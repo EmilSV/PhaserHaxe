@@ -1,0 +1,7 @@
+-cp src
+
+phaserX.Const
+phaserX.math.Vector2
+
+-dce std
+-js dist/output.js

@@ -1,0 +1,8 @@
+{
+    "lineEnds": {
+        "leftCurly": "both"
+    },
+    "sameLine": {
+        "ifElse": "next"
+    }
+}
