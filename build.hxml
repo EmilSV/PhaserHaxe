@@ -2,6 +2,7 @@
 
 phaserX.Const
 phaserX.math.Vector2
+phaserX.math.Vector3
 
 -dce std
 -js dist/output.js
