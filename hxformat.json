@@ -4,5 +4,8 @@
     },
     "sameLine": {
         "ifElse": "next"
+    },
+    "wrapping": {
+        "maxLineLength": 80
     }
 }

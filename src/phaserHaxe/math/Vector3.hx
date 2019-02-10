@@ -1,4 +1,6 @@
-package phaserX.math;
+package phaserHaxe.math;
+
+import phaserHaxe.math.Vector3Like;
 
 /**
  * A representation of a vector in 3D space.
@@ -35,6 +37,20 @@ class Vector3
 		this.x = x;
 		this.y = y;
 		this.z = z;
+	}
+
+	/**
+	 * create a vector from a vector like object.
+	 *
+	 * @since 1.0.0
+	 *
+	 * @param obj The object containing the component values to create Vector from.
+	 *
+	 * @return The new Vector3.
+	**/
+	public static inline function fromObject(obj:Vector3Like):Vector3
+	{
+		return new Vector3(obj.x, obj.y, obj.z);
 	}
 
 	/**
@@ -124,6 +140,24 @@ class Vector3
 	}
 
 	/**
+	 * Set the component values of this Vector from a given Vector3Like object.
+	 *
+	 * @since 1.0.0
+	 *
+	 * @param obj The object containing the component values to set for this Vector.
+	 *
+	 * @return This Vector3.
+	**/
+	public function setFromObject(obj:Vector3Like):Vector3
+	{
+		x = obj.x;
+		y = obj.y;
+		z = obj.z;
+
+		return this;
+	}
+
+	/**
 	 * Set the `x`, `y`, and `z` components of this Vector to the given `x`, `y`, and `z` values.
 	 *
 	 * @since 1.0.0
@@ -152,7 +186,7 @@ class Vector3
 	 *
 	 * @return This Vector3.
 	**/
-	public function add(v):Vector3
+	public function add(v:Vector3):Vector3
 	{
 		x += v.x;
 		y += v.y;
@@ -408,7 +442,7 @@ class Vector3
 	 *
 	 * @return This Vector3.
 	**/
-	public function transformMat3(mat)
+	public function transformMat3(mat):Vector3
 	{
 		var x = this.x;
 		var y = this.y;
@@ -545,14 +579,14 @@ class Vector3
 	 * After this operation, this vector's (x, y, z) components will
 	 * represent the unprojected 3D coordinate.
 	 *
-	 * @since 3.0.0
+	 * @since 1.0.0
 	 *
 	 * @param viewport - Screen x, y, width and height in pixels.
 	 * @param invProjectionView - Combined projection and view matrix.
 	 *
 	 * @return This Vector3.
 	**/
-	public function unproject(viewport, invProjectionView)
+	public function unproject(viewport, invProjectionView):Vector3
 	{
 		var viewX = viewport.x;
 		var viewY = viewport.y;

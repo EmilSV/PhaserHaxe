@@ -1,4 +1,4 @@
-package phaserX;
+package phaserHaxe;
 
 /**
  * Global consts.

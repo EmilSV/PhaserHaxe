@@ -1,6 +1,6 @@
-package phaserX.math;
+package phaserHaxe.math;
 
-import phaserX.math.Vector2Like;
+import phaserHaxe.math.Vector2Like;
 
 /**
  * A representation of a vector in 2D space.
@@ -42,7 +42,7 @@ class Vector2
 	 *
 	 * @param obj The object containing the component values to create Vector from.
 	 *
-	 * @return This Vector2.
+	 * @return The new Vector2.
 	**/
 	public static inline function fromObject(obj:Vector2Like):Vector2
 	{
@@ -101,7 +101,7 @@ class Vector2
 	 * @param x The x value to set for this Vector.
 	 * @param y The y value to set for this Vector.
 	 *
-	 * @return {Phaser.Math.Vector2} This Vector2.
+	 * @return This Vector2.
 	**/
 	public function set(x:Float, ?y:Float):Vector2
 	{

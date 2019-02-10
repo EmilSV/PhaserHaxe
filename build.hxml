@@ -1,8 +1,12 @@
 -cp src
 
-phaserX.Const
-phaserX.math.Vector2
-phaserX.math.Vector3
+phaserHaxe.Const
+phaserHaxe.math.Vector2
+phaserHaxe.math.Vector3
+phaserHaxe.math.Vector4
+phaserHaxe.math.Matrix3
+phaserHaxe.math.Matrix4
+phaserHaxe.math.MathUtility
 
 -dce std
 -js dist/output.js

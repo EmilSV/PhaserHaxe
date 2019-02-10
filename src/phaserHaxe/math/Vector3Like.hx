@@ -1,11 +1,11 @@
-package phaserX.math;
+package phaserHaxe.math;
 
 /**
  * a object with a x and y component.
  *
  * @since 1.0.0
- */
-typedef Vector2Like =
+**/
+typedef Vector3Like =
 {
 	/**
 	 * The x component of this Vector.
@@ -20,4 +20,11 @@ typedef Vector2Like =
 	 * @since 1.0.0
 	**/
 	var y:Float;
+
+	/**
+	 * The z component of this Vector.
+	 *
+	 * @since 1.0.0
+	**/
+	var z:Float;
 }
