@@ -38,6 +38,7 @@ class Vector4
 	**/
 	public var w:Float;
 
+
 	public function new(x:Float = 0, y:Float = 0, z:Float = 0, w:Float = 0)
 	{
 		this.x = x;
@@ -51,9 +52,9 @@ class Vector4
 	 *
 	 * @since 1.0.0
 	 *
-	 * @return {Phaser.Math.Vector4} A clone of this Vector4.
+	 * @return A clone of this Vector4.
 	**/
-	public function clone()
+	public function clone():Vector4
 	{
 		return new Vector4(this.x, this.y, this.z, this.w);
 	}
@@ -63,11 +64,11 @@ class Vector4
 	 *
 	 * @since 1.0.0
 	 *
-	 * @param {Phaser.Math.Vector4} src - The Vector to copy the components from.
+	 * @param src - The Vector to copy the components from.
 	 *
-	 * @return {Phaser.Math.Vector4} This Vector4.
+	 * @return This Vector4.
 	**/
-	public function copy(src)
+	public function copy(src:Vector4):Vector4
 	{
 		this.x = src.x;
 		this.y = src.y;
@@ -83,13 +84,14 @@ class Vector4
 	 *
 	 * @since 1.0.0
 	 *
-	 * @param {Phaser.Math.Vector4} v - The vector to check equality with.
+	 * @param v - The vector to check equality with.
 	 *
-	 * @return {boolean} A boolean indicating whether the two Vectors are equal or not.
+	 * @return A boolean indicating whether the two Vectors are equal or not.
 	**/
-	public function equals(v)
+	public function equals(v:Vector4):Bool
 	{
-		return ((this.x == v.x) && (this.y == v.y) && (this.z == v.z) && (this.w == v.w));
+		return ((this.x == v.x) && (this.y == v.y) && (this.z == v.z) && (this
+			.w == v.w));
 	}
 
 	/**
@@ -97,14 +99,14 @@ class Vector4
 	 *
 	 * @since 1.0.0
 	 *
-	 * @param {(number|object)} x - The x value to set for this Vector, or an object containing x, y, z and w components.
-	 * @param {number} y - The y value to set for this Vector.
-	 * @param {number} z - The z value to set for this Vector.
-	 * @param {number} w - The z value to set for this Vector.
+	 * @param x - The x value to set for this Vector, or an object containing x, y, z and w components.
+	 * @param y - The y value to set for this Vector.
+	 * @param z - The z value to set for this Vector.
+	 * @param w - The z value to set for this Vector.
 	 *
-	 * @return {Phaser.Math.Vector4} This Vector4.
+	 * @return This Vector4.
 	**/
-	public function set(x, y, z, w)
+	public function set(x:Float, y:Float, z:Float, w:Float):Vector4
 	{
 		this.x = x;
 		this.y = y;
@@ -118,11 +120,11 @@ class Vector4
 	 *
 	 * @since 1.0.0
 	 *
-	 * @param {(Phaser.Math.Vector2|Phaser.Math.Vector3|Phaser.Math.Vector4)} v - The Vector to add to this Vector.
+	 * @param v - The Vector to add to this Vector.
 	 *
-	 * @return {Phaser.Math.Vector4} This Vector4.
+	 * @return This Vector4.
 	**/
-	public function add(v)
+	public function add(v:Vector4):Vector4
 	{
 		this.x += v.x;
 		this.y += v.y;
@@ -136,11 +138,11 @@ class Vector4
 	 *
 	 * @since 1.0.0
 	 *
-	 * @param {(Phaser.Math.Vector2|Phaser.Math.Vector3|Phaser.Math.Vector4)} v - The Vector to subtract from this Vector.
+	 * @param v - The Vector to subtract from this Vector.
 	 *
-	 * @return {Phaser.Math.Vector4} This Vector4.
+	 * @return This Vector4.
 	**/
-	public function subtract(v)
+	public function subtract(v:Vector4):Vector4
 	{
 		this.x -= v.x;
 		this.y -= v.y;
@@ -154,11 +156,11 @@ class Vector4
 	 *
 	 * @since 1.0.0
 	 *
-	 * @param {number} scale - The value to scale this Vector by.
+	 * @param scale - The value to scale this Vector by.
 	 *
-	 * @return {Phaser.Math.Vector4} This Vector4.
+	 * @return This Vector4.
 	**/
-	public function scale(scale)
+	public function scale(scale:Float):Vector4
 	{
 		this.x *= scale;
 		this.y *= scale;
@@ -172,9 +174,9 @@ class Vector4
 	 *
 	 * @since 1.0.0
 	 *
-	 * @return {number} The length of this Vector.
+	 * @return The length of this Vector.
 	**/
-	public function length()
+	public function length():Float
 	{
 		var x = this.x;
 		var y = this.y;
@@ -188,9 +190,9 @@ class Vector4
 	 *
 	 * @since 1.0.0
 	 *
-	 * @return {number} The length of this Vector, squared.
+	 * @return The length of this Vector, squared.
 	**/
-	public function lengthSq()
+	public function lengthSq():Float
 	{
 		var x = this.x;
 		var y = this.y;
@@ -206,9 +208,9 @@ class Vector4
 	 *
 	 * @since 1.0.0
 	 *
-	 * @return {Phaser.Math.Vector4} This Vector4.
+	 * @return This Vector4.
 	**/
-	public function normalize()
+	public function normalize():Vector4
 	{
 		var x = this.x;
 		var y = this.y;
@@ -231,13 +233,13 @@ class Vector4
 	 *
 	 * @since 1.0.0
 	 *
-	 * @param {Phaser.Math.Vector4} v - The Vector4 to dot product with this Vector4.
+	 * @param v - The Vector4 to dot product with this Vector4.
 	 *
-	 * @return {number} The dot product of this Vector and the given Vector.
+	 * @return The dot product of this Vector and the given Vector.
 	**/
-	public function dot(v)
+	public function dot(v:Vector4):Float
 	{
-		return this.x * v.x + this.y * v.y + this.z * v.z + this.w * v.w;
+		return x * v.x + y * v.y + z * v.z + w * v.w;
 	}
 
 	/**
@@ -246,21 +248,21 @@ class Vector4
 	 * Interpolates this Vector towards the given Vector.
 	 *
 	 *
-	 * @param {Phaser.Math.Vector4} v - The Vector4 to interpolate towards.
-	 * @param {number} [t=0] - The interpolation percentage, between 0 and 1.
+	 * @param v - The Vector4 to interpolate towards.
+	 * @param t - The interpolation percentage, between 0 and 1.
 	 *
-	 * @return {Phaser.Math.Vector4} This Vector4.
+	 * @return This Vector4.
 	**/
-	public function lerp(v, t = 0)
+	public function lerp(v:Vector4, t:Float = 0):Vector4
 	{
-		var ax = this.x;
-		var ay = this.y;
-		var az = this.z;
-		var aw = this.w;
-		this.x = ax + t * (v.x - ax);
-		this.y = ay + t * (v.y - ay);
-		this.z = az + t * (v.z - az);
-		this.w = aw + t * (v.w - aw);
+		var ax = x;
+		var ay = y;
+		var az = z;
+		var aw = w;
+		x = ax + t * (v.x - ax);
+		y = ay + t * (v.y - ay);
+		z = az + t * (v.z - az);
+		w = aw + t * (v.w - aw);
 		return this;
 	}
 
@@ -271,11 +273,11 @@ class Vector4
 	 *
 	 * @since 1.0.0
 	 *
-	 * @param {(Phaser.Math.Vector2|Phaser.Math.Vector3|Phaser.Math.Vector4)} v - The Vector to multiply this Vector by.
+	 * @param v - The Vector to multiply this Vector by.
 	 *
-	 * @return {Phaser.Math.Vector4} This Vector4.
+	 * @return This Vector4.
 	**/
-	public function multiply(v)
+	public function multiply(v:Vector4):Vector4
 	{
 		this.x *= v.x;
 		this.y *= v.y;
@@ -291,16 +293,16 @@ class Vector4
 	 *
 	 * @since 1.0.0
 	 *
-	 * @param {(Phaser.Math.Vector2|Phaser.Math.Vector3|Phaser.Math.Vector4)} v - The Vector to divide this Vector by.
+	 * @param v - The Vector to divide this Vector by.
 	 *
-	 * @return {Phaser.Math.Vector4} This Vector4.
+	 * @return This Vector4.
 	**/
-	public function divide(v)
+	public function divide(v:Vector4):Vector4
 	{
-		this.x /= v.x;
-		this.y /= v.y;
-		this.z /= v.z;
-		this.w /= v.w;
+		x /= v.x;
+		y /= v.y;
+		z /= v.z;
+		w /= v.w;
 		return this;
 	}
 
@@ -309,16 +311,16 @@ class Vector4
 	 *
 	 * @since 1.0.0
 	 *
-	 * @param {(Phaser.Math.Vector2|Phaser.Math.Vector3|Phaser.Math.Vector4)} v - The Vector to calculate the distance to.
+	 * @param v - The Vector to calculate the distance to.
 	 *
-	 * @return {number} The distance from this Vector to the given Vector.
+	 * @return The distance from this Vector to the given Vector.
 	**/
-	public function distance(v)
+	public function distance(v:Vector4):Float
 	{
-		var dx = v.x - this.x;
-		var dy = v.y - this.y;
-		var dz = v.z - this.z;
-		var dw = v.w - this.w;
+		var dx = v.x - x;
+		var dy = v.y - y;
+		var dz = v.z - z;
+		var dw = v.w - w;
 		return Math.sqrt(dx * dx + dy * dy + dz * dz + dw * dw);
 	}
 
@@ -327,16 +329,16 @@ class Vector4
 	 *
 	 * @since 1.0.0
 	 *
-	 * @param {(Phaser.Math.Vector2|Phaser.Math.Vector3|Phaser.Math.Vector4)} v - The Vector to calculate the distance to.
+	 * @param v - The Vector to calculate the distance to.
 	 *
-	 * @return {number} The distance from this Vector to the given Vector, squared.
+	 * @return The distance from this Vector to the given Vector, squared.
 	**/
-	public function distanceSq(v)
+	public function distanceSq(v:Vector4):Float
 	{
-		var dx = v.x - this.x;
-		var dy = v.y - this.y;
-		var dz = v.z - this.z;
-		var dw = v.w - this.w;
+		var dx = v.x - x;
+		var dy = v.y - y;
+		var dz = v.z - z;
+		var dw = v.w - w;
 		return dx * dx + dy * dy + dz * dz + dw * dw;
 	}
 
@@ -345,14 +347,14 @@ class Vector4
 	 *
 	 * @since 1.0.0
 	 *
-	 * @return {Phaser.Math.Vector4} This Vector4.
+	 * @return This Vector4.
 	**/
-	public function negate()
+	public function negate():Vector4
 	{
-		this.x = -this.x;
-		this.y = -this.y;
-		this.z = -this.z;
-		this.w = -this.w;
+		x = -x;
+		y = -y;
+		z = -z;
+		w = -w;
 		return this;
 	}
 
@@ -361,21 +363,21 @@ class Vector4
 	 *
 	 * @since 1.0.0
 	 *
-	 * @param {Phaser.Math.Matrix4} mat - The Matrix4 to transform this Vector4 with.
+	 * @param mat - The Matrix4 to transform this Vector4 with.
 	 *
-	 * @return {Phaser.Math.Vector4} This Vector4.
+	 * @return This Vector4.
 	**/
-	public function transformMat4(mat)
+	public function transformMat4(mat:Matrix4):Vector4
 	{
-		var x = this.x;
-		var y = this.y;
-		var z = this.z;
-		var w = this.w;
+		var localX = x;
+		var localY = y;
+		var localZ = z;
+		var localW = w;
 		var m = mat.val;
-		this.x = m[0] * x + m[4] * y + m[8] * z + m[12] * w;
-		this.y = m[1] * x + m[5] * y + m[9] * z + m[13] * w;
-		this.z = m[2] * x + m[6] * y + m[10] * z + m[14] * w;
-		this.w = m[3] * x + m[7] * y + m[11] * z + m[15] * w;
+		x = m[0] * localX + m[4] * localY + m[8] * localZ + m[12] * localW;
+		y = m[1] * localX + m[5] * localY + m[9] * localZ + m[13] * localW;
+		z = m[2] * localX + m[6] * localY + m[10] * localZ + m[14] * localW;
+		w = m[3] * localX + m[7] * localY + m[11] * localZ + m[15] * localW;
 		return this;
 	}
 
@@ -384,31 +386,31 @@ class Vector4
 	 *
 	 * @since 1.0.0
 	 *
-	 * @param {Phaser.Math.Quaternion} q - The Quaternion to transform this Vector with.
+	 * @param q - The Quaternion to transform this Vector with.
 	 *
-	 * @return {Phaser.Math.Vector4} This Vector4.
+	 * @return This Vector4.
 	**/
-	public function transformQuat(q)
+	public function transformQuat(q):Vector4
 	{
 		// TODO: is this really the same as Vector3?
 		// Also, what about this: http://molecularmusings.wordpress.com/2013/05/24/a-faster-quaternion-vector-multiplication/
 		// benchmarks: http://jsperf.com/quaternion-transform-vec3-implementations
-		var x = this.x;
-		var y = this.y;
-		var z = this.z;
+		var localX = x;
+		var localY = y;
+		var localZ = z;
 		var qx = q.x;
 		var qy = q.y;
 		var qz = q.z;
 		var qw = q.w;
 		// calculate quat * vec
-		var ix = qw * x + qy * z - qz * y;
-		var iy = qw * y + qz * x - qx * z;
-		var iz = qw * z + qx * y - qy * x;
-		var iw = -qx * x - qy * y - qz * z;
+		var ix = qw * localX + qy * localZ - qz * localY;
+		var iy = qw * localY + qz * localX - qx * localZ;
+		var iz = qw * localZ + qx * localY - qy * localX;
+		var iw = -qx * localX - qy * localY - qz * localZ;
 		// calculate result * inverse quat
-		this.x = ix * qw + iw * -qx + iy * -qz - iz * -qy;
-		this.y = iy * qw + iw * -qy + iz * -qx - ix * -qz;
-		this.z = iz * qw + iw * -qz + ix * -qy - iy * -qx;
+		x = ix * qw + iw * -qx + iy * -qz - iz * -qy;
+		y = iy * qw + iw * -qy + iz * -qx - ix * -qz;
+		z = iz * qw + iw * -qz + ix * -qy - iy * -qx;
 		return this;
 	}
 
@@ -417,14 +419,14 @@ class Vector4
 	 *
 	 * @since 1.0.0
 	 *
-	 * @return {Phaser.Math.Vector4} This Vector4.
+	 * @return This Vector4.
 	**/
-	public function reset()
+	public function reset():Vector4
 	{
-		this.x = 0;
-		this.y = 0;
-		this.z = 0;
-		this.w = 0;
+		x = 0;
+		y = 0;
+		z = 0;
+		w = 0;
 		return this;
 	}
 }

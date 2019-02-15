@@ -32,7 +32,7 @@ class Vector3
 	**/
 	public var z:Float;
 
-	public function new(x:Float, y:Float, z:Float)
+	public function new(x:Float = 0, y:Float = 0, z:Float = 0)
 	{
 		this.x = x;
 		this.y = y;
@@ -463,7 +463,7 @@ class Vector3
 	 *
 	 * @return This Vector3.
 	**/
-	public function transformMat4(mat)
+	public function transformMat4(mat:Matrix4):Vector3
 	{
 		var x = this.x;
 		var y = this.y;

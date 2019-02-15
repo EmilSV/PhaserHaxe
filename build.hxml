@@ -6,7 +6,9 @@ phaserHaxe.math.Vector3
 phaserHaxe.math.Vector4
 phaserHaxe.math.Matrix3
 phaserHaxe.math.Matrix4
-phaserHaxe.math.MathUtility
+phaserHaxe.math.Quaternion
+phaserHaxe.math.Easing
+phaserHaxe.math.easing.Back
 
 -dce std
 -js dist/output.js

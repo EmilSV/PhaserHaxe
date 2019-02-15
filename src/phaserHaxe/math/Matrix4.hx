@@ -814,12 +814,12 @@ class Matrix4
 	 *
 	 * @since 1.0.0
 	 *
-	 * @param {Phaser.Math.Quaternion} q - The Quaternion to set rotation from.
-	 * @param v The Vector to set translation from.
+	 * @param q - The Quaternion to set rotation from.
+	 * @param v - The Vector to set translation from.
 	 *
 	 * @return This Matrix4.
 	**/
-	public function fromRotationTranslation(q, v:Vector3)
+	public function fromRotationTranslation(q:Quaternion, v:Vector3)
 	{
 		// Quaternion math
 		var out = val;

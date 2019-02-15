@@ -29,7 +29,7 @@ class Vector2
 	 * @param x The x component.
 	 * @param y The y component.
 	**/
-	public function new(x:Float, ?y:Float)
+	public function new(x:Float = 0, ?y:Float)
 	{
 		this.x = x;
 		this.y = if (y != null) y else x;
