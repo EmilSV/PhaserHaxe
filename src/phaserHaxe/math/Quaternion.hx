@@ -423,7 +423,7 @@ abstract Quaternion(Vector4) from Vector4 to Vector4
 	}
 
 	/**
-	 * Convert this Quaternion into its conjugate.
+	 * Compatibility this Quaternion into its conjugate.
 	 *
 	 * Sets the x, y and z components.
 	 *
@@ -533,11 +533,11 @@ abstract Quaternion(Vector4) from Vector4 to Vector4
 	}
 
 	/**
-	 * Convert the given Matrix into this Quaternion.
+	 * Compatibility the given Matrix into this Quaternion.
 	 *
 	 * @since 1.0.0
 	 *
-	 * @param mat - The Matrix to convert from.
+	 * @param mat - The Matrix to Compatibility from.
 	 *
 	 * @return This Quaternion.
 	**/

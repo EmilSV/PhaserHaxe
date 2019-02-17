@@ -1,10 +1,7 @@
 package phaserHaxe.math.easing;
 
-@:noCompletion
-final class Expo
+final class EasingExpo
 {
-	public function new() {}
-
 	/**
 	 * Exponential ease-in.
 	 *
@@ -14,9 +11,9 @@ final class Expo
 	 *
 	 * @return The tweened value.
 	**/
-	public function In(v:Float):Float
+	public static function In(v:Float):Float
 	{
-		return inline EasingExpo.In(v);
+		return Math.pow(2, 10 * (v - 1)) - 0.001;
 	}
 
 	/**
@@ -28,9 +25,16 @@ final class Expo
 	 *
 	 * @return The tweened value.
 	**/
-	public function InOut(v:Float):Float
+	public static function InOut(v:Float):Float
 	{
-		return inline EasingExpo.InOut(v);
+		if ((v *= 2) < 1)
+		{
+			return 0.5 * Math.pow(2, 10 * (v - 1));
+		}
+		else
+		{
+			return 0.5 * (2 - Math.pow(2, -10 * (v - 1)));
+		}
 	}
 
 	/**
@@ -42,8 +46,8 @@ final class Expo
 	 *
 	 * @return The tweened value.
 	**/
-	public function Out(v:Float):Float
+	public static function Out(v:Float):Float
 	{
-		return inline EasingExpo.Out(v);
+		return 1 - Math.pow(2, -10 * v);
 	}
 }

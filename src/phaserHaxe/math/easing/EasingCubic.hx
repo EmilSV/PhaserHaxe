@@ -1,10 +1,7 @@
 package phaserHaxe.math.easing;
 
-@:noCompletion
-final class Cubic
+final class EasingCubic
 {
-	public function new() {}
-
 	/**
 	 * Cubic ease-in.
 	 *
@@ -14,9 +11,9 @@ final class Cubic
 	 *
 	 * @return The tweened value.
 	**/
-	public function In(v:Float):Float
+	public static function In(v:Float):Float
 	{
-		return inline EasingCubic.In(v);
+		return v * v * v;
 	}
 
 	/**
@@ -28,9 +25,16 @@ final class Cubic
 	 *
 	 * @return The tweened value.
 	**/
-	public function InOut(v:Float):Float
+	public static function InOut(v:Float):Float
 	{
-		return inline EasingCubic.InOut(v);
+		if ((v *= 2) < 1)
+		{
+			return 0.5 * v * v * v;
+		}
+		else
+		{
+			return 0.5 * ((v -= 2) * v * v + 2);
+		}
 	}
 
 	/**
@@ -42,8 +46,8 @@ final class Cubic
 	 *
 	 * @return The tweened value.
 	**/
-	public function Out(v:Float):Float
+	public static function Out(v:Float):Float
 	{
-		return inline EasingCubic.Out(v);
+		return --v * v * v + 1;
 	}
 }

@@ -1,10 +1,7 @@
 package phaserHaxe.math.easing;
 
-@:noCompletion
-final class Linear
+final class EasingLinear
 {
-	public function new() {}
-
 	/**
 	 * Linear easing (no variation).
 	 *
@@ -14,7 +11,7 @@ final class Linear
 	 *
 	 * @return The tweened value.
 	**/
-	public function Linear(v:Float):Float
+	public static function Linear(v:Float):Float
 	{
 		return v;
 	}

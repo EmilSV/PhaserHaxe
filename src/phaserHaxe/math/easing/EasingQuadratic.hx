@@ -1,11 +1,8 @@
 package phaserHaxe.math.easing;
 
-@:noCompletion
-final class Quadratic
+final class EasingQuadratic
 {
-	public function new() {}
-
-	/**
+    	/**
 	 * Quadratic ease-in.
 	 *
 	 * @since 1.0.0
@@ -14,9 +11,9 @@ final class Quadratic
 	 *
 	 * @return The tweened value.
 	**/
-	public function In(v:Float):Float
+	public static function In(v:Float):Float
 	{
-		return inline EasingQuadratic.In(v);
+		return v * v;
 	}
 
 	/**
@@ -28,9 +25,16 @@ final class Quadratic
 	 *
 	 * @return The tweened value.
 	**/
-	public function InOut(v:Float):Float
+	public static function InOut(v:Float):Float
 	{
-		return inline EasingQuadratic.InOut(v);
+		if ((v *= 2) < 1)
+		{
+			return 0.5 * v * v;
+		}
+		else
+		{
+			return -0.5 * (--v * (v - 2) - 1);
+		}
 	}
 
 	/**
@@ -42,8 +46,8 @@ final class Quadratic
 	 *
 	 * @return The tweened value.
 	**/
-	public function Out(v:Float):Float
+	public static function Out(v:Float):Float
 	{
-		return inline EasingQuadratic.Out(v);
+		return v * (2 - v);
 	}
 }

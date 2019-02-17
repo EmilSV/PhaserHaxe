@@ -4,7 +4,7 @@ import haxe.io.Float32Array;
 
 class Matrix4
 {
-	private static inline final EPSILON = MathUtility.EPSILON;
+	private static inline final EPSILON = 0.000001;
 	private static final _tempMat1 = new Matrix4();
 	private static final _tempMat2 = new Matrix4();
 

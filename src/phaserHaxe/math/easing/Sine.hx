@@ -1,8 +1,10 @@
 package phaserHaxe.math.easing;
 
 @:noCompletion
-abstract Sine(Void)
+final class Sine
 {
+	public function new() {}
+
 	/**
 	 * Sinusoidal ease-in.
 	 *
@@ -12,20 +14,9 @@ abstract Sine(Void)
 	 *
 	 * @return The tweened value.
 	**/
-	public function In(v)
+	public function In(v:Float):Float
 	{
-		if (v == = 0)
-		{
-			return 0;
-		}
-		else if (v == = 1)
-		{
-			return 1;
-		}
-		else
-		{
-			return 1 - Math.cos(v * Math.PI / 2);
-		}
+		return inline EasingSine.In(v);
 	}
 
 	/**
@@ -37,20 +28,9 @@ abstract Sine(Void)
 	 *
 	 * @return The tweened value.
 	**/
-	public function InOut(v)
+	public function InOut(v:Float):Float
 	{
-		if (v == = 0)
-		{
-			return 0;
-		}
-		else if (v == = 1)
-		{
-			return 1;
-		}
-		else
-		{
-			return 0.5 * (1 - Math.cos(Math.PI * v));
-		}
+		return inline EasingSine.InOut(v);
 	}
 
 	/**
@@ -62,19 +42,8 @@ abstract Sine(Void)
 	 *
 	 * @return The tweened value.
 	**/
-	public function Out(v)
+	public function Out(v:Float):Float
 	{
-		if (v == = 0)
-		{
-			return 0;
-		}
-		else if (v == = 1)
-		{
-			return 1;
-		}
-		else
-		{
-			return Math.sin(v * Math.PI / 2);
-		}
+		return inline EasingSine.Out(v);
 	}
 }

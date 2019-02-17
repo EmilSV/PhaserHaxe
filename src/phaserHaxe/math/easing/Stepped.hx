@@ -1,7 +1,10 @@
 package phaserHaxe.math.easing;
 
-abstract Stepped(Void)
+@:noCompletion
+final class Stepped
 {
+	public function new() {}
+
 	/**
 	 * Stepped easing.
 	 *
@@ -14,17 +17,6 @@ abstract Stepped(Void)
 	**/
 	public function Stepped(v:Float, steps:Float = 1):Float
 	{
-		if (v <= 0)
-		{
-			return 0;
-		}
-		else if (v >= 1)
-		{
-			return 1;
-		}
-		else
-		{
-			return ((steps * v) + 1) * (1 / steps);
-		}
+		return inline EasingStepped.Stepped(v, steps);
 	}
 }

@@ -4,8 +4,10 @@
 			"path": "."
 		},
 		{
-			"path": "C:\\Users\\Emil\\Documents\\phaser"
+			"path": "C:\\Users\\emils\\Documents\\phaser"
 		}
 	],
-	"settings": {}
+	"settings": {
+		"zenMode.hideLineNumbers": false
+	}
 }

@@ -1,10 +1,7 @@
 package phaserHaxe.math.easing;
 
-@:noCompletion
-final class Back
+final class EasingBack
 {
-	public function new() {}
-
 	/**
 	 * Back ease-in.
 	 *
@@ -15,9 +12,9 @@ final class Back
 	 *
 	 * @return The tweened value.
 	**/
-	public function In(v:Float, overshoot:Float = 1.70158):Float
+	public static function In(v:Float, overshoot:Float = 1.70158):Float
 	{
-		return inline EasingBack.In(v, overshoot);
+		return v * v * ((overshoot + 1) * v - overshoot);
 	}
 
 	/**
@@ -30,9 +27,17 @@ final class Back
 	 *
 	 * @return number The tweened value.
 	**/
-	public function InOut(v:Float, overshoot:Float = 1.70158):Float
+	public static function InOut(v:Float, overshoot:Float = 1.70158):Float
 	{
-		return inline EasingBack.InOut(v, overshoot);
+		var s = overshoot * 1.525;
+		if ((v *= 2) < 1)
+		{
+			return 0.5 * (v * v * ((s + 1) * v - s));
+		}
+		else
+		{
+			return 0.5 * ((v -= 2) * v * ((s + 1) * v + s) + 2);
+		}
 	}
 
 	/**
@@ -45,8 +50,8 @@ final class Back
 	 *
 	 * @return The tweened value.
 	**/
-	public function Out(v:Float, overshoot:Float = 1.70158):Float
+	public static function Out(v:Float, overshoot:Float = 1.70158):Float
 	{
-		return inline EasingBack.Out(v, overshoot);
+		return --v * v * ((overshoot + 1) * v + overshoot) + 1;
 	}
 }

@@ -1,10 +1,7 @@
 package phaserHaxe.math.easing;
 
-@:noCompletion
-final class Quartic
+final class EasingQuartic
 {
-	public function new() {}
-
 	/**
 	 * Quintic ease-in.
 	 *
@@ -14,9 +11,9 @@ final class Quartic
 	 *
 	 * @return The tweened value.
 	**/
-	public function In(v:Float):Float
+	public static function In(v:Float):Float
 	{
-		return inline EasingQuartic.In(v);
+		return v * v * v * v * v;
 	}
 
 	/**
@@ -28,9 +25,16 @@ final class Quartic
 	 *
 	 * @return The tweened value.
 	**/
-	public function InOut(v:Float):Float
+	public static function InOut(v:Float):Float
 	{
-		return inline EasingQuartic.InOut(v);
+		if ((v *= 2) < 1)
+		{
+			return 0.5 * v * v * v * v * v;
+		}
+		else
+		{
+			return 0.5 * ((v -= 2) * v * v * v * v + 2);
+		}
 	}
 
 	/**
@@ -42,8 +46,8 @@ final class Quartic
 	 *
 	 * @return The tweened value.
 	**/
-	public function Out(v:Float):Float
+	public static function Out(v:Float):Float
 	{
-		return inline EasingQuartic.Out(v);
+		return --v * v * v * v * v + 1;
 	}
 }

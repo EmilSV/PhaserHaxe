@@ -6,6 +6,6 @@
         "ifElse": "next"
     },
     "wrapping": {
-        "maxLineLength": 80
+        "maxLineLength": 120
     }
 }

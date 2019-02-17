@@ -16,48 +16,6 @@ class MathUtility
 	private static final tmpVec3 = new Vector3();
 
 	/**
-	 * The value of PI.
-	 *
-	 * @since 1.0.0
-	**/
-	public static inline final PI = 3.141592653589793;
-
-	/**
-	 * The value of PI * 2.
-	 *
-	 * @since 1.0.0
-	**/
-	public static inline final PI2 = PI * 2;
-
-	/**
-	 * The value of PI * 0.5.
-	 *
-	 * @since 1.0.0
-	**/
-	public static inline final TAU = PI * 0.5;
-
-	/**
-	 * An epsilon value (1.0e-6)
-	 *
-	 * @since 1.0.0
-	**/
-	public static inline final EPSILON = 1.0e-6;
-
-	/**
-	 * For converting degrees to radians (PI / 180)
-	 *
-	 * @since 1.0.0
-	**/
-	public static inline final DEG_TO_RAD = PI / 180;
-
-	/**
-	 * For converting radians to degrees (180 / PI)
-	 *
-	 * @since 1.0.0
-	**/
-	public static inline final RAD_TO_DEG = 180 / PI;
-
-	/**
 	 * Wrap the given `value` between `min` and `max.
 	 *
 	 * @since 1.0.0
@@ -130,17 +88,26 @@ class MathUtility
 	}
 
 	/**
-	 * Convert the given angle from degrees, to the equivalent angle in radians.
+	 * Compatibility the given angle from degrees, to the equivalent angle in radians.
 	 *
 	 * @since 1.0.0
 	 *
-	 * @param degrees - The angle (in degrees) to convert to radians.
+	 * @param degrees - The angle (in degrees) to Compatibility to radians.
 	 *
-	 * @return The given angle converted to radians.
+	 * @return The given angle Compatibilityed to radians.
 	**/
 	public static function DegToRad(degrees:Int)
 	{
-		return degrees * DEG_TO_RAD;
+		return degrees * MathConst.DEG_TO_RAD;
+	}
+
+	public static inline function boolToInt(v:Bool):Int
+	{
+		#if js
+		return js.Syntax.code("(({0}) | 0 )", v);
+		#else
+		return v ? 1 : 0;
+		#end
 	}
 
 	/**
@@ -345,9 +312,8 @@ class MathUtility
 	 *
 	 * @return The translated point.
 	**/
-	public static function TransformXY(x:Float, y:Float, positionX:Float,
-			positionY:Float, rotation:Float, scaleX:Float, scaleY:Float,
-			output:Vector2):Vector2
+	public static function TransformXY(x:Float, y:Float, positionX:Float, positionY:Float, rotation:Float,
+			scaleX:Float, scaleY:Float, output:Vector2):Vector2
 	{
 		if (output == null)
 		{
@@ -366,10 +332,8 @@ class MathUtility
 		//  Invert
 		var id = 1 / ((a * d) + (c * -b));
 
-		output.x = (d * id * x) + (-c * id * y) +
-			(((positionY * c) - (positionX * d)) * id);
-		output.y = (a * id * y) + (-b * id * x) + (((-positionY * a) +
-			(positionX * b)) * id);
+		output.x = (d * id * x) + (-c * id * y) + (((positionY * c) - (positionX * d)) * id);
+		output.y = (a * id * y) + (-b * id * x) + (((-positionY * a) + (positionX * b)) * id);
 
 		return output;
 	}
@@ -654,17 +618,17 @@ class MathUtility
 	}
 
 	/**
-	 * Convert the given angle in radians, to the equivalent angle in degrees.
+	 * Compatibility the given angle in radians, to the equivalent angle in degrees.
 	 *
 	 * @since 1.0.0
 	 *
-	 * @param radians - The angle in radians to convert ot degrees.
+	 * @param radians - The angle in radians to Compatibility ot degrees.
 	 *
-	 * @return The given angle converted to degrees.
+	 * @return The given angle Compatibilityed to degrees.
 	**/
 	public static function RadToDeg(radians:Float):Float
 	{
-		return radians * RAD_TO_DEG;
+		return radians * MathConst.RAD_TO_DEG;
 	}
 
 	/**
@@ -740,5 +704,42 @@ class MathUtility
 	public static function MaxAdd(value:Float, amount:Float, max:Float):Float
 	{
 		return Math.min(value + amount, max);
+	}
+
+	/**
+	 * Calculates a Catmull-Rom value.
+	 *
+	 * @since 1.0.0
+	 *
+	 * @param t - [description]
+	 * @param p0 - [description]
+	 * @param p1 - [description]
+	 * @param p2 - [description]
+	 * @param p3 - [description]
+	 *
+	 * @return The Catmull-Rom value.
+	**/
+	public static function CatmullRom(t:Float, p0:Float, p1:Float, p2:Float, p3:Float):Float
+	{
+		var v0 = (p2 - p0) * 0.5;
+		var v1 = (p3 - p1) * 0.5;
+		var t2 = t * t;
+		var t3 = t * t2;
+		return (2 * p1 - 2 * p2 + v0 + v1) * t3 + (-3 * p1 + 3 * p2 - 2 * v0 - v1) * t2 + v0 * t + p1;
+	}
+
+	/**
+	 * [description]
+	 *
+	 * @since 1.0.0
+	 *
+	 * @param n - [description]
+	 * @param i - [description]
+	 *
+	 * @return [description]
+	**/
+	public static function Bernstein(n:Float, i:Float):Float
+	{
+		return Factorial(n) / Factorial(i) / Factorial(n - i);
 	}
 }

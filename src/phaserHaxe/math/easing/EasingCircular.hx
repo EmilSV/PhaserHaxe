@@ -1,10 +1,7 @@
 package phaserHaxe.math.easing;
 
-@:noCompletion
-final class Circular
+final class EasingCircular
 {
-    public function new() {}
-
 	/**
 	 * Circular ease-out.
 	 *
@@ -14,9 +11,9 @@ final class Circular
 	 *
 	 * @return The tweened value.
 	**/
-	public function Out(v:Float):Float
+	public static function Out(v:Float):Float
 	{
-		return inline EasingCircular.Out(v);
+		return Math.sqrt(1 - (--v * v));
 	}
 
 	/**
@@ -28,9 +25,16 @@ final class Circular
 	 *
 	 * @return The tweened value.
 	**/
-	public function InOut(v:Float):Float
+	public static function InOut(v:Float):Float
 	{
-		return inline EasingCircular.InOut(v);
+		if ((v *= 2) < 1)
+		{
+			return -0.5 * (Math.sqrt(1 - v * v) - 1);
+		}
+		else
+		{
+			return 0.5 * (Math.sqrt(1 - (v -= 2) * v) + 1);
+		}
 	}
 
 	/**
@@ -42,8 +46,8 @@ final class Circular
 	 *
 	 * @return The tweened value.
 	**/
-	public function In(v:Float):Float
+	public static function In(v:Float):Float
 	{
-		return inline EasingCircular.In(v);
+		return 1 - Math.sqrt(1 - v * v);
 	}
 }
