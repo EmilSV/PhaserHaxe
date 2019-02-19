@@ -7,42 +7,42 @@ final class MathConst
 	 *
 	 * @since 1.0.0
 	**/
-	public static inline final PI = 3.141592653589793;
+	public static inline var PI = 3.141592653589793;
 
 	/**
 	 * The value of PI * 2.
 	 *
 	 * @since 1.0.0
 	**/
-	public static inline final PI2 = PI * 2;
+	public static inline var PI2 = PI * 2;
 
 	/**
 	 * The value of PI * 0.5.
 	 *
 	 * @since 1.0.0
 	**/
-	public static inline final TAU = PI * 0.5;
+	public static inline var TAU = PI * 0.5;
 
 	/**
 	 * An epsilon value (1.0e-6)
 	 *
 	 * @since 1.0.0
 	**/
-	public static inline final EPSILON = 1.0e-6;
+	public static inline var EPSILON = 1.0e-6;
 
 	/**
 	 * For Compatibilitying degrees to radians (PI / 180)
 	 *
 	 * @since 1.0.0
 	**/
-	public static inline final DEG_TO_RAD = PI / 180;
+	public static inline var DEG_TO_RAD = PI / 180;
 
 	/**
 	 * For Compatibilitying radians to degrees (180 / PI)
 	 *
 	 * @since 1.0.0
 	**/
-	public static inline final RAD_TO_DEG = 180 / PI;
+	public static inline var RAD_TO_DEG = 180 / PI;
 
 	/**
 	 * 2 to the 32 power
