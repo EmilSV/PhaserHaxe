@@ -1,0 +1,8 @@
+-lib minimingw
+
+-cp src
+
+-main Main
+
+-dce std
+-cpp dist/Cpp

@@ -1,5 +1,7 @@
 package phaserHaxe;
 
+import phaserHaxe.math.MathConst;
+
 final class Compatibility
 {
 	public static inline function toJSUintRange(number:Float):Float

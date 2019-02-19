@@ -166,7 +166,7 @@ class RandomDataGenerator
 	public function sow(seeds:ReadOnlyArray<String>)
 	{
 		// Always reset to default seed
-		this.n = 0xefc8249d;
+		this.n = 4022871197;
 		this.s0 = this.hash(" ");
 		this.s1 = this.hash(" ");
 		this.s2 = this.hash(" ");
@@ -292,7 +292,7 @@ class RandomDataGenerator
 	}
 
 	/**
-	 * TODO: implement this function    
+	 * TODO: implement this function
 	 * Returns a valid RFC4122 version4 ID hex string from https://gist.github.com/1308368
 	 *
 	 * @since 1.0.0
@@ -301,17 +301,46 @@ class RandomDataGenerator
 	**/
 	public function uuid():String
 	{
-		// var a = '';
-		// var b = '';
-		// for (b
-		// 	= a = '';
-		// a++ < 36;
-		// b += ~a % 5 | a * 3 & 4 ? (a ^ 15 ? 8 ^ this.frac() * (a ^ 20 ? 16 : 4) : 4).toString(16) : '-')
-		// {
-		// 	// eslint-disable-next-line no-empty
-		// }
-		// return b;
-		return "";
+		inline function toHex(num: Int) : String
+		{
+			#if js
+			return js.Syntax.code("({0}).toString(16)",num);
+			#else
+			return StringTools.hex(num).toLowerCase();
+			#end
+		}
+
+		var output = "";
+		var a = 0;
+
+		while (a++ < 36)
+		{
+			var b1 = (~a % 5 | a * 3 & 4) != 0;
+
+			if (b1)
+			{
+				var b2 = (a ^ 15) != 0;
+
+				var n1:Int;
+
+				if (b2)
+				{
+					var b3 = (a ^ 20) != 0;
+					var fracint:Int = Compatibility.toIntSafe(frac() * (b3 ? 16 : 4));
+					output += toHex(8 ^ fracint);
+				}
+				else
+				{
+					output += toHex(4);
+				}
+			}
+			else
+			{
+				output += "-";
+			}
+		}
+
+		return output;
 	}
 
 	/**

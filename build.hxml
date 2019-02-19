@@ -42,5 +42,8 @@ phaserHaxe.math.Snap
 phaserHaxe.math.RandomDataGenerator
 phaserHaxe.Compatibility
 
+
+-main Main
+
 -dce std
 -js dist/output.js
