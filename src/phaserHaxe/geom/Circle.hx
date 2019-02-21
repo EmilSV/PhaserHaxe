@@ -9,41 +9,29 @@ class Circle
 	/**
 	 * The x position of the center of the circle.
 	 *
-	 * @name Phaser.Geom.Circle#x
-	 * @type {number}
-	 * @default 0
-	 * @since 3.0.0
+	 * @since 1.0.0
 	**/
 	public var x:Float;
 
 	/**
 	 * The y position of the center of the circle.
 	 *
-	 * @name Phaser.Geom.Circle#y
-	 * @type {number}
-	 * @default 0
-	 * @since 3.0.0
+	 * @since 1.0.0
 	**/
 	public var y:Float;
 
 	/**
 	 * The internal radius of the circle.
 	 *
-	 * @name Phaser.Geom.Circle#_radius
-	 * @type {number}
-	 * @private
-	 * @since 3.0.0
-	 */
+	 * @since 1.0.0
+	**/
 	private var _radius:Float;
 
 	/**
 	 * The internal diameter of the circle.
 	 *
-	 * @name Phaser.Geom.Circle#_diameter
-	 * @type {number}
-	 * @private
-	 * @since 3.0.0
-	 */
+	 * @since 1.0.0
+	**/
 	private var _diameter:Float;
 
 	/**
@@ -96,6 +84,7 @@ class Circle
 		this._diameter = radius * 2;
 	}
 
+	// #region GettersAndSetters
 	private inline function get_radius():Float
 	{
 		return this._radius;
@@ -164,17 +153,173 @@ class Circle
 		return value;
 	}
 
+	// #endregion
+
+	/**
+	 * Check to see if the Circle contains the given x / y coordinates.
+	 *
+	 * @since 1.0.0
+	 *
+	 * @param x - The x coordinate to check within the circle.
+	 * @param y - The y coordinate to check within the circle.
+	 *
+	 * @return True if the coordinates are within the circle, otherwise false.
+	**/
+	public function contains(x:Float, y:Float):Bool
+	{
+		return inline Contains(this, x, y);
+	}
+
+	/**
+	 * Returns a Point object containing the coordinates of a point on the circumference of the Circle
+	 * based on the given angle normalized to the range 0 to 1. I.e. a value of 0.5 will give the point
+	 * at 180 degrees around the circle.
+	 *
+	 * @since 1.0.0
+	 *
+	 * @param position - A value between 0 and 1, where 0 equals 0 degrees, 0.5 equals 180 degrees and 1 equals 360 around the circle.
+	 * @param out - An point to store the return values in. If not given a Point object will be created.
+	 *
+	 * @return A point, containing the coordinates of the point around the circle.
+	**/
+	public function getPoint(position:Float, ?point:Point):Point
+	{
+		return inline GetPoint(this, position, point);
+	}
+
+	/**
+	 * Returns a Point-like object containing the coordinates of a point on the circumference of the Circle
+	 * based on the given angle normalized to the range 0 to 1. I.e. a value of 0.5 will give the point
+	 * at 180 degrees around the circle.
+	 *
+	 * @since 1.0.0
+	 *
+	 * @param position - A value between 0 and 1, where 0 equals 0 degrees, 0.5 equals 180 degrees and 1 equals 360 around the circle.
+	 * @param out - An point-like object to store the return values in.
+	 *
+	 * @return the object, containing the coordinates of the point around the circle.
+	**/
+	public function getPointAny<T:Vector2Like>(position:Float, point:T):T
+	{
+		return inline GetPointAny(this, position, point);
+	}
+
+	/**
+	 * Returns an array of Point objects containing the coordinates of the points around the circumference of the Circle,
+	 * based on the given quantity or stepRate values.
+	 *
+	 * @since 1.0.0
+	 *
+	 * @param quantity - The amount of points to return. If 0 quantity will be derived from the `stepRate` instead.
+	 * @param stepRate - Sets the quantity by getting the circumference of the circle and dividing it by the stepRate.
+	 * @param output - An array to insert the points in to. If not provided a new array will be created.
+	 *
+	 * @return An array of Point objects pertaining to the points around the circumference of the circle.
+	**/
+	public function getPoints(quantity:Int, stepRate:Float = 0, ?output:Array<Point>):Array<Point>
+	{
+		return inline GetPoints(this, quantity, stepRate, output);
+	}
+
+	/**
+	 * Returns a uniformly distributed random point from anywhere within the Circle.
+	 *
+	 * @since 1.0.0
+	 *
+	 * @param point - A Point or point-like object to set the random `x` and `y` values in.
+	 *
+	 * @return A Point object with the random values set in the `x` and `y` properties.
+	**/
+	public function getRandomPoint<T:Vector2Like>(point:T):T
+	{
+		return inline RandomAny(this, point);
+	}
+
+	/**
+	 * Sets the x, y and radius of this circle.
+	 *
+	 * @since 1.0.0
+	 *
+	 * @param x - The x position of the center of the circle.
+	 * @param y - The y position of the center of the circle.
+	 * @param radius - The radius of the circle.
+	 *
+	 * @return This Circle object.
+	**/
+	public function setTo(x:Float = 0, y:Float = 0, radius:Float = 0):Circle
+	{
+		this.x = x;
+		this.y = y;
+		this._radius = radius;
+		this._diameter = radius * 2;
+
+		return this;
+	}
+
+	/**
+	 * Sets this Circle to be empty with a radius of zero.
+	 * Does not change its position.
+	 *
+	 * @since 1.0.0
+	 *
+	 * @return This Circle object.
+	**/
+	public function setEmpty():Circle
+	{
+		this._radius = 0;
+		this._diameter = 0;
+
+		return this;
+	}
+
+	/**
+	 * Sets the position of this Circle.
+	 *
+	 * @since 1.0.0
+	 *
+	 * @param x - The x position of the center of the circle.
+	 * @param y - The y position of the center of the circle.
+	 *
+	 * @return This Circle object.
+	**/
+	public function setPosition(x:Float, ?y:Float):Circle
+	{
+		if (y == null)
+		{
+			this.x = x;
+			this.y = x;
+		}
+		else
+		{
+			this.x = x;
+			this.y = y;
+		}
+
+		return this;
+	}
+
+	/**
+	 * Checks to see if the Circle is empty: has a radius of zero.
+	 *
+	 * @since 1.0.0
+	 *
+	 * @return True if the Circle is empty, otherwise false.
+	**/
+	public function isEmpty():Bool
+	{
+		return (this._radius <= 0);
+	}
+
 	/**
 	 * Calculates the area of the circle.
 	 *
-	 * @function Phaser.Geom.Circle.Area
-	 * @since 3.0.0
+	 * @since 1.0.0
 	 *
-	 * @param {Phaser.Geom.Circle} circle - The Circle to get the area of.
+	 * @param circle - The Circle to get the area of.
 	 *
-	 * @return {number} The area of the Circle.
-	 */
-	public static function Area(circle)
+	 * @return The area of the Circle.
+	**/
+	public static function Area(circle:Circle):Float
 	{
 		return (circle.radius > 0) ? Math.PI * circle.radius * circle.radius : 0;
 	}
@@ -182,23 +327,34 @@ class Circle
 	/**
 	 * Returns a uniformly distributed random point from anywhere within the given Circle.
 	 *
-	 * @function Phaser.Geom.Circle.Random
-	 * @since 3.0.0
+	 * @since 1.0.0
 	 *
-	 * @generic {Phaser.Geom.Point} O - [out,$return]
+	 * @param circle - The Circle to get a random point from.
+	 * @param out - A Point to set the random `x` and `y` values in.
 	 *
-	 * @param {Phaser.Geom.Circle} circle - The Circle to get a random point from.
-	 * @param {(Phaser.Geom.Point|object)} [out] - A Point or point-like object to set the random `x` and `y` values in.
-	 *
-	 * @return {(Phaser.Geom.Point|object)} A Point object with the random values set in the `x` and `y` properties.
-	 */
-	public static function Random(circle:Circle, ?out:Point)
+	 * @return A Point object with the random values set in the `x` and `y` properties.
+	**/
+	public static function Random(circle:Circle, ?out:Point):Point
 	{
 		if (out == null)
 		{
 			out = new Point();
 		}
+		return inline RandomAny(circle, out);
+	}
 
+	/**
+	 * Returns a uniformly distributed random point from anywhere within the given Circle.
+	 *
+	 * @since 1.0.0
+	 *
+	 * @param circle - The Circle to get a random point from.
+	 * @param out - A point-like object to set the random `x` and `y` values in.
+	 *
+	 * @return A Point object with the random values set in the `x` and `y` properties.
+	**/
+	public static function RandomAny<T:Vector2Like>(circle:Circle, out:T):T
+	{
 		var t = 2 * Math.PI * Math.random();
 		var u = Math.random() + Math.random();
 		var r = (u > 1) ? 2 - u : u;
@@ -212,38 +368,33 @@ class Circle
 	/**
 	 * Offsets the Circle by the values given in the `x` and `y` properties of the Point object.
 	 *
-	 * @function Phaser.Geom.Circle.OffsetPoint
-	 * @since 3.0.0
+	 * @since 1.0.0
 	 *
-	 * @generic {Phaser.Geom.Circle} O - [circle,$return]
+	 * @param circle - The Circle to be offset (translated.)
+	 * @param point - The Point object containing the values to offset the Circle by.
 	 *
-	 * @param {Phaser.Geom.Circle} circle - The Circle to be offset (translated.)
-	 * @param {(Phaser.Geom.Point|object)} point - The Point object containing the values to offset the Circle by.
-	 *
-	 * @return {Phaser.Geom.Circle} The Circle that was offset.
-	 */
-	public static function OffsetPoint(circle:Circle, point:Point)
+	 * @return The Circle that was offset.
+	**/
+	public static inline function OffsetPoint<T:CircleLike>(circle:T, point:Point):T
 	{
 		circle.x += point.x;
 		circle.y += point.y;
+
 		return circle;
 	}
 
 	/**
 	 * Offsets the Circle by the values given.
 	 *
-	 * @function Phaser.Geom.Circle.Offset
-	 * @since 3.0.0
+	 * @since 1.0.0
 	 *
-	 * @generic {Phaser.Geom.Circle} O - [circle,$return]
+	 * @param circle - The Circle or circle-like to be offset (translated.)
+	 * @param x - The amount to horizontally offset the Circle by.
+	 * @param y - The amount to vertically offset the Circle by.
 	 *
-	 * @param {Phaser.Geom.Circle} circle - The Circle to be offset (translated.)
-	 * @param {number} x - The amount to horizontally offset the Circle by.
-	 * @param {number} y - The amount to vertically offset the Circle by.
-	 *
-	 * @return {Phaser.Geom.Circle} The Circle that was offset.
-	 */
-	public static function Offset(circle:Circle, x:Float, y:Float)
+	 * @return The Circle that was offset.
+	**/
+	public static inline function Offset<T:CircleLike>(circle:T, x:Float, y:Float):T
 	{
 		circle.x += x;
 		circle.y += y;
@@ -257,13 +408,13 @@ class Circle
 	 * @since 1.0.0
 	 *
 	 * @param circle - The Circle to get the points from.
-	 * @param quantity - The amount of points to return. If a falsey value the quantity will be derived from the `stepRate` instead.
+	 * @param quantity - The amount of points to return. If 0 the quantity will be derived from the `stepRate` instead.
 	 * @param stepRate - Sets the quantity by getting the circumference of the circle and dividing it by the stepRate.
 	 * @param output - An array to insert the points in to. If not provided a new array will be created.
 	 *
 	 * @return An array of Point objects pertaining to the points around the circumference of the circle.
 	**/
-	public static function GetPoints(circle:Circle, quantity:Int, stepRate:Float, ?out:Array<Point>):Array<Point>
+	public static function GetPoints(circle:Circle, quantity:Int, stepRate:Float = 0, ?out:Array<Point>):Array<Point>
 	{
 		if (out == null)
 		{
@@ -278,7 +429,7 @@ class Circle
 		for (i in 0...quantity)
 		{
 			var angle = MathUtility.FromPercent(i / quantity, 0, MathConst.PI2);
-			out.push(CircumferencePoint(circle, angle, new Point()));
+			out.push(inline CircumferencePointAny(circle, angle, new Point()));
 		}
 		return out;
 	}
@@ -292,14 +443,38 @@ class Circle
 	 *
 	 * @param circle - The Circle to get the circumference point on.
 	 * @param position - A value between 0 and 1, where 0 equals 0 degrees, 0.5 equals 180 degrees and 1 equals 360 around the circle.
-	 * @param out - An object to store the return values in.
+	 * @param out - An point to store the return values in. If not given a Point object will be created.
 	 *
-	 * @return A Point, or point-like object, containing the coordinates of the point around the circle.
+	 * @return A Point, containing the coordinates of the point around the circle.
 	**/
-	public static function GetPoint<T:Vector2Like>(circle:Circle, position:Float, out:T):T
+	public static function GetPoint(circle:Circle, position:Float, ?out:Point):Point
 	{
+		if (out == null)
+		{
+			out = new Point();
+		}
+
 		var angle = MathUtility.FromPercent(position, 0, MathConst.PI2);
 		return CircumferencePoint(circle, angle, out);
+	}
+
+	/**
+	 * Returns a Point object containing the coordinates of a point on the circumference of the Circle
+	 * based on the given angle normalized to the range 0 to 1. I.e. a value of 0.5 will give the point
+	 * at 180 degrees around the circle.
+	 *
+	 * @since 1.0.0
+	 *
+	 * @param circle - The Circle to get the circumference point on.
+	 * @param position - A value between 0 and 1, where 0 equals 0 degrees, 0.5 equals 180 degrees and 1 equals 360 around the circle.
+	 * @param out - An object to store the return values in.
+	 *
+	 * @return A point-like object, containing the coordinates of the point around the circle.
+	**/
+	public static function GetPointAny<T:Vector2Like>(circle:Circle, position:Float, out:T):T
+	{
+		var angle = MathUtility.FromPercent(position, 0, MathConst.PI2);
+		return CircumferencePointAny(circle, angle, out);
 	}
 
 	/**
@@ -323,11 +498,32 @@ class Circle
 	 *
 	 * @param circle - The Circle to get the circumference point on.
 	 * @param angle - The angle from the center of the Circle to the circumference to return the point from. Given in radians.
-	 * @param out - A Point, or point-like object, to store the results in.
+	 * @param out - A Point to store the results in. If not given a Point will be created.
 	 *
 	 * @return A Point object where the `x` and `y` properties are the point on the circumference.
 	**/
-	public static inline function CircumferencePoint<T:Vector2Like>(circle:Circle, angle:Float, out:T):T
+	public static function CircumferencePoint(circle:Circle, angle:Float, ?out:Point):Point
+	{
+		if (out != null)
+		{
+			out = new Point();
+		}
+
+		return inline CircumferencePointAny(circle, angle, out);
+	}
+
+	/**
+	 * Returns a Point object containing the coordinates of a point on the circumference of the Circle based on the given angle.
+	 *
+	 * @since 1.0.0
+	 *
+	 * @param circle - The Circle to get the circumference point on.
+	 * @param angle - The angle from the center of the Circle to the circumference to return the point from. Given in radians.
+	 * @param out - A point-like object, to store the results in.
+	 *
+	 * @return A Point object where the `x` and `y` properties are the point on the circumference.
+	**/
+	public static inline function CircumferencePointAny<T:Vector2Like>(circle:Circle, angle:Float, out:T):T
 	{
 		out.x = circle.x + (circle.radius * Math.cos(angle));
 		out.y = circle.y + (circle.radius * Math.sin(angle));
@@ -425,14 +621,13 @@ class Circle
 	/**
 	 * Check to see if the Circle contains the given x / y coordinates.
 	 *
-	 * @function Phaser.Geom.Circle.Contains
-	 * @since 3.0.0
+	 * @since 1.0.0
 	 *
-	 * @param {Phaser.Geom.Circle} circle - The Circle to check.
-	 * @param {number} x - The x coordinate to check within the circle.
-	 * @param {number} y - The y coordinate to check within the circle.
+	 * @param circle - The Circle to check.
+	 * @param x - The x coordinate to check within the circle.
+	 * @param y - The y coordinate to check within the circle.
 	 *
-	 * @return {boolean} True if the coordinates are within the circle, otherwise false.
+	 * @return True if the coordinates are within the circle, otherwise false.
 	**/
 	public static function Contains(circle:Circle, x:Float, y:Float):Bool
 	{
@@ -454,12 +649,26 @@ class Circle
 	 *
 	 * @since 1.0.0
 	 *
-	 * @param {(Phaser.Geom.Circle|object)} source - The Circle to be cloned. Can be an instance of a Circle or a circle-like object, with x, y and radius properties.
+	 * @param source - The Circle to be cloned. Can be an instance of a Circle or a circle-like object, with x, y and radius properties.
 	 *
-	 * @return {Phaser.Geom.Circle} A clone of the source Circle.
+	 * @return A clone of the source Circle.
 	**/
-	public static function Clone(source:Circle):Circle
+	public static inline function Clone<T:CircleLike>(source:CircleLike):Circle
 	{
 		return new Circle(source.x, source.y, source.radius);
+	}
+
+	/**
+	 * Creates a new inline Circle instance based on the values contained in the given source.
+	 *
+	 * @since 1.0.0
+	 *
+	 * @param source - The Circle to be cloned. Can be an instance of a Circle or a circle-like object, with x, y and radius properties.
+	 *
+	 * @return A inline clone of the source Circle.
+	**/
+	public static inline function CloneInline<T:CircleLike>(source:CircleLike):Circle
+	{
+		return inline new Circle(source.x, source.y, source.radius);
 	}
 }

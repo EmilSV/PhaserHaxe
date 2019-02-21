@@ -2,15 +2,12 @@ package phaserHaxe.geom;
 
 import phaserHaxe.math.Vector2;
 
-@:forward(x,y)
+@:forward(x, y)
 abstract Point(Vector2) from Vector2 to Vector2
 {
-    
-
 	public function new(x:Float = 0, ?y:Float)
 	{
-		this.x = x;
-		this.y = y != null ? y : x;
+		this = new Vector2(x, y);
 	}
 
 	/**

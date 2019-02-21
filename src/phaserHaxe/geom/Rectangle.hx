@@ -115,12 +115,12 @@ class Rectangle
 		this.height = height;
 	}
 
-	private inline function get_left()
+	private inline function get_left():Float
 	{
 		return this.x;
 	}
 
-	private function set_left(value)
+	private function set_left(value:Float):Float
 	{
 		if (value >= this.right)
 		{
@@ -133,12 +133,12 @@ class Rectangle
 		return value;
 	}
 
-	private inline function get_right()
+	private inline function get_right():Float
 	{
 		return this.x + this.width;
 	}
 
-	private function set_right(value)
+	private function set_right(value:Float):Float
 	{
 		if (value <= this.x)
 		{
@@ -151,12 +151,12 @@ class Rectangle
 		return value;
 	}
 
-	private inline function get_top()
+	private inline function get_top():Float
 	{
 		return this.y;
 	}
 
-	private function set_top(value)
+	private function set_top(value:Float):Float
 	{
 		if (value >= this.bottom)
 		{
@@ -171,12 +171,12 @@ class Rectangle
 		return value;
 	}
 
-	private inline function get_bottom()
+	private inline function get_bottom():Float
 	{
 		return this.y + this.height;
 	}
 
-	private function set_bottom(value)
+	private function set_bottom(value:Float):Float
 	{
 		if (value <= this.y)
 		{
@@ -189,23 +189,23 @@ class Rectangle
 		return value;
 	}
 
-	private inline function get_centerX()
+	private inline function get_centerX():Float
 	{
 		return this.x + (this.width / 2);
 	}
 
-	private inline function set_centerX(value)
+	private inline function set_centerX(value:Float):Float
 	{
 		this.x = value - (this.width / 2);
 		return value;
 	}
 
-	private inline function get_centerY()
+	private inline function get_centerY():Float
 	{
 		return this.y + (this.height / 2);
 	}
 
-	private inline function set_centerY(value)
+	private inline function set_centerY(value:Float):Float
 	{
 		this.y = value - (this.height / 2);
 		return value;

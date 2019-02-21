@@ -41,6 +41,11 @@ phaserHaxe.math.Pow2
 phaserHaxe.math.Snap
 phaserHaxe.math.RandomDataGenerator
 phaserHaxe.Compatibility
+phaserHaxe.geom.Circle
+phaserHaxe.geom.CircleLike
+phaserHaxe.geom.Point
+phaserHaxe.geom.Rectangle
+phaserHaxe.geom.RectangleLike
 
 
 -main Main
