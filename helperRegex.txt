@@ -14,3 +14,7 @@ public function $1
 
 [@]since.*
 @since 1.0.0
+
+
+var (\w*) = function
+public static function $1
