@@ -46,6 +46,7 @@ phaserHaxe.geom.CircleLike
 phaserHaxe.geom.Point
 phaserHaxe.geom.Rectangle
 phaserHaxe.geom.RectangleLike
+phaserHaxe.geom.RectangleUtil
 
 
 -main Main
