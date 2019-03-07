@@ -9,6 +9,7 @@ import phaserHaxe.math.Vector2Like;
  *
  * @since 1.0.0
 **/
+@:structInit
 class Vector2
 {
 	/**

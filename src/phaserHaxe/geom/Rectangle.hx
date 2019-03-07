@@ -345,7 +345,7 @@ class Rectangle
 	 *
 	 * @return This Rectangle object.
 	**/
-	public function setSize(width:Float, height:Float):Rectangle
+	public function setSize(width:Float, ?height:Float):Rectangle
 	{
 		this.width = width;
 		this.height = height != null ? height : width;

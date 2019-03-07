@@ -8,6 +8,7 @@ package phaserHaxe.math;
  * @since 1.0.0
  *
 **/
+@:structInit
 class Vector4
 {
 	/**

@@ -47,7 +47,12 @@ phaserHaxe.geom.Point
 phaserHaxe.geom.Rectangle
 phaserHaxe.geom.RectangleLike
 phaserHaxe.geom.RectangleUtil
-
+phaserHaxe.geom.Line
+phaserHaxe.geom.LineUtil
+phaserHaxe.geom.Triangle
+phaserHaxe.geom.TriangleUtil
+phaserHaxe.geom.earcut.EarcutApi
+phaserHaxe.geom.Intersects
 
 -main Main
 

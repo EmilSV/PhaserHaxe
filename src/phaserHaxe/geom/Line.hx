@@ -3,6 +3,12 @@ package phaserHaxe.geom;
 import phaserHaxe.math.Vector2Like;
 import phaserHaxe.math.Vector2;
 
+/**
+ * Defines a Line segment, a part of a line between two endpoints.
+ *
+ * @since 1.0.0
+ *
+**/
 final class Line
 {
 	/**
@@ -195,7 +201,7 @@ final class Line
 		return LineUtil.GetPoints(this, quantity, stepRate, output);
 	}
 
-	/**t
+	/**
 	 * Get a random Point on the Line.
 	 *
 	 * @since 1.0.0
@@ -260,7 +266,7 @@ final class Line
 			vec2 = new Vector2();
 		}
 
-		vec2.set(this.x1, this.y1);
+		inline vec2.set(this.x1, this.y1);
 
 		return vec2;
 	}
@@ -274,7 +280,7 @@ final class Line
 	 *
 	 * @return A Vector2 object that corresponds to the start of this Line.
 	**/
-	public function getPointAAny<T:Vector2Like>(vec2:T):T
+	public inline function getPointAAny<T:Vector2Like>(vec2:T):T
 	{
 		vec2.x = this.x1;
 		vec2.y = this.y1;
@@ -297,7 +303,8 @@ final class Line
 			vec2 = new Vector2();
 		}
 
-		vec2.set(this.x2, this.y2);
+		vec2.x = x2;
+		vec2.y = y2;
 
 		return vec2;
 	}
@@ -311,7 +318,7 @@ final class Line
 	 *
 	 * @return A Vector2 object that corresponds to the end of this Line.
 	**/
-	public function getPointBAny<T:Vector2Like>(?vec2:T):T
+	public inline function getPointBAny<T:Vector2Like>(?vec2:T):T
 	{
 		vec2.x = this.x2;
 		vec2.y = this.y2;

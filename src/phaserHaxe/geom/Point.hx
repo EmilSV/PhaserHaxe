@@ -2,7 +2,13 @@ package phaserHaxe.geom;
 
 import phaserHaxe.math.Vector2;
 
+/**
+ * Defines a Point in 2D space, with an x and y component.
+ *
+ * @since 1.0.0
+**/
 @:forward(x, y)
+@:structInit
 abstract Point(Vector2) from Vector2 to Vector2
 {
 	public function new(x:Float = 0, ?y:Float)

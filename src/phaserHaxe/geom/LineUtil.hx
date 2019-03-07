@@ -49,7 +49,7 @@ class LineUtil
 		var sx = (x1 < x2) ? 1 : -1;
 		var sy = (y1 < y2) ? 1 : -1;
 		var err = dx - dy;
-		results.push(new Point(x1, y1));
+		results.push({x: x1, y: y1});
 		var i = 1;
 		while (!((x1 == x2) && (y1 == y2)))
 		{
@@ -66,7 +66,7 @@ class LineUtil
 			}
 			if (i % stepRate == 0)
 			{
-				results.push(new Point(x1, y1);
+				results.push({x: x1, y: y1});
 			}
 			i++;
 		}

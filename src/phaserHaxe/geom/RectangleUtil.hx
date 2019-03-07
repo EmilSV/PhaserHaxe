@@ -214,7 +214,7 @@ final class RectangleUtil
 	 *
 	 * @return Will return the array you specified or a new array containing the points of the Rectangle.
 	**/
-	public static function Decompose(rect:Rectangle, out:Array<Point>):Array<Point>
+	public static function Decompose(rect:Rectangle, ?out:Array<Point>):Array<Point>
 	{
 		if (out == null)
 		{
@@ -998,7 +998,7 @@ final class RectangleUtil
 	 *
 	 * @return The rectangle object with updated `width` and `height` properties as calculated from the scaling factor(s).
 	**/
-	public static function Scale(rect:Rectangle, x:Float, y:Float):Rectangle
+	public static function Scale(rect:Rectangle, x:Float, ?y:Float):Rectangle
 	{
 		rect.width *= x;
 

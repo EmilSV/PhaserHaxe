@@ -8,6 +8,7 @@ import haxe.io.Float32Array;
  * A quaternion.
 **/
 @:forward(x, y, z, w)
+@:structInit
 abstract Quaternion(Vector4) from Vector4 to Vector4
 {
 	private static inline final EPSILON = 0.000001;
@@ -162,8 +163,7 @@ abstract Quaternion(Vector4) from Vector4 to Vector4
 		var localY = this.y;
 		var localZ = this.z;
 		var localW = this.w;
-		var len = localX * localX + localY * localY + localZ * localZ +
-			localW * localW;
+		var len = localX * localX + localY * localY + localZ * localZ + localW * localW;
 		if (len > 0)
 		{
 			len = 1 / Math.sqrt(len);
