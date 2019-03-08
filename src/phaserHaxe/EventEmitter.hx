@@ -1,0 +1,6 @@
+package phaserHaxe;
+
+class EventEmitter
+{
+    
+}

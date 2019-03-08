@@ -267,15 +267,14 @@ class TransformMatrix
 	/**
 	 * Translate the Matrix.
 	 *
-	 * @method Phaser.GameObjects.Components.TransformMatrix#translate
-	 * @since 3.0.0
+	 * @since 1.0.0
 	 *
-	 * @param {number} x - The horizontal translation value.
-	 * @param {number} y - The vertical translation value.
+	 * @param x - The horizontal translation value.
+	 * @param y - The vertical translation value.
 	 *
 	 * @return {this} This TransformMatrix.
-	 */
-	public function translate(x, y)
+	**/
+	public function translate(x:Float, y:Float):TransformMatrix
 	{
 		var matrix = this.matrix;
 
@@ -288,15 +287,14 @@ class TransformMatrix
 	/**
 	 * Scale the Matrix.
 	 *
-	 * @method Phaser.GameObjects.Components.TransformMatrix#scale
-	 * @since 3.0.0
+	 * @since 1.0.0
 	 *
-	 * @param {number} x - The horizontal scale value.
-	 * @param {number} y - The vertical scale value.
+	 * @param x - The horizontal scale value.
+	 * @param y - The vertical scale value.
 	 *
-	 * @return {this} This TransformMatrix.
-	 */
-	public function scale(x, y)
+	 * @return This TransformMatrix.
+	**/
+	public function scale(x:Float, y:Float):TransformMatrix
 	{
 		var matrix = this.matrix;
 
@@ -311,14 +309,13 @@ class TransformMatrix
 	/**
 	 * Rotate the Matrix.
 	 *
-	 * @method Phaser.GameObjects.Components.TransformMatrix#rotate
-	 * @since 3.0.0
+	 * @since 1.0.0
 	 *
-	 * @param {number} angle - The angle of rotation in radians.
+	 * @param angle - The angle of rotation in radians.
 	 *
-	 * @return {this} This TransformMatrix.
-	 */
-	public function rotate(angle)
+	 * @return This TransformMatrix.
+	**/
+	public function rotate(angle:Float):TransformMatrix
 	{
 		var sin = Math.sin(angle);
 		var cos = Math.cos(angle);
@@ -432,19 +429,18 @@ class TransformMatrix
 	/**
 	 * Transform the Matrix.
 	 *
-	 * @method Phaser.GameObjects.Components.TransformMatrix#transform
 	 * @since 3.0.0
 	 *
-	 * @param {number} a - The Scale X value.
-	 * @param {number} b - The Shear Y value.
-	 * @param {number} c - The Shear X value.
-	 * @param {number} d - The Scale Y value.
-	 * @param {number} tx - The Translate X value.
-	 * @param {number} ty - The Translate Y value.
+	 * @param a - The Scale X value.
+	 * @param b - The Shear Y value.
+	 * @param c - The Shear X value.
+	 * @param d - The Scale Y value.
+	 * @param tx - The Translate X value.
+	 * @param ty - The Translate Y value.
 	 *
-	 * @return {this} This TransformMatrix.
+	 * @return This TransformMatrix.
 	**/
-	public function transform(a, b, c, d, tx, ty)
+	public function transform(a:Float, b:Float, c:Float, d:Float, tx:Float, ty:Float):TransformMatrix
 	{
 		var matrix = this.matrix;
 
@@ -468,16 +464,15 @@ class TransformMatrix
 	/**
 	 * Transform a point using this Matrix.
 	 *
-	 * @method Phaser.GameObjects.Components.TransformMatrix#transformPoint
-	 * @since 3.0.0
+	 * @since 1.0.0
 	 *
-	 * @param {number} x - The x coordinate of the point to transform.
-	 * @param {number} y - The y coordinate of the point to transform.
-	 * @param {(Phaser.Geom.Point|Phaser.Math.Vector2|object)} point - The Point object to store the transformed coordinates.
+	 * @param x - The x coordinate of the point to transform.
+	 * @param y - The y coordinate of the point to transform.
+	 * @param point - The Point object to store the transformed coordinates.
 	 *
-	 * @return {(Phaser.Geom.Point|Phaser.Math.Vector2|object)} The Point containing the transformed coordinates.
-	 */
-	public function transformPoint(x, y, ?point:Point)
+	 * @return The Point containing the transformed coordinates.
+	**/
+	public function transformPoint(x:Float, y:Float, ?point:Point):Point
 	{
 		if (point == null)
 		{
@@ -502,12 +497,11 @@ class TransformMatrix
 	/**
 	 * Invert the Matrix.
 	 *
-	 * @method Phaser.GameObjects.Components.TransformMatrix#invert
-	 * @since 3.0.0
+	 * @since 1.0.0
 	 *
-	 * @return {this} This TransformMatrix.
-	 */
-	public function invert()
+	 * @return This TransformMatrix.
+	**/
+	public function invert():TransformMatrix
 	{
 		var matrix = this.matrix;
 
@@ -533,14 +527,13 @@ class TransformMatrix
 	/**
 	 * Set the values of this Matrix to copy those of the matrix given.
 	 *
-	 * @method Phaser.GameObjects.Components.TransformMatrix#copyFrom
-	 * @since 3.11.0
+	 * @since 1.0.0
 	 *
-	 * @param {Phaser.GameObjects.Components.TransformMatrix} src - The source Matrix to copy from.
+	 * @param src - The source Matrix to copy from.
 	 *
-	 * @return {this} This TransformMatrix.
-	 */
-	public function copyFrom(src)
+	 * @return This TransformMatrix.
+	**/
+	public function copyFrom(src:TransformMatrix):TransformMatrix
 	{
 		var matrix = this.matrix;
 
@@ -558,14 +551,13 @@ class TransformMatrix
 	 * Set the values of this Matrix to copy those of the array given.
 	 * Where array indexes 0, 1, 2, 3, 4 and 5 are mapped to a, b, c, d, e and f.
 	 *
-	 * @method Phaser.GameObjects.Components.TransformMatrix#copyFromArray
-	 * @since 3.11.0
+	 * @since 1.0.0
 	 *
-	 * @param {array} src - The array of values to set into this matrix.
+	 * @param src - The array of values to set into this matrix.
 	 *
-	 * @return {this} This TransformMatrix.
-	 */
-	public function copyFromArray(src)
+	 * @return This TransformMatrix.
+	**/
+	public function copyFromArray(src:Array<Float>):TransformMatrix
 	{
 		var matrix = this.matrix;
 
@@ -583,13 +575,12 @@ class TransformMatrix
 	 * Copy the values from this Matrix to the given Canvas Rendering Context.
 	 * This will use the Context.transform method.
 	 *
-	 * @method Phaser.GameObjects.Components.TransformMatrix#copyToContext
-	 * @since 3.12.0
+	 * @since 1.0.0
 	 *
 	 * @param {CanvasRenderingContext2D} ctx - The Canvas Rendering Context to copy the matrix values to.
 	 *
 	 * @return {CanvasRenderingContext2D} The Canvas Rendering Context.
-	 */
+	**/
 	public function copyToContext(ctx)
 	{
 		var matrix = this.matrix;
@@ -601,16 +592,17 @@ class TransformMatrix
 	}
 
 	/**
+	 * TODO: Add Canvas Rendering Context type
+	 *
 	 * Copy the values from this Matrix to the given Canvas Rendering Context.
 	 * This will use the Context.setTransform method.
 	 *
-	 * @method Phaser.GameObjects.Components.TransformMatrix#setToContext
-	 * @since 3.12.0
+	 * @since 1.0.0
 	 *
 	 * @param {CanvasRenderingContext2D} ctx - The Canvas Rendering Context to copy the matrix values to.
 	 *
 	 * @return {CanvasRenderingContext2D} The Canvas Rendering Context.
-	 */
+	**/
 	public function setToContext(ctx)
 	{
 		var matrix = this.matrix;
@@ -626,18 +618,17 @@ class TransformMatrix
 	 *
 	 * Where array indexes 0, 1, 2, 3, 4 and 5 are mapped to a, b, c, d, e and f.
 	 *
-	 * @method Phaser.GameObjects.Components.TransformMatrix#copyToArray
-	 * @since 3.12.0
+	 * @since 1.0.0
 	 *
-	 * @param {array} [out] - The array to copy the matrix values in to.
+	 * @param out - The array to copy the matrix values in to.
 	 *
-	 * @return {array} An array where elements 0 to 5 contain the values from this matrix.
-	 */
-	public function copyToArray(out)
+	 * @return An array where elements 0 to 5 contain the values from this matrix.
+	**/
+	public function copyToArray(out:Array<Float>):Array<Float>
 	{
 		var matrix = this.matrix;
 
-		if (out == = undefined)
+		if (out ==)
 		{
 			out = [matrix[0], matrix[1], matrix[2], matrix[3], matrix[4], matrix[5]];
 		}
@@ -657,19 +648,18 @@ class TransformMatrix
 	/**
 	 * Set the values of this Matrix.
 	 *
-	 * @method Phaser.GameObjects.Components.TransformMatrix#setTransform
-	 * @since 3.0.0
+	 * @since 1.0.0
 	 *
-	 * @param {number} a - The Scale X value.
-	 * @param {number} b - The Shear Y value.
-	 * @param {number} c - The Shear X value.
-	 * @param {number} d - The Scale Y value.
-	 * @param {number} tx - The Translate X value.
-	 * @param {number} ty - The Translate Y value.
+	 * @param a - The Scale X value.
+	 * @param b - The Shear Y value.
+	 * @param c - The Shear X value.
+	 * @param d - The Scale Y value.
+	 * @param tx - The Translate X value.
+	 * @param ty - The Translate Y value.
 	 *
 	 * @return {this} This TransformMatrix.
-	 */
-	public function setTransform(a, b, c, d, tx, ty)
+	**/
+	public function setTransform(a:Float, b:Float, c:Float, d:Float, tx:Float, ty:Float):TransformMatrix
 	{
 		var matrix = this.matrix;
 
@@ -690,11 +680,10 @@ class TransformMatrix
 	 *
 	 * translate -> rotate -> scale
 	 *
-	 * @method Phaser.GameObjects.Components.TransformMatrix#decomposeMatrix
-	 * @since 3.0.0
+	 * @since 1.0.0
 	 *
-	 * @return {object} The decomposed Matrix.
-	 */
+	 * @return The decomposed Matrix.
+	**/
 	public function decomposeMatrix()
 	{
 		var decomposedMatrix = this.decomposedMatrix;
@@ -747,18 +736,17 @@ class TransformMatrix
 	/**
 	 * Apply the identity, translate, rotate and scale operations on the Matrix.
 	 *
-	 * @method Phaser.GameObjects.Components.TransformMatrix#applyITRS
-	 * @since 3.0.0
+	 * @since 1.0.0
 	 *
-	 * @param {number} x - The horizontal translation.
-	 * @param {number} y - The vertical translation.
-	 * @param {number} rotation - The angle of rotation in radians.
-	 * @param {number} scaleX - The horizontal scale.
-	 * @param {number} scaleY - The vertical scale.
+	 * @param x - The horizontal translation.
+	 * @param y - The vertical translation.
+	 * @param rotation - The angle of rotation in radians.
+	 * @param scaleX - The horizontal scale.
+	 * @param scaleY - The vertical scale.
 	 *
-	 * @return {this} This TransformMatrix.
-	 */
-	public function applyITRS(x, y, rotation, scaleX, scaleY)
+	 * @return This TransformMatrix.
+	**/
+	public function applyITRS(x:Float, y:Float, rotation:Float, scaleX:Float, scaleY:Float):TransformMatrix
 	{
 		var matrix = this.matrix;
 
@@ -784,16 +772,15 @@ class TransformMatrix
 	 *
 	 * Can be used to translate points from world to local space.
 	 *
-	 * @method Phaser.GameObjects.Components.TransformMatrix#applyInverse
-	 * @since 3.12.0
+	 * @since 1.0.0
 	 *
-	 * @param {number} x - The x position to translate.
-	 * @param {number} y - The y position to translate.
-	 * @param {Phaser.Math.Vector2} [output] - A Vector2, or point-like object, to store the results in.
+	 * @param x - The x position to translate.
+	 * @param y - The y position to translate.
+	 * @param output - A Vector2 to store the results in.
 	 *
-	 * @return {Phaser.Math.Vector2} The coordinates, inverse-transformed through this matrix.
-	 */
-	public function applyInverse(x, y, output:Vector2)
+	 * @return The coordinates, inverse-transformed through this matrix.
+	**/
+	public function applyInverse(x:Float, y:Float, output:Vector2):Vector2
 	{
 		if (output == null)
 		{
@@ -821,45 +808,42 @@ class TransformMatrix
 	 * Returns the X component of this matrix multiplied by the given values.
 	 * This is the same as `x * a + y * c + e`.
 	 *
-	 * @method Phaser.GameObjects.Components.TransformMatrix#getX
-	 * @since 3.12.0
+	 * @since 1.0.0
 	 *
-	 * @param {number} x - The x value.
-	 * @param {number} y - The y value.
+	 * @param x - The x value.
+	 * @param y - The y value.
 	 *
-	 * @return {number} The calculated x value.
-	 */
-	public function getX(x, y)
+	 * @return The calculated x value.
+	**/
+	public function getX(x:Float, y:Float):Float
 	{
-		return x * this.a + y * this.c + this.e;
+		return x * a + y * c + e;
 	}
 
 	/**
 	 * Returns the Y component of this matrix multiplied by the given values.
 	 * This is the same as `x * b + y * d + f`.
 	 *
-	 * @method Phaser.GameObjects.Components.TransformMatrix#getY
-	 * @since 3.12.0
+	 * @since 1.0.0
 	 *
-	 * @param {number} x - The x value.
-	 * @param {number} y - The y value.
+	 * @param x - The x value.
+	 * @param y - The y value.
 	 *
-	 * @return {number} The calculated y value.
-	 */
-	public function getY(x, y)
+	 * @return The calculated y value.
+	**/
+	public function getY(x:Float, y:Float):Float
 	{
-		return x * this.b + y * this.d + this.f;
+		return x * b + y * d + f;
 	}
 
 	/**
 	 * Returns a string that can be used in a CSS Transform call as a `matrix` property.
 	 *
-	 * @method Phaser.GameObjects.Components.TransformMatrix#getCSSMatrix
-	 * @since 3.12.0
+	 * @since 1.0.0
 	 *
-	 * @return {string} A string containing the CSS Transform matrix values.
-	 */
-	public function getCSSMatrix()
+	 * @return A string containing the CSS Transform matrix values.
+	**/
+	public function getCSSMatrix():String
 	{
 		var m = this.matrix;
 
@@ -870,10 +854,9 @@ class TransformMatrix
 	/**
 	 * Destroys this Transform Matrix.
 	 *
-	 * @method Phaser.GameObjects.Components.TransformMatrix#destroy
-	 * @since 3.4.0
-	 */
-	public function destroy()
+	 * @since 1.0.0
+	**/
+	public function destroy():Void
 	{
 		this.matrix = null;
 		this.decomposedMatrix = null;
