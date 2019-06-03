@@ -4,7 +4,8 @@ package phaserHaxe;
  * Global consts.
  *
 **/
-class Const {
+class Const
+{
 	/**
 	 * Phaser Haxe Release Version
 	 *

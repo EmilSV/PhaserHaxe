@@ -628,7 +628,7 @@ class TransformMatrix
 	{
 		var matrix = this.matrix;
 
-		if (out ==)
+		if (out == null)
 		{
 			out = [matrix[0], matrix[1], matrix[2], matrix[3], matrix[4], matrix[5]];
 		}

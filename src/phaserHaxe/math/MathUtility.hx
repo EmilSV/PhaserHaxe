@@ -2,11 +2,19 @@ package phaserHaxe.math;
 
 import haxe.ds.ReadOnlyArray;
 
-typedef SinCosTable =
+@:structInit
+final class SinCosTable
 {
 	final sin:ReadOnlyArray<Float>;
 	final cos:ReadOnlyArray<Float>;
 	final length:Int;
+
+	public function new(sin:ReadOnlyArray<Float>, cos:ReadOnlyArray<Float>, length:Int)
+	{
+		this.sin = sin;
+		this.cos = cos;
+		this.length = length;
+	}
 }
 
 class MathUtility
@@ -312,8 +320,9 @@ class MathUtility
 	 *
 	 * @return The translated point.
 	**/
-	public static function TransformXY(x:Float, y:Float, positionX:Float, positionY:Float, rotation:Float,
-			scaleX:Float, scaleY:Float, output:Vector2):Vector2
+	public static function TransformXY(x:Float, y:Float, positionX:Float,
+			positionY:Float, rotation:Float, scaleX:Float, scaleY:Float,
+			output:Vector2):Vector2
 	{
 		if (output == null)
 		{
@@ -332,8 +341,10 @@ class MathUtility
 		//  Invert
 		var id = 1 / ((a * d) + (c * -b));
 
-		output.x = (d * id * x) + (-c * id * y) + (((positionY * c) - (positionX * d)) * id);
-		output.y = (a * id * y) + (-b * id * x) + (((-positionY * a) + (positionX * b)) * id);
+		output.x = (d * id * x) + (-c * id * y) +
+			(((positionY * c) - (positionX * d)) * id);
+		output.y = (a * id * y) + (-b * id * x) + (((-positionY * a) +
+			(positionX * b)) * id);
 
 		return output;
 	}
@@ -408,7 +419,8 @@ class MathUtility
 	 *
 	 * @return The generated values.
 	**/
-	public static function SinCosTableGenerator(length:Int, sinAmp:Float = 1, cosAmp:Float = 1, frequency:Float = 1):SinCosTable
+	public static function SinCosTableGenerator(length:Int, sinAmp:Float = 1,
+			cosAmp:Float = 1, frequency:Float = 1):SinCosTable
 	{
 		frequency *= Math.PI / length;
 
@@ -501,7 +513,8 @@ class MathUtility
 	 *
 	 * @return The given point.
 	**/
-	public static function RotateAroundDistance(point:Vector2, x:Float, y:Float, angle:Float, distance:Float):Vector2
+	public static function RotateAroundDistance(point:Vector2, x:Float, y:Float,
+			angle:Float, distance:Float):Vector2
 	{
 		var t = angle + Math.atan2(point.y - y, point.x - x);
 		point.x = x + (distance * Math.cos(t));
@@ -522,7 +535,8 @@ class MathUtility
 	 *
 	 * @return The given point, rotated by the given angle around the given coordinates.
 	**/
-	public static function RotateAround(point:Vector2, x:Float, y:Float, angle:Float):Vector2
+	public static function RotateAround(point:Vector2, x:Float, y:Float,
+			angle:Float):Vector2
 	{
 		var c = Math.cos(angle);
 		var s = Math.sin(angle);
@@ -646,7 +660,8 @@ class MathUtility
 	 *
 	 * @return A value between 0 and 1 representing the percentage.
 	**/
-	public static function Percent(value:Float, min:Float, ?max:Float, ?upperMax:Float):Float
+	public static function Percent(value:Float, min:Float, ?max:Float,
+			?upperMax:Float):Float
 	{
 		var max:Float = max != null ? max : min + 1;
 
@@ -719,13 +734,15 @@ class MathUtility
 	 *
 	 * @return The Catmull-Rom value.
 	**/
-	public static function CatmullRom(t:Float, p0:Float, p1:Float, p2:Float, p3:Float):Float
+	public static function CatmullRom(t:Float, p0:Float, p1:Float, p2:Float,
+			p3:Float):Float
 	{
 		var v0 = (p2 - p0) * 0.5;
 		var v1 = (p3 - p1) * 0.5;
 		var t2 = t * t;
 		var t3 = t * t2;
-		return (2 * p1 - 2 * p2 + v0 + v1) * t3 + (-3 * p1 + 3 * p2 - 2 * v0 - v1) * t2 + v0 * t + p1;
+		return (2 * p1 - 2 * p2 + v0 + v1) * t3 + (-3 * p1 + 3 * p2 - 2 * v0 - v1) * t2 +
+			v0 * t + p1;
 	}
 
 	/**

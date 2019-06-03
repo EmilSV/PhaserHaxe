@@ -3,9 +3,9 @@ package phaserHaxe;
 import haxe.ds.StringMap;
 import haxe.Constraints.Function;
 
-typedef Events = StringMap<Null<Array<EE>>>;
+typedef Events = StringMap<Array<EE>>;
 
-private class EE
+private final class EE
 {
 	public var fn:Function;
 	public var context:Dynamic;
@@ -19,12 +19,23 @@ private class EE
 	}
 }
 
+/**
+ * Near copy of eventemitter3.
+ * Minimal `EventEmitter` interface that is molded against the Node.js
+ * `EventEmitter` interface.
+**/
 class EventEmitter
 {
-	private static inline var prefix:String = "~";
+	public static inline var prefixed = false;
 
 	private var _events:Events;
 	private var _eventsCount:Int;
+
+	public function new()
+	{
+		_events = new Events();
+		_eventsCount = 0;
+	}
 
 	/**
 	 * Add a listener for a given event.
@@ -35,7 +46,7 @@ class EventEmitter
 	 * @param context The context to invoke the listener with.
 	 * @param once Specify if the listener is a one-time listener.
 	**/
-	private static function addListener(emitter:EventEmitter, event:String,
+	private static function s_addListener(emitter:EventEmitter, event:String,
 			fn:Function, ?context:Dynamic, once:Bool):EventEmitter
 	{
 		if (context == null)
@@ -64,57 +75,56 @@ class EventEmitter
 	 * Clear event by name.
 	 *
 	 * @param emitter Reference to the `EventEmitter` instance.
-	 * @param evt The Event name.
+	 * @param event The Event name.
 	**/
-	private static function clearEvent(emitter:EventEmitter, evt:String)
+	private static function clearEvent(emitter:EventEmitter, event:String):Void
 	{
-		var events = emitter._events.get(evt);
-		if (events != null)
-		{
-			events.resize(0);
-		}
+		emitter._eventsCount -= 1;
+		emitter._events.remove(event);
 	}
 
+	/**
+	 * Return an array listing the events for which the emitter has registered
+	 * listeners.
+	**/
 	public function eventNames():Array<String>
 	{
-		var names = [];
-		var name:String;
-		var events = this._events;
-
 		if (_eventsCount == 0)
 		{
-			return names;
+			return [];
 		}
-
-		for (key in events.keys())
+		else
 		{
-			names.push(key);
+			return [
+				for (key in _events.keys())
+				{
+					key;
+				}
+			];
 		}
-
-		return names;
 	}
 
+	/**
+	 * Return the listeners registered for a given event.
+	 *
+	 * @param event - The event name.
+	 * @returns The registered listeners.
+	**/
 	public function listeners(event:String):Null<Array<Function>>
 	{
-		if (event == null)
-		{
-			return null;
-		}
-		var evt = event;
-		var handlers = this._events.get(evt);
+		var handlers = this._events.get(event);
 
 		if (handlers == null)
 		{
-			return null;
+			return [];
 		}
 
-		var ee = new Array<Function>();
-		ee.resize(handlers.length);
-
-		for (i in 0...handlers.length)
-		{
-			ee[i] = handlers[i].fn;
-		}
+		var ee = [
+			for (item in handlers)
+			{
+				item.fn;
+			}
+		];
 
 		return ee;
 	}
@@ -122,7 +132,7 @@ class EventEmitter
 	/**
 	 * Return the number of listeners listening to a given event.
 	 *
-	 * @param event The event name.
+	 * @param event - The event name.
 	 * @returns The number of listeners.
 	**/
 	public function listenerCount(event:String):Int
@@ -142,21 +152,27 @@ class EventEmitter
 	/**
 	 * Calls each of the listeners registered for a given event.
 	 *
-	 * @param event The event name.
+	 * @param event - The event name.
 	 * @returns `true` if the event had listeners, else `false`.
 	**/
 	public function emit(event, args:Array<Dynamic>):Bool
 	{
-		var listeners = _events.get(event);
+		final listeners = _events.get(event);
 		if (listeners == null)
 		{
 			return false;
 		}
 
-		var len = args.length;
-
-		for (listener in listeners)
+		final len = args.length;
+		for (i in 0...len)
 		{
+			final listener = listeners[i];
+
+			if (listener.once)
+			{
+				removeListener(event, listener.fn, null, true);
+			}
+
 			Reflect.callMethod(listener.context, listener.fn, args);
 		}
 
@@ -164,17 +180,132 @@ class EventEmitter
 	}
 
 	/**
+	 * Add a listener for a given event.
+	 *
+	 * @param event - The event name.
+	 * @param fn - The listener function.
+	 * @param context - The context to invoke the listener with.
+	 * @returns `this`.
+	**/
+	public inline function on(event:String, fn:Function, ?context:Dynamic):EventEmitter
+	{
+		return s_addListener(this, event, fn, context, false);
+	}
+
+	/**
+	 * Add a one-time listener for a given event.
+	 *
+	 * @param event - The event name.
+	 * @param fn - The listener function.
+	 * @param context - The context to invoke the listener with.
+	 * @returns `this`.
+	**/
+	public inline function once(event:String, fn:Function, ?context:Dynamic):EventEmitter
+	{
+		return s_addListener(this, event, fn, context, true);
+	}
+
+	/**
 	 * Remove the listeners of a given event.
 	 *
-	 * @param {(String|Symbol)} event The event name.
-	 * @param {Function} fn Only remove the listeners that match this function.
-	 * @param {*} context Only remove the listeners that have this context.
-	 * @param {Boolean} once Only remove one-time listeners.
-	 * @returns {EventEmitter} `this`.
+	 * @param event - The event name.
+	 * @param fn - Only remove the listeners that match this function.
+	 * @param context - Only remove the listeners that have this context.
+	 * @param once - Only remove one-time listeners.
+	 * @returns `this`.
 	**/
 	public function removeListener(event:String, fn:Function, context:Dynamic,
 			once:Bool):EventEmitter
 	{
+		final listeners = _events.get(event);
+
+		if (listeners == null)
+		{
+			return this;
+		}
+
+		if (fn == null)
+		{
+			clearEvent(this, event);
+		}
+
+		final len = listeners.length;
+		var events:Null<Array<EE>> = [];
+		for (item in listeners)
+		{
+			if (item.fn != fn || (once && !item.once) || (context != null && item.context != context))
+			{
+				events.push(item);
+			}
+		}
+
+		//
+		// Reset the array, or remove it completely if we have no more listeners.
+		//
+		if (events.length > 0)
+		{
+			this._events.set(event, events);
+		}
+		else
+		{
+			clearEvent(this, event);
+		}
+
 		return this;
+	}
+
+	/**
+	 * Remove all listeners, or those of the specified event.
+	 *
+	 * @param event - The event name.
+	 * @returns `this`.
+	**/
+	public function removeAllListeners(?event:String):EventEmitter
+	{
+		if (event != null)
+		{
+			final listeners = _events.get(event);
+			if (listeners != null)
+			{
+				clearEvent(this, event);
+			}
+		}
+		else
+		{
+			this._events = new Events();
+			this._eventsCount = 0;
+		}
+
+		return this;
+	}
+
+	/**
+	 * Remove the listeners of a given event.
+	 *
+	 * @param event - The event name.
+	 * @param fn - Only remove the listeners that match this function.
+	 * @param context - Only remove the listeners that have this context.
+	 * @param once - Only remove one-time listeners.
+	 * @returns `this`.
+	**/
+	public inline function off(event:String, fn:Function, context:Dynamic,
+			once:Bool):EventEmitter
+	{
+		return removeListener(event, fn, context, once);
+	}
+
+	/**
+	 * Remove the listeners of a given event.
+	 *
+	 * @param event - The event name.
+	 * @param fn - Only remove the listeners that match this function.
+	 * @param context - Only remove the listeners that have this context.
+	 * @param once - Only remove one-time listeners.
+	 * @returns `this`.
+	**/
+	public inline function addListener(event:String, fn:Function,
+			context:Dynamic):EventEmitter
+	{
+		return on(event, fn, context);
 	}
 }
