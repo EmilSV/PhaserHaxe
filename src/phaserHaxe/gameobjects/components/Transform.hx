@@ -1,11 +1,23 @@
 package phaserHaxe.gameobjects.components;
 
+import phaserHaxe.math.MathConst as MATH_CONST;
+import phaserHaxe.math.Angle.wrap as wrapAngle;
+import phaserHaxe.math.Angle.wrapDegrees as wrapAngleDegrees;
+
+using Lambda;
+
 #if eval
 import haxe.macro.Context;
 import haxe.macro.Expr;
 #end
 
-@:allow(phaserHaxe.gameobjects.components.TransformImplementaion)
+/**
+ * Provides methods used for getting and setting the position, scale and rotation of a Game Object.
+ *
+ * @since 1.0.0
+**/
+@:allow(phaserHaxe.gameobjects.components.TransformImplementation)
+@:autoBuild(phaserHaxe.gameobjects.components.Transform.TransformBuilder.build())
 interface ITransform
 {
 	/**
@@ -108,123 +120,132 @@ interface ITransform
 	public function setPosition(x:Float = 0, ?y:Float, z:Float = 0,
 		w:Float = 0):ITransform;
 
-	// /**
-	//  * Sets the position of this Game Object to be a random position within the confines of
-	//  * the given area.
-	//  *
-	//  * If no area is specified a random position between 0 x 0 and the game width x height is used instead.
-	//  *
-	//  * The position does not factor in the size of this Game Object, meaning that only the origin is
-	//  * guaranteed to be within the area.
-	//  *
-	//  * @since 1.0.0
-	//  *
-	//  * @param x - The x position of the top-left of the random area.
-	//  * @param y - The y position of the top-left of the random area.
-	//  * @param width - The width of the random area.
-	//  * @param height - The height of the random area.
-	//  *
-	//  * @return This Transfrom instance.
-	// **/
-	// public function setRandomPosition(x:Float = 0, y:Float = 0, ?width:Float,
-	// 	height:Float):ITransform;
-	// /**
-	//  * Sets the rotation of this Game Object.
-	//  *
-	//  * @since 1.0.0
-	//  *
-	//  * @param radians - The rotation of this Game Object, in radians.
-	//  *
-	//  * @return This Transfrom instance.
-	// **/
-	// public function setRotation(radians:Float = 0):ITransform;
-	// /**
-	//  * Sets the angle of this Game Object.
-	//  *
-	//  * @since 1.0.0
-	//  *
-	//  * @param degrees - The rotation of this Game Object, in degrees.
-	//  *
-	//  * @return This Transform instance.
-	// **/
-	// public function setAngle(radians:Float = 0):ITransform;
-	// /**
-	//  * Sets the scale of this Game Object.
-	//  *
-	//  * @since 1.0.0
-	//  *
-	//  * @param x - The horizontal scale of this Game Object.
-	//  * @param y - The vertical scale of this Game Object. If not set it will use the `x` value.
-	//  *
-	//  * @return This Transfrom instance.
-	// **/
-	// public function setScale(x:Float = 1, ?y:Float):ITransform;
-	// /**
-	//  * Sets the x position of this Game Object.
-	//  *
-	//  * @since 1.0.0
-	//  *
-	//  * @param value - The x position of this Game Object.
-	//  *
-	//  * @return This Transform instance.
-	// **/
-	// public function setX(value:Float = 0):ITransform;
-	// /**
-	//  * Sets the y position of this Game Object.
-	//  *
-	//  * @since 1.0.0
-	//  *
-	//  * @param value - The y position of this Game Object.
-	//  *
-	//  * @return This Transform instance.
-	// **/
-	// public function setY(value:Float = 0):ITransform;
-	// /**
-	//  * Sets the z position of this Game Object.
-	//  *
-	//  * @since 1.0.0
-	//  *
-	//  * @param value - The z position of this Game Object.
-	//  *
-	//  * @return This Transform instance.
-	// **/
-	// public function setZ(value:Float = 0):ITransform;
-	// /**
-	//  * Sets the w position of this Game Object.
-	//  *
-	//  * @since 1.0.0
-	//  *
-	//  * @param value - The w position of this Game Object.
-	//  *
-	//  * @return This Transform instance.
-	// **/
-	// public function setW(value:Float = 0):ITransform;
-	// /**
-	//  * Gets the local transform matrix for this Game Object.
-	//  *
-	//  * @method Phaser.GameObjects.Components.Transform#getLocalTransformMatrix
-	//  * @since 1.0.0
-	//  *
-	//  * @param {Phaser.GameObjects.Components.TransformMatrix} [tempMatrix] - The matrix to populate with the values from this Game Object.
-	//  *
-	//  * @return {Phaser.GameObjects.Components.TransformMatrix} The populated Transform Matrix.
-	// **/
-	// public function getLocalTransformMatrix(?tempMatrix:TransformMatrix):TransformMatrix;
-	// /**
-	//  * Gets the world transform matrix for this Game Object, factoring in any parent Containers.
-	//  *
-	//  * @since 1.0.0
-	//  *
-	//  * @param tempMatrix - The matrix to populate with the values from this Game Object.
-	//  * @param parentMatrix - A temporary matrix to hold parent values during the calculations.
-	//  *
-	//  * @return The populated Transform Matrix.
-	// **/
-	// public function getWorldTransformMatrix(?tempMatrix:TransformMatrix,
-	// 	?parentMatrix:TransformMatrix):TransformMatrix;
+	/**
+	 * Sets the position of this Game Object to be a random position within the confines of
+	 * the given area.
+	 *
+	 * If no area is specified a random position between 0 x 0 and the game width x height is used instead.
+	 *
+	 * The position does not factor in the size of this Game Object, meaning that only the origin is
+	 * guaranteed to be within the area.
+	 *
+	 * @since 1.0.0
+	 *
+	 * @param x - The x position of the top-left of the random area.
+	 * @param y - The y position of the top-left of the random area.
+	 * @param width - The width of the random area.
+	 * @param height - The height of the random area.
+	 *
+	 * @return This Transform instance.
+	**/
+	public function setRandomPosition(x:Float = 0, y:Float = 0, ?width:Float,
+		?height:Float):ITransform;
+
+	/**
+	 * Sets the rotation of this Game Object.
+	 *
+	 * @since 1.0.0
+	 *
+	 * @param radians - The rotation of this Game Object, in radians.
+	 *
+	 * @return This Transform instance.
+	**/
+	public function setRotation(radians:Float = 0):ITransform;
+
+	/**
+	 * Sets the angle of this Game Object.
+	 *
+	 * @since 1.0.0
+	 *
+	 * @param degrees - The rotation of this Game Object, in degrees.
+	 *
+	 * @return This Transform instance.
+	**/
+	public function setAngle(radians:Float = 0):ITransform;
+
+	/**
+	 * Sets the scale of this Game Object.
+	 *
+	 * @since 1.0.0
+	 *
+	 * @param x - The horizontal scale of this Game Object.
+	 * @param y - The vertical scale of this Game Object. If not set it will use the `x` value.
+	 *
+	 * @return This Transform instance.
+	**/
+	public function setScale(x:Float = 1, ?y:Float):ITransform;
+
+	/**
+	 * Sets the x position of this Game Object.
+	 *
+	 * @since 1.0.0
+	 *
+	 * @param value - The x position of this Game Object.
+	 *
+	 * @return This Transform instance.
+	**/
+	public function setX(value:Float = 0):ITransform;
+
+	/**
+	 * Sets the y position of this Game Object.
+	 *
+	 * @since 1.0.0
+	 *
+	 * @param value - The y position of this Game Object.
+	 *
+	 * @return This Transform instance.
+	**/
+	public function setY(value:Float = 0):ITransform;
+
+	/**
+	 * Sets the z position of this Game Object.
+	 *
+	 * @since 1.0.0
+	 *
+	 * @param value - The z position of this Game Object.
+	 *
+	 * @return This Transform instance.
+	**/
+	public function setZ(value:Float = 0):ITransform;
+
+	/**
+	 * Sets the w position of this Game Object.
+	 *
+	 * @since 1.0.0
+	 *
+	 * @param value - The w position of this Game Object.
+	 *
+	 * @return This Transform instance.
+	**/
+	public function setW(value:Float = 0):ITransform;
+
+	/**
+	 * Gets the local transform matrix for this Game Object.
+	 *
+	 * @since 1.0.0
+	 *
+	 * @param tempMatrix - The matrix to populate with the values from this Game Object.
+	 *
+	 * @return The populated Transform Matrix.
+	**/
+	public function getLocalTransformMatrix(?tempMatrix:TransformMatrix):TransformMatrix;
+
+	/**
+	 * Gets the world transform matrix for this Game Object, factoring in any parent Containers.
+	 *
+	 * @since 1.0.0
+	 *
+	 * @param tempMatrix - The matrix to populate with the values from this Game Object.
+	 * @param parentMatrix - A temporary matrix to hold parent values during the calculations.
+	 *
+	 * @return The populated Transform Matrix.
+	**/
+	public function getWorldTransformMatrix(?tempMatrix:TransformMatrix,
+		?parentMatrix:TransformMatrix):TransformMatrix;
 }
 
-final class TransformImplementaion
+@:noCompletion
+final class TransformImplementation
 {
 	//  global bitmask flag for GameObject.renderMask (used by Scale)
 	private static inline var _FLAG = 4;
@@ -238,22 +259,19 @@ final class TransformImplementaion
 	@:generic
 	public static inline function set_scaleX<T:ITransform>(self:T, value:Float):Float
 	{
-		self._scaleX = value;
-
-		if (self._scaleX == 0)
+		if (Std.is(self, GameObject))
 		{
-			/* TODO: finish TransformImplementaion
-				// self.renderFlags &= ~_FLAG;
-			 */
-		}
-		else
-		{
-			/* TODO: finish TransformImplementaion
-				self.renderFlags |= _FLAG;
-			 */
+			if (value == 0)
+			{
+				(cast self : GameObject).renderFlags &= ~_FLAG;
+			}
+			else
+			{
+				(cast self : GameObject).renderFlags |= _FLAG;
+			}
 		}
 
-		return self._scaleX;
+		return self._scaleX = value;
 	}
 
 	@:generic
@@ -266,18 +284,16 @@ final class TransformImplementaion
 	public static inline function set_scaleY<T:ITransform>(self:T, value:Float):Float
 	{
 		self._scaleY = value;
-
-		if (self._scaleY == 0)
+		if (Std.is(self, GameObject))
 		{
-			/* TODO: finish TransformImplementaion
-				self.renderFlags &= ~_FLAG;
-			 */
-		}
-		else
-		{
-			/* TODO: finish TransformImplementaion
-				self.renderFlags |= _FLAG;
-			 */
+			if (self._scaleY == 0)
+			{
+				(cast self : GameObject).renderFlags &= ~_FLAG;
+			}
+			else
+			{
+				(cast self : GameObject).renderFlags |= _FLAG;
+			}
 		}
 
 		return self._scaleY;
@@ -286,19 +302,13 @@ final class TransformImplementaion
 	@:generic
 	public static inline function get_angle<T:ITransform>(self:T):Float
 	{
-		/* TODO: finish TransformImplementaion
-			return WrapAngleDegrees(this._rotation * MATH_CONST.RAD_TO_DEG);
-		 */
-		return self._rotation;
+		return wrapAngleDegrees(self._rotation * MATH_CONST.RAD_TO_DEG);
 	}
 
 	@:generic
 	public static inline function set_angle<T:ITransform>(self:T, value:Float):Float
 	{
-		/* TODO: finish TransformImplementaion
-			this.rotation = WrapAngleDegrees(value) * MATH_CONST.DEG_TO_RAD;
-		 */
-		return self._rotation;
+		return self._rotation = wrapAngleDegrees(value) * MATH_CONST.DEG_TO_RAD;
 	}
 
 	@:generic
@@ -310,10 +320,7 @@ final class TransformImplementaion
 	@:generic
 	public static inline function set_rotation<T:ITransform>(self:T, value:Float):Float
 	{
-		/* TODO: finish TransformImplementaion
-			this._rotation = WrapAngle(value);
-		 */
-		return self._rotation = value;
+		return self._rotation = wrapAngle(value);
 	}
 
 	@:generic
@@ -332,17 +339,16 @@ final class TransformImplementaion
 	public static inline function setRandomPosition<T:ITransform>(self:T, x:Float = 0,
 			y:Float = 0, ?width:Float, ?height:Float):T
 	{
-		if (width == null)
+		if (Std.is(self, GameObject))
 		{
-			/* TODO: finish TransformImplementaion
-				width = self.scene.sys.scale.width;
-			 */
-		}
-		if (height == null)
-		{
-			/* TODO: finish TransformImplementaion
-				height = self.scene.sys.scale.height;
-			 */
+			if (width == null)
+			{
+				width = (cast self : GameObject).scene.sys.scale.width;
+			}
+			if (height == null)
+			{
+				height = (cast self : GameObject).scene.sys.scale.height;
+			}
 		}
 
 		self.x = x + (Math.random() * width);
@@ -354,6 +360,13 @@ final class TransformImplementaion
 	public static inline function setAngle<T:ITransform>(self:T, degrees:Float = 0):T
 	{
 		self.angle = degrees;
+		return self;
+	}
+
+	@:generic
+	public static inline function setRotation<T:ITransform>(self:T, radians:Float = 0):T
+	{
+		self.rotation = radians;
 		return self;
 	}
 
@@ -399,9 +412,7 @@ final class TransformImplementaion
 	{
 		if (tempMatrix == null)
 		{
-			/* TODO: finish TransformImplementaion
-				tempMatrix = new TransformMatrix();
-			 */
+			tempMatrix = new TransformMatrix();
 		}
 
 		return
@@ -412,25 +423,23 @@ final class TransformImplementaion
 	public static inline function getWorldTransformMatrix<T:ITransform>(self:T,
 			?tempMatrix:TransformMatrix, ?parentMatrix:TransformMatrix):TransformMatrix
 	{
+		final go = cast(self, GameObject);
+
 		if (tempMatrix == null)
 		{
-			/* TODO: finish TransformImplementaion
-				tempMatrix = new TransformMatrix();
-			 */
+			tempMatrix = new TransformMatrix();
 		}
 		if (parentMatrix == null)
 		{
-			/* TODO: finish TransformImplementaion
-				parentMatrix = new TransformMatrix();
-			 */
+			parentMatrix = new TransformMatrix();
 		}
 
-		var parent:Dynamic = (self : Dynamic).parentContainer;
+		var parent = go.parentContainer;
 
-		// if (parent == null)
-		// {
-		// 	return self.getLocalTransformMatrix(tempMatrix);
-		// }
+		if (parent == null)
+		{
+			return self.getLocalTransformMatrix(tempMatrix);
+		}
 
 		tempMatrix.applyITRS(self.x, self.y, self._rotation, self._scaleX, self._scaleY);
 
@@ -447,44 +456,38 @@ final class TransformImplementaion
 	}
 }
 
-#if eval
 final class TransformBuilder
 {
+	#if eval
 	public static function build():Array<Field>
 	{
 		// get existing fields from the context from where build() is called
 		final fields = Context.getBuildFields();
 		final pos = Context.currentPos();
 		final buildType = Context.toComplexType(Context.getLocalType());
+		final newFelids:Array<Field> = [];
+		final transformMatrixType = macro:phaserHaxe.gameobjects.components.TransformMatrix;
 
-		function addFeild(newFeild:Field)
+		function addField(field:Field)
 		{
-			for (feild in fields)
-			{
-				if (feild.name == newFeild.name)
-				{
-					return;
-				}
-			}
-
-			fields.push(newFeild);
+			newFelids.push(field);
 		}
 
-		addFeild({
+		addField({
 			name: "_scaleX",
 			doc: "Private internal value. Holds the horizontal scale value.",
 			access: [Access.APrivate],
 			kind: FieldType.FVar(macro:Float, macro 1),
 			pos: pos,
 		});
-		addFeild({
+		addField({
 			name: "_scaleY",
 			doc: "Private internal value. Holds the vertical scale value.",
 			access: [Access.APrivate],
 			kind: FieldType.FVar(macro:Float, macro 1),
 			pos: pos,
 		});
-		addFeild({
+		addField({
 			name: "_rotation",
 			doc: "Private internal value. Holds the rotation value in radians.",
 			access: [Access.APrivate],
@@ -492,21 +495,21 @@ final class TransformBuilder
 			pos: pos,
 		});
 
-		addFeild({
+		addField({
 			name: "x",
 			doc: "The x position of this Game Object.",
 			access: [Access.APublic],
 			kind: FieldType.FVar(macro:Float, macro 0),
 			pos: pos,
 		});
-		addFeild({
+		addField({
 			name: "y",
 			doc: "The y position of this Game Object.",
 			access: [Access.APublic],
 			kind: FieldType.FVar(macro:Float, macro 0),
 			pos: pos,
 		});
-		addFeild({
+		addField({
 			name: "z",
 			doc: "The z position of this Game Object.
             Note: Do not use this value to set the z-index, instead see the `depth` property.",
@@ -514,7 +517,7 @@ final class TransformBuilder
 			kind: FieldType.FVar(macro:Float, macro 0),
 			pos: pos,
 		});
-		addFeild({
+		addField({
 			name: "w",
 			doc: "The w position of this Game Object.",
 			access: [Access.APublic],
@@ -522,25 +525,25 @@ final class TransformBuilder
 			pos: pos,
 		});
 
-		addFeild({
+		addField({
 			name: "scaleX",
 			doc: "The horizontal scale of this Game Object.",
 			access: [Access.APublic],
 			kind: FieldType.FProp("get", "set", macro:Float),
 			pos: pos,
 		});
-		addFeild({
+		addField({
 			name: "get_scaleX",
 			access: [Access.APrivate, Access.AInline],
 			kind: FieldType.FFun({
 				args: [],
 				ret: macro:Float,
 				expr: macro return
-					phaserHaxe.gameobjects.components.TransformImplementaion.get_scaleX(this),
+					phaserHaxe.gameobjects.components.TransformImplementation.get_scaleX(this),
 			}),
 			pos: pos,
 		});
-		addFeild({
+		addField({
 			name: "set_scaleX",
 			access: [Access.APrivate, Access.AInline],
 			kind: FieldType.FFun({
@@ -552,30 +555,30 @@ final class TransformBuilder
 				],
 				ret: macro:Float,
 				expr: macro return
-					phaserHaxe.gameobjects.components.TransformImplementaion.set_scaleX(this, value),
+					phaserHaxe.gameobjects.components.TransformImplementation.set_scaleX(this, value),
 			}),
 			pos: pos,
 		});
 
-		addFeild({
+		addField({
 			name: "scaleY",
-			doc: "The vertical scale of this Game Object. @since 1.0.0",
+			doc: "The vertical scale of this Game Object.",
 			access: [Access.APublic],
 			kind: FieldType.FProp("get", "set", macro:Float),
 			pos: pos,
 		});
-		addFeild({
+		addField({
 			name: "get_scaleY",
 			access: [Access.APrivate, Access.AInline],
 			kind: FieldType.FFun({
 				args: [],
 				ret: macro:Float,
 				expr: macro return
-					phaserHaxe.gameobjects.components.TransformImplementaion.get_scaleY(this),
+					phaserHaxe.gameobjects.components.TransformImplementation.get_scaleY(this),
 			}),
 			pos: pos,
 		});
-		addFeild({
+		addField({
 			name: "set_scaleY",
 			access: [Access.APrivate, Access.AInline],
 			kind: FieldType.FFun({
@@ -587,38 +590,36 @@ final class TransformBuilder
 				],
 				ret: macro:Float,
 				expr: macro return
-					phaserHaxe.gameobjects.components.TransformImplementaion.set_scaleY(this, value),
+					phaserHaxe.gameobjects.components.TransformImplementation.set_scaleY(this, value),
 			}),
 			pos: pos,
 		});
 
-		addFeild({
+		addField({
 			name: "angle",
 
 			doc: "The angle of this Game Object as expressed in degrees.
 			
 			Where 0 is to the right, 90 is down, 180 is left.
 			
-			If you prefer to work in radians, see the `rotation` property instead.
-			
-			@since 1.0.0",
+			If you prefer to work in radians, see the `rotation` property instead.",
 
 			access: [Access.APublic],
 			kind: FieldType.FProp("get", "set", macro:Float),
 			pos: pos,
 		});
-		addFeild({
+		addField({
 			name: "get_angle",
 			access: [Access.APrivate, Access.AInline],
 			kind: FieldType.FFun({
 				args: [],
 				ret: macro:Float,
 				expr: macro return
-					phaserHaxe.gameobjects.components.TransformImplementaion.get_angle(this),
+					phaserHaxe.gameobjects.components.TransformImplementation.get_angle(this),
 			}),
 			pos: pos,
 		});
-		addFeild({
+		addField({
 			name: "set_angle",
 			access: [Access.APrivate, Access.AInline],
 			kind: FieldType.FFun({
@@ -630,36 +631,34 @@ final class TransformBuilder
 				],
 				ret: macro:Float,
 				expr: macro return
-					phaserHaxe.gameobjects.components.TransformImplementaion.set_angle(this, value),
+					phaserHaxe.gameobjects.components.TransformImplementation.set_angle(this, value),
 			}),
 			pos: pos,
 		});
 
-		addFeild({
+		addField({
 			name: "rotation",
 
 			doc: "The angle of this Game Object in radians.
 			
-			If you prefer to work in degrees, see the `angle` property instead.
-			
-			@since 1.0.0",
+			If you prefer to work in degrees, see the `angle` property instead.",
 
 			access: [Access.APublic],
 			kind: FieldType.FProp("get", "set", macro:Float),
 			pos: pos,
 		});
-		addFeild({
+		addField({
 			name: "get_rotation",
 			access: [Access.APrivate, Access.AInline],
 			kind: FieldType.FFun({
 				args: [],
 				ret: macro:Float,
 				expr: macro return
-					phaserHaxe.gameobjects.components.TransformImplementaion.get_rotation(this),
+					phaserHaxe.gameobjects.components.TransformImplementation.get_rotation(this),
 			}),
 			pos: pos,
 		});
-		addFeild({
+		addField({
 			name: "set_rotation",
 			access: [Access.APrivate, Access.AInline],
 			kind: FieldType.FFun({
@@ -671,13 +670,22 @@ final class TransformBuilder
 				],
 				ret: macro:Float,
 				expr: macro return
-					phaserHaxe.gameobjects.components.TransformImplementaion.set_rotation(this, value),
+					phaserHaxe.gameobjects.components.TransformImplementation.set_rotation(this, value),
 			}),
 			pos: pos,
 		});
 
-		addFeild({
+		addField({
 			name: "setPosition",
+			doc: "Sets the position of this Game Object.
+			
+			@param x - The x position of this Game Object.
+			@param y - The y position of this Game Object. If not set it will use the `x` value.
+			@param z - The z position of this Game Object.
+			@param w - The w position of this Game Object.
+			
+			@return This Game Object instance.",
+
 			access: [Access.APublic],
 			kind: FieldType.FFun({
 				args: [
@@ -704,12 +712,282 @@ final class TransformBuilder
 				],
 				ret: buildType,
 				expr: macro return
-					phaserHaxe.gameobjects.components.TransformImplementaion.setPosition(this, x, y, z, w),
+					phaserHaxe.gameobjects.components.TransformImplementation.setPosition(this, x, y, z, w),
 			}),
 			pos: pos,
 		});
 
-		return fields;
+		addField({
+			name: "setRandomPosition",
+			access: [Access.APublic],
+			doc: "Sets the position of this Game Object to be a random position within the confines of 
+			the given area.
+			
+			If no area is specified a random position between 0 x 0 and the game width x height is used instead. 
+			The position does not factor in the size of this Game Object, meaning that only the origin is 
+			guaranteed to be within the area. 
+			@param x - The x position of the top-left of the random area.
+			@param y - The y position of the top-left of the random area.
+			@param width - The width of the random area.
+			@param height - The height of the random area.
+			
+			@return This Game Object instance.",
+
+			kind: FieldType.FFun({
+				args: [
+					{
+						name: "x",
+						type: macro:Float,
+						value: macro 0
+					},
+					{
+						name: "y",
+						type: macro:Float,
+						value: macro 0
+					},
+					{
+						name: "width",
+						type: macro:Float,
+						opt: true
+					},
+					{
+						name: "height",
+						type: macro:Float,
+						opt: true
+					}
+				],
+				ret: buildType,
+				expr: macro return
+					phaserHaxe.gameobjects.components.TransformImplementation.setRandomPosition(this, x, y, width, height),
+			}),
+			pos: pos,
+		});
+
+		addField({
+			name: "setRotation",
+			access: [Access.APublic],
+
+			doc: "Sets the rotation of this Game Object.
+			 	@param radians - The rotation of this Game Object, in radians.
+				
+				@return This Game Object instance.",
+
+			kind: FieldType.FFun({
+				args: [
+					{
+						name: "radians",
+						type: macro:Float,
+						value: macro 0
+					}
+				],
+				ret: buildType,
+				expr: macro return
+					phaserHaxe.gameobjects.components.TransformImplementation.setRotation(this, radians),
+			}),
+			pos: pos,
+		});
+
+		addField({
+			name: "setAngle",
+			access: [Access.APublic],
+			doc: "Sets the angle of this Game Object.
+
+				 @param degrees - The rotation of this Game Object, in degrees.
+	 			
+				 @return This Game Object instance.",
+
+			kind: FieldType.FFun({
+				args: [
+					{
+						name: "radians",
+						type: macro:Float,
+						value: macro 0
+					}
+				],
+				ret: buildType,
+				expr: macro return
+					phaserHaxe.gameobjects.components.TransformImplementation.setRotation(this, radians),
+			}),
+			pos: pos,
+		});
+
+		addField({
+			name: "setScale",
+			doc: " Sets the scale of this Game Object.
+			
+			@param x - The horizontal scale of this Game Object.
+			@param y - The vertical scale of this Game Object. If not set it will use the `x` value.
+			
+			@return This Game object instance.",
+
+			access: [Access.APublic],
+			kind: FieldType.FFun({
+				args: [
+					{
+						name: "x",
+						type: macro:Float,
+						value: macro 1
+					},
+					{
+						name: "y",
+						type: macro:Float,
+						opt: true
+					}
+				],
+				ret: buildType,
+				expr: macro return
+					phaserHaxe.gameobjects.components.TransformImplementation.setScale(this, x, y),
+			}),
+			pos: pos,
+		});
+
+		addField({
+			name: "setX",
+
+			doc: "Sets the x position of this Game Object.
+			
+			@param value - The x position of this Game Object.
+			
+			@return This Transform instance.",
+
+			access: [Access.APublic],
+			kind: FieldType.FFun({
+				args: [
+					{
+						name: "value",
+						type: macro:Float,
+						value: macro 0
+					}
+				],
+				ret: buildType,
+				expr: macro return
+					phaserHaxe.gameobjects.components.TransformImplementation.setX(this, value),
+			}),
+			pos: pos,
+		});
+
+		addField({
+			name: "setY",
+			doc: "Sets the y position of this Game Object.
+			
+			@param value - The y position of this Game Object.
+			
+			@return This Transform instance.",
+
+			access: [Access.APublic],
+			kind: FieldType.FFun({
+				args: [
+					{
+						name: "value",
+						type: macro:Float,
+						value: macro 0
+					}
+				],
+				ret: buildType,
+				expr: macro return
+					phaserHaxe.gameobjects.components.TransformImplementation.setY(this, value),
+			}),
+			pos: pos,
+		});
+
+		addField({
+			name: "setZ",
+			doc: "Sets the z position of this Game Object.
+			
+			@param value - The z position of this Game Object.
+			
+			@return This Transform instance.",
+
+			access: [Access.APublic],
+			kind: FieldType.FFun({
+				args: [
+					{
+						name: "value",
+						type: macro:Float,
+						value: macro 0
+					}
+				],
+				ret: buildType,
+				expr: macro return
+					phaserHaxe.gameobjects.components.TransformImplementation.setY(this, value),
+			}),
+			pos: pos,
+		});
+
+		addField({
+			name: "setW",
+
+			doc: "Sets the w position of this Game Object.
+			
+			@param value - The w position of this Game Object.
+			
+			@return This Transform instance.",
+
+			access: [Access.APublic],
+			kind: FieldType.FFun({
+				args: [
+					{
+						name: "value",
+						type: macro:Float,
+						value: macro 0
+					}
+				],
+				ret: buildType,
+				expr: macro return
+					phaserHaxe.gameobjects.components.TransformImplementation.setW(this, value),
+			}),
+			pos: pos,
+		});
+
+		addField({
+			name: "getLocalTransformMatrix",
+			access: [Access.APublic],
+			doc: "Sets the x position of this Game Object.
+			
+			@param value - The x position of this Game Object.
+			
+			@return This Transform instance.",
+
+			kind: FieldType.FFun({
+				args: [
+					{
+						name: "tempMatrix",
+						type: transformMatrixType,
+						opt: true
+					}
+				],
+				ret: transformMatrixType,
+				expr: macro return
+					phaserHaxe.gameobjects.components.TransformImplementation.getLocalTransformMatrix(this, tempMatrix),
+			}),
+			pos: pos,
+		});
+
+		addField({
+			name: "getWorldTransformMatrix",
+			access: [Access.APublic],
+			kind: FieldType.FFun({
+				args: [
+					{
+						name: "tempMatrix",
+						type: transformMatrixType,
+						opt: true
+					},
+					{
+						name: "parentMatrix",
+						type: transformMatrixType,
+						opt: true
+					}
+				],
+				ret: transformMatrixType,
+				expr: macro return
+					phaserHaxe.gameobjects.components.TransformImplementation.getWorldTransformMatrix(this, tempMatrix, parentMatrix),
+			}),
+			pos: pos,
+		});
+
+		return newFelids.filter((f1) -> !fields.exists((f2) -> f1.name == f2.name))
+			.concat(fields);
 	}
+	#end
 }
-#end

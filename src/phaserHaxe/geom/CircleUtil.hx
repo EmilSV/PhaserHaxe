@@ -129,7 +129,7 @@ final class CircleUtil
 		}
 		for (i in 0...quantity)
 		{
-			var angle = MathUtility.FromPercent(i / quantity, 0, MathConst.PI2);
+			var angle = MathUtility.fromPercent(i / quantity, 0, MathConst.PI2);
 			out.push(inline CircumferencePointAny(circle, angle, new Point()));
 		}
 		return out;
@@ -155,7 +155,7 @@ final class CircleUtil
 			out = new Point();
 		}
 
-		var angle = MathUtility.FromPercent(position, 0, MathConst.PI2);
+		var angle = MathUtility.fromPercent(position, 0, MathConst.PI2);
 		return CircumferencePoint(circle, angle, out);
 	}
 
@@ -174,7 +174,7 @@ final class CircleUtil
 	**/
 	public static function GetPointAny<T:Vector2Like>(circle:Circle, position:Float, out:T):T
 	{
-		var angle = MathUtility.FromPercent(position, 0, MathConst.PI2);
+		var angle = MathUtility.fromPercent(position, 0, MathConst.PI2);
 		return CircumferencePointAny(circle, angle, out);
 	}
 

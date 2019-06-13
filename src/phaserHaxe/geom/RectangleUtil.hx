@@ -871,7 +871,7 @@ final class RectangleUtil
 		{
 			out = new Point();
 		}
-		var angle = MathUtility.DegToRad(angle);
+		var angle = MathUtility.degToRad(angle);
 		var s = Math.sin(angle);
 		var c = Math.cos(angle);
 		var dx = (c > 0) ? rectangle.width / 2 : rectangle.width / -2;
@@ -952,7 +952,7 @@ final class RectangleUtil
 			//  The quadrants don't extend the full widths / heights of the outer rect to give
 			//  us a better uniformed distribution, otherwise you get clumping in the corners where
 			//  the 4 quads would overlap
-			switch (MathUtility.Between(0, 3))
+			switch (MathUtility.between(0, 3))
 			{
 				case 0: // Top
 					out.x = outer.x + (Math.random() * (inner.right - outer.x));

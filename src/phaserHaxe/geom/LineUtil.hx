@@ -513,7 +513,7 @@ class LineUtil
 	public static function NormalAngle(line:Line):Float
 	{
 		var angle = Angle(line) - MathConst.TAU;
-		return MathUtility.Wrap(angle, -Math.PI, Math.PI);
+		return MathUtility.wrap(angle, -Math.PI, Math.PI);
 	}
 
 	/**

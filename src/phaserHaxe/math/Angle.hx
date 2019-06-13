@@ -14,7 +14,7 @@ final class Angle
 	 *
 	 * @return The angle in radians.
 	**/
-	public static function Between(x1:Float, y1:Float, x2:Float, y2:Float):Float
+	public static function between(x1:Float, y1:Float, x2:Float, y2:Float):Float
 	{
 		return Math.atan2(y2 - y1, x2 - x1);
 	}
@@ -31,7 +31,7 @@ final class Angle
 	 *
 	 * @return The angle in radians.
 	**/
-	public static function BetweenPoints(point1:Vector2, point2:Vector2):Float
+	public static function betweenPoints(point1:Vector2, point2:Vector2):Float
 	{
 		return Math.atan2(point2.y - point1.y, point2.x - point1.x);
 	}
@@ -51,7 +51,7 @@ final class Angle
 	 *
 	 * @return The angle in radians.
 	**/
-	public static function BetweenY(x1:Float, y1:Float, x2:Float, y2:Float):Float
+	public static function betweenY(x1:Float, y1:Float, x2:Float, y2:Float):Float
 	{
 		return Math.atan2(x2 - x1, y2 - y1);
 	}
@@ -69,7 +69,7 @@ final class Angle
 	 *
 	 * @return The angle in radians.
 	**/
-	public static function BetweenPointsY(point1:Vector2, point2:Vector2):Float
+	public static function betweenPointsY(point1:Vector2, point2:Vector2):Float
 	{
 		return Math.atan2(point2.x - point1.x, point2.y - point1.y);
 	}
@@ -93,7 +93,7 @@ final class Angle
 	 *
 	 * @return The Compatibilityed angle, in radians.
 	**/
-	public static function CounterClockwise(angle:Float):Float
+	public static function counterClockwise(angle:Float):Float
 	{
 		return Math.abs((((angle + MathConst.TAU) % MathConst.PI2) - MathConst
 			.PI2) % MathConst.PI2);
@@ -108,7 +108,7 @@ final class Angle
 	 *
 	 * @return The normalized angle, in radians.
 	**/
-	public static function Normalize(angle:Float):Float
+	public static function normalize(angle:Float):Float
 	{
 		angle = angle % (2 * Math.PI);
 		if (angle >= 0)
@@ -130,9 +130,9 @@ final class Angle
 	 *
 	 * @return The reversed angle, in radians.
 	**/
-	public static function Reverse(angle:Float):Float
+	public static function reverse(angle:Float):Float
 	{
-		return Normalize(angle + Math.PI);
+		return normalize(angle + Math.PI);
 	}
 
 	/**
@@ -146,7 +146,7 @@ final class Angle
 	 *
 	 * @return The adjusted angle.
 	**/
-	public static function RotateTo(currentAngle:Float, targetAngle:Float, lerp:Float = 0.05):Float
+	public static function rotateTo(currentAngle:Float, targetAngle:Float, lerp:Float = 0.05):Float
 	{
 		if (currentAngle == targetAngle)
 		{
@@ -202,7 +202,7 @@ final class Angle
 	 *
 	 * @return The shortest angle, in degrees. If greater than zero it's a counter-clockwise rotation.
 	**/
-	public static function ShortestBetween(angle1:Float, angle2:Float):Float
+	public static function shortestBetween(angle1:Float, angle2:Float):Float
 	{
 		var difference = angle2 - angle1;
 		if (difference == 0)
@@ -224,9 +224,9 @@ final class Angle
 	 *
 	 * @return The wrapped angle, in radians.
 	**/
-	public static function Wrap(angle:Float):Float
+	public static function wrap(angle:Float):Float
 	{
-		return MathUtility.Wrap(angle, -Math.PI, Math.PI);
+		return MathUtility.wrap(angle, -Math.PI, Math.PI);
 	}
 
 	/**
@@ -240,8 +240,8 @@ final class Angle
 	 *
 	 * @return The wrapped angle, in degrees.
 	**/
-	public static function WrapDegrees(angle:Float):Float
+	public static function wrapDegrees(angle:Float):Float
 	{
-		return MathUtility.Wrap(angle, -180, 180);
+		return MathUtility.wrap(angle, -180, 180);
 	}
 }

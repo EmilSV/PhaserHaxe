@@ -1,41 +1,42 @@
 package phaserHaxe.display;
 
+import phaserHaxe.gameobjects.components.Size;
 import phaserHaxe.gameobjects.GameObject;
+import phaserHaxe.gameobjects.components.Transform;
+import phaserHaxe.gameobjects.components.Origin;
 
 final class Bounds
 {
 	/**
 	 * Positions the Game Object so that it is centered on the given coordinates.
 	 *
-	 * @function Phaser.Display.Bounds.CenterOn
 	 * @since 1.0.0
 	 *
-	 * @generic {Phaser.GameObjects.GameObject} G - [gameObject,$return]
+	 * @param gameObject - The Game Object that will be re-positioned.
+	 * @param x - The horizontal coordinate to position the Game Object on.
+	 * @param y - The vertical coordinate to position the Game Object on.
 	 *
-	 * @param {Phaser.GameObjects.GameObject} gameObject - The Game Object that will be re-positioned.
-	 * @param {number} x - The horizontal coordinate to position the Game Object on.
-	 * @param {number} y - The vertical coordinate to position the Game Object on.
-	 *
-	 * @return {Phaser.GameObjects.GameObject} The Game Object that was positioned.
+	 * @return The Game Object that was positioned.
 	**/
-	public static function CenterOn(gameObject:GameObject, x:Float, y:Float)
+	public static inline function centerOn<G:ITransform & ISize & IOrigin>(gameObject:G,
+			x:Float, y:Float):G
 	{
-		SetCenterX(gameObject, x);
+		setCenterX(gameObject, x);
 
-		return SetCenterY(gameObject, y);
+		return setCenterY(gameObject, y);
 	}
 
 	/**
 	 * Returns the bottom coordinate from the bounds of the Game Object.
 	 *
-	 * @function Phaser.Display.Bounds.GetBottom
 	 * @since 1.0.0
 	 *
-	 * @param {Phaser.GameObjects.GameObject} gameObject - The Game Object to get the bounds value from.
+	 * @param gameObject - The Game Object to get the bounds value from.
 	 *
-	 * @return {number} The bottom coordinate of the bounds of the Game Object.
-	 */
-	public static function GetBottom(gameObject)
+	 * @return The bottom coordinate of the bounds of the Game Object.
+	**/
+	@:pure
+	public static inline function getBottom<G:ITransform & ISize & IOrigin>(gameObject:G):Float
 	{
 		return (gameObject.y +
 			gameObject.height) - (gameObject.height * gameObject.originY);
@@ -44,14 +45,14 @@ final class Bounds
 	/**
 	 * Returns the center x coordinate from the bounds of the Game Object.
 	 *
-	 * @function Phaser.Display.Bounds.GetCenterX
 	 * @since 1.0.0
 	 *
-	 * @param {Phaser.GameObjects.GameObject} gameObject - The Game Object to get the bounds value from.
+	 * @param gameObject - The Game Object to get the bounds value from.
 	 *
-	 * @return {number} The center x coordinate of the bounds of the Game Object.
-	 */
-	public static function GetCenterX(gameObject)
+	 * @return The center x coordinate of the bounds of the Game Object.
+	**/
+	@:pure
+	public static inline function getCenterX<G:ITransform & ISize & IOrigin>(gameObject:G):Float
 	{
 		return gameObject.x - (gameObject.width * gameObject.originX) +
 			(gameObject.width * 0.5);
@@ -60,14 +61,14 @@ final class Bounds
 	/**
 	 * Returns the center y coordinate from the bounds of the Game Object.
 	 *
-	 * @function Phaser.Display.Bounds.GetCenterY
 	 * @since 1.0.0
 	 *
-	 * @param {Phaser.GameObjects.GameObject} gameObject - The Game Object to get the bounds value from.
+	 * @param gameObject - The Game Object to get the bounds value from.
 	 *
-	 * @return {number} The center y coordinate of the bounds of the Game Object.
-	 */
-	public static function GetCenterY(gameObject)
+	 * @return The center y coordinate of the bounds of the Game Object.
+	**/
+	@:pure
+	public static inline function getCenterY<G:ITransform & ISize & IOrigin>(gameObject:G):Float
 	{
 		return gameObject.y - (gameObject.height * gameObject.originY) +
 			(gameObject.height * 0.5);
@@ -76,14 +77,14 @@ final class Bounds
 	/**
 	 * Returns the left coordinate from the bounds of the Game Object.
 	 *
-	 * @function Phaser.Display.Bounds.GetLeft
 	 * @since 1.0.0
 	 *
-	 * @param {Phaser.GameObjects.GameObject} gameObject - The Game Object to get the bounds value from.
+	 * @param gameObject - The Game Object to get the bounds value from.
 	 *
-	 * @return {number} The left coordinate of the bounds of the Game Object.
-	 */
-	public static function GetLeft(gameObject)
+	 * @return The left coordinate of the bounds of the Game Object.
+	**/
+	@:pure
+	public static inline function getLeft<G:ITransform & ISize & IOrigin>(gameObject:G):Float
 	{
 		return gameObject.x - (gameObject.width * gameObject.originX);
 	}
@@ -93,14 +94,14 @@ final class Bounds
 	 * This is the same as `width * origin.x`.
 	 * This value will only be > 0 if `origin.x` is not equal to zero.
 	 *
-	 * @function Phaser.Display.Bounds.GetOffsetX
 	 * @since 1.0.0
 	 *
-	 * @param {Phaser.GameObjects.GameObject} gameObject - The Game Object to get the bounds value from.
+	 * @param gameObject - The Game Object to get the bounds value from.
 	 *
-	 * @return {number} The horizontal offset of the Game Object.
-	 */
-	public static function GetOffsetX(gameObject)
+	 * @return The horizontal offset of the Game Object.
+	**/
+	@:pure
+	public static inline function getOffsetX<G:ISize & IOrigin>(gameObject:G):Float
 	{
 		return gameObject.width * gameObject.originX;
 	}
@@ -110,14 +111,14 @@ final class Bounds
 	 * This is the same as `width * origin.y`.
 	 * This value will only be > 0 if `origin.y` is not equal to zero.
 	 *
-	 * @function Phaser.Display.Bounds.GetOffsetY
 	 * @since 1.0.0
 	 *
-	 * @param {Phaser.GameObjects.GameObject} gameObject - The Game Object to get the bounds value from.
+	 * @param gameObject - The Game Object to get the bounds value from.
 	 *
-	 * @return {number} The vertical offset of the Game Object.
-	 */
-	public static function GetOffsetY(gameObject)
+	 * @return The vertical offset of the Game Object.
+	**/
+	@:pure
+	public static function getOffsetY<G:ISize & IOrigin>(gameObject:G):Float
 	{
 		return gameObject.height * gameObject.originY;
 	}
@@ -125,14 +126,14 @@ final class Bounds
 	/**
 	 * Returns the right coordinate from the bounds of the Game Object.
 	 *
-	 * @function Phaser.Display.Bounds.GetRight
 	 * @since 1.0.0
 	 *
-	 * @param {Phaser.GameObjects.GameObject} gameObject - The Game Object to get the bounds value from.
+	 * @param gameObject - The Game Object to get the bounds value from.
 	 *
-	 * @return {number} The right coordinate of the bounds of the Game Object.
-	 */
-	public static function GetRight(gameObject)
+	 * @return The right coordinate of the bounds of the Game Object.
+	**/
+	@:pure
+	public static function getRight<G:ISize & ITransform & IOrigin>(gameObject:G):Float
 	{
 		return (gameObject.x +
 			gameObject.width) - (gameObject.width * gameObject.originX);
@@ -141,14 +142,14 @@ final class Bounds
 	/**
 	 * Returns the top coordinate from the bounds of the Game Object.
 	 *
-	 * @function Phaser.Display.Bounds.GetTop
 	 * @since 1.0.0
 	 *
-	 * @param {Phaser.GameObjects.GameObject} gameObject - The Game Object to get the bounds value from.
+	 * @param gameObject - The Game Object to get the bounds value from.
 	 *
-	 * @return {number} The top coordinate of the bounds of the Game Object.
-	 */
-	public static function GetTop(gameObject)
+	 * @return The top coordinate of the bounds of the Game Object.
+	**/
+	@:pure
+	public static inline function getTop<G:ISize & ITransform & IOrigin>(gameObject:G):Float
 	{
 		return gameObject.y - (gameObject.height * gameObject.originY);
 	}
@@ -156,17 +157,16 @@ final class Bounds
 	/**
 	 * Positions the Game Object so that the bottom of its bounds aligns with the given coordinate.
 	 *
-	 * @function Phaser.Display.Bounds.SetBottom
 	 * @since 1.0.0
 	 *
-	 * @generic {Phaser.GameObjects.GameObject} G - [gameObject,$return]
+	 * @param gameObject - The Game Object that will be re-positioned.
+	 * @param value - The coordinate to position the Game Object bounds on.
 	 *
-	 * @param {Phaser.GameObjects.GameObject} gameObject - The Game Object that will be re-positioned.
-	 * @param {number} value - The coordinate to position the Game Object bounds on.
-	 *
-	 * @return {Phaser.GameObjects.GameObject} The Game Object that was positioned.
-	 */
-	public static function SetBottom(gameObject, value)
+	 * @return The Game Object that was positioned.
+	**/
+	@:pure
+	public static function setBottom<G:ISize & ITransform & IOrigin>(gameObject:G,
+			value:Float):G
 	{
 		gameObject.y = (value - gameObject.height) +
 			(gameObject.height * gameObject.originY);
@@ -176,17 +176,15 @@ final class Bounds
 	/**
 	 * Positions the Game Object so that the center top of its bounds aligns with the given coordinate.
 	 *
-	 * @function Phaser.Display.Bounds.SetCenterX
 	 * @since 1.0.0
 	 *
-	 * @generic {Phaser.GameObjects.GameObject} G - [gameObject,$return]
+	 * @param gameObject - The Game Object that will be re-positioned.
+	 * @param  x - The coordinate to position the Game Object bounds on.
 	 *
-	 * @param {Phaser.GameObjects.GameObject} gameObject - The Game Object that will be re-positioned.
-	 * @param {number} x - The coordinate to position the Game Object bounds on.
-	 *
-	 * @return {Phaser.GameObjects.GameObject} The Game Object that was positioned.
-	 */
-	public static function SetCenterX(gameObject:GameObject, x)
+	 * @return The Game Object that was positioned.
+	**/
+	public static function setCenterX<G:ISize & ITransform & IOrigin>(gameObject:G,
+			x:Float):G
 	{
 		var offsetX = gameObject.width * gameObject.originX;
 		gameObject.x = (x + offsetX) - (gameObject.width * 0.5);
@@ -196,17 +194,15 @@ final class Bounds
 	/**
 	 * Positions the Game Object so that the center top of its bounds aligns with the given coordinate.
 	 *
-	 * @function Phaser.Display.Bounds.SetCenterY
 	 * @since 1.0.0
 	 *
-	 * @generic {Phaser.GameObjects.GameObject} G - [gameObject,$return]
+	 * @param gameObject - The Game Object that will be re-positioned.
+	 * @param  y - The coordinate to position the Game Object bounds on.
 	 *
-	 * @param {Phaser.GameObjects.GameObject} gameObject - The Game Object that will be re-positioned.
-	 * @param {number} y - The coordinate to position the Game Object bounds on.
-	 *
-	 * @return {Phaser.GameObjects.GameObject} The Game Object that was positioned.
-	 */
-	public static function SetCenterY(gameObject, y)
+	 * @return The Game Object that was positioned.
+	**/
+	public static function setCenterY<G:ISize & ITransform & IOrigin>(gameObject:G,
+			y:Float):G
 	{
 		var offsetY = gameObject.height * gameObject.originY;
 		gameObject.y = (y + offsetY) - (gameObject.height * 0.5);
@@ -216,37 +212,32 @@ final class Bounds
 	/**
 	 * Positions the Game Object so that the left of its bounds aligns with the given coordinate.
 	 *
-	 * @function Phaser.Display.Bounds.SetLeft
 	 * @since 1.0.0
 	 *
-	 * @generic {Phaser.GameObjects.GameObject} G - [gameObject,$return]
+	 * @param gameObject - The Game Object that will be re-positioned.
+	 * @param value - The coordinate to position the Game Object bounds on.
 	 *
-	 * @param {Phaser.GameObjects.GameObject} gameObject - The Game Object that will be re-positioned.
-	 * @param {number} value - The coordinate to position the Game Object bounds on.
-	 *
-	 * @return {Phaser.GameObjects.GameObject} The Game Object that was positioned.
-	 */
-	public static function SetLeft(gameObject, value)
+	 * @return The Game Object that was positioned.
+	**/
+	public static function setLeft<G:ISize & ITransform & IOrigin>(gameObject:G,
+			value:Float):G
 	{
 		gameObject.x = value + (gameObject.width * gameObject.originX);
-
 		return gameObject;
 	}
 
 	/**
 	 * Positions the Game Object so that the left of its bounds aligns with the given coordinate.
 	 *
-	 * @function Phaser.Display.Bounds.SetRight
 	 * @since 1.0.0
 	 *
-	 * @generic {Phaser.GameObjects.GameObject} G - [gameObject,$return]
+	 * @param gameObject - The Game Object that will be re-positioned.
+	 * @param value - The coordinate to position the Game Object bounds on.
 	 *
-	 * @param {Phaser.GameObjects.GameObject} gameObject - The Game Object that will be re-positioned.
-	 * @param {number} value - The coordinate to position the Game Object bounds on.
-	 *
-	 * @return {Phaser.GameObjects.GameObject} The Game Object that was positioned.
-	 */
-	public static function SetRight(gameObject, value)
+	 * @return The Game Object that was positioned.
+	**/
+	public static function setRight<G:ISize & ITransform & IOrigin>(gameObject:G,
+			value:Float):G
 	{
 		gameObject.x = (value - gameObject.width) +
 			(gameObject.width * gameObject.originX);
@@ -257,20 +248,17 @@ final class Bounds
 	/**
 	 * Positions the Game Object so that the top of its bounds aligns with the given coordinate.
 	 *
-	 * @function Phaser.Display.Bounds.SetTop
 	 * @since 1.0.0
 	 *
-	 * @generic {Phaser.GameObjects.GameObject} G - [gameObject,$return]
+	 * @param gameObject - The Game Object that will be re-positioned.
+	 * @param value - The coordinate to position the Game Object bounds on.
 	 *
-	 * @param {Phaser.GameObjects.GameObject} gameObject - The Game Object that will be re-positioned.
-	 * @param {number} value - The coordinate to position the Game Object bounds on.
-	 *
-	 * @return {Phaser.GameObjects.GameObject} The Game Object that was positioned.
-	 */
-	public static function SetTop(gameObject, value)
+	 * @return The Game Object that was positioned.
+	**/
+	public static function setTop<G:ISize & ITransform & IOrigin>(gameObject:G,
+			value:Float):G
 	{
 		gameObject.y = value + (gameObject.height * gameObject.originY);
-
 		return gameObject;
 	}
 }

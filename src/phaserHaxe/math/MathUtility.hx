@@ -34,7 +34,7 @@ class MathUtility
 	 *
 	 * @return The wrapped value.
 	**/
-	public static function Wrap(value:Float, min:Float, max:Float):Float
+	public static function wrap(value:Float, min:Float, max:Float):Float
 	{
 		var range = max - min;
 		return (min + ((((value - min) % range) + range) % range));
@@ -49,7 +49,7 @@ class MathUtility
 	 *
 	 * @return The average value.
 	**/
-	public static function Average(values:Array<Float>):Float
+	public static function average(values:Array<Float>):Float
 	{
 		var sum = 0.0;
 
@@ -71,7 +71,7 @@ class MathUtility
 	 *
 	 * @return The random integer.
 	**/
-	public static function Between(min:Int, max:Int):Int
+	public static function between(min:Int, max:Int):Int
 	{
 		return Math.floor(Math.random() * (max - min + 1) + min);
 	}
@@ -89,7 +89,7 @@ class MathUtility
 	 *
 	 * @return The rounded value.
 	**/
-	public static function CeilTo(value:Float, place:Float = 0, base:Int = 10)
+	public static function ceilTo(value:Float, place:Float = 0, base:Int = 10)
 	{
 		var p = Math.pow(base, -place);
 		return Math.ceil(value * p) / p;
@@ -104,7 +104,7 @@ class MathUtility
 	 *
 	 * @return The given angle Compatibilityed to radians.
 	**/
-	public static function DegToRad(degrees:Int):Float
+	public static function degToRad(degrees:Int):Float
 	{
 		return degrees * MathConst.DEG_TO_RAD;
 	}
@@ -129,7 +129,7 @@ class MathUtility
 	 *
 	 * @return The clamped value.
 	**/
-	public static function Clamp(value:Float, min:Float, max:Float):Float
+	public static function clamp(value:Float, min:Float, max:Float):Float
 	{
 		return Math.max(min, Math.min(max, value));
 	}
@@ -144,7 +144,7 @@ class MathUtility
 	 *
 	 * @return The amount you will need to increment the position by each step in order to cover the distance in the time given.
 	**/
-	public static function GetSpeed(distance:Float, time:Int):Float
+	public static function getSpeed(distance:Float, time:Int):Float
 	{
 		return (distance / time) / 1000;
 	}
@@ -160,9 +160,9 @@ class MathUtility
 	 *
 	 * @return The value that is `percent` percent between `min` and `max`.
 	**/
-	public static function FromPercent(percent:Float, min:Float, max:Float):Float
+	public static function fromPercent(percent:Float, min:Float, max:Float):Float
 	{
-		percent = Clamp(percent, 0, 1);
+		percent = clamp(percent, 0, 1);
 
 		return (max - min) * percent;
 	}
@@ -180,7 +180,7 @@ class MathUtility
 	 *
 	 * @return The rounded value.
 	**/
-	public static function FloorTo(value:Float, place:Int = 0, base:Int = 10):Float
+	public static function floorTo(value:Float, place:Int = 0, base:Int = 10):Float
 	{
 		var p = Math.pow(base, -place);
 
@@ -197,7 +197,7 @@ class MathUtility
 	 *
 	 * @return A random float within the given range.
 	**/
-	public static function FloatBetween(min:Float, max:Float):Float
+	public static function floatBetween(min:Float, max:Float):Float
 	{
 		return Math.random() * (max - min) + min;
 	}
@@ -211,7 +211,7 @@ class MathUtility
 	 *
 	 * @return The factorial of the given number.
 	**/
-	public static function Factorial(value:Float):Float
+	public static function factorial(value:Float):Float
 	{
 		if (value == 0)
 		{
@@ -238,7 +238,7 @@ class MathUtility
 	 *
 	 * @return The positive difference of the two given numbers.
 	**/
-	public static function Difference(a:Float, b:Float)
+	public static function difference(a:Float, b:Float)
 	{
 		return Math.abs(a - b);
 	}
@@ -252,7 +252,7 @@ class MathUtility
 	 *
 	 * @return Whether the number is even or not.
 	**/
-	public static function IsEvenFloat(value:Float):Bool
+	public static function isEvenFloat(value:Float):Bool
 	{
 		return (value % 2) == 0;
 	}
@@ -266,7 +266,7 @@ class MathUtility
 	 *
 	 * @return Whether the number is even or not.
 	**/
-	public static function IsEven(value:Int):Bool
+	public static function isEven(value:Int):Bool
 	{
 		return (value % 2) == 0;
 	}
@@ -282,7 +282,7 @@ class MathUtility
 	 *
 	 * @return The step t% of the way between p0 and p1.
 	**/
-	public static function Linear(p0:Float, p1:Float, t:Float):Float
+	public static function linear(p0:Float, p1:Float, t:Float):Float
 	{
 		return (p1 - p0) * t + p0;
 	}
@@ -298,7 +298,7 @@ class MathUtility
 	 *
 	 * @return Returns `true` if `a` is less than or equal to the tolerance of `b`.
 	**/
-	public static function Within(a:Float, b:Float, tolerance:Float):Bool
+	public static function within(a:Float, b:Float, tolerance:Float):Bool
 	{
 		return (Math.abs(a - b) <= tolerance);
 	}
@@ -320,7 +320,7 @@ class MathUtility
 	 *
 	 * @return The translated point.
 	**/
-	public static function TransformXY(x:Float, y:Float, positionX:Float,
+	public static function transformXY(x:Float, y:Float, positionX:Float,
 			positionY:Float, rotation:Float, scaleX:Float, scaleY:Float,
 			output:Vector2):Vector2
 	{
@@ -365,7 +365,7 @@ class MathUtility
 	 *
 	 * @return The percentage of interpolation, between 0 and 1.
 	**/
-	public static function SmoothStep(x:Float, min:Float, max:Float):Float
+	public static function smoothStep(x:Float, min:Float, max:Float):Float
 	{
 		if (x <= min)
 		{
@@ -400,7 +400,7 @@ class MathUtility
 	 *
 	 * @return The percentage of interpolation, between 0 and 1.
 	**/
-	public static function SmootherStep(x:Float, min:Float, max:Float):Float
+	public static function smootherStep(x:Float, min:Float, max:Float):Float
 	{
 		x = Math.max(0, Math.min(1, (x - min) / (max - min)));
 
@@ -419,7 +419,7 @@ class MathUtility
 	 *
 	 * @return The generated values.
 	**/
-	public static function SinCosTableGenerator(length:Int, sinAmp:Float = 1,
+	public static function sinCosTableGenerator(length:Int, sinAmp:Float = 1,
 			cosAmp:Float = 1, frequency:Float = 1):SinCosTable
 	{
 		frequency *= Math.PI / length;
@@ -454,7 +454,7 @@ class MathUtility
 	 *
 	 * @return The rounded value.
 	**/
-	public static function RoundTo(value:Float, place:Int = 0, base:Int = 10):Float
+	public static function roundTo(value:Float, place:Int = 0, base:Int = 10):Float
 	{
 		var p = Math.pow(base, -place);
 
@@ -470,7 +470,7 @@ class MathUtility
 	 *
 	 * @return The rounded number, rounded away from zero.
 	**/
-	public static function RoundAwayFromZero(value:Float):Float
+	public static function roundAwayFromZero(value:Float):Float
 	{
 		// "Opposite" of truncate.
 		return (value > 0) ? Math.ceil(value) : Math.floor(value);
@@ -490,7 +490,7 @@ class MathUtility
 	 *
 	 * @return The given vector.
 	**/
-	public static function RotateVec3(vec:Vector3, axis:Vector3, radians:Float):Vector3
+	public static function rotateVec3(vec:Vector3, axis:Vector3, radians:Float):Vector3
 	{
 		//  Set the quaternion to our axis angle
 		tmpQuat.setAxisAngle(axis, radians);
@@ -513,7 +513,7 @@ class MathUtility
 	 *
 	 * @return The given point.
 	**/
-	public static function RotateAroundDistance(point:Vector2, x:Float, y:Float,
+	public static function rotateAroundDistance(point:Vector2, x:Float, y:Float,
 			angle:Float, distance:Float):Vector2
 	{
 		var t = angle + Math.atan2(point.y - y, point.x - x);
@@ -535,7 +535,7 @@ class MathUtility
 	 *
 	 * @return The given point, rotated by the given angle around the given coordinates.
 	**/
-	public static function RotateAround(point:Vector2, x:Float, y:Float,
+	public static function rotateAround(point:Vector2, x:Float, y:Float,
 			angle:Float):Vector2
 	{
 		var c = Math.cos(angle);
@@ -557,7 +557,7 @@ class MathUtility
 	 *
 	 * @return The given point, rotated by the given angle in an anticlockwise direction.
 	**/
-	public static function Rotate(point:Vector2, angle:Float):Vector2
+	public static function rotate(point:Vector2, angle:Float):Vector2
 	{
 		var x = point.x;
 		var y = point.y;
@@ -578,7 +578,7 @@ class MathUtility
 	 *
 	 * @return The given Vector.
 	**/
-	public static function RandomXYZW(vec4:Vector4, scale:Float = 1):Vector4
+	public static function randomXYZW(vec4:Vector4, scale:Float = 1):Vector4
 	{
 		// TODO: Not spherical; should fix this for more uniform distribution
 		vec4.x = (Math.random() * 2 - 1) * scale;
@@ -598,7 +598,7 @@ class MathUtility
 	 *
 	 * @return The given Vector.
 	**/
-	public static function RandomXYZ(vec3:Vector3, radius:Float = 1):Vector3
+	public static function randomXYZ(vec3:Vector3, radius:Float = 1):Vector3
 	{
 		var r = Math.random() * 2 * Math.PI;
 		var z = (Math.random() * 2) - 1;
@@ -623,7 +623,7 @@ class MathUtility
 	 *
 	 * @return The given Vector.
 	**/
-	public static function RandomXY(vector:Vector2, scale:Float = 1):Vector2
+	public static function randomXY(vector:Vector2, scale:Float = 1):Vector2
 	{
 		var r = Math.random() * 2 * Math.PI;
 		vector.x = Math.cos(r) * scale;
@@ -640,7 +640,7 @@ class MathUtility
 	 *
 	 * @return The given angle Compatibilityed to degrees.
 	**/
-	public static function RadToDeg(radians:Float):Float
+	public static function radToDeg(radians:Float):Float
 	{
 		return radians * MathConst.RAD_TO_DEG;
 	}
@@ -660,7 +660,7 @@ class MathUtility
 	 *
 	 * @return A value between 0 and 1 representing the percentage.
 	**/
-	public static function Percent(value:Float, min:Float, ?max:Float,
+	public static function percent(value:Float, min:Float, ?max:Float,
 			?upperMax:Float):Float
 	{
 		var max:Float = max != null ? max : min + 1;
@@ -700,7 +700,7 @@ class MathUtility
 	 *
 	 * @return The resulting value.
 	**/
-	public static function MinSub(value:Float, amount:Float, min:Float):Float
+	public static function minSub(value:Float, amount:Float, min:Float):Float
 	{
 		return Math.max(value - amount, min);
 	}
@@ -716,7 +716,7 @@ class MathUtility
 	 *
 	 * @return The resulting value.
 	**/
-	public static function MaxAdd(value:Float, amount:Float, max:Float):Float
+	public static function maxAdd(value:Float, amount:Float, max:Float):Float
 	{
 		return Math.min(value + amount, max);
 	}
@@ -734,7 +734,7 @@ class MathUtility
 	 *
 	 * @return The Catmull-Rom value.
 	**/
-	public static function CatmullRom(t:Float, p0:Float, p1:Float, p2:Float,
+	public static function catmullRom(t:Float, p0:Float, p1:Float, p2:Float,
 			p3:Float):Float
 	{
 		var v0 = (p2 - p0) * 0.5;
@@ -755,8 +755,8 @@ class MathUtility
 	 *
 	 * @return [description]
 	**/
-	public static function Bernstein(n:Float, i:Float):Float
+	public static function bernstein(n:Float, i:Float):Float
 	{
-		return Factorial(n) / Factorial(i) / Factorial(n - i);
+		return factorial(n) / factorial(i) / factorial(n - i);
 	}
 }
