@@ -1,17 +1,9 @@
 package phaserHaxe;
 
-@:structInit
-class StringOrNumberPatten
+typedef StringOrNumberPatten =
 {
-	public final dynamic function string(s:String):Void {};
-
-	public final dynamic function number(n:Float):Void {};
-
-	public inline function new(string:(s:String) -> Void, number:(n:Float) -> Void)
-	{
-		this.string = string;
-		this.number = number;
-	}
+	var t_string:(s:String) -> Void;
+	var t_number:(n:Float) -> Void;
 }
 
 abstract StringOrNumber(Dynamic)
@@ -33,15 +25,15 @@ abstract StringOrNumber(Dynamic)
 		return new StringOrNumber(f);
 	}
 
-	// public inline function match(patten:StringOrNumberPatten)
+	public inline function match<T:StringOrNumberPatten>(patten:T)
 	{
 		if (Std.is(this, String))
 		{
-			patten.string(this);
+			patten.t_string(this);
 		}
 		else
 		{
-			patten.number(this);
+			patten.t_number(this);
 		}
 	}
 }
