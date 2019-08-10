@@ -2,11 +2,12 @@ package phaserHaxe.gameobjects.components;
 
 @:allow(phaserHaxe.gameobjects.components.DepthImplementation)
 @:autoBuild(phaserHaxe.macro.Mixin.build(DepthMixin))
-interface IDepth
+interface ICDepth
 {
 	/**
 	 * Private internal value. Holds the depth of the Game Object.
 	 *
+	 * @default 0
 	 * @since 1.0.0
 	**/
 	private var _depth:Int;
@@ -43,20 +44,20 @@ interface IDepth
 	 *
 	 * @return This Game Object instance.
 	**/
-	public function setDepth(value:Int = 0):IDepth;
+	public function setDepth(value:Int = 0):ICDepth;
 }
 
 @:noCompletion
 final class DepthImplementation
 {
 	@:generic
-	public static inline function get_depth<T:IDepth>(self:T):Int
+	public static inline function get_depth<T:ICDepth>(self:T):Int
 	{
 		return self._depth;
 	}
 
 	@:generic
-	public static inline function set_depth<T:IDepth>(self:T, value:Int):Int
+	public static inline function set_depth<T:ICDepth>(self:T, value:Int):Int
 	{
 		if (Std.is(self, GameObject))
 		{
@@ -66,23 +67,21 @@ final class DepthImplementation
 	}
 
 	@:generic
-	public static inline function setDepth<T:IDepth>(self:T, value:Int):T
+	public static inline function setDepth<T:ICDepth>(self:T, value:Int):T
 	{
 		self.depth = value;
 		return self;
 	}
 }
 
-@:noCompletion
-@:PhaserHaxe.NoMixin
-final class DepthMixin implements IDepth
+final class DepthMixin
 {
 	/**
 	 * Private internal value. Holds the depth of the Game Object.
 	 *
 	 * @since 1.0.0
 	**/
-	private var _depth:Int;
+	private var _depth:Int = 0;
 
 	/**
 	 * The depth of this Game Object within the Scene.
@@ -101,12 +100,12 @@ final class DepthMixin implements IDepth
 
 	private inline function get_depth():Int
 	{
-		return DepthImplementation.get_depth(this);
+		return DepthImplementation.get_depth(cast this);
 	}
 
 	private inline function set_depth(value:Int):Int
 	{
-		return DepthImplementation.set_depth(this, value);
+		return DepthImplementation.set_depth(cast this, value);
 	}
 
 	/**
@@ -128,6 +127,6 @@ final class DepthMixin implements IDepth
 	**/
 	public inline function setDepth(value:Int = 0):DepthMixin
 	{
-		return DepthImplementation.setDepth(this, value);
+		return cast DepthImplementation.setDepth(cast this, value);
 	}
 }

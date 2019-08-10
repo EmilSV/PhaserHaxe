@@ -1,9 +1,8 @@
 package phaserHaxe.display;
 
-import phaserHaxe.gameobjects.components.Size;
-import phaserHaxe.gameobjects.GameObject;
-import phaserHaxe.gameobjects.components.Transform;
-import phaserHaxe.gameobjects.components.Origin;
+import phaserHaxe.gameobjects.components.ICSize;
+import phaserHaxe.gameobjects.components.ICTransform;
+import phaserHaxe.gameobjects.components.ICOrigin;
 
 final class Bounds
 {
@@ -18,8 +17,8 @@ final class Bounds
 	 *
 	 * @return The Game Object that was positioned.
 	**/
-	public static inline function centerOn<G:ITransform & ISize & IOrigin>(gameObject:G,
-			x:Float, y:Float):G
+	public static inline function centerOn<G:ICTransform & ICSize & ICOrigin>(gameObject:G,
+		x:Float, y:Float):G
 	{
 		setCenterX(gameObject, x);
 
@@ -36,7 +35,7 @@ final class Bounds
 	 * @return The bottom coordinate of the bounds of the Game Object.
 	**/
 	@:pure
-	public static inline function getBottom<G:ITransform & ISize & IOrigin>(gameObject:G):Float
+	public static inline function getBottom<G:ICTransform & ICSize & ICOrigin>(gameObject:G):Float
 	{
 		return (gameObject.y +
 			gameObject.height) - (gameObject.height * gameObject.originY);
@@ -52,7 +51,7 @@ final class Bounds
 	 * @return The center x coordinate of the bounds of the Game Object.
 	**/
 	@:pure
-	public static inline function getCenterX<G:ITransform & ISize & IOrigin>(gameObject:G):Float
+	public static inline function getCenterX<G:ICTransform & ICSize & ICOrigin>(gameObject:G):Float
 	{
 		return gameObject.x - (gameObject.width * gameObject.originX) +
 			(gameObject.width * 0.5);
@@ -68,7 +67,7 @@ final class Bounds
 	 * @return The center y coordinate of the bounds of the Game Object.
 	**/
 	@:pure
-	public static inline function getCenterY<G:ITransform & ISize & IOrigin>(gameObject:G):Float
+	public static inline function getCenterY<G:ICTransform & ICSize & ICOrigin>(gameObject:G):Float
 	{
 		return gameObject.y - (gameObject.height * gameObject.originY) +
 			(gameObject.height * 0.5);
@@ -84,7 +83,7 @@ final class Bounds
 	 * @return The left coordinate of the bounds of the Game Object.
 	**/
 	@:pure
-	public static inline function getLeft<G:ITransform & ISize & IOrigin>(gameObject:G):Float
+	public static inline function getLeft<G:ICTransform & ICSize & ICOrigin>(gameObject:G):Float
 	{
 		return gameObject.x - (gameObject.width * gameObject.originX);
 	}
@@ -101,7 +100,7 @@ final class Bounds
 	 * @return The horizontal offset of the Game Object.
 	**/
 	@:pure
-	public static inline function getOffsetX<G:ISize & IOrigin>(gameObject:G):Float
+	public static inline function getOffsetX<G:ICSize & ICOrigin>(gameObject:G):Float
 	{
 		return gameObject.width * gameObject.originX;
 	}
@@ -118,7 +117,7 @@ final class Bounds
 	 * @return The vertical offset of the Game Object.
 	**/
 	@:pure
-	public static function getOffsetY<G:ISize & IOrigin>(gameObject:G):Float
+	public static function getOffsetY<G:ICSize & ICOrigin>(gameObject:G):Float
 	{
 		return gameObject.height * gameObject.originY;
 	}
@@ -133,7 +132,7 @@ final class Bounds
 	 * @return The right coordinate of the bounds of the Game Object.
 	**/
 	@:pure
-	public static function getRight<G:ISize & ITransform & IOrigin>(gameObject:G):Float
+	public static function getRight<G:ICSize & ICTransform & ICOrigin>(gameObject:G):Float
 	{
 		return (gameObject.x +
 			gameObject.width) - (gameObject.width * gameObject.originX);
@@ -149,7 +148,7 @@ final class Bounds
 	 * @return The top coordinate of the bounds of the Game Object.
 	**/
 	@:pure
-	public static inline function getTop<G:ISize & ITransform & IOrigin>(gameObject:G):Float
+	public static inline function getTop<G:ICSize & ICTransform & ICOrigin>(gameObject:G):Float
 	{
 		return gameObject.y - (gameObject.height * gameObject.originY);
 	}
@@ -165,7 +164,7 @@ final class Bounds
 	 * @return The Game Object that was positioned.
 	**/
 	@:pure
-	public static function setBottom<G:ISize & ITransform & IOrigin>(gameObject:G,
+	public static function setBottom<G:ICSize & ICTransform & ICOrigin>(gameObject:G,
 			value:Float):G
 	{
 		gameObject.y = (value - gameObject.height) +
@@ -183,7 +182,7 @@ final class Bounds
 	 *
 	 * @return The Game Object that was positioned.
 	**/
-	public static function setCenterX<G:ISize & ITransform & IOrigin>(gameObject:G,
+	public static function setCenterX<G:ICSize & ICTransform & ICOrigin>(gameObject:G,
 			x:Float):G
 	{
 		var offsetX = gameObject.width * gameObject.originX;
@@ -201,7 +200,7 @@ final class Bounds
 	 *
 	 * @return The Game Object that was positioned.
 	**/
-	public static function setCenterY<G:ISize & ITransform & IOrigin>(gameObject:G,
+	public static function setCenterY<G:ICSize & ICTransform & ICOrigin>(gameObject:G,
 			y:Float):G
 	{
 		var offsetY = gameObject.height * gameObject.originY;
@@ -219,7 +218,7 @@ final class Bounds
 	 *
 	 * @return The Game Object that was positioned.
 	**/
-	public static function setLeft<G:ISize & ITransform & IOrigin>(gameObject:G,
+	public static function setLeft<G:ICSize & ICTransform & ICOrigin>(gameObject:G,
 			value:Float):G
 	{
 		gameObject.x = value + (gameObject.width * gameObject.originX);
@@ -236,7 +235,7 @@ final class Bounds
 	 *
 	 * @return The Game Object that was positioned.
 	**/
-	public static function setRight<G:ISize & ITransform & IOrigin>(gameObject:G,
+	public static function setRight<G:ICSize & ICTransform & ICOrigin>(gameObject:G,
 			value:Float):G
 	{
 		gameObject.x = (value - gameObject.width) +
@@ -255,7 +254,7 @@ final class Bounds
 	 *
 	 * @return The Game Object that was positioned.
 	**/
-	public static function setTop<G:ISize & ITransform & IOrigin>(gameObject:G,
+	public static function setTop<G:ICSize & ICTransform & ICOrigin>(gameObject:G,
 			value:Float):G
 	{
 		gameObject.y = value + (gameObject.height * gameObject.originY);

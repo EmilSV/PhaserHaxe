@@ -28,7 +28,12 @@ final class Mixin
 
 		final outputFelids = Context.getBuildFields();
 
-		if (localClass.meta.has(":PhaserHaxe.NoMixin"))
+		if (localClass.meta.has(":phaserHaxe.NoMixin"))
+		{
+			return outputFelids;
+		}
+
+		if(localClass.isInterface)
 		{
 			return outputFelids;
 		}

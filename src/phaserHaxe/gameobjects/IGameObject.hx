@@ -9,20 +9,24 @@ import phaserHaxe.cameras.scene2D.Camera;
 import phaserHaxe.data.DataManager;
 import phaserHaxe.types.input.InteractiveObject;
 import phaserHaxe.physics.arcade.Body;
-import phaserHaxe.gameobjects.components.ICVisible;
-import haxe.ds.StringMap;
 
 /**
+ * @classdesc
  * The base class that all Game Objects extend.
  * You don't create GameObjects directly and they cannot be added to the display list.
  * Instead, use them as the base for your own custom classes.
  *
- * @since 1.0.0
-**/
-class GameObject extends EventEmitter
+ * @class GameObject
+ * @memberof Phaser.GameObjects
+ * @extends Phaser.Events.EventEmitter
+ * @constructor
+ * @since 3.0.0
+ *
+ * @param {Phaser.Scene} scene - The Scene to which this Game Object belongs.
+ * @param {string} type - A textual representation of the type of Game Object, i.e. `sprite`.
+ */
+interface IGameObject extends IEventEmitter
 {
-	public static inline var RENDER_MASK = 15;
-
 	/**
 	 * TODO: MAYBE PRIVATE
 	 *
@@ -50,14 +54,14 @@ class GameObject extends EventEmitter
 	 * If you need to store complex data about your Game Object, look at using the Data Component instead.
 	 * @since 1.0.0
 	**/
-	public var state:Either<Int, String> = 0;
+	public var state:Int;
 
 	/**
 	 * The parent Container of this Game Object, if it has one.
 	 *
 	 * @since 1.0.0
 	**/
-	public var parentContainer:Null<Container> = null;
+	public var parentContainer:Null<Container>;
 
 	/**
 	 * The name of this Game Object.
@@ -65,7 +69,7 @@ class GameObject extends EventEmitter
 	 *
 	 * @since 1.0.0
 	**/
-	public var name:String = "";
+	public var name:String;
 
 	/**
 	 * The active state of this Game Object.
@@ -74,7 +78,7 @@ class GameObject extends EventEmitter
 	 *
 	 * @since 1.0.0
 	 */
-	public var active:Bool = true;
+	public var active:Bool;
 
 	/**
 	 * The Tab Index of the Game Object.
@@ -82,7 +86,7 @@ class GameObject extends EventEmitter
 	 *
 	 * @since 1.0.0
 	**/
-	public var tabIndex:Int = -1;
+	public var tabIndex:Int;
 
 	/**
 	 * A Data Manager.
@@ -91,7 +95,7 @@ class GameObject extends EventEmitter
 	 *
 	 * @since 1.0.0
 	**/
-	public var data:DataManager = null;
+	public var data:DataManager;
 
 	/**
 	 * The flags that are compared against `RENDER_MASK` to determine if this Game Object will render or not.
@@ -100,7 +104,7 @@ class GameObject extends EventEmitter
 	 *
 	 * @since 1.0.0
 	**/
-	public var renderFlags:Int = 15;
+	public var renderFlags:Int;
 
 	/**
 	 * A bitmask that controls if this Game Object is drawn by a Camera or not.
@@ -112,7 +116,7 @@ class GameObject extends EventEmitter
 	 *
 	 * @since 1.0.0
 	**/
-	public var cameraFilter:Int = 0;
+	public var cameraFilter:Int;
 
 	/**
 	 * If this Game Object is enabled for input then this property will contain an InteractiveObject instance.
@@ -120,14 +124,14 @@ class GameObject extends EventEmitter
 	 *
 	 * @since 1.0.0
 	**/
-	public var input:Null<InteractiveObject> = null;
+	public var input:Null<InteractiveObject>;
 
 	/**
 	 * If this Game Object is enabled for physics then this property will contain a reference to a Physics Body.
 	 *
 	 * @since 1.0.0
 	**/
-	public var body:Body = null;
+	public var body:Body;
 
 	/**
 	 * This Game Object will ignore all calls made to its destroy method if this flag is set to `true`.
@@ -137,38 +141,20 @@ class GameObject extends EventEmitter
 	 *
 	 * @since 1.0.0
 	**/
-	public var ignoreDestroy:Bool = false;
-
-	/**
-	 * @param scene - The Scene to which this Game Object belongs.
-	 * @param type - A textual representation of the type of Game Object, i.e. `sprite`.
-	**/
-	public function new(scene:Scene, type:String)
-	{
-		super();
-
-		this.scene = scene;
-		this.type = type;
-
-		//  Tell the Scene to re-sort the children
-		scene.sys.queueDepthSort();
-	}
+	public var ignoreDestroy:Bool;
 
 	/**
 	 * Sets the `active` property of this Game Object and returns this Game Object for further chaining.
 	 * A Game Object with its `active` property set to `true` will be updated by the Scenes UpdateList.
 	 *
-	 * @since 1.0.0
+	 * @method Phaser.GameObjects.GameObject#setActive
+	 * @since 3.0.0
 	 *
-	 * @param value - True if this Game Object should be set as active, false if not.
+	 * @param {boolean} value - True if this Game Object should be set as active, false if not.
 	 *
-	 * @return This GameObject.
-	**/
-	public function setActive(value:Bool):GameObject
-	{
-		active = value;
-		return this;
-	}
+	 * @return {this} This GameObject.
+	 */
+	public function setActive(value:Bool):IGameObject;
 
 	/**
 	 * Sets the `name` property of this Game Object and returns this Game Object for further chaining.
@@ -177,15 +163,11 @@ class GameObject extends EventEmitter
 	 * @method Phaser.GameObjects.GameObject#setName
 	 * @since 3.0.0
 	 *
-	 * @param value - The name to be given to this Game Object.
+	 * @param {string} value - The name to be given to this Game Object.
 	 *
-	 * @return This GameObject.
-	**/
-	public function setName(value:String):GameObject
-	{
-		name = value;
-		return this;
-	}
+	 * @return {this} This GameObject.
+	 */
+	public function setName(value:String):IGameObject;
 
 	/**
 	 * Sets the current state of this Game Object.
@@ -197,35 +179,25 @@ class GameObject extends EventEmitter
 	 * in your game code), but could also be a string. It is recommended to keep it light and simple.
 	 * If you need to store complex data about your Game Object, look at using the Data Component instead.
 	 *
-	 * @since 1.0.0
+	 * @method Phaser.GameObjects.GameObject#setState
+	 * @since 3.16.0
 	 *
-	 * @param value - The state of the Game Object.
+	 * @param {(integer|string)} value - The state of the Game Object.
 	 *
-	 * @return This GameObject.
+	 * @return {this} This GameObject.
 	**/
-	public function setState(value:Either<Int, String>):GameObject
-	{
-		state = value;
-		return this;
-	}
+	public function setState(value:Either<Int, String>):IGameObject;
 
 	/**
 	 * Adds a Data Manager component to this Game Object.
 	 *
-	 * @since 1.0.0
+	 * @method Phaser.GameObjects.GameObject#setDataEnabled
+	 * @since 3.0.0
 	 * @see Phaser.Data.DataManager
 	 *
-	 * @return This GameObject.
+	 * @return {this} This GameObject.
 	**/
-	public function setDataEnabled():GameObject
-	{
-		if (data == null)
-		{
-			this.data = null /* TODO: new DataManager(this) */;
-		}
-
-		return this;
-	}
+	public function setDataEnabled():IGameObject;
 
 	/**
 	 * Allows you to store a key value pair within this Game Objects Data Manager.
@@ -235,25 +207,25 @@ class GameObject extends EventEmitter
 	 *
 	 * If the key doesn't already exist in the Data Manager then it is created.
 	 *
-	 * ```haxe
+	 * ```javascript
 	 * sprite.setData('name', 'Red Gem Stone');
 	 * ```
 	 *
 	 * You can also pass in an object of key value pairs as the first argument:
 	 *
-	 * ```haxe
+	 * ```javascript
 	 * sprite.setData({ name: 'Red Gem Stone', level: 2, owner: 'Link', gold: 50 });
 	 * ```
 	 *
 	 * To get a value back again you can call `getData`:
 	 *
-	 * ```haxe
+	 * ```javascript
 	 * sprite.getData('gold');
 	 * ```
 	 *
 	 * Or you can access the value directly via the `values` property, where it works like any other variable:
 	 *
-	 * ```haxe
+	 * ```javascript
 	 * sprite.data.values.gold += 50;
 	 * ```
 	 *
@@ -267,24 +239,14 @@ class GameObject extends EventEmitter
 	 * This means the keys `gold` and `Gold` are treated as two unique values within the Data Manager.
 	 *
 	 * @method Phaser.GameObjects.GameObject#setData
-	 * @since 1.0.0
+	 * @since 3.0.0
 	 *
-	 * @param key - The key to set the value for. Or an object or key value pairs. If an object the `data` argument is ignored.
-	 * @param data - The value to set for the given key. If an object is provided as the key this argument is ignored.
+	 * @param {(string|object)} key - The key to set the value for. Or an object or key value pairs. If an object the `data` argument is ignored.
+	 * @param {*} data - The value to set for the given key. If an object is provided as the key this argument is ignored.
 	 *
-	 * @return This GameObject.
-	 **/
-	public function setData(key:Either<String, StringMap<Dynamic>>, value:Dynamic):GameObject
-	{
-		if (data == null)
-		{
-			data = null /* TODO: new DataManager(this) */;
-		}
-
-		data.set(key, value);
-
-		return this;
-	}
+	 * @return {this} This GameObject.
+	 */
+	public function setData(key:Dynamic, data:Dynamic):Any;
 
 	/**
 	 * Retrieves the value for the given key in this Game Objects Data Manager, or undefined if it doesn't exist.
@@ -315,20 +277,8 @@ class GameObject extends EventEmitter
 	 * @param {(string|string[])} key - The key of the value to retrieve, or an array of keys.
 	 *
 	 * @return {*} The value belonging to the given key, or an array of values, the order of which will match the input array.
-	 */
-	public function getData(key:String):Dynamic
-	{
-		/* TODO: fix GameObject Class
-			if (!this.data)
-			{
-				this.data = new DataManager(this);
-			}
-
-			return this.data.get(key);
-		 */
-
-		return null;
-	}
+	**/
+	public function getData(key:Either<String, Array<String>>):Any;
 
 	/**
 	 * Pass this Game Object to the Input Manager to enable it for Input.
@@ -343,20 +293,17 @@ class GameObject extends EventEmitter
 	 *
 	 * You can also provide an Input Configuration Object as the only argument to this method.
 	 *
+	 * @method Phaser.GameObjects.GameObject#setInteractive
 	 * @since 1.0.0
 	 *
-	 * @param shape - Either an input configuration object, or a geometric shape that defines the hit area for the Game Object. If not specified a Rectangle will be used.
-	 * @param callback - A callback to be invoked when the Game Object is interacted with. If you provide a shape you must also provide a callback.
-	 * @param dropZone - Should this Game Object be treated as a drop zone target?
+	 * @param {(Phaser.Input.Types.InputConfiguration|any)} [shape] - Either an input configuration object, or a geometric shape that defines the hit area for the Game Object. If not specified a Rectangle will be used.
+	 * @param {Phaser.Input.Types.HitAreaCallback} [callback] - A callback to be invoked when the Game Object is interacted with. If you provide a shape you must also provide a callback.
+	 * @param {boolean} [dropZone=false] - Should this Game Object be treated as a drop zone target?
 	 *
 	 * @return This GameObject.
 	**/
 	public function setInteractive(?shape:Either<InputConfiguration, Any>,
-			?callback:HitAreaCallback, dropZone:Bool = false):GameObject
-	{
-		scene.sys.input.enable(this, shape, callback, dropZone);
-		return this;
-	}
+		?callback:HitAreaCallback, dropZone:Bool = false):IGameObject;
 
 	/**
 	 * If this Game Object has previously been enabled for input, this will disable it.
@@ -371,15 +318,7 @@ class GameObject extends EventEmitter
 	 *
 	 * @return This GameObject.
 	**/
-	public function disableInteractive():GameObject
-	{
-		if (input != null)
-		{
-			input.enabled = false;
-		}
-
-		return this;
-	}
+	public function disableInteractive():IGameObject;
 
 	/**
 	 * If this Game Object has previously been enabled for input, this will queue it
@@ -405,15 +344,8 @@ class GameObject extends EventEmitter
 	 * @since 3.7.0
 	 *
 	 * @return {this} This GameObject.
-	 */
-	public function removeInteractive():GameObject
-	{
-		this.scene.sys.input.clear(this);
-
-		this.input = null;
-
-		return this;
-	}
+	**/
+	public function removeInteractive():IGameObject;
 
 	/**
 	 * To be overridden by custom GameObjects. Allows base objects to be used in a Pool.
@@ -422,8 +354,8 @@ class GameObject extends EventEmitter
 	 * @since 3.0.0
 	 *
 	 * @param {...*} [args] - args
-	 */
-	public function update() {}
+	**/
+	public function update(?args:Array<Dynamic>):Void;
 
 	/**
 	 * Returns a JSON representation of the Game Object.
@@ -433,30 +365,20 @@ class GameObject extends EventEmitter
 	 *
 	 * @return {Phaser.GameObjects.Types.JSONGameObject} A JSON representation of the Game Object.
 	**/
-	public function toJSON():Dynamic
-	{
-		/* TODO: fix GameObject Class
-			return ComponentsToJSON(this);
-		 */
-
-		return null;
-	}
+	public function toJSON():JSONGameObject;
 
 	/**
 	 * Compares the renderMask with the renderFlags to see if this Game Object will render or not.
 	 * Also checks the Game Object against the given Cameras exclusion list.
 	 *
-	 * @since 1.0.0
+	 * @method Phaser.GameObjects.GameObject#willRender
+	 * @since 3.0.0
 	 *
-	 * @param camera - The Camera to check against this Game Object.
+	 * @param {Phaser.Cameras.Scene2D.Camera} camera - The Camera to check against this Game Object.
 	 *
-	 * @return True if the Game Object should be rendered, otherwise false.
+	 * @return {boolean} True if the Game Object should be rendered, otherwise false.
 	**/
-	public function willRender(camera:Camera):Bool
-	{
-		return
-			!(GameObject.RENDER_MASK != renderFlags || (cameraFilter != 0 && (cameraFilter != 0 && camera.id != 0)));
-	}
+	public function willRender(camera:Camera):Bool;
 
 	/**
 	 * Returns an array containing the display list index of either this Game Object, or if it has one,
@@ -466,39 +388,12 @@ class GameObject extends EventEmitter
 	 * Used internally by the InputPlugin but also useful if you wish to find out the display depth of
 	 * this Game Object and all of its ancestors.
 	 *
-	 * @since 1.0.0
+	 * @method Phaser.GameObjects.GameObject#getIndexList
+	 * @since 3.4.0
 	 *
-	 * @return An array of display list position indexes.
-	**/
-	public function getIndexList():Array<Int>
-	{
-		var child:Either<GameObject, Container> = this;
-		var parent = this.parentContainer;
-
-		var indexes = [];
-
-		while (parent != null)
-		{
-			indexes.unshift(parent.getIndex(child));
-
-			child = parent;
-
-			if (!parent.parentContainer)
-			{
-				break;
-			}
-			else
-			{
-				parent = parent.parentContainer;
-			}
-		}
-
-		indexes.unshift(this.scene.sys.displayList.getIndex(child));
-
-		return indexes;
-	}
-
-	public dynamic function preDestroy() {};
+	 * @return {integer[]} An array of display list position indexes.
+	 */
+	public function getIndexList():Array<Int>;
 
 	/**
 	 * Destroys this Game Object removing it from the Display List and Update List and
@@ -518,70 +413,6 @@ class GameObject extends EventEmitter
 	 * @since 3.0.0
 	 *
 	 * @param {boolean} [fromScene=false] - Is this Game Object being destroyed as the result of a Scene shutdown?
-	**/
-	public function destroy(fromScene:Bool):Void
-	{
-		if (fromScene == null)
-		{
-			fromScene = false;
-		}
-
-		//  This Game Object has already been destroyed
-		if (scene == null || ignoreDestroy)
-		{
-			return;
-		}
-
-		if (preDestroy != null)
-		{
-			this.preDestroy();
-		}
-
-		this.emit(Events.Destroy, [this]);
-
-		var sys = this.scene.sys;
-
-		if (!fromScene)
-		{
-			sys.displayList.remove(this);
-			sys.updateList.remove(this);
-		}
-
-		if (input != null)
-		{
-			sys.input.clear(this);
-			input = null;
-		}
-
-		if (data != null)
-		{
-			data.destroy();
-
-			data = null;
-		}
-
-		if (body != null)
-		{
-			body.destroy();
-			body = null;
-		}
-
-		//  Tell the Scene to re-sort the children
-		if (!fromScene)
-		{
-			sys.queueDepthSort();
-		}
-
-		active = false;
-		if (Std.is(this, ICVisible))
-		{
-			(cast this : ICVisible).visible = false;
-		}
-
-		scene = null;
-
-		parentContainer = null;
-
-		removeAllListeners();
-	}
+	 */
+	public function destroy(fromScene:Bool):Void;
 }

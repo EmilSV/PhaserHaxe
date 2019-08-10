@@ -1,8 +1,8 @@
 package phaserHaxe.gameobjects;
 
-import phaserHaxe.gameobjects.components.ITransform;
+import phaserHaxe.gameobjects.components.ICTransform;
 
-class Sprite implements ITransform
+class Sprite implements ICTransform
 {
 	/**
 	 * Private internal value. Holds the horizontal scale value.
