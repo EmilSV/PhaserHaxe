@@ -24,7 +24,7 @@ private final class EE
  * Minimal `EventEmitter` interface that is molded against the Node.js
  * `EventEmitter` interface.
 **/
-class EventEmitter implements IEventEmitter
+class EventEmitter
 {
 	public static inline var prefixed = false;
 

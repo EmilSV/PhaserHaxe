@@ -7,12 +7,11 @@ import phaserHaxe.math.Angle.wrapDegrees as wrapAngleDegrees;
 /**
  * Provides methods used for getting and setting the position, scale and rotation of a Game Object.
  *
- * @mixin phaserHaxe.gameobjects.components.ICTransform.TransformMixin
+ * @mixin phaserHaxe.gameobjects.components.ITransform.TransformMixin
  * @since 1.0.0
 **/
 @:allow(phaserHaxe.gameobjects.components.TransformImplementation)
-@:autoBuild(phaserHaxe.macro.Mixin.build(TransformMixin))
-interface ICTransform
+interface ITransform
 {
 	/**
 	 * Private internal value. Holds the horizontal scale value.
@@ -130,7 +129,7 @@ interface ICTransform
 	 * @return This Transform instance.
 	**/
 	public function setPosition(x:Float = 0, ?y:Float, z:Float = 0,
-		w:Float = 0):ICTransform;
+		w:Float = 0):ITransform;
 
 	/**
 	 * Sets the position of this Game Object to be a random position within the confines of
@@ -151,7 +150,7 @@ interface ICTransform
 	 * @return This Transform instance.
 	**/
 	public function setRandomPosition(x:Float = 0, y:Float = 0, ?width:Float,
-		?height:Float):ICTransform;
+		?height:Float):ITransform;
 
 	/**
 	 * Sets the rotation of this Game Object.
@@ -162,7 +161,7 @@ interface ICTransform
 	 *
 	 * @return This Transform instance.
 	**/
-	public function setRotation(radians:Float = 0):ICTransform;
+	public function setRotation(radians:Float = 0):ITransform;
 
 	/**
 	 * Sets the angle of this Game Object.
@@ -173,7 +172,7 @@ interface ICTransform
 	 *
 	 * @return This Transform instance.
 	**/
-	public function setAngle(degrees:Float = 0):ICTransform;
+	public function setAngle(degrees:Float = 0):ITransform;
 
 	/**
 	 * Sets the scale of this Game Object.
@@ -185,7 +184,7 @@ interface ICTransform
 	 *
 	 * @return This Transform instance.
 	**/
-	public function setScale(x:Float = 1, ?y:Float):ICTransform;
+	public function setScale(x:Float = 1, ?y:Float):ITransform;
 
 	/**
 	 * Sets the x position of this Game Object.
@@ -196,7 +195,7 @@ interface ICTransform
 	 *
 	 * @return This Transform instance.
 	**/
-	public function setX(value:Float = 0):ICTransform;
+	public function setX(value:Float = 0):ITransform;
 
 	/**
 	 * Sets the y position of this Game Object.
@@ -207,7 +206,7 @@ interface ICTransform
 	 *
 	 * @return This Transform instance.
 	**/
-	public function setY(value:Float = 0):ICTransform;
+	public function setY(value:Float = 0):ITransform;
 
 	/**
 	 * Sets the z position of this Game Object.
@@ -218,7 +217,7 @@ interface ICTransform
 	 *
 	 * @return This Transform instance.
 	**/
-	public function setZ(value:Float = 0):ICTransform;
+	public function setZ(value:Float = 0):ITransform;
 
 	/**
 	 * Sets the w position of this Game Object.
@@ -229,7 +228,7 @@ interface ICTransform
 	 *
 	 * @return This Transform instance.
 	**/
-	public function setW(value:Float = 0):ICTransform;
+	public function setW(value:Float = 0):ITransform;
 
 	/**
 	 * Gets the local transform matrix for this Game Object.
@@ -261,12 +260,12 @@ final class TransformImplementation
 	//  global bitmask flag for GameObject.renderMask (used by Scale)
 	private static inline var _FLAG = 4;
 
-	public static inline function get_scale<T:ICTransform>(self:T):Float
+	public static inline function get_scale<T:ITransform>(self:T):Float
 	{
 		return (self._scaleX + self._scaleY) / 2;
 	}
 
-	public static inline function set_scale<T:ICTransform>(self:T, value:Float):Float
+	public static inline function set_scale<T:ITransform>(self:T, value:Float):Float
 	{
 		self._scaleX = value;
 		self._scaleY = value;
@@ -286,12 +285,12 @@ final class TransformImplementation
 		return value;
 	}
 
-	public static inline function get_scaleX<T:ICTransform>(self:T):Float
+	public static inline function get_scaleX<T:ITransform>(self:T):Float
 	{
 		return self._scaleX;
 	}
 
-	public static inline function set_scaleX<T:ICTransform>(self:T, value:Float):Float
+	public static inline function set_scaleX<T:ITransform>(self:T, value:Float):Float
 	{
 		if (Std.is(self, GameObject))
 		{
@@ -308,12 +307,12 @@ final class TransformImplementation
 		return self._scaleX = value;
 	}
 
-	public static inline function get_scaleY<T:ICTransform>(self:T):Float
+	public static inline function get_scaleY<T:ITransform>(self:T):Float
 	{
 		return self._scaleY;
 	}
 
-	public static inline function set_scaleY<T:ICTransform>(self:T, value:Float):Float
+	public static inline function set_scaleY<T:ITransform>(self:T, value:Float):Float
 	{
 		self._scaleY = value;
 		if (Std.is(self, GameObject))
@@ -331,31 +330,31 @@ final class TransformImplementation
 		return self._scaleY;
 	}
 
-	public static inline function get_angle<T:ICTransform>(self:T):Float
+	public static inline function get_angle<T:ITransform>(self:T):Float
 	{
 		return wrapAngleDegrees(self._rotation * MATH_CONST.RAD_TO_DEG);
 	}
 
 	@:generic
-	public static inline function set_angle<T:ICTransform>(self:T, value:Float):Float
+	public static inline function set_angle<T:ITransform>(self:T, value:Float):Float
 	{
 		return self._rotation = wrapAngleDegrees(value) * MATH_CONST.DEG_TO_RAD;
 	}
 
 	@:generic
-	public static inline function get_rotation<T:ICTransform>(self:T):Float
+	public static inline function get_rotation<T:ITransform>(self:T):Float
 	{
 		return self._rotation;
 	}
 
 	@:generic
-	public static inline function set_rotation<T:ICTransform>(self:T, value:Float):Float
+	public static inline function set_rotation<T:ITransform>(self:T, value:Float):Float
 	{
 		return self._rotation = wrapAngle(value);
 	}
 
 	@:generic
-	public static inline function setPosition<T:ICTransform>(self:T, x:Float = 0,
+	public static inline function setPosition<T:ITransform>(self:T, x:Float = 0,
 			?y:Float, z:Float = 0, w:Float = 0):T
 	{
 		self.x = x;
@@ -367,7 +366,7 @@ final class TransformImplementation
 	}
 
 	@:generic
-	public static inline function setRandomPosition<T:ICTransform>(self:T, x:Float = 0,
+	public static inline function setRandomPosition<T:ITransform>(self:T, x:Float = 0,
 			y:Float = 0, ?width:Float, ?height:Float):T
 	{
 		if (Std.is(self, GameObject))
@@ -388,21 +387,21 @@ final class TransformImplementation
 	}
 
 	@:generic
-	public static inline function setAngle<T:ICTransform>(self:T, degrees:Float = 0):T
+	public static inline function setAngle<T:ITransform>(self:T, degrees:Float = 0):T
 	{
 		self.angle = degrees;
 		return self;
 	}
 
 	@:generic
-	public static inline function setRotation<T:ICTransform>(self:T, radians:Float = 0):T
+	public static inline function setRotation<T:ITransform>(self:T, radians:Float = 0):T
 	{
 		self.rotation = radians;
 		return self;
 	}
 
 	@:generic
-	public static inline function setScale<T:ICTransform>(self:T, x:Float = 1,
+	public static inline function setScale<T:ITransform>(self:T, x:Float = 1,
 			?y:Float):T
 	{
 		self.scaleX = x;
@@ -411,35 +410,35 @@ final class TransformImplementation
 	}
 
 	@:generic
-	public static inline function setX<T:ICTransform>(self:T, value:Float = 0):T
+	public static inline function setX<T:ITransform>(self:T, value:Float = 0):T
 	{
 		self.x = value;
 		return self;
 	}
 
 	@:generic
-	public static inline function setY<T:ICTransform>(self:T, value:Float = 0):T
+	public static inline function setY<T:ITransform>(self:T, value:Float = 0):T
 	{
 		self.y = value;
 		return self;
 	}
 
 	@:generic
-	public static inline function setZ<T:ICTransform>(self:T, value:Float = 0):T
+	public static inline function setZ<T:ITransform>(self:T, value:Float = 0):T
 	{
 		self.z = value;
 		return self;
 	}
 
 	@:generic
-	public static inline function setW<T:ICTransform>(self:T, value:Float = 0):T
+	public static inline function setW<T:ITransform>(self:T, value:Float = 0):T
 	{
 		self.w = value;
 		return self;
 	}
 
 	@:generic
-	public static inline function getLocalTransformMatrix<T:ICTransform>(self:T,
+	public static inline function getLocalTransformMatrix<T:ITransform>(self:T,
 			?tempMatrix:TransformMatrix):TransformMatrix
 	{
 		if (tempMatrix == null)
@@ -452,7 +451,7 @@ final class TransformImplementation
 	}
 
 	@:generic
-	public static inline function getWorldTransformMatrix<T:ICTransform>(self:T,
+	public static inline function getWorldTransformMatrix<T:ITransform>(self:T,
 			?tempMatrix:TransformMatrix, ?parentMatrix:TransformMatrix):TransformMatrix
 	{
 		final go = cast(self, GameObject);
@@ -488,7 +487,6 @@ final class TransformImplementation
 	}
 }
 
-@:phaserHaxe.NoMixin
 final class TransformMixin
 {
 	/**

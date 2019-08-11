@@ -53,7 +53,7 @@ phaserHaxe.geom.Triangle
 phaserHaxe.geom.TriangleUtil
 phaserHaxe.geom.earcut.EarcutApi
 phaserHaxe.geom.Intersects
-phaserHaxe.gameobjects.components.ICTransform
+phaserHaxe.gameobjects.components.ITransform
 
 -main Main
 

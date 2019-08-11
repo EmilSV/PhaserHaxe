@@ -1,7 +1,6 @@
 package phaserHaxe.gameobjects.components;
 
-@:autoBuild(phaserHaxe.macro.Mixin.build(ComputedSizeMixin))
-interface ICComputedSize extends ICTransform
+interface IComputedSize
 {
 	/**
 	 * The native (un-scaled) width of this Game Object.
@@ -65,7 +64,7 @@ interface ICComputedSize extends ICTransform
 	 *
 	 * @return This Game Object instance.
 	**/
-	public function setSize(width:Float, height:Float):ICComputedSize;
+	public function setSize(width:Float, height:Float):IComputedSize;
 
 	/**
 	 * Sets the display size of this Game Object.
@@ -79,41 +78,41 @@ interface ICComputedSize extends ICTransform
 	 *
 	 * @return This Game Object instance.
 	**/
-	public function setDisplaySize(width:Float, height:Float):ICComputedSize;
+	public function setDisplaySize(width:Float, height:Float):IComputedSize;
 }
 
 final class ComputedSizeImplementation
 {
-	public static inline function get_displayWidth<T:ICComputedSize>(self:T):Float
+	public static inline function get_displayWidth<T:IComputedSize & ITransform>(self:T):Float
 	{
 		return self.scaleX * self.width;
 	}
 
-	public static inline function set_displayWidth<T:ICComputedSize>(self:T,
-			value:Float):Float
+	public static inline function set_displayWidth<T:IComputedSize & ITransform>(self:T,
+		value:Float):Float
 	{
 		return self.scaleX = value / self.width;
 	}
 
-	public static inline function get_displayHeight<T:ICComputedSize>(self:T):Float
+	public static inline function get_displayHeight<T:IComputedSize & ITransform>(self:T):Float
 	{
 		return self.scaleY * self.height;
 	}
 
-	public static inline function set_displayHeight<T:ICComputedSize>(self:T,
-			value:Float):Float
+	public static inline function set_displayHeight<T:IComputedSize & ITransform>(self:T,
+		value:Float):Float
 	{
 		return self.scaleY = value / self.height;
 	}
 
-	public static function setSize<T:ICComputedSize>(self:T, width:Float, height:Float):T
+	public static function setSize<T:IComputedSize>(self:T, width:Float, height:Float):T
 	{
 		self.width = width;
 		self.height = height;
 		return self;
 	}
 
-	public static function setDisplaySize<T:ICComputedSize>(self:T, width:Float,
+	public static function setDisplaySize<T:IComputedSize>(self:T, width:Float,
 			height:Float):T
 	{
 		self.displayWidth = width;
@@ -122,7 +121,7 @@ final class ComputedSizeImplementation
 	}
 }
 
-final class ComputedSizeMixin
+final class ComputedSizeMixin implements IComputedSize implements ITransform
 {
 	/**
 	 * The native (un-scaled) width of this Game Object.
@@ -170,22 +169,22 @@ final class ComputedSizeMixin
 
 	private inline function get_displayWidth():Float
 	{
-		return ComputedSizeImplementation.get_displayWidth(cast this);
+		return ComputedSizeImplementation.get_displayWidth(this);
 	}
 
 	private inline function set_displayWidth(value:Float):Float
 	{
-		return ComputedSizeImplementation.set_displayWidth(cast this, value);
+		return ComputedSizeImplementation.set_displayWidth(this, value);
 	}
 
 	private inline function get_displayHeight():Float
 	{
-		return ComputedSizeImplementation.get_displayHeight(cast this);
+		return ComputedSizeImplementation.get_displayHeight(this);
 	}
 
 	private inline function set_displayHeight(value:Float):Float
 	{
-		return ComputedSizeImplementation.set_displayHeight(cast this, value);
+		return ComputedSizeImplementation.set_displayHeight(this, value);
 	}
 
 	/**
@@ -226,5 +225,171 @@ final class ComputedSizeMixin
 	public function setDisplaySize(width:Float, height:Float):ComputedSizeMixin
 	{
 		return cast ComputedSizeImplementation.setDisplaySize(cast this, width, height);
+	}
+
+	// Transform implementation
+	@:phaserHaxe.mixinIgnorer
+	private var _scaleX:Float;
+
+	@:phaserHaxe.mixinIgnorer
+	private var _scaleY:Float;
+
+	@:phaserHaxe.mixinIgnorer
+	private var _rotation:Float;
+
+	@:phaserHaxe.mixinIgnorer
+	public var x:Float;
+
+	@:phaserHaxe.mixinIgnorer
+	public var y:Float;
+
+	@:phaserHaxe.mixinIgnorer
+	public var z:Float;
+
+	@:phaserHaxe.mixinIgnorer
+	public var w:Float;
+
+	@:phaserHaxe.mixinIgnorer
+	public var scale(get, set):Float;
+
+	@:phaserHaxe.mixinIgnorer
+	public var scaleX(get, set):Float;
+
+	@:phaserHaxe.mixinIgnorer
+	public var scaleY(get, set):Float;
+
+	@:phaserHaxe.mixinIgnorer
+	public var angle(get, set):Float;
+
+	@:phaserHaxe.mixinIgnorer
+	public var rotation(get, set):Float;
+
+	@:phaserHaxe.mixinIgnorer
+	private inline function get_scale():Float
+	{
+		throw "Not Implement";
+	}
+
+	@:phaserHaxe.mixinIgnorer
+	private inline function set_scale(value:Float):Float
+	{
+		throw "Not Implement";
+	}
+
+	@:phaserHaxe.mixinIgnorer
+	private inline function get_scaleX():Float
+	{
+		throw "Not Implement";
+	}
+
+	@:phaserHaxe.mixinIgnorer
+	private inline function set_scaleX(value:Float):Float
+	{
+		throw "Not Implement";
+	}
+
+	@:phaserHaxe.mixinIgnorer
+	private inline function get_scaleY():Float
+	{
+		throw "Not Implement";
+	}
+
+	@:phaserHaxe.mixinIgnorer
+	private inline function set_scaleY(value:Float):Float
+	{
+		throw "Not Implement";
+	}
+
+	@:phaserHaxe.mixinIgnorer
+	private inline function get_angle():Float
+	{
+		throw "Not Implement";
+	}
+
+	@:phaserHaxe.mixinIgnorer
+	private inline function set_angle(value:Float):Float
+	{
+		throw "Not Implement";
+	}
+
+	@:phaserHaxe.mixinIgnorer
+	private inline function get_rotation():Float
+	{
+		throw "Not Implement";
+	}
+
+	@:phaserHaxe.mixinIgnorer
+	private inline function set_rotation(value:Float):Float
+	{
+		throw "Not Implement";
+	}
+
+	@:phaserHaxe.mixinIgnorer
+	public function setPosition(x:Float = 0, ?y:Float, z:Float = 0,
+			w:Float = 0):ITransform
+	{
+		throw "Not Implement";
+	}
+
+	@:phaserHaxe.mixinIgnorer
+	public function setRandomPosition(x:Float = 0, y:Float = 0, ?width:Float,
+			?height:Float):ITransform
+	{
+		throw "Not Implement";
+	}
+
+	@:phaserHaxe.mixinIgnorer
+	public function setRotation(radians:Float = 0):ITransform
+	{
+		throw "Not Implement";
+	}
+
+	@:phaserHaxe.mixinIgnorer
+	public function setAngle(degrees:Float = 0):ITransform
+	{
+		throw "Not Implement";
+	}
+
+	@:phaserHaxe.mixinIgnorer
+	public function setScale(x:Float = 1, ?y:Float):ITransform
+	{
+		throw "Not Implement";
+	}
+
+	@:phaserHaxe.mixinIgnorer
+	public function setX(value:Float = 0):ITransform
+	{
+		throw "Not Implement";
+	}
+
+	@:phaserHaxe.mixinIgnorer
+	public function setY(value:Float = 0):ITransform
+	{
+		throw "Not Implement";
+	}
+
+	@:phaserHaxe.mixinIgnorer
+	public function setZ(value:Float = 0):ITransform
+	{
+		throw "Not Implement";
+	}
+
+	@:phaserHaxe.mixinIgnorer
+	public function setW(value:Float = 0):ITransform
+	{
+		throw "Not Implement";
+	}
+
+	@:phaserHaxe.mixinIgnorer
+	public function getLocalTransformMatrix(?tempMatrix:TransformMatrix):TransformMatrix
+	{
+		throw "Not Implement";
+	}
+
+	@:phaserHaxe.mixinIgnorer
+	public function getWorldTransformMatrix(?tempMatrix:TransformMatrix,
+			?parentMatrix:TransformMatrix):TransformMatrix
+	{
+		throw "Not Implement";
 	}
 }

@@ -1,7 +1,6 @@
 package phaserHaxe.gameobjects.components;
 
-@:autoBuild(phaserHaxe.macro.Mixin.build(FlipMixin))
-interface ICFlip
+interface IFlip
 {
 	/**
 	 * The horizontally flipped state of the Game Object.
@@ -38,7 +37,7 @@ interface ICFlip
 	 *
 	 * @return This Game Object instance.
 	**/
-	public function toggleFlipX():ICFlip;
+	public function toggleFlipX():IFlip;
 
 	/**
 	 * Toggles the vertical flipped state of this Game Object.
@@ -47,7 +46,7 @@ interface ICFlip
 	 *
 	 * @return This Game Object instance.
 	**/
-	public function toggleFlipY():ICFlip;
+	public function toggleFlipY():IFlip;
 
 	/**
 	 * Sets the horizontal flipped state of this Game Object.
@@ -62,7 +61,7 @@ interface ICFlip
 	 *
 	 * @return This Game Object instance.
 	**/
-	public function setFlipX(value:Bool):ICFlip;
+	public function setFlipX(value:Bool):IFlip;
 
 	/**
 	 * Sets the vertical flipped state of this Game Object.
@@ -73,7 +72,7 @@ interface ICFlip
 	 *
 	 * @return This Game Object instance.
 	**/
-	public function setFlipY(value:Bool):ICFlip;
+	public function setFlipY(value:Bool):IFlip;
 
 	/**
 	 * Sets the horizontal and vertical flipped state of this Game Object.
@@ -89,7 +88,7 @@ interface ICFlip
 	 *
 	 * @return This Game Object instance.
 	**/
-	public function setFlip(x:Bool, y:Bool):ICFlip;
+	public function setFlip(x:Bool, y:Bool):IFlip;
 
 	/**
 	 * Resets the horizontal and vertical flipped state of this Game Object back to their default un-flipped state.
@@ -98,36 +97,36 @@ interface ICFlip
 	 *
 	 * @return This Game Object instance.
 	**/
-	public function resetFlip():ICFlip;
+	public function resetFlip():IFlip;
 }
 
 final class FlipImplementation
 {
-	public static inline function toggleFlipX<T:ICFlip>(self:T):T
+	public static inline function toggleFlipX<T:IFlip>(self:T):T
 	{
 		self.flipX = !self.flipX;
 		return self;
 	}
 
-	public static inline function toggleFlipY<T:ICFlip>(self:T):T
+	public static inline function toggleFlipY<T:IFlip>(self:T):T
 	{
 		self.flipY = !self.flipY;
 		return self;
 	}
 
-	public static inline function setFlipX<T:ICFlip>(self:T, value:Bool):T
+	public static inline function setFlipX<T:IFlip>(self:T, value:Bool):T
 	{
 		self.flipX = value;
 		return self;
 	}
 
-	public static inline function setFlipY<T:ICFlip>(self:T, value:Bool):T
+	public static inline function setFlipY<T:IFlip>(self:T, value:Bool):T
 	{
 		self.flipY = value;
 		return self;
 	}
 
-	public static inline function setFlip<T:ICFlip>(self:T, x:Bool, y:Bool):T
+	public static inline function setFlip<T:IFlip>(self:T, x:Bool, y:Bool):T
 	{
 		self.flipX = x;
 		self.flipY = y;
@@ -135,7 +134,7 @@ final class FlipImplementation
 		return self;
 	}
 
-	public static inline function resetFlip<T:ICFlip>(self:T):T
+	public static inline function resetFlip<T:IFlip>(self:T):T
 	{
 		self.flipX = false;
 		self.flipY = false;
@@ -144,7 +143,7 @@ final class FlipImplementation
 	}
 }
 
-final class FlipMixin
+final class FlipMixin implements IFlip
 {
 	/**
 	 * The horizontally flipped state of the Game Object.
@@ -181,7 +180,7 @@ final class FlipMixin
 	**/
 	public function toggleFlipX():FlipMixin
 	{
-		return cast FlipImplementation.toggleFlipX(cast this);
+		return cast FlipImplementation.toggleFlipX(this);
 	}
 
 	/**
@@ -193,7 +192,7 @@ final class FlipMixin
 	**/
 	public function toggleFlipY():FlipMixin
 	{
-		return cast FlipImplementation.toggleFlipY(cast this);
+		return FlipImplementation.toggleFlipY(this);
 	}
 
 	/**
@@ -211,7 +210,7 @@ final class FlipMixin
 	**/
 	public function setFlipX(value:Bool):FlipMixin
 	{
-		return cast FlipImplementation.setFlipX(cast this, value);
+		return FlipImplementation.setFlipX(this, value);
 	}
 
 	/**
@@ -225,7 +224,7 @@ final class FlipMixin
 	**/
 	public function setFlipY(value:Bool):FlipMixin
 	{
-		return cast FlipImplementation.setFlipY(cast this, value);
+		return FlipImplementation.setFlipY(this, value);
 	}
 
 	/**
@@ -244,7 +243,7 @@ final class FlipMixin
 	**/
 	public function setFlip(x:Bool, y:Bool):FlipMixin
 	{
-		return cast FlipImplementation.setFlip(cast this, x, y);
+		return FlipImplementation.setFlip(this, x, y);
 	}
 
 	/**
@@ -256,6 +255,6 @@ final class FlipMixin
 	**/
 	public function resetFlip():FlipMixin
 	{
-		return cast FlipImplementation.resetFlip(cast this);
+		return FlipImplementation.resetFlip(this);
 	}
 }

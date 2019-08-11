@@ -1,6 +1,6 @@
 package phaserHaxe.gameobjects.components;
 
-interface ICVisible
+interface IVisible
 {
 	/**
 	 * Private internal value. Holds the visible value.
@@ -30,5 +30,5 @@ interface ICVisible
 	 *
 	 * @return This Game Object instance.
 	**/
-	public function setVisible(value:Bool):ICVisible;
+	public function setVisible(value:Bool):IVisible;
 }

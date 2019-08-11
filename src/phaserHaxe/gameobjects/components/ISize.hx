@@ -1,10 +1,13 @@
 package phaserHaxe.gameobjects.components;
 
-import phaserHaxe.gameobjects.components.ICCrop;
-import phaserHaxe.gameobjects.components.ICTransform;
+import phaserHaxe.textures.CanvasTexture;
+import phaserHaxe.textures.Texture;
+import phaserHaxe.geom.Rectangle;
+import phaserHaxe.gameobjects.components.ICrop;
+import phaserHaxe.gameobjects.components.ITransform;
+import phaserHaxe.textures.Frame;
 
-@:autoBuild(phaserHaxe.macro.Mixin.build(SizeMixin))
-interface ICSize
+interface ISize
 {
 	/**
 	 * A property indicating that a Game Object has this component.
@@ -75,7 +78,7 @@ interface ICSize
 	 *
 	 * @return This Game Object instance.
 	**/
-	public function setSizeToFrame(?frame:Frame):ICSize;
+	public function setSizeToFrame(?frame:Frame):ISize;
 
 	/**
 	 * Sets the internal size of this Game Object, as used for frame or physics body creation.
@@ -95,7 +98,7 @@ interface ICSize
 	 *
 	 * @return This Game Object instance.
 	**/
-	public function setSize(width:Float, height:Float):ICSize;
+	public function setSize(width:Float, height:Float):ISize;
 
 	/**
 	 * Sets the display size of this Game Object.
@@ -109,64 +112,39 @@ interface ICSize
 	 *
 	 * @return This Game Object instance.
 	**/
-	public function setDisplaySize(width:Float, height:Float):ICSize;
+	public function setDisplaySize(width:Float, height:Float):ISize;
 }
 
-@:noCompletion
 final class SizeImplementation
 {
-	@:generic
-	public static inline function get_displayWidth<T:ICSize>(self:T):Float
+	public static inline function get_displayWidth<T:ISize & ITransform & ICrop>(self:T):Float
 	{
-		if (Std.is(self, ICTransform) && Std.is(self, ICCrop))
-		{
-			return (cast self : ICTransform).scaleX * (cast self : ICCrop)
-				.frame.realWidth;
-		}
-		return 0;
+		return self.scaleX * self.frame.realWidth;
 	}
 
-	@:generic
-	public static inline function set_displayWidth<T:ICSize>(self:T, value:Float):Float
+	public static inline function set_displayWidth<T:ISize & ITransform & ICrop>(self:T,
+		value:Float):Float
 	{
-		if (Std.is(self, ICTransform) && Std.is(self, ICCrop))
-		{
-			return (cast self : ICTransform).scaleX = value / (cast self : ICCrop)
-				.frame.realWidth;
-		}
-		return 0;
+		return self.scaleX = value / self.frame.realWidth;
 	}
 
-	@:generic
-	public static inline function get_displayHeight<T:ICSize>(self:T):Float
+	public static inline function get_displayHeight<T:ISize & ITransform & ICrop>(self:T):Float
 	{
-		if (Std.is(self, ICTransform) && Std.is(self, ICCrop))
-		{
-			return (cast self : ICTransform).scaleY * (cast self : ICCrop)
-				.frame.realHeight;
-		}
-
-		return 0;
+		return self.scaleY * self.frame.realHeight;
 	}
 
-	@:generic
-	public static inline function set_displayHeight<T:ICSize>(self:T, value:Float):Float
+	public static inline function set_displayHeight<T:ISize & ITransform & ICrop>(self:T,
+		value:Float):Float
 	{
-		if (Std.is(self, ICTransform) && Std.is(self, ICCrop))
-		{
-			return (cast self : ICTransform).scaleY = value / (cast self : ICCrop)
-				.frame.realHeight;
-		}
-
-		return 0;
+		return self.scaleY = value / self.frame.realHeight;
 	}
 
-	@:generic
-	public static inline function setSizeToFrame<T:ICSize>(self:T, ?frame:Frame):T
+	public static inline function setSizeToFrame<T:ISize & ICrop>(self:T,
+			?frame:Frame):T
 	{
-		if (frame == null && Std.is(self, ICCrop))
+		if (frame == null)
 		{
-			frame = (cast self : ICCrop).frame;
+			frame = self.frame;
 		}
 
 		self.width = frame.realWidth;
@@ -175,16 +153,14 @@ final class SizeImplementation
 		return self;
 	}
 
-	@:generic
-	public static inline function setSize<T:ICSize>(self:T, width:Float, height:Float):T
+	public static inline function setSize<T:ISize>(self:T, width:Float, height:Float):T
 	{
 		self.width = width;
 		self.height = height;
 		return self;
 	}
 
-	@:generic
-	public static inline function setDisplaySize<T:ICSize>(self:T, width:Float,
+	public static inline function setDisplaySize<T:ISize>(self:T, width:Float,
 			height:Float):T
 	{
 		self.displayWidth = width;
@@ -194,8 +170,7 @@ final class SizeImplementation
 	}
 }
 
-@:phaserHaxe.NoMixin
-final class SizeMixin implements ICSize
+final class SizeMixin implements ISize implements ITransform implements ICrop
 {
 	/**
 	 * A property indicating that a Game Object has this component.
@@ -328,5 +303,193 @@ final class SizeMixin implements ICSize
 	public function setDisplaySize(width:Float, height:Float):SizeMixin
 	{
 		return SizeImplementation.setDisplaySize(this, width, height);
+	}
+
+	// ITransform implementation
+	@:phaserHaxe.mixinIgnorer
+	private var _scaleX:Float = 1;
+
+	@:phaserHaxe.mixinIgnorer
+	private var _scaleY:Float = 1;
+
+	@:phaserHaxe.mixinIgnorer
+	private var _rotation:Float = 0;
+
+	@:phaserHaxe.mixinIgnorer
+	public var x:Float = 0;
+
+	@:phaserHaxe.mixinIgnorer
+	public var y:Float = 0;
+
+	@:phaserHaxe.mixinIgnorer
+	public var z:Float = 0;
+
+	@:phaserHaxe.mixinIgnorer
+	public var w:Float = 0;
+
+	@:phaserHaxe.mixinIgnorer
+	public var scale(get, set):Float;
+
+	@:phaserHaxe.mixinIgnorer
+	public var scaleX(get, set):Float;
+
+	@:phaserHaxe.mixinIgnorer
+	public var scaleY(get, set):Float;
+
+	@:phaserHaxe.mixinIgnorer
+	public var angle(get, set):Float;
+	@:phaserHaxe.mixinIgnorer
+	public var rotation(get, set):Float;
+
+	@:phaserHaxe.mixinIgnorer
+	private inline function get_scale():Float
+	{
+		throw "Not Implemented";
+	}
+
+	@:phaserHaxe.mixinIgnorer
+	private inline function set_scale(value:Float):Float
+	{
+		throw "Not Implemented";
+	}
+
+	@:phaserHaxe.mixinIgnorer
+	private inline function get_scaleX():Float
+	{
+		throw "Not Implemented";
+	}
+
+	@:phaserHaxe.mixinIgnorer
+	private inline function set_scaleX(value:Float):Float
+	{
+		throw "Not Implemented";
+	}
+
+	@:phaserHaxe.mixinIgnorer
+	private inline function get_scaleY():Float
+	{
+		throw "Not Implemented";
+	}
+
+	@:phaserHaxe.mixinIgnorer
+	private inline function set_scaleY(value:Float):Float
+	{
+		throw "Not Implemented";
+	}
+
+	@:phaserHaxe.mixinIgnorer
+	private inline function get_angle():Float
+	{
+		throw "Not Implemented";
+	}
+
+	@:phaserHaxe.mixinIgnorer
+	private inline function set_angle(value:Float):Float
+	{
+		throw "Not Implemented";
+	}
+
+	@:phaserHaxe.mixinIgnorer
+	private inline function get_rotation():Float
+	{
+		throw "Not Implemented";
+	}
+
+	@:phaserHaxe.mixinIgnorer
+	private inline function set_rotation(value:Float):Float
+	{
+		throw "Not Implemented";
+	}
+
+	@:phaserHaxe.mixinIgnorer
+	public function setPosition(x:Float = 0, ?y:Float, z:Float = 0,
+			w:Float = 0):ITransform
+	{
+		throw "Not Implemented";
+	}
+
+	@:phaserHaxe.mixinIgnorer
+	public function setRandomPosition(x:Float = 0, y:Float = 0, ?width:Float,
+			?height:Float):ITransform
+	{
+		throw "Not Implemented";
+	}
+
+	@:phaserHaxe.mixinIgnorer
+	public function setRotation(radians:Float = 0):ITransform
+	{
+		throw "Not Implemented";
+	}
+
+	@:phaserHaxe.mixinIgnorer
+	public function setAngle(degrees:Float = 0):ITransform
+	{
+		throw "Not Implemented";
+	}
+
+	@:phaserHaxe.mixinIgnorer
+	public function setScale(x:Float = 1, ?y:Float):ITransform
+	{
+		throw "Not Implemented";
+	}
+
+	@:phaserHaxe.mixinIgnorer
+	public function setX(value:Float = 0):ITransform
+	{
+		throw "Not Implemented";
+	}
+
+	@:phaserHaxe.mixinIgnorer
+	public function setY(value:Float = 0):ITransform
+	{
+		throw "Not Implemented";
+	}
+
+	@:phaserHaxe.mixinIgnorer
+	public function setZ(value:Float = 0):ITransform
+	{
+		throw "Not Implemented";
+	}
+
+	@:phaserHaxe.mixinIgnorer
+	public function setW(value:Float = 0):ITransform
+	{
+		throw "Not Implemented";
+	}
+
+	@:phaserHaxe.mixinIgnorer
+	public function getLocalTransformMatrix(?tempMatrix:TransformMatrix):TransformMatrix
+	{
+		throw "Not Implemented";
+	}
+
+	@:phaserHaxe.mixinIgnorer
+	public function getWorldTransformMatrix(?tempMatrix:TransformMatrix,
+			?parentMatrix:TransformMatrix):TransformMatrix
+	{
+		throw "Not Implemented";
+	}
+
+	// ICrop implementation
+	@:phaserHaxe.mixinIgnorer
+	public var texture:Either<Texture, CanvasTexture> = null;
+
+	@:phaserHaxe.mixinIgnorer
+	public var frame:Frame = null;
+
+	@:phaserHaxe.mixinIgnorer
+	public var isCropped:Bool = false;
+
+	@:phaserHaxe.mixinIgnorer
+	public function setCrop(?x:Either<Rectangle, Float>, ?y:Float, ?width:Float,
+			?height:Float):CropMixin
+	{
+		throw "Not Implemented";
+	}
+
+	@:phaserHaxe.mixinIgnorer
+	private function resetCropObject():ResetCropObject
+	{
+		throw "Not Implemented";
 	}
 }

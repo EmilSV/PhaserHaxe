@@ -1,8 +1,7 @@
 package phaserHaxe.gameobjects.components;
 
 @:allow(phaserHaxe.gameobjects.components.DepthImplementation)
-@:autoBuild(phaserHaxe.macro.Mixin.build(DepthMixin))
-interface ICDepth
+interface IDepth
 {
 	/**
 	 * Private internal value. Holds the depth of the Game Object.
@@ -44,37 +43,30 @@ interface ICDepth
 	 *
 	 * @return This Game Object instance.
 	**/
-	public function setDepth(value:Int = 0):ICDepth;
+	public function setDepth(value:Int = 0):IDepth;
 }
 
-@:noCompletion
 final class DepthImplementation
 {
-	@:generic
-	public static inline function get_depth<T:ICDepth>(self:T):Int
+	public static inline function get_depth<T:IDepth>(self:T):Int
 	{
 		return self._depth;
 	}
 
-	@:generic
-	public static inline function set_depth<T:ICDepth>(self:T, value:Int):Int
+	public static inline function set_depth<T:IDepth & GameObject>(self:T, value:Int):Int
 	{
-		if (Std.is(self, GameObject))
-		{
-			(cast self : GameObject).scene.sys.queueDepthSort();
-		}
+		self.scene.sys.queueDepthSort();
 		return self._depth = value;
 	}
 
-	@:generic
-	public static inline function setDepth<T:ICDepth>(self:T, value:Int):T
+	public static inline function setDepth<T:IDepth>(self:T, value:Int):T
 	{
 		self.depth = value;
 		return self;
 	}
 }
 
-final class DepthMixin
+final class DepthMixin extends GameObject implements IDepth
 {
 	/**
 	 * Private internal value. Holds the depth of the Game Object.
@@ -100,12 +92,12 @@ final class DepthMixin
 
 	private inline function get_depth():Int
 	{
-		return DepthImplementation.get_depth(cast this);
+		return DepthImplementation.get_depth(this);
 	}
 
 	private inline function set_depth(value:Int):Int
 	{
-		return DepthImplementation.set_depth(cast this, value);
+		return DepthImplementation.set_depth(this, value);
 	}
 
 	/**
@@ -127,6 +119,6 @@ final class DepthMixin
 	**/
 	public inline function setDepth(value:Int = 0):DepthMixin
 	{
-		return cast DepthImplementation.setDepth(cast this, value);
+		return cast DepthImplementation.setDepth(this, value);
 	}
 }

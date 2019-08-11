@@ -33,21 +33,24 @@ final class Mixin
 			return outputFelids;
 		}
 
-		if(localClass.isInterface)
+		if (localClass.isInterface)
 		{
 			return outputFelids;
 		}
 
 		for (cme in classMixinExprs)
 		{
-			addFromClassExpr(cme, outputFelids);
+			final mixinClass = getClassFromExpr(cme);
+			if (MixinValidator.isValid(mixinClass, localClass))
+			{
+				addFromClassExpr(mixinClass, localClass, outputFelids);
+			}
 		}
 
 		return outputFelids;
 	}
 
-	private static function addFromClassExpr(classMixinExpr:Expr,
-			outputFelids:Array<Field>)
+	private static function getClassFromExpr(classMixinExpr:Expr):Null<ClassType>
 	{
 		var classMixinName = tryGetIdentifier(classMixinExpr);
 		var classType:Null<ClassType>;
@@ -78,13 +81,12 @@ final class Mixin
 			classType = null;
 		}
 
-		final localClass = Context.getLocalClass().get();
+		return classType;
+	}
 
-		if (classType == null)
-		{
-			return;
-		}
-
+	private static function addFromClassExpr(classType:ClassType, localClass:ClassType,
+			outputFelids:Array<Field>)
+	{
 		function convertParams(params:Array<TypeParameter>)
 		{
 			return [
@@ -159,6 +161,10 @@ final class Mixin
 		for (felid in mixinFelids)
 		{
 			var kind = felid.kind;
+			if (felid.meta.has(":phaserHaxe.mixinIgnorer"))
+			{
+				continue;
+			}
 
 			switch (kind)
 			{
@@ -174,6 +180,10 @@ final class Mixin
 		for (felid in mixinStaticFelids)
 		{
 			var kind = felid.kind;
+			if (felid.meta.has(":phaserHaxe.mixinIgnorer"))
+			{
+				continue;
+			}
 
 			switch (kind)
 			{

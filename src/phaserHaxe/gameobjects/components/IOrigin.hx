@@ -1,11 +1,10 @@
 package phaserHaxe.gameobjects.components;
 
-import phaserHaxe.gameobjects.components.ICCrop;
-import phaserHaxe.gameobjects.components.ICSize;
+import phaserHaxe.gameobjects.components.ICrop;
+import phaserHaxe.gameobjects.components.ISize;
 
 @:allow(phaserHaxe.gameobjects.components.OriginImplementation)
-@:autoBuild(phaserHaxe.macro.Mixin.build(OriginMixin))
-interface ICOrigin
+interface IOrigin
 {
 	/**
 	 * A property indicating that a Game Object has this component.
@@ -71,7 +70,7 @@ interface ICOrigin
 	 *
 	 * @return This Game Object instance.
 	**/
-	public function setOrigin(x:Float = 0.5, ?y:Float):ICOrigin;
+	public function setOrigin(x:Float = 0.5, ?y:Float):IOrigin;
 
 	/**
 	 * Sets the origin of this Game Object based on the Pivot values in its Frame.
@@ -80,7 +79,7 @@ interface ICOrigin
 	 *
 	 * @return This Game Object instance.
 	**/
-	public function setOriginFromFrame():ICOrigin;
+	public function setOriginFromFrame():IOrigin;
 
 	/**
 	 * Sets the display origin of this Game Object.
@@ -93,7 +92,7 @@ interface ICOrigin
 	 *
 	 * @return {this} This Game Object instance.
 	 */
-	public function setDisplayOrigin(x:Float = 0, ?y:Float):ICOrigin;
+	public function setDisplayOrigin(x:Float = 0, ?y:Float):IOrigin;
 
 	/**
 	 * Updates the Display Origin cached values internally stored on this Game Object.
@@ -103,23 +102,20 @@ interface ICOrigin
 	 *
 	 * @return This Game Object instance.
 	 */
-	public function updateDisplayOrigin():ICOrigin;
+	public function updateDisplayOrigin():IOrigin;
 }
 
-@:noCompletion
 final class OriginImplementation
 {
-	@:generic
-	public static inline function get_displayOriginX<T:ICOrigin>(self:T):Float
+	public static inline function get_displayOriginX<T:IOrigin>(self:T):Float
 	{
 		return self._displayOriginX;
 	}
 
-	@:generic
-	public static inline function set_displayOriginX<T:ICOrigin>(self:T,
+	public static inline function set_displayOriginX<T:IOrigin>(self:T,
 			value:Float):Float
 	{
-		final selfSize = cast(self, ICSize);
+		final selfSize = cast(self, ISize);
 
 		self._displayOriginX = value;
 		self.originX = value / selfSize.width;
@@ -127,17 +123,15 @@ final class OriginImplementation
 		return value;
 	}
 
-	@:generic
-	public static inline function get_displayOriginY<T:ICOrigin>(self:T):Float
+	public static inline function get_displayOriginY<T:IOrigin>(self:T):Float
 	{
 		return self._displayOriginY;
 	}
 
-	@:generic
-	public static inline function set_displayOriginY<T:ICOrigin>(self:T,
+	public static inline function set_displayOriginY<T:IOrigin>(self:T,
 			value:Float):Float
 	{
-		final selfSize = cast(self, ICSize);
+		final selfSize = cast(self, ISize);
 
 		self._displayOriginY = value;
 		self.originY = value / selfSize.height;
@@ -145,8 +139,7 @@ final class OriginImplementation
 		return value;
 	}
 
-	@:generic
-	public static inline function setOrigin<T:ICOrigin>(self:T, x:Float = 0.5,
+	public static inline function setOrigin<T:IOrigin>(self:T, x:Float = 0.5,
 			?y:Float):T
 	{
 		self.originX = x;
@@ -154,12 +147,11 @@ final class OriginImplementation
 		return (cast self.updateDisplayOrigin() : T);
 	}
 
-	@:generic
-	public static inline function setOriginFromFrame<T:ICOrigin>(self:T):T
+	public static inline function setOriginFromFrame<T:IOrigin>(self:T):T
 	{
-		final selfCrop = cast(self, ICCrop);
+		final selfCrop = cast(self, ICrop);
 
-		if (!selfCrop.frame || !selfCrop.frame.customPivot)
+		if (selfCrop.frame != null || !selfCrop.frame.customPivot)
 		{
 			self.setOrigin();
 		}
@@ -172,8 +164,7 @@ final class OriginImplementation
 		return self;
 	}
 
-	@:generic
-	public static inline function setDisplayOrigin<T:ICOrigin>(self:T, x:Float = 0,
+	public static inline function setDisplayOrigin<T:IOrigin>(self:T, x:Float = 0,
 			?y:Float):T
 	{
 		self.displayOriginX = x;
@@ -182,10 +173,9 @@ final class OriginImplementation
 		return self;
 	}
 
-	@:generic
-	public static inline function updateDisplayOrigin<T:ICOrigin>(self:T):T
+	public static inline function updateDisplayOrigin<T:IOrigin>(self:T):T
 	{
-		final selfSize = cast(self, ICSize);
+		final selfSize = cast(self, ISize);
 
 		self._displayOriginX = Math.round(self.originX * selfSize.width);
 		self._displayOriginY = Math.round(self.originY * selfSize.height);
@@ -195,7 +185,7 @@ final class OriginImplementation
 }
 
 @:phaserHaxe.NoMixin
-final class OriginMixin implements ICOrigin
+final class OriginMixin implements IOrigin
 {
 	/**
 	 * A property indicating that a Game Object has this component.
@@ -304,7 +294,7 @@ final class OriginMixin implements ICOrigin
 	 * @param x - The horizontal display origin value.
 	 * @param y - The vertical display origin value. If not defined it will be set to the value of `x`.
 	 *
-	 * @return {this} This Game Object instance.
+	 * @return This Game Object instance.
 	**/
 	public function setDisplayOrigin(x:Float = 0, ?y:Float):OriginMixin
 	{

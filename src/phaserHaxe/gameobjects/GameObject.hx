@@ -9,8 +9,7 @@ import phaserHaxe.cameras.scene2D.Camera;
 import phaserHaxe.data.DataManager;
 import phaserHaxe.types.input.InteractiveObject;
 import phaserHaxe.physics.arcade.Body;
-import phaserHaxe.gameobjects.components.ICVisible;
-import haxe.ds.StringMap;
+import phaserHaxe.gameobjects.components.IVisible;
 
 /**
  * The base class that all Game Objects extend.
@@ -24,8 +23,6 @@ class GameObject extends EventEmitter
 	public static inline var RENDER_MASK = 15;
 
 	/**
-	 * TODO: MAYBE PRIVATE
-	 *
 	 * The Scene to which this Game Object belongs.
 	 * Game Objects can only belong to one Scene.
 	 * @since 1.0.0
@@ -174,8 +171,7 @@ class GameObject extends EventEmitter
 	 * Sets the `name` property of this Game Object and returns this Game Object for further chaining.
 	 * The `name` property is not populated by Phaser and is presented for your own use.
 	 *
-	 * @method Phaser.GameObjects.GameObject#setName
-	 * @since 3.0.0
+	 * @since 1.0.0
 	 *
 	 * @param value - The name to be given to this Game Object.
 	 *
@@ -270,11 +266,11 @@ class GameObject extends EventEmitter
 	 * @since 1.0.0
 	 *
 	 * @param key - The key to set the value for. Or an object or key value pairs. If an object the `data` argument is ignored.
-	 * @param data - The value to set for the given key. If an object is provided as the key this argument is ignored.
+	 * @param value - The value to set for the given key. If an object is provided as the key this argument is ignored.
 	 *
 	 * @return This GameObject.
-	 **/
-	public function setData(key:Either<String, StringMap<Dynamic>>, value:Dynamic):GameObject
+	**/
+	public function setData(key:Either<String, {}>, ?value:Dynamic):GameObject
 	{
 		if (data == null)
 		{
@@ -291,32 +287,30 @@ class GameObject extends EventEmitter
 	 *
 	 * You can also access values via the `values` object. For example, if you had a key called `gold` you can do either:
 	 *
-	 * ```javascript
+	 * ```haxe
 	 * sprite.getData('gold');
 	 * ```
 	 *
 	 * Or access the value directly:
 	 *
-	 * ```javascript
+	 * ```haxe
 	 * sprite.data.values.gold;
 	 * ```
 	 *
 	 * You can also pass in an array of keys, in which case an array of values will be returned:
 	 *
-	 * ```javascript
+	 * ```haxe
 	 * sprite.getData([ 'gold', 'armor', 'health' ]);
 	 * ```
 	 *
-	 * This approach is useful for destructuring arrays in ES6.
 	 *
-	 * @method Phaser.GameObjects.GameObject#getData
-	 * @since 3.0.0
+	 * @since 1.0.0
 	 *
-	 * @param {(string|string[])} key - The key of the value to retrieve, or an array of keys.
+	 * @param key - The key of the value to retrieve, or an array of keys.
 	 *
-	 * @return {*} The value belonging to the given key, or an array of values, the order of which will match the input array.
-	 */
-	public function getData(key:String):Dynamic
+	 * @return The value belonging to the given key, or an array of values, the order of which will match the input array.
+	**/
+	public function getData(key:Either<String, Array<String>>):Dynamic
 	{
 		/* TODO: fix GameObject Class
 			if (!this.data)
@@ -401,44 +395,38 @@ class GameObject extends EventEmitter
 	 * being used. I.e.: `sprite.input.hitArea.setSize(width, height)` (assuming the
 	 * shape is a Rectangle, which it is by default.)
 	 *
-	 * @method Phaser.GameObjects.GameObject#removeInteractive
-	 * @since 3.7.0
+	 * @since 1.0.0
 	 *
-	 * @return {this} This GameObject.
-	 */
+	 * @return This GameObject.
+	**/
 	public function removeInteractive():GameObject
 	{
-		this.scene.sys.input.clear(this);
-
-		this.input = null;
-
+		scene.sys.input.clear(this);
+		input = null;
 		return this;
 	}
 
 	/**
 	 * To be overridden by custom GameObjects. Allows base objects to be used in a Pool.
 	 *
-	 * @method Phaser.GameObjects.GameObject#update
-	 * @since 3.0.0
+	 * @since 1.0.0
 	 *
-	 * @param {...*} [args] - args
-	 */
-	public function update() {}
+	 * @param args - args
+	**/
+	public function update(?args:Array<Dynamic>):Void {}
 
 	/**
 	 * Returns a JSON representation of the Game Object.
 	 *
-	 * @method Phaser.GameObjects.GameObject#toJSON
-	 * @since 3.0.0
+	 * @since 1.0.0
 	 *
-	 * @return {Phaser.GameObjects.Types.JSONGameObject} A JSON representation of the Game Object.
+	 * @return A JSON representation of the Game Object.
 	**/
-	public function toJSON():Dynamic
+	public function toJSON():JSONGameObject
 	{
 		/* TODO: fix GameObject Class
 			return ComponentsToJSON(this);
 		 */
-
 		return null;
 	}
 
@@ -513,13 +501,11 @@ class GameObject extends EventEmitter
 	 * If you just want to temporarily disable an object then look at using the
 	 * Game Object Pool instead of destroying it, as destroyed objects cannot be resurrected.
 	 *
-	 * @method Phaser.GameObjects.GameObject#destroy
-	 * @fires Phaser.GameObjects.Events#DESTROY
-	 * @since 3.0.0
+	 * @since 1.0.0
 	 *
-	 * @param {boolean} [fromScene=false] - Is this Game Object being destroyed as the result of a Scene shutdown?
+	 * @param fromScene - Is this Game Object being destroyed as the result of a Scene shutdown?
 	**/
-	public function destroy(fromScene:Bool):Void
+	public function destroy(fromScene:Bool = false):Void
 	{
 		if (fromScene == null)
 		{
@@ -573,9 +559,9 @@ class GameObject extends EventEmitter
 		}
 
 		active = false;
-		if (Std.is(this, ICVisible))
+		if (Std.is(this, IVisible))
 		{
-			(cast this : ICVisible).visible = false;
+			(cast this : IVisible).visible = false;
 		}
 
 		scene = null;

@@ -5,12 +5,10 @@ import phaserHaxe.math.MathUtility.clamp as clamp;
 /**
  * Provides methods used for setting the alpha properties of a Game Object.
  *
- * @mixin phaserHaxe.gameobjects.components.ICAlpha.AlphaMixin
  * @since 1.0.0
 **/
 @:allow(phaserHaxe.gameobjects.components.AlphaImplantation)
-@:autoBuild(phaserHaxe.macro.Mixin.build(AlphaMixin))
-interface ICAlpha
+interface IAlpha
 {
 	/**
 	 * Private internal value. Holds the global alpha value.
@@ -56,7 +54,7 @@ interface ICAlpha
 	 *
 	 * @return This Game Object instance.
 	**/
-	public function clearAlpha():ICAlpha;
+	public function clearAlpha():IAlpha;
 
 	/**
 	 * Set the Alpha level of this Game Object. The alpha controls the opacity of the Game Object as it renders.
@@ -75,7 +73,7 @@ interface ICAlpha
 	 * @return This Game Object instance.
 	**/
 	public function setAlpha(topLeft:Float = 1, ?topRight:Float, ?bottomLeft:Float,
-		?bottomRight:Float):ICAlpha;
+		?bottomRight:Float):IAlpha;
 
 	/**
 	 * The alpha value of the Game Object.
@@ -129,13 +127,13 @@ final class AlphaImplantation
 {
 	private static inline var _FLAG = 2;
 
-	public inline static function clearAlpha<T:ICAlpha>(self:T):T
+	public inline static function clearAlpha<T:IAlpha>(self:T):T
 	{
 		self.setAlpha(1);
 		return self;
 	}
 
-	public inline static function setAlpha<T:ICAlpha>(self:T, topLeft:Float,
+	public inline static function setAlpha<T:IAlpha>(self:T, topLeft:Float,
 			?topRight:Float, ?bottomLeft:Float, ?bottomRight:Float):T
 	{
 		//  Treat as if there is only one alpha value for the whole Game Object
@@ -154,12 +152,13 @@ final class AlphaImplantation
 		return self;
 	}
 
-	public static inline function get_alpha<T:ICAlpha>(self:T):Float
+	public static inline function get_alpha<T:IAlpha>(self:T):Float
 	{
 		return self._alpha;
 	}
 
-	public static inline function set_alpha<T:ICAlpha>(self:T, value:Float):Float
+	public static inline function set_alpha<T:IAlpha & GameObject>(self:T,
+			value:Float):Float
 	{
 		final v = clamp(value, 0, 1);
 
@@ -169,100 +168,99 @@ final class AlphaImplantation
 		self._alphaBL = v;
 		self._alphaBR = v;
 
-		if (Std.is(self, GameObject))
+		if (v == 0)
 		{
-			if (v == 0)
-			{
-				(cast self : GameObject).renderFlags &= ~_FLAG;
-			}
-			else
-			{
-				(cast self : GameObject).renderFlags |= _FLAG;
-			}
+			self.renderFlags &= ~_FLAG;
+		}
+		else
+		{
+			self.renderFlags |= _FLAG;
 		}
 
 		return v;
 	}
 
-	public static inline function get_alphaTopLeft<T:ICAlpha>(self:T):Float
+	public static inline function get_alphaTopLeft<T:IAlpha>(self:T):Float
 	{
 		return self._alphaTL;
 	}
 
-	public static inline function set_alphaTopLeft<T:ICAlpha>(self:T, value:Float):Float
+	public static inline function set_alphaTopLeft<T:IAlpha & GameObject>(self:T,
+			value:Float):Float
 	{
 		final v = clamp(value, 0, 1);
 		self._alphaTL = v;
 
-		if (v != 0 && Std.is(self, GameObject))
+		if (v != 0)
 		{
-			(cast self : GameObject).renderFlags |= _FLAG;
+			self.renderFlags |= _FLAG;
 		}
 
 		return v;
 	}
 
-	public static inline function get_alphaTopRight<T:ICAlpha>(self:T):Float
+	public static inline function get_alphaTopRight<T:IAlpha>(self:T):Float
 	{
 		return self._alphaTR;
 	}
 
-	public static inline function set_alphaTopRight<T:ICAlpha>(self:T, value:Float):Float
+	public static inline function set_alphaTopRight<T:IAlpha & GameObject>(self:T,
+			value:Float):Float
 	{
 		final v = clamp(value, 0, 1);
 
 		self._alphaTR = v;
 
-		if (v != 0 && Std.is(self, GameObject))
+		if (v != 0)
 		{
-			(cast self : GameObject).renderFlags |= _FLAG;
+			self.renderFlags |= _FLAG;
 		}
 
 		return v;
 	}
 
-	public static inline function get_alphaBottomLeft<T:ICAlpha>(self:T):Float
+	public static inline function get_alphaBottomLeft<T:IAlpha>(self:T):Float
 	{
 		return self._alphaBL;
 	}
 
-	public static inline function set_alphaBottomLeft<T:ICAlpha>(self:T,
+	public static inline function set_alphaBottomLeft<T:IAlpha & GameObject>(self:T,
 			value:Float):Float
 	{
 		final v = clamp(value, 0, 1);
 
 		self._alphaBL = v;
 
-		if (v != 0 && Std.is(self, GameObject))
+		if (v != 0)
 		{
-			(cast self : GameObject).renderFlags |= _FLAG;
+			self.renderFlags |= _FLAG;
 		}
 
 		return v;
 	}
 
-	public static inline function get_alphaBottomRight<T:ICAlpha>(self:T):Float
+	public static inline function get_alphaBottomRight<T:IAlpha>(self:T):Float
 	{
 		return self._alphaBR;
 	}
 
-	public static inline function set_alphaBottomRight<T:ICAlpha>(self:T,
+	public static inline function set_alphaBottomRight<T:IAlpha & GameObject>(self:T,
 			value:Float):Float
 	{
 		final v = clamp(value, 0, 1);
 
 		self._alphaBR = v;
 
-		if (v != 0 && Std.is(self, GameObject))
+		if (v != 0)
 		{
-			(cast self : GameObject).renderFlags |= _FLAG;
+			self.renderFlags |= _FLAG;
 		}
 
 		return v;
 	}
 }
 
-final class AlphaMixin
+final class AlphaMixin extends GameObject implements IAlpha
 {
 	/**
 	 * Private internal value. Holds the global alpha value.
@@ -306,17 +304,17 @@ final class AlphaMixin
 
 	private inline function set_alphaTopLeft(value:Float):Float
 	{
-		return AlphaImplantation.set_alphaTopLeft(cast this, value);
+		return AlphaImplantation.set_alphaTopLeft(this, value);
 	}
 
 	private inline function get_alphaTopRight():Float
 	{
-		return AlphaImplantation.get_alphaTopRight(cast this);
+		return AlphaImplantation.get_alphaTopRight(this);
 	}
 
 	private inline function set_alphaTopRight(value:Float):Float
 	{
-		return AlphaImplantation.set_alphaTopRight(cast this, value);
+		return AlphaImplantation.set_alphaTopRight(this, value);
 	}
 
 	private inline function get_alpha():Float
@@ -326,7 +324,7 @@ final class AlphaMixin
 
 	private inline function set_alpha(value:Float):Float
 	{
-		return AlphaImplantation.set_alpha(cast this, value);
+		return AlphaImplantation.set_alpha(this, value);
 	}
 
 	private inline function get_alphaBottomLeft():Float
@@ -336,17 +334,17 @@ final class AlphaMixin
 
 	private inline function set_alphaBottomLeft(value:Float):Float
 	{
-		return AlphaImplantation.set_alphaBottomLeft(cast this, value);
+		return AlphaImplantation.set_alphaBottomLeft(this, value);
 	}
 
 	private inline function get_alphaBottomRight():Float
 	{
-		return AlphaImplantation.get_alphaBottomRight(cast this);
+		return AlphaImplantation.get_alphaBottomRight(this);
 	}
 
 	private inline function set_alphaBottomRight(value:Float):Float
 	{
-		return AlphaImplantation.set_alphaBottomRight(cast this, value);
+		return AlphaImplantation.set_alphaBottomRight(this, value);
 	}
 
 	/**
@@ -383,7 +381,7 @@ final class AlphaMixin
 			?bottomRight:Float):AlphaMixin
 	{
 		return
-			cast AlphaImplantation.setAlpha(cast this, topLeft, topRight, bottomLeft, bottomRight);
+			AlphaImplantation.setAlpha(this, topLeft, topRight, bottomLeft, bottomRight);
 	}
 
 	/**

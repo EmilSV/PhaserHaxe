@@ -1,17 +1,20 @@
 package phaserHaxe.gameobjects.components;
 
 import phaserHaxe.geom.Rectangle;
-import phaserHaxe.gameobjects.components.ICFlip;
+import phaserHaxe.gameobjects.components.IFlip;
+import phaserHaxe.gameobjects.sprite.Sprite;
+import phaserHaxe.textures.Texture;
+import phaserHaxe.textures.CanvasTexture;
+import phaserHaxe.textures.Frame;
 
-@:autoBuild(phaserHaxe.macro.Mixin.build(CropMixin))
-interface ICCrop extends ICFlip
+interface ICrop
 {
 	/**
 	 * The Texture this Game Object is using to render with.
 	 *
 	 * @since 1.0.0
 	**/
-	public var texture:Texture;
+	public var texture:Either<Texture, CanvasTexture>;
 
 	/**
 	 * The Texture Frame this Game Object is using to render with.
@@ -62,7 +65,7 @@ interface ICCrop extends ICFlip
 	 * @return This Game Object instance.
 	**/
 	public function setCrop(?x:Either<Rectangle, Float>, ?y:Float, ?width:Float,
-		?height:Float):ICCrop;
+		?height:Float):ICrop;
 
 	/**
 	 * Internal method that returns a blank, well-formed crop object for use by a Game Object.
@@ -74,17 +77,6 @@ interface ICCrop extends ICFlip
 	private function resetCropObject():ResetCropObject;
 }
 
-/**
- * TODO: Placeholder
-**/
-typedef Texture = Dynamic;
-
-/**
- * TODO: Placeholder
-**/
-typedef Frame = Dynamic;
-
-@:structInit
 final class ResetCropObject
 {
 	public var u0:Float;
@@ -101,33 +93,48 @@ final class ResetCropObject
 	public var cy:Float;
 	public var cw:Float;
 	public var ch:Float;
+
+	public function new()
+	{
+		u0 = 0.0;
+		v0 = 0.0;
+		u1 = 0.0;
+		v1 = 0.0;
+		width = 0.0;
+		height = 0.0;
+		x = 0.0;
+		y = 0.0;
+		flipX = false;
+		flipY = false;
+		cx = 0.0;
+		cy = 0.0;
+		cw = 0.0;
+		ch = 0.0;
+	}
 }
 
 final class CropImplementation
 {
-	public inline static function setCrop<T:ICCrop>(self:T, ?x:Either<Rectangle, Float>,
-			?y:Float, ?width:Float, ?height:Float):T
+	public inline static function setCrop<T:ICrop & IFlip>(self:T,
+			?x:Either<Rectangle, Float>, ?y:Float, ?width:Float, ?height:Float):T
 	{
-		// TODO: fix type
-		final dynSelf = (self : Dynamic);
-
 		if (x == null)
 		{
 			self.isCropped = false;
 		}
-		else if (self.frame != null)
+		else if (self.frame != null && Std.is(self, Sprite))
 		{
 			if (Std.is(x, Float))
 			{
-				self.frame.setCropUVs(dynSelf._crop, (cast x : Float), y, width, height,
-					self.flipX, self.flipY);
+				self.frame.setCropUVs((cast self : Sprite)._crop, (cast x : Float), y,
+					width, height, self.flipX, self.flipY);
 			}
 			else
 			{
 				final rect = (cast x : Rectangle);
 
-				self.frame.setCropUVs(dynSelf._crop, rect.x, rect.y, rect.width,
-					rect.height, self.flipX, self.flipY);
+				self.frame.setCropUVs((cast self : Sprite)._crop, rect.x, rect.y,
+					rect.width, rect.height, self.flipX, self.flipY);
 			}
 
 			self.isCropped = true;
@@ -138,33 +145,18 @@ final class CropImplementation
 
 	public inline static function resetCropObject():ResetCropObject
 	{
-		return {
-			u0: 0,
-			v0: 0,
-			u1: 0,
-			v1: 0,
-			width: 0,
-			height: 0,
-			x: 0,
-			y: 0,
-			flipX: false,
-			flipY: false,
-			cx: 0,
-			cy: 0,
-			cw: 0,
-			ch: 0
-		};
+		return new ResetCropObject();
 	}
 }
 
-final class CropMixin
+final class CropMixin implements ICrop implements IFlip
 {
 	/**
 	 * The Texture this Game Object is using to render with.
 	 *
 	 * @since 1.0.0
 	**/
-	public var texture:Texture = null;
+	public var texture:Either<Texture, CanvasTexture> = null;
 
 	/**
 	 * The Texture Frame this Game Object is using to render with.
@@ -217,7 +209,7 @@ final class CropMixin
 	public function setCrop(?x:Either<Rectangle, Float>, ?y:Float, ?width:Float,
 			?height:Float):CropMixin
 	{
-		return cast CropImplementation.setCrop(cast this, x, y, width, height);
+		return CropImplementation.setCrop(this, x, y, width, height);
 	}
 
 	/**
@@ -230,5 +222,48 @@ final class CropMixin
 	private function resetCropObject():ResetCropObject
 	{
 		return CropImplementation.resetCropObject();
+	}
+
+	// IFlip implementation
+	@:phaserHaxe.mixinIgnorer
+	public var flipX:Bool = false;
+
+	@:phaserHaxe.mixinIgnorer
+	public var flipY:Bool = false;
+
+	@:phaserHaxe.mixinIgnorer
+	public function toggleFlipX():IFlip
+	{
+		throw "Not Implemented";
+	}
+
+	@:phaserHaxe.mixinIgnorer
+	public function toggleFlipY():IFlip
+	{
+		throw "Not Implemented";
+	}
+
+	@:phaserHaxe.mixinIgnorer
+	public function setFlipX(value:Bool):IFlip
+	{
+		throw "Not Implemented";
+	}
+
+	@:phaserHaxe.mixinIgnorer
+	public function setFlipY(value:Bool):IFlip
+	{
+		throw "Not Implemented";
+	}
+
+	@:phaserHaxe.mixinIgnorer
+	public function setFlip(x:Bool, y:Bool):IFlip
+	{
+		throw "Not Implemented";
+	}
+
+	@:phaserHaxe.mixinIgnorer
+	public function resetFlip():IFlip
+	{
+		throw "Not Implemented";
 	}
 }
