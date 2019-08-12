@@ -128,121 +128,120 @@ class TransformMatrix
 	 * @param tx - The Translate X value.
 	 * @param ty - The Translate Y value.
 	**/
-	public function new(a:Float = 1, b:Float = 0, c:Float = 0, d:Float = 1, tx:Float = 0, ty:Float = 0)
+	public function new(a:Float = 1, b:Float = 0, c:Float = 0, d:Float = 1,
+			tx:Float = 0, ty:Float = 0)
 	{
 		matrix = Float32Array.fromArray([a, b, c, d, tx, ty, 0, 0, 1]);
-		decomposedMatrix =
-			{
-				translateX: 0,
-				translateY: 0,
-				scaleX: 1,
-				scaleY: 1,
-				rotation: 0
-			};
+		decomposedMatrix = {
+			translateX: 0,
+			translateY: 0,
+			scaleX: 1,
+			scaleY: 1,
+			rotation: 0
+		};
 	}
 
 	private inline function get_a():Float
 	{
-		return this.matrix[0];
+		return matrix[0];
 	}
 
 	private inline function set_a(value:Float):Float
 	{
-		this.matrix[0] = value;
+		matrix[0] = value;
 		return value;
 	}
 
 	private inline function get_b():Float
 	{
-		return this.matrix[1];
+		return matrix[1];
 	}
 
 	private inline function set_b(value:Float):Float
 	{
-		this.matrix[1] = value;
+		matrix[1] = value;
 		return value;
 	}
 
 	private inline function get_c():Float
 	{
-		return this.matrix[2];
+		return matrix[2];
 	}
 
 	private inline function set_c(value:Float):Float
 	{
-		this.matrix[2] = value;
+		matrix[2] = value;
 		return value;
 	}
 
 	private inline function get_d():Float
 	{
-		return this.matrix[3];
+		return matrix[3];
 	}
 
 	private inline function set_d(value:Float):Float
 	{
-		this.matrix[3] = value;
+		matrix[3] = value;
 		return value;
 	}
 
 	private inline function get_e():Float
 	{
-		return this.matrix[4];
+		return matrix[4];
 	}
 
 	private inline function set_e(value:Float):Float
 	{
-		this.matrix[4] = value;
+		matrix[4] = value;
 		return value;
 	}
 
 	private inline function get_f():Float
 	{
-		return this.matrix[5];
+		return matrix[5];
 	}
 
 	private inline function set_f(value:Float):Float
 	{
-		this.matrix[5] = value;
+		matrix[5] = value;
 		return value;
 	}
 
 	private inline function get_tx():Float
 	{
-		return this.matrix[4];
+		return matrix[4];
 	}
 
 	private inline function set_tx(value:Float):Float
 	{
-		this.matrix[4] = value;
+		matrix[4] = value;
 		return value;
 	}
 
 	private inline function get_ty():Float
 	{
-		return this.matrix[5];
+		return matrix[5];
 	}
 
 	private inline function set_ty(value:Float):Float
 	{
-		this.matrix[5] = value;
+		matrix[5] = value;
 		return value;
 	}
 
 	private inline function get_rotation():Float
 	{
-		return Math.acos(this.a / this.scaleX) * (Math.atan(-this.c / this
-			.a) < 0 ? -1 : 1);
+		return Math.acos(a / scaleX) * (Math.atan(-c / this.a) < 0 ? -1 : 1);
 	}
 
 	private inline function get_scaleX():Float
 	{
-		return Math.sqrt((this.a * this.a) + (this.c * this.c));
+		return Math.sqrt((a * a) + (c * c));
 	}
 
 	private inline function get_scaleY():Float
 	{
-		return Math.sqrt((this.b * this.b) + (this.d * this.d));
+		return Math.sqrt((b * b) + (d * d));
 	}
 
 	/**
@@ -440,7 +439,8 @@ class TransformMatrix
 	 *
 	 * @return This TransformMatrix.
 	**/
-	public function transform(a:Float, b:Float, c:Float, d:Float, tx:Float, ty:Float):TransformMatrix
+	public function transform(a:Float, b:Float, c:Float, d:Float, tx:Float,
+			ty:Float):TransformMatrix
 	{
 		var matrix = this.matrix;
 
@@ -535,7 +535,7 @@ class TransformMatrix
 	**/
 	public function copyFrom(src:TransformMatrix):TransformMatrix
 	{
-		var matrix = this.matrix;
+		var matrix = matrix;
 
 		matrix[0] = src.a;
 		matrix[1] = src.b;
@@ -583,10 +583,9 @@ class TransformMatrix
 	**/
 	public function copyToContext(ctx)
 	{
-		var matrix = this.matrix;
+		var matrix = matrix;
 
-		ctx
-			.transform(matrix[0], matrix[1], matrix[2], matrix[3], matrix[4], matrix[5]);
+		ctx.transform(matrix[0], matrix[1], matrix[2], matrix[3], matrix[4], matrix[5]);
 
 		return ctx;
 	}
@@ -605,10 +604,9 @@ class TransformMatrix
 	**/
 	public function setToContext(ctx)
 	{
-		var matrix = this.matrix;
+		var matrix = matrix;
 
-		ctx
-			.setTransform(matrix[0], matrix[1], matrix[2], matrix[3], matrix[4], matrix[5]);
+		ctx.setTransform(matrix[0], matrix[1], matrix[2], matrix[3], matrix[4], matrix[5]);
 
 		return ctx;
 	}
@@ -626,7 +624,7 @@ class TransformMatrix
 	**/
 	public function copyToArray(out:Array<Float>):Array<Float>
 	{
-		var matrix = this.matrix;
+		var matrix = matrix;
 
 		if (out == null)
 		{
@@ -659,9 +657,10 @@ class TransformMatrix
 	 *
 	 * @return {this} This TransformMatrix.
 	**/
-	public function setTransform(a:Float, b:Float, c:Float, d:Float, tx:Float, ty:Float):TransformMatrix
+	public function setTransform(a:Float, b:Float, c:Float, d:Float, tx:Float,
+			ty:Float):TransformMatrix
 	{
-		var matrix = this.matrix;
+		var matrix = matrix;
 
 		matrix[0] = a;
 		matrix[1] = b;
@@ -686,9 +685,9 @@ class TransformMatrix
 	**/
 	public function decomposeMatrix()
 	{
-		var decomposedMatrix = this.decomposedMatrix;
+		var decomposedMatrix = decomposedMatrix;
 
-		var matrix = this.matrix;
+		var matrix = matrix;
 
 		//  a = scale X (1)
 		//  b = shear Y (0)
@@ -709,8 +708,7 @@ class TransformMatrix
 		{
 			var r = Math.sqrt(a * a + b * b);
 
-			decomposedMatrix.rotation = (b > 0) ? Math.acos(a / r) : -Math
-				.acos(a / r);
+			decomposedMatrix.rotation = (b > 0) ? Math.acos(a / r) : -Math.acos(a / r);
 			decomposedMatrix.scaleX = r;
 			decomposedMatrix.scaleY = determ / r;
 		}
@@ -718,8 +716,7 @@ class TransformMatrix
 		{
 			var s = Math.sqrt(c * c + d * d);
 
-			decomposedMatrix.rotation = Math.PI * 0.5 - (d > 0 ? Math
-				.acos(-c / s) : -Math.acos(c / s));
+			decomposedMatrix.rotation = Math.PI * 0.5 - (d > 0 ? Math.acos(-c / s) : -Math.acos(c / s));
 			decomposedMatrix.scaleX = determ / s;
 			decomposedMatrix.scaleY = s;
 		}
@@ -746,9 +743,10 @@ class TransformMatrix
 	 *
 	 * @return This TransformMatrix.
 	**/
-	public function applyITRS(x:Float, y:Float, rotation:Float, scaleX:Float, scaleY:Float):TransformMatrix
+	public function applyITRS(x:Float, y:Float, rotation:Float, scaleX:Float,
+			scaleY:Float):TransformMatrix
 	{
-		var matrix = this.matrix;
+		var matrix = matrix;
 
 		var radianSin = Math.sin(rotation);
 		var radianCos = Math.cos(rotation);
@@ -787,7 +785,7 @@ class TransformMatrix
 			output = new Vector2();
 		}
 
-		var matrix = this.matrix;
+		var matrix = matrix;
 
 		var a = matrix[0];
 		var b = matrix[1];
@@ -845,10 +843,10 @@ class TransformMatrix
 	**/
 	public function getCSSMatrix():String
 	{
-		var m = this.matrix;
+		var m = matrix;
 
-		return 'matrix(' + m[0] + ',' + m[1] + ',' + m[2] + ',' + m[3] + ',' +
-			m[4] + ',' + m[5] + ')';
+		return 'matrix(' + m[0] + ',' + m[1] + ',' + m[2] + ',' + m[3] + ',' + m[4] +
+			',' + m[5] + ')';
 	}
 
 	/**
@@ -858,7 +856,7 @@ class TransformMatrix
 	**/
 	public function destroy():Void
 	{
-		this.matrix = null;
-		this.decomposedMatrix = null;
+		matrix = null;
+		decomposedMatrix = null;
 	}
 }
