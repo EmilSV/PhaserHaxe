@@ -161,7 +161,7 @@ final class Mixin
 		for (felid in mixinFelids)
 		{
 			var kind = felid.kind;
-			if (felid.meta.has(":phaserHaxe.mixinIgnorer"))
+			if (felid.meta.has(":phaserHaxe.mixinIgnore"))
 			{
 				continue;
 			}
@@ -180,7 +180,7 @@ final class Mixin
 		for (felid in mixinStaticFelids)
 		{
 			var kind = felid.kind;
-			if (felid.meta.has(":phaserHaxe.mixinIgnorer"))
+			if (felid.meta.has(":phaserHaxe.mixinIgnore"))
 			{
 				continue;
 			}

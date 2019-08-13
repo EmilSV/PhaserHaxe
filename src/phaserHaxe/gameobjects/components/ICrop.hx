@@ -225,43 +225,43 @@ final class CropMixin implements ICrop implements IFlip
 	}
 
 	// IFlip implementation
-	@:phaserHaxe.mixinIgnorer
+	@:phaserHaxe.mixinIgnore
 	public var flipX:Bool = false;
 
-	@:phaserHaxe.mixinIgnorer
+	@:phaserHaxe.mixinIgnore
 	public var flipY:Bool = false;
 
-	@:phaserHaxe.mixinIgnorer
+	@:phaserHaxe.mixinIgnore
 	public function toggleFlipX():IFlip
 	{
 		throw "Not Implemented";
 	}
 
-	@:phaserHaxe.mixinIgnorer
+	@:phaserHaxe.mixinIgnore
 	public function toggleFlipY():IFlip
 	{
 		throw "Not Implemented";
 	}
 
-	@:phaserHaxe.mixinIgnorer
+	@:phaserHaxe.mixinIgnore
 	public function setFlipX(value:Bool):IFlip
 	{
 		throw "Not Implemented";
 	}
 
-	@:phaserHaxe.mixinIgnorer
+	@:phaserHaxe.mixinIgnore
 	public function setFlipY(value:Bool):IFlip
 	{
 		throw "Not Implemented";
 	}
 
-	@:phaserHaxe.mixinIgnorer
+	@:phaserHaxe.mixinIgnore
 	public function setFlip(x:Bool, y:Bool):IFlip
 	{
 		throw "Not Implemented";
 	}
 
-	@:phaserHaxe.mixinIgnorer
+	@:phaserHaxe.mixinIgnore
 	public function resetFlip():IFlip
 	{
 		throw "Not Implemented";

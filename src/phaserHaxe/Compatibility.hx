@@ -78,4 +78,15 @@ final class Compatibility
 		return Std.int(number);
 		#end
 	}
-}
+
+	#if js
+	public static inline function forceIntValue(number:Int):Int
+	{
+		return js.Syntax.code("(({0}) | 0)", number);
+	}
+	#else
+	public static inline function forceIntValue(number:Int):Int
+	{
+		return number;
+	}
+	#end
