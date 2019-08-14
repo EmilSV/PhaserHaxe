@@ -11,7 +11,7 @@ import js.html.webgl.WebGL2RenderingContext;
 **/
 final class Smoothing
 {
-	public static inline var isAPISupported = true;
+	public static inline var isSupported = true;
 
 	private static var prefix = '';
 
@@ -108,17 +108,16 @@ final class Smoothing
 	}
 }
 #else
+
 /**
  * @since 1.0.0
 **/
 final class Smoothing
 {
-	public static inline var isAPISupported = false;
+	public static inline var isSupported = false;
 
-	public static inline function getPrefix(context:Dynamic):String
-	{
-		return null;
-	}
+	public static function getPrefix(context:Dynamic):String
+		throw "Not Implemented";
 
 	/**
 	 * Sets the Image Smoothing property on the given context. Set to false to disable image smoothing.
@@ -133,10 +132,8 @@ final class Smoothing
 	 *
 	 * @return The provided context.
 	**/
-	public static inline function enable(context:Dynamic):Any
-	{
-		return null;
-	}
+	public static function enable(context:Dynamic):Dynamic
+		throw "Not Implemented";
 
 	/**
 	 * Sets the Image Smoothing property on the given context. Set to false to disable image smoothing.
@@ -151,10 +148,8 @@ final class Smoothing
 	 *
 	 * @return The provided context.
 	**/
-	public static inline function disable(context:Dynamic):Any
-	{
-		return null;
-	}
+	public static function disable(context:Dynamic):Dynamic
+		throw "Not Implemented";
 
 	/**
 	 * Returns `true` if the given context has image smoothing enabled, otherwise returns `false`.
@@ -167,8 +162,6 @@ final class Smoothing
 	 * @return `true` if smoothing is enabled on the context, otherwise `false`. `null` if not supported.
 	**/
 	public static inline function isEnabled(context:Dynamic):Null<Bool>
-	{
-		return null;
-	}
+		throw "Not Implemented";
 }
 #end
