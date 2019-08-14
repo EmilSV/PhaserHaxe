@@ -1,14 +1,37 @@
 package phaserHaxe;
 
+#if !js
 import phaserHaxe.math.MathConst;
+#end
 
+#if js
 final class Compatibility
 {
 	public static inline function toJSUintRange(number:Float):Float
 	{
-		#if js
 		return js.Syntax.code("(({0}) >>> 0)", number);
-		#else
+	}
+
+	public static inline function toJSIntRange(number:Float):Float
+	{
+		return js.Syntax.code("(({0}) | 0)", number);
+	}
+
+	public static inline function toIntSafe(number:Float):Int
+	{
+		return js.Syntax.code("(({0}) | 0)", number);
+	}
+
+	public static inline function forceIntValue(number:Int):Int
+	{
+		return js.Syntax.code("(({0}) | 0)", number);
+	}
+}
+#else
+final class Compatibility
+{
+	public static function toJSUintRange(number:Float):Float
+	{
 		inline function sign(n:Float):Float
 		{
 			return n >= 0 ? 1 : -1;
@@ -16,21 +39,15 @@ final class Compatibility
 
 		number = sign(number) * Math.ffloor(Math.abs(number));
 		number = number % MathConst.POW2_32;
-
 		if (number < 0)
 		{
 			number = MathConst.POW2_32 + number;
 		}
-
 		return number;
-		#end
 	}
 
-	public static inline function toJSIntRange(number:Float):Float
+	public static function toJSIntRange(number:Float):Float
 	{
-		#if js
-		return js.Syntax.code("(({0}) | 0)", number);
-		#else
 		inline function sign(n:Float)
 		{
 			return n >= 0 ? 1 : -1;
@@ -50,14 +67,10 @@ final class Compatibility
 		}
 
 		return number;
-		#end
 	}
 
-	public static inline function toIntSafe(number:Float):Int
+	public static function toIntSafe(number:Float):Int
 	{
-		#if js
-		return js.Syntax.code("(({0}) | 0)", number);
-		#else
 		inline function sign(n:Float)
 		{
 			return n >= 0 ? 1 : -1;
@@ -76,17 +89,11 @@ final class Compatibility
 		}
 
 		return Std.int(number);
-		#end
 	}
 
-	#if js
-	public static inline function forceIntValue(number:Int):Int
-	{
-		return js.Syntax.code("(({0}) | 0)", number);
-	}
-	#else
 	public static inline function forceIntValue(number:Int):Int
 	{
 		return number;
 	}
-	#end
+}
+#end
