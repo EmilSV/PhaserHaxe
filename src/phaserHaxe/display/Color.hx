@@ -4,8 +4,8 @@ import phaserHaxe.Compatibility.toIntSafe as toIntSafe;
 import phaserHaxe.display.HSVColorObject;
 import phaserHaxe.Either;
 
-
 // Todo: rest of color
+@:allow(phaserHaxe.display.InputColorObject)
 class Color
 {
 	/**
@@ -13,28 +13,28 @@ class Color
 	 *
 	 * @since 1.0.0
 	**/
-	private var r:Float = 0;
+	public var r(default, null):Float = 0;
 
 	/**
 	 * The internal green color value.
 	 *
 	 * @since 1.0.0
 	**/
-	private var g:Float = 0;
+	public var g(default, null):Float = 0;
 
 	/**
 	 * The internal blue color value.
 	 *
 	 * @since 1.0.0
 	**/
-	private var b:Float = 0;
+	public var b(default, null):Float = 0;
 
 	/**
 	 * The internal alpha color value.
 	 *
 	 * @since 1.0.0
 	**/
-	private var a:Float = 255;
+	public var a(default, null):Float = 255;
 
 	/**
 	 * The hue color value. A number between 0 and 1.
@@ -430,6 +430,75 @@ class Color
 		return out;
 	}
 
+	public static function hsvToRGB<T:Either<ColorObject, Color>>(h:Float, s:Float = 1,
+			v:Float = 1, out:T):T
+	{
+		var i = Math.floor(h * 6);
+		var f = h * 6 - i;
+
+		var p = Math.floor((v * (1 - s)) * 255);
+		var q = Math.floor((v * (1 - f * s)) * 255);
+		var t = Math.floor((v * (1 - (1 - f) * s)) * 255);
+
+		v *= 255;
+		var v:Int = Math.floor(v);
+
+		var r = v;
+		var g = v;
+		var b = v;
+
+		var c = i % 6;
+
+		if (c == 0)
+		{
+			g = t;
+			b = p;
+		}
+		else if (c == 1)
+		{
+			r = q;
+			b = p;
+		}
+		else if (c == 2)
+		{
+			r = p;
+			b = t;
+		}
+		else if (c == 3)
+		{
+			r = p;
+			g = q;
+		}
+		else if (c == 4)
+		{
+			r = t;
+			g = p;
+		}
+		else if (c == 5)
+		{
+			g = p;
+			b = q;
+		}
+
+		if (Std.is(out, Color))
+		{
+			var outColor = (cast out : Color);
+			var alpha = (cast outColor.alpha);
+			return cast outColor.setTo(r, g, b, alpha, false);
+		}
+		else
+		{
+			var outColorObject:ColorObject = cast out;
+
+			outColorObject.r = r;
+			outColorObject.g = g;
+			outColorObject.b = b;
+			outColorObject.color = getColor(r, g, b);
+
+			return out;
+		}
+	}
+
 	/**
 	 * Sets this color to be transparent. Sets all values to zero.
 	 *
@@ -439,13 +508,113 @@ class Color
 	**/
 	public function transparent():Color
 	{
-		this._locked = true;
-		this.red = 0;
-		this.green = 0;
-		this.blue = 0;
-		this.alpha = 0;
-		this._locked = false;
-		return this.update(true);
+		_locked = true;
+		
+		red = 0;
+		green = 0;
+		blue = 0;
+		alpha = 0;
+		
+		_locked = false;
+
+		return update(true);
+	}
+
+	/**
+	 * Sets the color of this Color component.
+	 *
+	 * @since 1.0.0
+	 *
+	 * @param red - The red color value. A number between 0 and 255.
+	 * @param green - The green color value. A number between 0 and 255.
+	 * @param blue - The blue color value. A number between 0 and 255.
+	 * @param alpha - The alpha value. A number between 0 and 255.
+	 * @param updateHSV - Update the HSV values after setting the RGB values?
+	 *
+	 * @return This Color object.
+	**/
+	public function setTo(red:Int, green:Int, blue:Int, alpha:Int = 255,
+			updateHSV:Bool = true)
+	{
+		_locked = true;
+
+		this.red = red;
+		this.green = green;
+		this.blue = blue;
+		this.alpha = alpha;
+
+		_locked = false;
+
+		return update(updateHSV);
+	}
+
+	/**
+	 * Sets the red, green, blue and alpha GL values of this Color component.
+	 *
+	 * @since 1.0.0
+	 *
+	 * @param red - The red color value. A number between 0 and 1.
+	 * @param green - The green color value. A number between 0 and 1.
+	 * @param blue - The blue color value. A number between 0 and 1.
+	 * @param alpha - The alpha value. A number between 0 and 1.
+	 *
+	 * @return This Color object.
+	**/
+	public function setGLTo(red:Float, green:Float, blue:Float, alpha:Float = 1.0):Color
+	{
+		_locked = true;
+
+		redGL = red;
+		greenGL = green;
+		blueGL = blue;
+		alphaGL = alpha;
+
+		_locked = false;
+
+		return update(true);
+	}
+
+	/**
+	 * Sets the color based on the color object given.
+	 *
+	 * @since 1.0.0
+	 *
+	 * @param color - An object containing `r`, `g`, `b` and optionally `a` values in the range 0 to 255.
+	 *
+	 * @return This Color object.
+	**/
+	public function setFromRGB(color:InputColorObject)
+	{
+		_locked = true;
+
+		red = color.r;
+		green = color.g;
+		blue = color.b;
+
+		if (a != null)
+		{
+			alpha = color.a;
+		}
+
+		_locked = false;
+
+		return update(true);
+	}
+
+	/**
+	 * Sets the color based on the hue, saturation and lightness values given.
+	 *
+	 * @since 1.0.0
+	 *
+	 * @param h - The hue, in the range 0 - 1. This is the base color.
+	 * @param s - The saturation, in the range 0 - 1. This controls how much of the hue will be in the final color, where 1 is fully saturated and 0 will give you white.
+	 * @param v - The value, in the range 0 - 1. This controls how dark the color is. Where 1 is as bright as possible and 0 is black.
+	 *
+	 * @return This Color object.
+	**/
+	public function setFromHSV(h:Float, s:Float, v:Float)
+	{
+		return hsvToRGB(h, s, v, this);
 	}
 
 	/**
