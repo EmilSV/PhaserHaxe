@@ -7,7 +7,7 @@ import phaserHaxe.math.MathConst;
 #if js
 final class Compatibility
 {
-	public static inline function toJSUintRange(number:Float):Float
+	public static inline function toJSUIntRange(number:Float):Float
 	{
 		return js.Syntax.code("(({0}) >>> 0)", number);
 	}
@@ -30,7 +30,7 @@ final class Compatibility
 #else
 final class Compatibility
 {
-	public static function toJSUintRange(number:Float):Float
+	public static function toJSUIntRange(number:Float):Float
 	{
 		inline function sign(n:Float):Float
 		{
@@ -80,6 +80,7 @@ final class Compatibility
 		{
 			return Std.int(number);
 		}
+		
 		number = sign(number) * Math.ffloor(Math.abs(number));
 		number = number % MathConst.POW2_32;
 

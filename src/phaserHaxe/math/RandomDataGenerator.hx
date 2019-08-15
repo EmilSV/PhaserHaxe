@@ -122,17 +122,17 @@ class RandomDataGenerator
 		{
 			n += data.charCodeAt(i);
 			h = 0.02519603282416938 * n;
-			n = Compatibility.toJSUintRange(h);
+			n = Compatibility.toJSUIntRange(h);
 			h -= n;
 			h *= n;
-			n = Compatibility.toJSUintRange(h);
+			n = Compatibility.toJSUIntRange(h);
 			h -= n;
 			n += h * MathConst.POW2_32;
 		}
 
 		this.n = n;
 
-		return Compatibility.toJSUintRange(n) * MathConst.POW2_NEGATIVE32;
+		return Compatibility.toJSUIntRange(n) * MathConst.POW2_NEGATIVE32;
 	}
 
 	/**
