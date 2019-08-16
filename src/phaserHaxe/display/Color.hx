@@ -1,11 +1,15 @@
 package phaserHaxe.display;
 
 import phaserHaxe.Compatibility.toIntSafe as toIntSafe;
+import phaserHaxe.math.MathInt;
 import phaserHaxe.display.HSVColorObject;
 import phaserHaxe.Either;
 
-// Todo: rest of color
-@:allow(phaserHaxe.display.InputColorObject)
+/**
+ * The Color class holds a single color value and allows for easy modification and reading of it.
+ *
+ * @since 1.0.0
+**/
 class Color
 {
 	/**
@@ -13,28 +17,28 @@ class Color
 	 *
 	 * @since 1.0.0
 	**/
-	public var r(default, null):Float = 0;
+	public var r(default, null):Int = 0;
 
 	/**
 	 * The internal green color value.
 	 *
 	 * @since 1.0.0
 	**/
-	public var g(default, null):Float = 0;
+	public var g(default, null):Int = 0;
 
 	/**
 	 * The internal blue color value.
 	 *
 	 * @since 1.0.0
 	**/
-	public var b(default, null):Float = 0;
+	public var b(default, null):Int = 0;
 
 	/**
 	 * The internal alpha color value.
 	 *
 	 * @since 1.0.0
 	**/
-	public var a(default, null):Float = 255;
+	public var a(default, null):Int = 255;
 
 	/**
 	 * The hue color value. A number between 0 and 1.
@@ -149,30 +153,51 @@ class Color
 	 *
 	 * @since 1.0.0
 	**/
-	public var red(get, set):Float;
+	public var red(get, set):Int;
 
 	/**
 	 * The green color value, normalized to the range 0 to 255.
 	 *
 	 * @since 1.0.0
 	**/
-	public var green(get, set):Float;
+	public var green(get, set):Int;
 
 	/**
 	 * The blue color value, normalized to the range 0 to 255.
 	 *
 	 * @since 1.0.0
 	**/
-	public var blue(get, set):Float;
+	public var blue(get, set):Int;
 
 	/**
 	 * The alpha color value, normalized to the range 0 to 255.
 	 *
 	 * @since 1.0.0
 	**/
-	public var alpha(get, set):Float;
+	public var alpha(get, set):Int;
 
-	public function new(red:Float = 0, green:Float = 0, blue:Float = 0, alpha:Float = 0)
+	/**
+	 * The green color value, normalized to the range 0 to 255.
+	 *
+	 * @since 1.0.0
+	**/
+	public var h(get, set):Float;
+
+	/**
+	 * The blue color value, normalized to the range 0 to 255.
+	 *
+	 * @since 1.0.0
+	**/
+	public var s(get, set):Float;
+
+	/**
+	 * The alpha color value, normalized to the range 0 to 255.
+	 *
+	 * @since 1.0.0
+	**/
+	public var v(get, set):Float;
+
+	public function new(red:Int = 0, green:Int = 0, blue:Int = 0, alpha:Int = 0)
 	{
 		r = red;
 		g = green;
@@ -259,16 +284,16 @@ class Color
 		return gl[3];
 	}
 
-	private inline function get_red():Float
+	private inline function get_red():Int
 	{
 		return r;
 	}
 
-	private inline function set_red(value:Float):Float
+	private inline function set_red(value:Int):Int
 	{
 		value = Math.floor(Math.abs(value));
 
-		r = Math.min(value, 255);
+		r = value < 255 ? value : 255;
 
 		gl[0] = value / 255;
 
@@ -277,58 +302,94 @@ class Color
 		return r;
 	}
 
-	private inline function get_green():Float
+	private inline function get_green():Int
 	{
 		return g;
 	}
 
-	private inline function set_green(value:Float):Float
+	private inline function set_green(value:Int):Int
 	{
 		value = Math.floor(Math.abs(value));
 
-		this.g = Math.min(value, 255);
+		g = MathInt.min(value, 255);
 
-		this.gl[1] = value / 255;
+		gl[1] = value / 255;
 
-		this.update(true);
+		update(true);
 
 		return g;
 	}
 
-	private inline function get_blue():Float
+	private inline function get_blue():Int
 	{
 		return b;
 	}
 
-	private inline function set_blue(value:Float):Float
+	private inline function set_blue(value:Int):Int
 	{
 		value = Math.floor(Math.abs(value));
 
-		this.b = Math.min(value, 255);
+		b = MathInt.min(value, 255);
 
-		this.gl[2] = value / 255;
+		gl[2] = value / 255;
 
-		this.update(true);
+		update(true);
 
 		return b;
 	}
 
-	private inline function get_alpha():Float
+	private inline function get_alpha():Int
 	{
 		return a;
 	}
 
-	private inline function set_alpha(value:Float):Float
+	private inline function set_alpha(value:Int):Int
 	{
 		value = Math.floor(Math.abs(value));
 
-		this.a = Math.min(value, 255);
+		a = MathInt.min(value, 255);
 
-		this.gl[3] = value / 255;
+		gl[3] = value / 255;
 
-		this.update();
+		update();
 
 		return a;
+	}
+
+	private inline function get_h():Float
+	{
+		return _h;
+	}
+
+	private inline function set_h(value:Float):Float
+	{
+		_h = value;
+		hsvToRGB(value, _s, _v, this);
+		return _h;
+	}
+
+	private inline function get_s():Float
+	{
+		return _s;
+	}
+
+	private inline function set_s(value:Float):Float
+	{
+		_s = value;
+		hsvToRGB(_h, value, _v, this);
+		return _s;
+	}
+
+	private inline function get_v():Float
+	{
+		return _v;
+	}
+
+	private inline function set_v(value:Float):Float
+	{
+		_v = value;
+		hsvToRGB(_h, _s, value, this);
+		return _v;
 	}
 
 	/**
@@ -430,6 +491,21 @@ class Color
 		return out;
 	}
 
+	/**
+	 * Converts an HSV (hue, saturation and value) color value to RGB.
+	 * Conversion formula from http://en.wikipedia.org/wiki/HSL_color_space.
+	 * Assumes HSV values are contained in the set [0, 1].
+	 * Based on code by Michael Jackson (https://github.com/mjijackson)
+	 *
+	 * @since 1.0.0
+	 *
+	 * @param h - The hue, in the range 0 - 1. This is the base color.
+	 * @param s - The saturation, in the range 0 - 1. This controls how much of the hue will be in the final color, where 1 is fully saturated and 0 will give you white.
+	 * @param v - The value, in the range 0 - 1. This controls how dark the color is. Where 1 is as bright as possible and 0 is black.
+	 * @param out - A Color object to store the results in.
+	 *
+	 * @return An object with the red, green and blue values set in the r, g and b properties.
+	**/
 	public static function hsvToRGB<T:Either<ColorObject, Color>>(h:Float, s:Float = 1,
 			v:Float = 1, out:T):T
 	{
@@ -500,6 +576,31 @@ class Color
 	}
 
 	/**
+	 * Converts an HSV (hue, saturation and value) color value to RGB.
+	 * Conversion formula from http://en.wikipedia.org/wiki/HSL_color_space.
+	 * Assumes HSV values are contained in the set [0, 1].
+	 * Based on code by Michael Jackson (https://github.com/mjijackson)
+	 *
+	 * @since 1.0.0
+	 *
+	 * @param h - The hue, in the range 0 - 1. This is the base color.
+	 * @param s - The saturation, in the range 0 - 1. This controls how much of the hue will be in the final color, where 1 is fully saturated and 0 will give you white.
+	 * @param v - The value, in the range 0 - 1. This controls how dark the color is. Where 1 is as bright as possible and 0 is black.
+	 *
+	 * @return An object with the red, green and blue values set in the r, g and b properties.
+	**/
+	public static inline function createRGBFromHSV(h:Float, s:Float = 1,
+			v:Float = 1):ColorObject
+	{
+		return hsvToRGB(h, s, v, {
+			r: 0.0,
+			g: 0.0,
+			b: 0.0,
+			color: 0.0
+		});
+	}
+
+	/**
 	 * Sets this color to be transparent. Sets all values to zero.
 	 *
 	 * @since 1.0.0
@@ -509,12 +610,12 @@ class Color
 	public function transparent():Color
 	{
 		_locked = true;
-		
+
 		red = 0;
 		green = 0;
 		blue = 0;
 		alpha = 0;
-		
+
 		_locked = false;
 
 		return update(true);
@@ -651,5 +752,166 @@ class Color
 			rgbToHSV(r, g, b, this);
 		}
 		return this;
+	}
+
+	/**
+	 * Updates the internal hsv cache values.
+	 *
+	 * @since 1.0.0
+	 *
+	 * @return This Color object.
+	**/
+	public function updateHSV()
+	{
+		var r = this.r;
+		var g = this.g;
+		var b = this.b;
+
+		rgbToHSV(r, g, b, this);
+	}
+
+	/**
+	 * Returns a new Color component using the values from this one.
+	 *
+	 * @since 1.0.0
+	 *
+	 * @return A new Color object.
+	**/
+	public function clone():Color
+	{
+		return new Color(r, g, b, a);
+	}
+
+	/**
+	 * Sets this Color object to be grayscaled based on the shade value given.
+	 *
+	 * @since 1.0.0
+	 *
+	 * @param shade - A value between 0 and 255.
+	 *
+	 * @return This Color object.
+	**/
+	public function gray(shade:Int):Color
+	{
+		return setTo(shade, shade, shade);
+	}
+
+	/**
+	 * Sets this Color object to be a random color between the `min` and `max` values given.
+	 *
+	 * @since 1.0.0
+	 *
+	 * @param min - The minimum random color value. Between 0 and 255.
+	 * @param max - The maximum random color value. Between 0 and 255.
+	 *
+	 * @return This Color object.
+	**/
+	public function random(min:Int = 0, max:Int = 255):Color
+	{
+		var r = Math.floor(min + Math.random() * (max - min));
+		var g = Math.floor(min + Math.random() * (max - min));
+		var b = Math.floor(min + Math.random() * (max - min));
+		return setTo(r, g, b);
+	}
+
+	/**
+	 * Sets this Color object to be a random grayscale color between the `min` and `max` values given.
+	 *
+	 * @since 1.0.0
+	 *
+	 * @param min - The minimum random color value. Between 0 and 255.
+	 * @param max - The maximum random color value. Between 0 and 255.
+	 *
+	 * @return This Color object.
+	**/
+	public function randomGray(min:Int = 0, max:Int = 255):Color
+	{
+		var s = Math.floor(min + Math.random() * (max - min));
+
+		return setTo(s, s, s);
+	}
+
+	/**
+	 * Increase the saturation of this Color by the percentage amount given.
+	 * The saturation is the amount of the base color in the hue.
+	 *
+	 * @since 1.0.0
+	 *
+	 * @param amount - The percentage amount to change this color by. A value between 0 and 100.
+	 *
+	 * @return This Color object.
+	**/
+	public function saturate(amount:Int):Color
+	{
+		s += amount / 100;
+		return this;
+	}
+
+	/**
+	 * Decrease the saturation of this Color by the percentage amount given.
+	 * The saturation is the amount of the base color in the hue.
+	 *
+	 * @since 1.0.0
+	 *
+	 * @param amount - The percentage amount to change this color by. A value between 0 and 100.
+	 *
+	 * @return This Color object.
+	**/
+	public function desaturate(amount:Int):Color
+	{
+		s -= amount / 100;
+		return this;
+	}
+
+	/**
+	 * Increase the lightness of this Color by the percentage amount given.
+	 *
+	 * @since 1.0.0
+	 *
+	 * @param amount - The percentage amount to change this color by. A value between 0 and 100.
+	 *
+	 * @return This Color object.
+	 */
+	public function lighten(amount:Int):Color
+	{
+		v += amount / 100;
+		return this;
+	}
+
+	/**
+	 * Decrease the lightness of this Color by the percentage amount given.
+	 *
+	 * @since 1.0.0
+	 *
+	 * @param amount - The percentage amount to change this color by. A value between 0 and 100.
+	 *
+	 * @return This Color object.
+	**/
+	public function darken(amount:Int):Color
+	{
+		v -= amount / 100;
+		return this;
+	}
+
+	/**
+	 * Brighten this Color by the percentage amount given.
+	 *
+	 * @since 1.0.0
+	 *
+	 * @param amount - The percentage amount to change this color by. A value between 0 and 100.
+	 *
+	 * @return This Color object.
+	**/
+	public function brighten(amount)
+	{
+		var r = this.r;
+		var g = this.g;
+		var b = this.b;
+
+		r = MathInt.max(0, MathInt.min(255, r - Math.round(255 * -(amount / 100))));
+		g = MathInt.max(0, MathInt.min(255, g - Math.round(255 * -(amount / 100))));
+		b = MathInt.max(0, MathInt.min(255, b - Math.round(255 * -(amount / 100))));
+
+		return setTo(r, g, b);
 	}
 }
