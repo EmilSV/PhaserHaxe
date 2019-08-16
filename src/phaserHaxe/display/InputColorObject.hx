@@ -10,26 +10,26 @@ typedef InputColorObject =
 	 *
 	 * @since 1.0.0
 	**/
-	var r(default, null):Float;
+	var r(default, null):Int;
 
 	/**
 	 * The green color value in the range 0 to 255.
 	 *
 	 * @since 1.0.0
 	**/
-	var g(default, null):Float;
+	var g(default, null):Int;
 
 	/**
 	 * The blue color value in the range 0 to 255.
 	 *
 	 * @since 1.0.0
 	**/
-	var b(default, null):Float;
+	var b(default, null):Int;
 
 	/**
 	 * The alpha color value in the range 0 to 255.
 	 *
 	 * @since 1.0.0
 	**/
-	var ?a(default, null):Float;
+	var ?a(default, null):Int;
 }
