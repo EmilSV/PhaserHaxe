@@ -83,4 +83,6 @@ class Const
 	 * @since 1.0.0
 	**/
 	public static inline var RIGHT = 8;
+
+
 }
