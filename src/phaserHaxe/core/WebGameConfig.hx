@@ -206,28 +206,28 @@ final class WebGameConfig
 	 *
 	 * @since 1.0.0
 	**/
-	public var physics:Dynamic = null; // Todo
+	public var physics:Null<PhysicsConfig> = null; // Todo
 
 	/**
 	 * Plugins to install.
 	 *
 	 * @since 1.0.0
 	**/
-	public var plugins:Dynamic = null; // Todo
+	public var plugins:Dynamic = null;
 
 	/**
 	 * The Scale Manager configuration.
 	 *
 	 * @since 1.0.0
 	**/
-	public var scale:Dynamic = null; // Todo
+	public var scale:ScaleConfig = null;
 
 	/**
 	 * The Audio Configuration object.
 	 *
 	 * @since 1.0.0
 	**/
-	public var audio:Dynamic = null; // Todo
+	public var audio:AudioConfig = null;
 
 }
 #end

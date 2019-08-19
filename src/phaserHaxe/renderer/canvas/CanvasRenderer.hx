@@ -1,7 +1,11 @@
-// package phaserHaxe.renderer.canvas;
+package phaserHaxe.renderer.canvas;
 
-// import phaserHaxe.Const;
+import phaserHaxe.Const;
 
+private final class CanvasRendererConfig
+{
+	public var clearBeforeRender:Bool;
+}
 // class CanvasRenderer
 // {
 // 	/**
@@ -10,35 +14,30 @@
 // 	 * @since 1.0.0
 // 	**/
 // 	public var game:Game;
-
 // 	/**
 // 	 * A constant which allows the renderer to be easily identified as a Canvas Renderer.
 // 	 *
 // 	 * @since 1.0.0
 // 	**/
 // 	public var type:Int = Const.CANVAS;
-
 // 	/**
 // 	 * The total number of Game Objects which were rendered in a frame.
 // 	 *
 // 	 * @since 1.0.0
 // 	**/
 // 	public var drawCount:Int = 0;
-
 // 	/**
 // 	 * The width of the canvas being rendered to.
 // 	 *
 // 	 * @since 1.0.0
 // 	**/
 // 	public var width:Int = 0;
-
 // 	/**
 // 	 * The height of the canvas being rendered to.
 // 	 *
 // 	 * @since 1.0.0
 // 	**/
 // 	public var height:Int = 0;
-
 // 	/**
 // 	 * The local configuration settings of the CanvasRenderer.
 // 	 *
@@ -51,14 +50,12 @@
 // 		antialias: game.config.antialias,
 // 		roundPixels: game.config.roundPixels
 // 	};
-
 // 	/**
 // 	 * The scale mode which should be used by the CanvasRenderer.
 // 	 *
 // 	 * @since 1.0.0
 // 	**/
 // 	public var scaleMode = (game.config.antialias) ? ScaleModes.LINEAR : ScaleModes.NEAREST;
-
 // 	/**
 // 	 * The canvas element which the Game uses.
 // 	 *

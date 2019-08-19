@@ -2,8 +2,6 @@ package phaserHaxe.utils;
 
 final class Utils
 {
-	private function new() {}
-
 	/**
 	 * A NOOP (No Operation) callback function.
 	 *
