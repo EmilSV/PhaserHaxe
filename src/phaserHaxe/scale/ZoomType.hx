@@ -7,7 +7,7 @@ package phaserHaxe.scale;
  *
  * @since 1.0.0
 **/
-enum abstract ZoomType(Int) from Int to Int
+enum abstract ZoomType(Float) from Float to Float
 {
 	/**
 	 * The game canvas will not be zoomed by Phaser.
