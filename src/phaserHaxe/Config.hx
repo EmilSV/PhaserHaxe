@@ -1,5 +1,7 @@
 package phaserHaxe;
 
+import haxe.macro.Expr.Case;
+import haxe.ds.Option;
 import phaserHaxe.core.GamepadInputConfig;
 import phaserHaxe.core.TouchInputConfig;
 import phaserHaxe.core.MouseInputConfig;
@@ -594,6 +596,81 @@ class Config
 	**/
 	public final missingImage:String;
 
+	// private static function defaultConfig():WebGameConfig
+	// {
+	// 	return {
+	// 		width: 1024,
+	// 		height: 768,
+	// 		zoom: 1,
+	// 		resolution: 1,
+	// 		parent: null,
+	// 		scaleMode: 0,
+	// 		expandParent: true,
+	// 		autoRound: false,
+	// 		autoCenter: 0,
+	// 		resizeInterval: 500,
+	// 		fullscreenTarget: null,
+	// 		minWidth: 500,
+	// 		maxWidth: 500,
+	// 		minHeight: 500,
+	// 		maxHeight: 500,
+	// 		scale: {
+	// 			width: 1024,
+	// 			height: 768,
+	// 			zoom: 1,
+	// 			resolution: 1,
+	// 			parent: null,
+	// 			mode: 0,
+	// 			expandParent: true,
+	// 			autoRound: false,
+	// 			autoCenter: 0,
+	// 			fullscreenTarget: null,
+	// 			min: {
+	// 				width: 500,
+	// 				height: 500
+	// 			},
+	// 			max: {
+	// 				width: 500,
+	// 				height: 500,
+	// 			}
+	// 		},
+	// 		type: Const.AUTO,
+	// 		canvas: null,
+	// 		context: null,
+	// 		customEnvironment: false,
+	// 		scene: null,
+	// 		seed: [Std.string((Date.now().getTime() * Math.random()))],
+	// 		title: "",
+	// 		url: "https://phaser.io",
+	// 		version: "",
+	// 		autoFocus: true,
+	// 		dom: {
+	// 			createContainer: false,
+	// 			behindCanvas: false
+	// 		},
+	// 		input: Some({
+	// 			keyboard: Some({
+	// 				target: Browser.window,
+	// 				capture: []
+	// 			}),
+	// 			mouse: Some({
+	// 				target: null,
+	// 				capture: true
+	// 			}),
+	// 			touch: DeviceInput.touch ? Some({
+	// 				target: null,
+	// 				capture: true
+	// 			}) : None,
+	// 			activePointers: 1,
+	// 			smoothFactor: 0,
+	// 			windowEvents: true,
+	// 			gamepad: None
+	// 		}),
+	// 		audio: null,
+	// 		banner:
+	// 	};
+	// }
+
 	public function new(config:Null<WebGameConfig>)
 	{
 		inline function getValue<T>(value:Null<T>, defaultValue:T)
@@ -718,126 +795,122 @@ class Config
 
 			//  Input
 
-			final inputBool = Std.is(config.input, Bool);
-			final inputDisable = inputBool && !(cast config.input : Bool);
-
-			if (inputDisable)
+			switch (config.input)
 			{
-				inputKeyboard = true;
-				inputKeyboardEventTarget = Browser.window;
-				inputKeyboardCapture = [];
-
-				inputMouse = true;
-				inputMouseEventTarget = null;
-				inputMouseCapture = true;
-
-				inputTouch = DeviceInput.touch;
-				inputTouchEventTarget = null;
-				inputTouchCapture = true;
-
-				inputActivePointers = 1;
-				inputSmoothFactor = 0;
-				inputWindowEvents = true;
-
-				inputGamepad = false;
-				inputGamepadEventTarget = Browser.window;
-			}
-			else
-			{
-				if (config.input != null && !inputBool)
-				{
-					final configInput = (cast config.input : InputConfig);
-					final configInputKeyboard = configInput.keyboard;
-
-					if (Std.is(configInputKeyboard, Bool))
-					{
-						inputKeyboard = cast configInputKeyboard;
-						inputKeyboardEventTarget = Browser.window;
-						inputKeyboardCapture = [];
-					}
-					else
-					{
-						final configInputKeyboard = (cast configInputKeyboard : KeyboardInputConfig);
-						inputKeyboard = true;
-						inputKeyboardEventTarget = getValue(configInputKeyboard.target, Browser.window);
-						inputKeyboardCapture = getValue(configInputKeyboard.capture, []);
-					}
-
-					final configInputMouse = configInput.mouse;
-
-					if (Std.is(configInputKeyboard, Bool))
-					{
-						inputMouse = cast configInputMouse;
-						inputMouseEventTarget = null;
-						inputMouseCapture = true;
-					}
-					else
-					{
-						final configInputMouse = (cast configInputMouse : MouseInputConfig);
-						inputMouse = true;
-						inputMouseEventTarget = getValue(configInputMouse.target, null);
-						inputMouseCapture = getValue(configInputMouse.capture, true);
-					}
-
-					final configInputTouch = configInput.touch;
-
-					if (Std.is(configInputTouch, Bool))
-					{
-						inputTouch = cast configInputTouch;
-						inputTouchEventTarget = null;
-						inputTouchCapture = true;
-					}
-					else
-					{
-						final configInputTouch = (cast configInputTouch : TouchInputConfig);
-						inputTouchEventTarget = getValue(configInputTouch.target, null);
-						inputTouchCapture = getValue(configInputTouch.capture, true);
-					}
-
-					inputActivePointers = getValue(configInput.activePointers, 1);
-					inputSmoothFactor = getValue(configInput.smoothFactor, 0);
-					inputWindowEvents = getValue(configInput.windowEvents, true);
-
-					final configInputGamepad = configInput.gamepad;
-
-					if (Std.is(configInputGamepad, Bool))
-					{
-						inputGamepad = cast configInputGamepad;
-						inputGamepadEventTarget = Browser.window;
-					}
-					else
-					{
-						final configInputGamepad = (cast configInput.gamepad : GamepadInputConfig);
-						inputGamepad = true;
-						inputGamepadEventTarget = getValue(configInputGamepad.target, Browser.window);
-					}
-				}
-				else
-				{
-					inputKeyboard = true;
+				case null | None:
+					inputKeyboard = config.input != None;
 					inputKeyboardEventTarget = Browser.window;
 					inputKeyboardCapture = [];
 
-					inputMouse = true;
+					inputMouse = config.input != None;
 					inputMouseEventTarget = null;
 					inputMouseCapture = true;
 
-					inputTouch = DeviceInput.touch;
+					inputTouch = config.input != None && DeviceInput.touch;
 					inputTouchEventTarget = null;
 					inputTouchCapture = true;
+
+					inputGamepad = false;
+					inputGamepadEventTarget = Browser.window;
 
 					inputActivePointers = 1;
 					inputSmoothFactor = 0;
 					inputWindowEvents = true;
 
-					inputGamepad = false;
-					inputGamepadEventTarget = Browser.window;
-				}
+				case Some(v):
+					switch (v.keyboard)
+					{
+						case None | null:
+							inputKeyboard = v.keyboard != None;
+							inputKeyboardEventTarget = Browser.window;
+							inputKeyboardCapture = [];
+						case Some(v):
+							inputKeyboard = true;
+							inputKeyboardEventTarget = getValue(v.target, Browser.window);
+							inputKeyboardCapture = getValue(v.capture, []);
+					}
 
-				
+					switch (v.mouse)
+					{
+						case None | null:
+							inputMouse = v.mouse != None;
+							inputMouseEventTarget = null;
+							inputMouseCapture = true;
+						case Some(v):
+							inputMouse = true;
+							inputMouseEventTarget = getValue(v.target, null);
+							inputMouseCapture = getValue(v.capture, true);
+					}
+
+					switch (v.touch)
+					{
+						case None | null:
+							inputTouch = config.input != None && DeviceInput.touch;
+							inputTouchEventTarget = null;
+							inputTouchCapture = true;
+						case Some(v):
+							inputTouch = true;
+							inputTouchEventTarget = getValue(v.target, null);
+							inputTouchCapture = getValue(v.capture, true);
+					}
+
+					switch (v.gamepad)
+					{
+						case None | null:
+							inputGamepad = false;
+							inputGamepadEventTarget = Browser.window;
+						case Some(v):
+							inputGamepad = true;
+							inputGamepadEventTarget = getValue(v.target, Browser.window);
+					}
+
+					inputActivePointers = getValue(v.activePointers, 1);
+					inputSmoothFactor = getValue(v.smoothFactor, 0);
+					inputWindowEvents = getValue(v.windowEvents, true);
 			}
 
-			var configInput = (cast config.input : InputConfig);
+			audio = config.audio;
+
+			hideBanner = (getValue(config.banner, null) != None);
+
+			switch (config.banner)
+			{
+				case None | null:
+					hideBanner = config.banner != None;
+					hidePhaser = false;
+					bannerTextColor = defaultBannerTextColor;
+					bannerBackgroundColor = defaultBannerColor;
+				case Some(v):
+					hideBanner = false;
+					hidePhaser = getValue(v.hidePhaser, false);
+					bannerTextColor = getValue(v.text, defaultBannerTextColor);
+					bannerBackgroundColor = getValue(v.background, defaultBannerColor);
+			}
+
+			if (gameTitle == '' && hidePhaser)
+			{
+				hideBanner = true;
+			}
+
+			fps = getValue(config.fps, null);
+
+			final renderConfig = getValue(config.render, config);
+
+			antialias = getValue(renderConfig.antialias, true);
+			desynchronized = getValue(renderConfig.desynchronized, false);
+			roundPixels = getValue(renderConfig.roundPixels, false);
+			pixelArt = getValue(renderConfig.pixelArt, zoom == 1);
+			transparent = getValue(renderConfig.transparent, false);
+			clearBeforeRender = getValue(renderConfig.clearBeforeRender, true);
+			premultipliedAlpha = getValue(renderConfig.premultipliedAlpha, true);
+			failIfMajorPerformanceCaveat = getValue(renderConfig.failIfMajorPerformanceCaveat, true);
+			powerPreference = getValue(renderConfig.powerPreference, DEFAULT);
+			batchSize = getValue(renderConfig.batchSize, 2000);
+			maxLights = getValue(renderConfig.maxLights, 2000);
+
+			var bgc = getValue(config.backgroundColor, 0);
+
+			backgroundColor = Color.valueToColor(bgc);
 		}
 	}
 }

@@ -10,26 +10,33 @@ typedef ColorObject =
 	 *
 	 * @since 1.0.0
 	**/
-	var r:Float;
+	var r:Int;
 
 	/**
 	 * The green color value in the range 0 to 255.
 	 *
 	 * @since 1.0.0
 	**/
-	var g:Float;
+	var g:Int;
 
 	/**
 	 * The blue color value in the range 0 to 255.
 	 *
 	 * @since 1.0.0
 	**/
-	var b:Float;
+	var b:Int;
 
 	/**
-     * The color of this Color component, not including the alpha channel.
+	 * The alpha color value in the range 0 to 255.
 	 *
 	 * @since 1.0.0
 	**/
-	var color:Float;
+	var ?a:Int;
+
+	/**
+	 * The color of this Color component, not including the alpha channel.
+	 *
+	 * @since 1.0.0
+	**/
+	var ?color:Int;
 }

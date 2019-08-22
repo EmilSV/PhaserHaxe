@@ -4,6 +4,7 @@ import phaserHaxe.Compatibility.toIntSafe as toIntSafe;
 import phaserHaxe.math.MathInt;
 import phaserHaxe.display.HSVColorObject;
 import phaserHaxe.Either;
+import phaserHaxe.utils.Utils;
 
 /**
  * The Color class holds a single color value and allows for easy modification and reading of it.
@@ -393,6 +394,191 @@ class Color
 	}
 
 	/**
+	 * TODO: needs some testing as this is total rewrite
+	 *
+	 * Converts a hex string into a Phaser Color object.
+	 *
+	 * The hex string can supplied as `'#0033ff'` or the short-hand format of `'#03f'`; it can begin with an optional "#" or "0x", or be unprefixed.
+	 *
+	 * An alpha channel is _not_ supported.
+	 *
+	 * @since 1.0.0
+	 *
+	 * @param hex - The hex color value to convert, such as `#0033ff` or the short-hand format: `#03f`.
+	 *
+	 * @return A Color object populated by the values of the given string.
+	**/
+	public static function hexStringToColor(hex:String):Color
+	{
+		var color = new Color();
+
+		inline function decimal(n:Int):Int
+		{
+			return Utils.charterCodeHexToInt(n);
+		}
+
+		var startIndex:Int = 0;
+		if (hex.charCodeAt(0) == "#".code)
+		{
+			startIndex = 1;
+		}
+		if (hex.charCodeAt(0) == "0".code && (hex.charCodeAt(1) == "x".code || hex.charCodeAt(1) == "X".code))
+		{
+			startIndex = 2;
+		}
+
+		if ((hex.length - startIndex) == 3)
+		{
+			var r = decimal(hex.charCodeAt(0 + startIndex)) * 17;
+			var g = decimal(hex.charCodeAt(1 + startIndex)) * 17;
+			var b = decimal(hex.charCodeAt(2 + startIndex)) * 17;
+			color.setTo(r, g, b);
+		}
+		else
+		{
+			var r = decimal(hex.charCodeAt(0 + startIndex)) * 16 +
+				decimal(hex.charCodeAt(1 + startIndex));
+
+			var g = decimal(hex.charCodeAt(2 + startIndex)) * 16 +
+				decimal(hex.charCodeAt(3 + startIndex));
+
+			var b = decimal(hex.charCodeAt(4 + startIndex)) * 16 +
+				decimal(hex.charCodeAt(5 + startIndex));
+
+			color.setTo(r, g, b);
+		}
+		return color;
+	}
+
+	/**
+	 * Converts the given color value into an instance of a Color object.
+	 *
+	 * @since 1.0.0
+	 *
+	 * @param input - The color value to convert into a Color object.
+	 *
+	 * @return A Color object.
+	**/
+	public static function integerToColor(input:Int):Color
+	{
+		var rgb = integerToRGB(input);
+
+		return new Color(rgb.r, rgb.g, rgb.b, rgb.a);
+	}
+
+	/**
+	 * Converts a CSS 'web' string into a Phaser Color object.
+	 *
+	 * The web string can be in the format `'rgb(r,g,b)'` or `'rgba(r,g,b,a)'` where r/g/b are in the range [0..255] and a is in the range [0..1].
+	 *
+	 * @since 1.0.0
+	 *
+	 * @param rgb - The CSS format color string, using the `rgb` or `rgba` format.
+	 *
+	 * @return A Color object.
+	**/
+	public static function rgbStringToColor(rgb)
+	{
+		var color = new Color();
+
+		var result = (~/^rgba?\(\s*(\d+)\s*,\s*(\d+)\s*,\s*(\d+)\s*(?:,\s*(\d+(?:\.\d+)?))?\s*\)$/)
+			.split(rgb.toLowerCase());
+
+		if (result != null)
+		{
+			var r = Std.parseInt(result[1]);
+			var g = Std.parseInt(result[2]);
+			var b = Std.parseInt(result[3]);
+			var a = (result[4] != null) ? Std.parseFloat(result[4]) : 1;
+
+			color.setTo(r, g, b, Std.int(a * 255));
+		}
+
+		return color;
+	}
+
+	/**
+	 * Converts the given source color value into an instance of a Color class.
+	 * The value can be either a string, prefixed with `rgb` or a hex string, a number or an Object.
+	 *
+	 * @since 1.0.0
+	 *
+	 * @param input - The source color value to convert.
+	 *
+	 * @return A Color object.
+	**/
+	public static function valueToColor(input:Either3<String, Int, InputColorObject>)
+	{
+		if (Std.is(input, String))
+		{
+			if ((cast input : String).substr(0, 3).toLowerCase() == 'rgb')
+			{
+				return rgbStringToColor(cast input);
+			}
+			else
+			{
+				return hexStringToColor(cast input);
+			}
+		}
+		else if (Std.is(input, String))
+		{
+			return integerToColor(cast input);
+		}
+		else
+		{
+			return objectToColor(cast input);
+		}
+	}
+
+	/**
+	 * Converts an object containing `r`, `g`, `b` and `a` properties into a Color class instance.
+	 *
+	 * @since 1.0.0
+	 *
+	 * @param input - An object containing `r`, `g`, `b` and `a` properties in the range 0 to 255.
+	 *
+	 * @return A Color object.
+	**/
+	public static function objectToColor(input:InputColorObject)
+	{
+		return new Color(input.r, input.g, input.b, input.a);
+	}
+
+	/**
+	 * Return the component parts of a color as an Object with the properties alpha, red, green, blue.
+	 *
+	 * Alpha will only be set if it exists in the given color (0xAARRGGBB)
+	 *
+	 * @since 1.0.0
+	 *
+	 * @param input - The color value to convert into a Color object.
+	 *
+	 * @return An object with the red, green and blue values set in the r, g and b properties.
+	**/
+	public static function integerToRGB(input:Int):ColorObject
+	{
+		return if (input > 16777215)
+		{
+			//  The color value has an alpha component
+			{
+				a: input >>> 24,
+				r: input >> 16 & 0xFF,
+				g: input >> 8 & 0xFF,
+				b: input & 0xFF
+			};
+		}
+		else
+		{
+			{
+				a: 255,
+				r: input >> 16 & 0xFF,
+				g: input >> 8 & 0xFF,
+				b: input & 0xFF
+			};
+		}
+	}
+
+	/**
 	 * Given 3 separate color values this will return an integer representation of it.
 	 *
 	 * @since 1.0.0
@@ -592,12 +778,12 @@ class Color
 	public static inline function createRGBFromHSV(h:Float, s:Float = 1,
 			v:Float = 1):ColorObject
 	{
-		return hsvToRGB(h, s, v, {
-			r: 0.0,
-			g: 0.0,
-			b: 0.0,
-			color: 0.0
-		});
+		return hsvToRGB(h, s, v, ({
+			r: 0,
+			g: 0,
+			b: 0,
+			color: 0
+		} : ColorObject));
 	}
 
 	/**
