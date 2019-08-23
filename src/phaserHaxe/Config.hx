@@ -1,5 +1,6 @@
 package phaserHaxe;
 
+import phaserHaxe.utils.Utils;
 import haxe.macro.Expr.Case;
 import haxe.ds.Option;
 import phaserHaxe.core.GamepadInputConfig;
@@ -27,6 +28,7 @@ import phaserHaxe.scale.CenterType;
 import phaserHaxe.scale.ScaleModeType;
 import phaserHaxe.scale.ZoomType;
 import phaserHaxe.device.Input as DeviceInput;
+import phaserHaxe.plugins.DefaultPlugins;
 
 class Config
 {
@@ -375,13 +377,6 @@ class Config
 	public final fps:FPSConfig;
 
 	/**
-	 *
-	 *
-	 * @since 1.0.0
-	**/
-	public final renderConfig:RenderConfig;
-
-	/**
 	 * When set to `true`, WebGL uses linear interpolation to draw scaled or
 	 * rotated textures, giving a smooth appearance. When set to `false`,
 	 * WebGL uses nearest-neighbor interpolation, giving a crisper appearance.
@@ -596,81 +591,6 @@ class Config
 	**/
 	public final missingImage:String;
 
-	// private static function defaultConfig():WebGameConfig
-	// {
-	// 	return {
-	// 		width: 1024,
-	// 		height: 768,
-	// 		zoom: 1,
-	// 		resolution: 1,
-	// 		parent: null,
-	// 		scaleMode: 0,
-	// 		expandParent: true,
-	// 		autoRound: false,
-	// 		autoCenter: 0,
-	// 		resizeInterval: 500,
-	// 		fullscreenTarget: null,
-	// 		minWidth: 500,
-	// 		maxWidth: 500,
-	// 		minHeight: 500,
-	// 		maxHeight: 500,
-	// 		scale: {
-	// 			width: 1024,
-	// 			height: 768,
-	// 			zoom: 1,
-	// 			resolution: 1,
-	// 			parent: null,
-	// 			mode: 0,
-	// 			expandParent: true,
-	// 			autoRound: false,
-	// 			autoCenter: 0,
-	// 			fullscreenTarget: null,
-	// 			min: {
-	// 				width: 500,
-	// 				height: 500
-	// 			},
-	// 			max: {
-	// 				width: 500,
-	// 				height: 500,
-	// 			}
-	// 		},
-	// 		type: Const.AUTO,
-	// 		canvas: null,
-	// 		context: null,
-	// 		customEnvironment: false,
-	// 		scene: null,
-	// 		seed: [Std.string((Date.now().getTime() * Math.random()))],
-	// 		title: "",
-	// 		url: "https://phaser.io",
-	// 		version: "",
-	// 		autoFocus: true,
-	// 		dom: {
-	// 			createContainer: false,
-	// 			behindCanvas: false
-	// 		},
-	// 		input: Some({
-	// 			keyboard: Some({
-	// 				target: Browser.window,
-	// 				capture: []
-	// 			}),
-	// 			mouse: Some({
-	// 				target: null,
-	// 				capture: true
-	// 			}),
-	// 			touch: DeviceInput.touch ? Some({
-	// 				target: null,
-	// 				capture: true
-	// 			}) : None,
-	// 			activePointers: 1,
-	// 			smoothFactor: 0,
-	// 			windowEvents: true,
-	// 			gamepad: None
-	// 		}),
-	// 		audio: null,
-	// 		banner:
-	// 	};
-	// }
-
 	public function new(config:Null<WebGameConfig>)
 	{
 		inline function getValue<T>(value:Null<T>, defaultValue:T)
@@ -704,6 +624,8 @@ class Config
 		autoRound = getValue(config.autoRound, false);
 
 		autoCenter = getValue(config.autoCenter, 0);
+
+		resizeInterval = getValue(config.resizeInterval, 500);
 
 		fullscreenTarget = getValue(config.fullscreenTarget, null);
 
@@ -766,6 +688,8 @@ class Config
 			canvas = getValue(config.canvas, null);
 
 			context = getValue(config.context, null);
+
+			canvasStyle = getValue(config.canvasStyle, null);
 
 			customEnvironment = getValue(config.customEnvironment, false);
 
@@ -869,6 +793,8 @@ class Config
 					inputWindowEvents = getValue(v.windowEvents, true);
 			}
 
+			disableContextMenu = getValue(config.disableContextMenu, false);
+
 			audio = config.audio;
 
 			hideBanner = (getValue(config.banner, null) != None);
@@ -911,6 +837,71 @@ class Config
 			var bgc = getValue(config.backgroundColor, 0);
 
 			backgroundColor = Color.valueToColor(bgc);
+
+			if (Std.is(bgc, Int) && (cast bgc : Int) == 0 && transparent)
+			{
+				backgroundColor.alpha = 0;
+			}
+
+			var callbacks = getValue(config.callbacks, {});
+
+			final NOOP = (g) -> {};
+
+			preBoot = getValue(callbacks.preBoot, NOOP);
+
+			postBoot = getValue(callbacks.postBoot, NOOP);
+
+			physics = getValue(config.physics, {});
+
+			defaultPhysicsSystem = getValue((this.physics.defaultPhysics : Either<Bool,
+				String>), false);
+
+			var loader = getValue(config.loader, {});
+
+			loaderBaseURL = getValue(loader.baseURL, "");
+
+			loaderPath = getValue(loader.path, "");
+
+			loaderMaxParallelDownloads = getValue(loader.maxParallelDownloads, 32);
+
+			loaderCrossOrigin = getValue(loader.crossOrigin, null);
+
+			loaderResponseType = getValue(loader.responseType, '');
+
+			loaderAsync = getValue(loader.async, true);
+
+			loaderUser = getValue(loader.user, '');
+
+			loaderPassword = getValue(loader.password, '');
+
+			loaderTimeout = getValue(loader.timeout, 0);
+
+			installGlobalPlugins = [];
+
+			installScenePlugins = [];
+
+			var plugins = getValue(config.plugins, null);
+			var defaultPlugins:Array<Dynamic> = DefaultPlugins.defaultScene;
+
+			if (plugins != null)
+			{
+				defaultPlugins = plugins;
+			}
+
+			this.defaultPlugins = cast defaultPlugins;
+
+			//  Default / Missing Images
+			var pngPrefix = 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAg';
+
+			var images = getValue(config.images, {});
+
+			defaultImage = getValue(images.defaultURL,
+				pngPrefix +
+				'AQMAAABJtOi3AAAAA1BMVEX///+nxBvIAAAAAXRSTlMAQObYZgAAABVJREFUeF7NwIEAAAAAgKD9qdeocAMAoAABm3DkcAAAAABJRU5ErkJggg==');
+
+			missingImage = getValue(images.missing,
+				pngPrefix +
+				'CAIAAAD8GO2jAAAAGXRFWHRTb2Z0d2FyZQBBZG9iZSBJbWFnZVJlYWR5ccllPAAAAJ9JREFUeNq01ssOwyAMRFG46v//Mt1ESmgh+DFmE2GPOBARKb2NVjo+17PXLD8a1+pl5+A+wSgFygymWYHBb0FtsKhJDdZlncG2IzJ4ayoMDv20wTmSMzClEgbWYNTAkQ0Z+OJ+A/eWnAaR9+oxCF4Os0H8htsMUp+pwcgBBiMNnAwF8GqIgL2hAzaGFFgZauDPKABmowZ4GL369/0rwACp2yA/ttmvsQAAAABJRU5ErkJggg==');
 		}
 	}
 }

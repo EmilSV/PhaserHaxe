@@ -359,7 +359,7 @@ typedef WebGameConfig =
 	 *
 	 * @since 1.0.0
 	**/
-	public var ?physics:Null<PhysicsConfig>; // Todo
+	public var ?physics:Null<PhysicsConfig>;
 
 	/**
 	 * Plugins to install.

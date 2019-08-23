@@ -3,20 +3,19 @@ package phaserHaxe.core;
 /**
  * @since 1.0.0
 **/
-@:structInit
-final class ImagesConfig
+typedef ImagesConfig =
 {
 	/**
 	 * URL to use for the 'default' texture.
 	 *
 	 * @since 1.0.0
 	**/
-	public var defaultURL:Null<String> = null;
+	public var ?defaultURL:String;
 
 	/**
 	 * URL to use for the 'missing' texture.
 	 *
 	 * @since 1.0.0
 	**/
-	public var missing:Null<String> = null;
+	public var ?missing:String;
 }
