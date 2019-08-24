@@ -18,7 +18,7 @@ final class Snap
 	 *
 	 * @return The snapped value.
 	**/
-	public static function SnapCeil(value:Float, gap:Float, start:Float = 0, divide:Bool = false):Float
+	public static function snapCeil(value:Float, gap:Float, start:Float = 0, divide:Bool = false):Float
 	{
 		if (gap == 0)
 		{
@@ -44,7 +44,7 @@ final class Snap
 	 *
 	 * @return The snapped value.
 	**/
-	public static function SnapFloor(value:Float, gap:Float, start:Float = 0, divide:Bool = false):Float
+	public static function snapFloor(value:Float, gap:Float, start:Float = 0, divide:Bool = false):Float
 	{
 		if (gap == 0)
 		{
@@ -69,7 +69,7 @@ final class Snap
 	 *
 	 * @return The snapped value.
 	**/
-	public static function SnapTo(value:Float, gap:Float, start:Float = 0, divide:Bool = false):Float
+	public static function snapTo(value:Float, gap:Float, start:Float = 0, divide:Bool = false):Float
 	{
 		if (gap == 0)
 		{
