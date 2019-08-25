@@ -84,7 +84,7 @@ final class SnapshotState
 #if js
 final class SnapShoot
 {
-	public function canvas(canvas:CanvasElement, config:SnapshotState)
+	public static function canvas(canvas:CanvasElement, config:SnapshotState)
 	{
 		var callback = config.callback;
 		var type = config.type;

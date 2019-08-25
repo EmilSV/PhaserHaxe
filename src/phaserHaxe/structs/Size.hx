@@ -570,6 +570,18 @@ class Size
 		snapTo = null;
 	}
 
+	/**
+	 * The width of this Size component.
+	 *
+	 * This value is clamped to the range specified by `minWidth` and `maxWidth`, if enabled.
+	 *
+	 * A width can never be less than zero.
+	 *
+	 * Changing this value will automatically update the `height` if the aspect ratio lock is enabled.
+	 * You can also use the `setWidth` and `getWidth` methods.
+	 *
+	 * @since 1.0.0
+	**/
 	public var width(get, set):Float;
 
 	private inline function get_width():Float
@@ -581,5 +593,30 @@ class Size
 	{
 		setSize(value, _height);
 		return _width;
+	}
+
+	/**
+	 * The height of this Size component.
+	 *
+	 * This value is clamped to the range specified by `minHeight` and `maxHeight`, if enabled.
+	 *
+	 * A height can never be less than zero.
+	 *
+	 * Changing this value will automatically update the `width` if the aspect ratio lock is enabled.
+	 * You can also use the `setHeight` and `getHeight` methods.
+	 *
+	 * @since 1.0.0
+	**/
+	public var height(get, set):Float;
+
+	private inline function get_height():Float
+	{
+		return _height;
+	}
+
+	private inline function set_height(value:Float):Float
+	{
+		setSize(_width, value);
+		return _height;
 	}
 }
