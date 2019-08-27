@@ -9,6 +9,7 @@ import phaserHaxe.renderer.BlendModes;
  * @since 1.0.0
 **/
 @:allow(phaserHaxe.gameobjects.components.BlendModeImplantation)
+@:phaserHaxe.Mixin(phaserHaxe.gameobjects.components.IBlendMode.BlendModeMixin)
 interface IBlendMode
 {
 	/**

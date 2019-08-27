@@ -7,6 +7,7 @@ import phaserHaxe.gameobjects.components.ICrop;
 import phaserHaxe.gameobjects.components.ITransform;
 import phaserHaxe.textures.Frame;
 
+@:phaserHaxe.Mixin(phaserHaxe.gameobjects.components.IFrameBasedSize.FrameBasedSizeMixin)
 interface IFrameBasedSize extends ISize
 {
 	/**

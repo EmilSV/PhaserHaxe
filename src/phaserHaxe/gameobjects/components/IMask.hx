@@ -8,14 +8,13 @@ import phaserHaxe.display.mask.BitMask;
  *
  * @since 1.0.0
 **/
+// @:phaserHaxe.Mixin(phaserHaxe.gameobjects.components.IMask.)
 interface IMask
 {
 	/**
 	 * The Mask this Game Object is using during render.
 	 *
-	 * @name Phaser.GameObjects.Components.Mask#mask
-	 * @type {Phaser.Display.Masks.BitmapMask|Phaser.Display.Masks.GeometryMask}
-	 * @since 3.0.0
+	 * @since 1.0.0
 	**/
 	public var mask:Either<BitMask, GeometryMask>;
 
@@ -33,24 +32,22 @@ interface IMask
 	 * Masks have no impact on physics or input detection. They are purely a rendering component
 	 * that allows you to limit what is visible during the render pass.
 	 *
-	 * @method Phaser.GameObjects.Components.Mask#setMask
-	 * @since 3.6.2
+	 * @since 1.0.0
 	 *
-	 * @param {Phaser.Display.Masks.BitmapMask|Phaser.Display.Masks.GeometryMask} mask - The mask this Game Object will use when rendering.
+	 * @param mask - The mask this Game Object will use when rendering.
 	 *
-	 * @return {this} This Game Object instance.
+	 * @return This Game Object instance.
 	**/
 	public function setMask(mask:Either<BitMask, GeometryMask>):IMask;
 
 	/**
 	 * Clears the mask that this Game Object was using.
 	 *
-	 * @method Phaser.GameObjects.Components.Mask#clearMask
-	 * @since 3.6.2
+	 * @since 1.0.0
 	 *
-	 * @param {boolean} [destroyMask=false] - Destroy the mask before clearing it?
+	 * @param destroyMask - Destroy the mask before clearing it?
 	 *
-	 * @return {this} This Game Object instance.
+	 * @return This Game Object instance.
 	**/
 	function clearMask(destroyMask:Bool = false):IMask;
 
@@ -66,12 +63,11 @@ interface IMask
 	 * it will use itself as the object. This means you can call this method to create
 	 * a Bitmap Mask from any renderable Game Object.
 	 *
-	 * @method Phaser.GameObjects.Components.Mask#createBitmapMask
-	 * @since 3.6.2
+	 * @since 1.0.0
 	 *
-	 * @param {Phaser.GameObjects.GameObject} [renderable] - A renderable Game Object that uses a texture, such as a Sprite.
+	 * @param renderable - A renderable Game Object that uses a texture, such as a Sprite.
 	 *
-	 * @return {Phaser.Display.Masks.BitmapMask} This Bitmap Mask that was created.
+	 * @return This Bitmap Mask that was created.
 	**/
 	public function createBitmapMask(?renderable:GameObject):BitMask;
 
@@ -86,11 +82,16 @@ interface IMask
 	 *
 	 * This means you can call this method to create a Geometry Mask from any Graphics Game Object.
 	 *
-	 * @method Phaser.GameObjects.Components.Mask#createGeometryMask
-	 * @since 3.6.2
+	 * @since 1.0.0
 	 *
-	 * @param {Phaser.GameObjects.Graphics} [graphics] - A Graphics Game Object. The geometry within it will be used as the mask.
+	 * @param graphics - A Graphics Game Object. The geometry within it will be used as the mask.
 	 *
-	 * @return {Phaser.Display.Masks.GeometryMask} This Geometry Mask that was created.
-	**/ public function createGeometryMask(?graphics:Graphics):GeometryMask;
+	 * @return This Geometry Mask that was created.
+	**/
+	public function createGeometryMask(?graphics:Graphics):GeometryMask;
+}
+
+final class MaskImplementation
+{
+	//public static function setMask<T:IMask>(self:T,) {}
 }

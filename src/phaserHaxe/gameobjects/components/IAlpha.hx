@@ -8,6 +8,7 @@ import phaserHaxe.math.MathUtility.clamp as clamp;
  * @since 1.0.0
 **/
 @:allow(phaserHaxe.gameobjects.components.AlphaImplantation)
+@:phaserHaxe.Mixin(phaserHaxe.gameobjects.components.IAlpha.AlphaMixin)
 interface IAlpha
 {
 	/**

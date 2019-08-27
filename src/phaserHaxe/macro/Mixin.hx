@@ -50,6 +50,53 @@ final class Mixin
 		return outputFelids;
 	}
 
+	/**
+	 * A macro build function to mixin other class into another. They will be mixed in the
+	 * order they were give to the function ,and will skip any felid that is already defined
+	 *
+	 * @since 1.0.0
+	 *
+	 * @param classMixinExprs - the classes to mixin
+	**/
+	public static function auto():Array<Field>
+	{
+		final localClass = Context.getLocalClass().get();
+
+		final outputFelids = Context.getBuildFields();
+
+		if (localClass.isInterface)
+		{
+			return outputFelids;
+		}
+
+		final classMixinExprs = [];
+
+		for (item in localClass.interfaces)
+		{
+			var ct = item.t.get();
+			var meta = ct.meta.extract(":phaserHaxe.Mixin");
+			if (meta.length > 0)
+			{
+				var param = meta[0].params;
+				if (param.length > 0)
+				{
+					classMixinExprs.push(param[0]);
+				}
+			}
+		}
+
+		for (cme in classMixinExprs)
+		{
+			final mixinClass = getClassFromExpr(cme);
+			if (MixinValidator.isValid(mixinClass, localClass))
+			{
+				addFromClassExpr(mixinClass, localClass, outputFelids);
+			}
+		}
+
+		return outputFelids;
+	}
+
 	private static function getClassFromExpr(classMixinExpr:Expr):Null<ClassType>
 	{
 		var classMixinName = tryGetIdentifier(classMixinExpr);

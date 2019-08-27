@@ -1,6 +1,7 @@
 package phaserHaxe.gameobjects.components;
 
 @:allow(phaserHaxe.gameobjects.components.DepthImplementation)
+@:phaserHaxe.Mixin(phaserHaxe.gameobjects.components.IDepth.DepthMixin)
 interface IDepth
 {
 	/**

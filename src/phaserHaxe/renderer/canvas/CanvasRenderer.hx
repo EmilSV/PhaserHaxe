@@ -1,5 +1,9 @@
 package phaserHaxe.renderer.canvas;
 
+import phaserHaxe.gameobjects.sprite.Sprite;
+import phaserHaxe.gameobjects.GameObject;
+import phaserHaxe.textures.Frame;
+import phaserHaxe.cameras.scene2D.Camera;
 import phaserHaxe.display.canvas.Smoothing;
 import phaserHaxe.structs.Size;
 import js.html.CanvasRenderingContext2D;
@@ -362,36 +366,61 @@ class CanvasRenderer
 	 * Snapshots work by creating an Image object from the canvas data, this is a blocking process, which gets
 	 * more expensive the larger the canvas size gets, so please be careful how you employ this in your game.
 	 *
-	 * @method Phaser.Renderer.Canvas.CanvasRenderer#snapshotCanvas
-	 * @since 3.19.0
+	 * @since 1.0.0
 	 *
-	 * @param {HTMLCanvasElement} canvas - The canvas to grab from.
-	 * @param {Phaser.Types.Renderer.Snapshot.SnapshotCallback} callback - The Function to invoke after the snapshot image is created.
-	 * @param {boolean} [getPixel=false] - Grab a single pixel as a Color object, or an area as an Image object?
-	 * @param {integer} [x=0] - The x coordinate to grab from.
-	 * @param {integer} [y=0] - The y coordinate to grab from.
-	 * @param {integer} [width=canvas.width] - The width of the area to grab.
-	 * @param {integer} [height=canvas.height] - The height of the area to grab.
-	 * @param {string} [type='image/png'] - The format of the image to create, usually `image/png` or `image/jpeg`.
-	 * @param {number} [encoderOptions=0.92] - The image quality, between 0 and 1. Used for image formats with lossy compression, such as `image/jpeg`.
+	 * @param canvas - The canvas to grab from.
+	 * @param callback - The Function to invoke after the snapshot image is created.
+	 * @param getPixel - Grab a single pixel as a Color object, or an area as an Image object?
+	 * @param x - The x coordinate to grab from.
+	 * @param y - The y coordinate to grab from.
+	 * @param width - The width of the area to grab.
+	 * @param height - The height of the area to grab.
+	 * @param type - The format of the image to create, usually `image/png` or `image/jpeg`.
+	 * @param encoderOptions - The image quality, between 0 and 1. Used for image formats with lossy compression, such as `image/jpeg`.
 	 *
-	 * @return {this} This Canvas Renderer.
+	 * @return This Canvas Renderer.
 	**/
-	function snapshotCanvas(canvas:CanvasElement, callback:SnapShootCallback,
+	public function snapshotCanvas(canvas:CanvasElement, callback:SnapShootCallback,
 			getPixel:Bool = false, x:Int = 0, y:Int = 0, ?width:Int, ?height:Int,
 			type:String = 'image/png', encoderOptions:Float = 0.92)
 	{
-		this.snapshotArea(x, y, width, height, callback, type, encoderOptions);
+		snapshotArea(x, y, width, height, callback, type, encoderOptions);
 
 		var state = this.snapshotState;
 
 		state.getPixel = getPixel;
 
-		SnapShoot.canvas(this.gameCanvas, state);
+		SnapShoot.canvas(gameCanvas, state);
 
 		state.callback = null;
 
 		return this;
+	}
+
+	/**
+	 * Schedules a snapshot of the entire game viewport to be taken after the current frame is rendered.
+	 *
+	 * To capture a specific area see the `snapshotArea` method. To capture a specific pixel, see `snapshotPixel`.
+	 *
+	 * Only one snapshot can be active _per frame_. If you have already called `snapshotPixel`, for example, then
+	 * calling this method will override it.
+	 *
+	 * Snapshots work by creating an Image object from the canvas data, this is a blocking process, which gets
+	 * more expensive the larger the canvas size gets, so please be careful how you employ this in your game.
+	 *
+	 * @since 1.0.0
+	 *
+	 * @param callback - The Function to invoke after the snapshot image is created.
+	 * @param type - The format of the image to create, usually `image/png` or `image/jpeg`.
+	 * @param encoderOptions - The image quality, between 0 and 1. Used for image formats with lossy compression, such as `image/jpeg`.
+	 *
+	 * @return This WebGL Renderer.
+	**/
+	public function snapshot(callback:SnapShootCallback, type:String = "image/png",
+			encoderOptions:Float = 0.92)
+	{
+		return snapshotArea(0, 0, gameCanvas.width, gameCanvas.height, callback, type,
+			encoderOptions);
 	}
 
 	/**
@@ -405,20 +434,21 @@ class CanvasRenderer
 	 * Snapshots work by creating an Image object from the canvas data, this is a blocking process, which gets
 	 * more expensive the larger the canvas size gets, so please be careful how you employ this in your game.
 	 *
-	 * @method Phaser.Renderer.Canvas.CanvasRenderer#snapshotArea
-	 * @since 3.16.0
+	 * @since 1.0.0
 	 *
-	 * @param {integer} x - The x coordinate to grab from.
-	 * @param {integer} y - The y coordinate to grab from.
-	 * @param {integer} width - The width of the area to grab.
-	 * @param {integer} height - The height of the area to grab.
-	 * @param {Phaser.Types.Renderer.Snapshot.SnapshotCallback} callback - The Function to invoke after the snapshot image is created.
-	 * @param {string} [type='image/png'] - The format of the image to create, usually `image/png` or `image/jpeg`.
-	 * @param {number} [encoderOptions=0.92] - The image quality, between 0 and 1. Used for image formats with lossy compression, such as `image/jpeg`.
+	 * @param x - The x coordinate to grab from.
+	 * @param y - The y coordinate to grab from.
+	 * @param width - The width of the area to grab.
+	 * @param height - The height of the area to grab.
+	 * @param callback - The Function to invoke after the snapshot image is created.
+	 * @param type - The format of the image to create, usually `image/png` or `image/jpeg`.
+	 * @param encoderOptions - The image quality, between 0 and 1. Used for image formats with lossy compression, such as `image/jpeg`.
 	 *
-	 * @return {this} This WebGL Renderer.
+	 * @return This WebGL Renderer.
 	**/
-	public function snapshotArea(x, y, width, height, callback, type, encoderOptions)
+	public function snapshotArea(x:Int, y:Int, width:Int, height:Int,
+			callback:SnapShootCallback, type:String = "image/png",
+			encoderOptions:Float = 0.92):CanvasRenderer
 	{
 		var state = this.snapshotState;
 
@@ -428,9 +458,155 @@ class CanvasRenderer
 		state.getPixel = false;
 		state.x = x;
 		state.y = y;
-		state.width = MathInt.min(width, this.gameCanvas.width);
-		state.height = MathInt.min(height, this.gameCanvas.height);
+		state.width = MathInt.min(width, gameCanvas.width);
+		state.height = MathInt.min(height, gameCanvas.height);
 
 		return this;
+	}
+
+	/**
+	 * Schedules a snapshot of the given pixel from the game viewport to be taken after the current frame is rendered.
+	 *
+	 * To capture the whole game viewport see the `snapshot` method. To capture a specific area, see `snapshotArea`.
+	 *
+	 * Only one snapshot can be active _per frame_. If you have already called `snapshotArea`, for example, then
+	 * calling this method will override it.
+	 *
+	 * Unlike the other two snapshot methods, this one will return a `Color` object containing the color data for
+	 * the requested pixel. It doesn't need to create an internal Canvas or Image object, so is a lot faster to execute,
+	 * using less memory.
+	 *
+	 * @since 1.0.0
+	 *
+	 * @param x - The x coordinate of the pixel to get.
+	 * @param y - The y coordinate of the pixel to get.
+	 * @param callback - The Function to invoke after the snapshot pixel data is extracted.
+	 *
+	 * @return This WebGL Renderer.
+	**/
+	public function snapshotPixel(x:Int, y:Int, callback:SnapShootCallback)
+	{
+		this.snapshotArea(x, y, 1, 1, callback);
+		this.snapshotState.getPixel = true;
+		return this;
+	}
+
+	/**
+	 * Takes a Sprite Game Object, or any object that extends it, and draws it to the current context.
+	 *
+	 * @method Phaser.Renderer.Canvas.CanvasRenderer#batchSprite
+	 * @since 3.12.0
+	 *
+	 * @param {Phaser.GameObjects.GameObject} sprite - The texture based Game Object to draw.
+	 * @param {Phaser.Textures.Frame} frame - The frame to draw, doesn't have to be that owned by the Game Object.
+	 * @param {Phaser.Cameras.Scene2D.Camera} camera - The Camera to use for the rendering transform.
+	 * @param {Phaser.GameObjects.Components.TransformMatrix} [parentTransformMatrix] - The transform matrix of the parent container, if set.
+	 */
+	public function batchSprite(sprite:Sprite, frame:Frame, camera:Camera,
+			parentTransformMatrix:TransformMatrix)
+	{
+		var alpha = camera.alpha * sprite.alpha;
+		if (alpha == 0)
+		{
+			//  Nothing to see, so abort early
+			return;
+		}
+
+		var ctx = this.currentContext;
+		var camMatrix = this._tempMatrix1;
+		var spriteMatrix = this._tempMatrix2;
+		var calcMatrix = this._tempMatrix3;
+		var cd = frame.canvasData;
+		var frameX = cd.x;
+		var frameY = cd.y;
+		var frameWidth = frame.cutWidth;
+		var frameHeight = frame.cutHeight;
+		var customPivot = frame.customPivot;
+		var res = frame.source.resolution;
+		var displayOriginX = sprite.displayOriginX;
+		var displayOriginY = sprite.displayOriginY;
+		var x = -displayOriginX + frame.x;
+		var y = -displayOriginY + frame.y;
+		if (sprite.isCropped)
+		{
+			var crop = sprite._crop;
+			if (crop.flipX != sprite.flipX || crop.flipY != sprite.flipY)
+			{
+				frame.updateCropUVs(crop, sprite.flipX, sprite.flipY);
+			}
+			frameWidth = crop.cw;
+			frameHeight = crop.ch;
+			frameX = crop.cx;
+			frameY = crop.cy;
+			x = -displayOriginX + crop.x;
+			y = -displayOriginY + crop.y;
+			if (sprite.flipX)
+			{
+				if (x >= 0)
+				{
+					x = -(x + frameWidth);
+				}
+				else if (x < 0)
+				{
+					x = (MathInt.abs(x) - frameWidth);
+				}
+			}
+			if (sprite.flipY)
+			{
+				if (y >= 0)
+				{
+					y = -(y + frameHeight);
+				}
+				else if (y < 0)
+				{
+					y = (MathInt.abs(y) - frameHeight);
+				}
+			}
+		}
+		var flipX = 1;
+		var flipY = 1;
+		if (sprite.flipX)
+		{
+			if (!customPivot)
+			{
+				x += (-frame.realWidth + (displayOriginX * 2));
+			}
+			flipX = -1;
+		}
+		//  Auto-invert the flipY if this is coming from a GLTexture
+		if (sprite.flipY)
+		{
+			if (!customPivot)
+			{
+				y += (-frame.realHeight + (displayOriginY * 2));
+			}
+			flipY = -1;
+		}
+		spriteMatrix.applyITRS(sprite.x, sprite.y, sprite.rotation, sprite.scaleX * flipX, sprite.scaleY * flipY);
+		camMatrix.copyFrom(camera.matrix);
+		if (parentTransformMatrix)
+		{
+			//  Multiply the camera by the parent matrix
+			camMatrix.multiplyWithOffset(parentTransformMatrix, -camera.scrollX * sprite.scrollFactorX, -camera.scrollY * sprite.scrollFactorY);
+			//  Undo the camera scroll
+			spriteMatrix.e = sprite.x;
+			spriteMatrix.f = sprite.y;
+			//  Multiply by the Sprite matrix, store result in calcMatrix
+			camMatrix.multiply(spriteMatrix, calcMatrix);
+		}
+		else
+		{
+			spriteMatrix.e -= camera.scrollX * sprite.scrollFactorX;
+			spriteMatrix.f -= camera.scrollY * sprite.scrollFactorY;
+			//  Multiply by the Sprite matrix, store result in calcMatrix
+			camMatrix.multiply(spriteMatrix, calcMatrix);
+		}
+		ctx.save();
+		calcMatrix.setToContext(ctx);
+		ctx.globalCompositeOperation = this.blendModes[sprite.blendMode];
+		ctx.globalAlpha = alpha;
+		ctx.drawImage(frame.source.image, frameX, frameY, frameWidth, frameHeight, x, y,
+			frameWidth / res, frameHeight / res);
+		ctx.restore();
 	}
 }

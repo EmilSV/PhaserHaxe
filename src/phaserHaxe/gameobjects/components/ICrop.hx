@@ -7,6 +7,7 @@ import phaserHaxe.textures.Texture;
 import phaserHaxe.textures.CanvasTexture;
 import phaserHaxe.textures.Frame;
 
+@:phaserHaxe.Mixin(phaserHaxe.gameobjects.components.ICrop.CropMixin)
 interface ICrop
 {
 	/**

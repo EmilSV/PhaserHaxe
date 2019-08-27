@@ -1,5 +1,6 @@
 package phaserHaxe.gameobjects.components;
 
+@:phaserHaxe.Mixin(phaserHaxe.gameobjects.components.IFlip.FlipMixin)
 interface IFlip
 {
 	/**

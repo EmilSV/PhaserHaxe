@@ -4,6 +4,7 @@ import phaserHaxe.math.Vector2;
 import phaserHaxe.geom.Rectangle;
 import phaserHaxe.math.MathUtility.rotateAround as rotateAround;
 
+@:phaserHaxe.Mixin(phaserHaxe.gameobjects.components.IGetBounds.GetBoundsMixin)
 interface IGetBounds
 {
 	/**

@@ -1,5 +1,6 @@
 package phaserHaxe.gameobjects.components;
 
+@:phaserHaxe.Mixin(phaserHaxe.gameobjects.components.IComputedSize.ComputedSizeMixin)
 interface IComputedSize extends ISize
 {
 	/**
@@ -89,7 +90,7 @@ final class ComputedSizeImplementation
 	}
 
 	public static inline function set_displayWidth<T:IComputedSize & ITransform>(self:T,
-		value:Float):Float
+			value:Float):Float
 	{
 		return self.scaleX = value / self.width;
 	}
