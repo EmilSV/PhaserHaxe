@@ -7,10 +7,10 @@ import phaserHaxe.math.Angle.wrapDegrees as wrapAngleDegrees;
 /**
  * Provides methods used for getting and setting the position, scale and rotation of a Game Object.
  *
- * @mixin phaserHaxe.gameobjects.components.ITransform.TransformMixin
  * @since 1.0.0
 **/
 @:allow(phaserHaxe.gameobjects.components.TransformImplementation)
+@:phaserHaxe.Mixin(phaserHaxe.gameobjects.components.ITransform.TransformMixin)
 interface ITransform
 {
 	/**
@@ -335,25 +335,21 @@ final class TransformImplementation
 		return wrapAngleDegrees(self._rotation * MATH_CONST.RAD_TO_DEG);
 	}
 
-	@:generic
 	public static inline function set_angle<T:ITransform>(self:T, value:Float):Float
 	{
 		return self._rotation = wrapAngleDegrees(value) * MATH_CONST.DEG_TO_RAD;
 	}
 
-	@:generic
 	public static inline function get_rotation<T:ITransform>(self:T):Float
 	{
 		return self._rotation;
 	}
 
-	@:generic
 	public static inline function set_rotation<T:ITransform>(self:T, value:Float):Float
 	{
 		return self._rotation = wrapAngle(value);
 	}
 
-	@:generic
 	public static inline function setPosition<T:ITransform>(self:T, x:Float = 0,
 			?y:Float, z:Float = 0, w:Float = 0):T
 	{
@@ -365,7 +361,6 @@ final class TransformImplementation
 		return self;
 	}
 
-	@:generic
 	public static inline function setRandomPosition<T:ITransform>(self:T, x:Float = 0,
 			y:Float = 0, ?width:Float, ?height:Float):T
 	{
@@ -386,58 +381,49 @@ final class TransformImplementation
 		return self;
 	}
 
-	@:generic
 	public static inline function setAngle<T:ITransform>(self:T, degrees:Float = 0):T
 	{
 		self.angle = degrees;
 		return self;
 	}
 
-	@:generic
 	public static inline function setRotation<T:ITransform>(self:T, radians:Float = 0):T
 	{
 		self.rotation = radians;
 		return self;
 	}
 
-	@:generic
-	public static inline function setScale<T:ITransform>(self:T, x:Float = 1,
-			?y:Float):T
+	public static inline function setScale<T:ITransform>(self:T, x:Float = 1, ?y:Float):T
 	{
 		self.scaleX = x;
 		self.scaleY = y != null ? y : x;
 		return self;
 	}
 
-	@:generic
 	public static inline function setX<T:ITransform>(self:T, value:Float = 0):T
 	{
 		self.x = value;
 		return self;
 	}
 
-	@:generic
 	public static inline function setY<T:ITransform>(self:T, value:Float = 0):T
 	{
 		self.y = value;
 		return self;
 	}
 
-	@:generic
 	public static inline function setZ<T:ITransform>(self:T, value:Float = 0):T
 	{
 		self.z = value;
 		return self;
 	}
 
-	@:generic
 	public static inline function setW<T:ITransform>(self:T, value:Float = 0):T
 	{
 		self.w = value;
 		return self;
 	}
 
-	@:generic
 	public static inline function getLocalTransformMatrix<T:ITransform>(self:T,
 			?tempMatrix:TransformMatrix):TransformMatrix
 	{
@@ -450,7 +436,6 @@ final class TransformImplementation
 			tempMatrix.applyITRS(self.x, self.y, self._rotation, self._scaleX, self._scaleY);
 	}
 
-	@:generic
 	public static inline function getWorldTransformMatrix<T:ITransform>(self:T,
 			?tempMatrix:TransformMatrix, ?parentMatrix:TransformMatrix):TransformMatrix
 	{
@@ -487,7 +472,7 @@ final class TransformImplementation
 	}
 }
 
-final class TransformMixin
+final class TransformMixin extends GameObject
 {
 	/**
 	 * Private internal value. Holds the horizontal scale value.
@@ -673,7 +658,8 @@ final class TransformMixin
 	public function setRandomPosition(x:Float = 0, y:Float = 0, ?width:Float,
 			?height:Float):TransformMixin
 	{
-		return cast TransformImplementation.setRandomPosition(cast this, x, y, width, height);
+		return
+			cast TransformImplementation.setRandomPosition(cast this, x, y, width, height);
 	}
 
 	/**

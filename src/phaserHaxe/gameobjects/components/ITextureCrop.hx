@@ -1,15 +1,21 @@
 package phaserHaxe.gameobjects.components;
 
+import phaserHaxe.gameobjects.components.ICrop.CropImplementation;
 import phaserHaxe.geom.Rectangle;
 import phaserHaxe.gameobjects.components.IFlip;
-import phaserHaxe.gameobjects.sprite.Sprite;
 import phaserHaxe.textures.Texture;
 import phaserHaxe.textures.CanvasTexture;
 import phaserHaxe.textures.Frame;
+import phaserHaxe.gameobjects.components.ICrop.ResetCropObject;
 
-@:allow(phaserHaxe.gameobjects.components.CropImplementation)
-@:phaserHaxe.Mixin(phaserHaxe.gameobjects.components.ICrop.CropMixin)
-interface ICrop
+/**
+ * Provides methods used for getting and setting the texture of a Game Object.
+ *
+ * @since 1.0.0
+**/
+@:allow(phaserHaxe.gameobjects.components.TextureCropImplementation)
+@:phaserHaxe.Mixin(phaserHaxe.gameobjects.components.ITextureCrop.TextureCropMixin)
+interface ITextureCrop extends ICrop
 {
 	/**
 	 * The internal crop data object, as used by `setCrop` and passed to the `Frame.setCropUVs` method.
@@ -77,6 +83,42 @@ interface ICrop
 		?height:Float):ICrop;
 
 	/**
+	 * Sets the texture and frame this Game Object will use to render with.
+	 *
+	 * Textures are referenced by their string-based keys, as stored in the Texture Manager.
+	 *
+	 * @method Phaser.GameObjects.Components.TextureCrop#setTexture
+	 * @since 3.0.0
+	 *
+	 * @param key - The key of the texture to be used, as stored in the Texture Manager.
+	 * @param frame - The name or index of the frame within the Texture.
+	 *
+	 * @return This Game Object instance.
+	**/
+	public function setTexture(key:String, ?frame:Either<String, Int>):ITextureCrop;
+
+	/**
+	 * Sets the frame this Game Object will use to render with.
+	 *
+	 * The Frame has to belong to the current Texture being used.
+	 *
+	 * It can be either a string or an index.
+	 *
+	 * Calling `setFrame` will modify the `width` and `height` properties of your Game Object.
+	 * It will also change the `origin` if the Frame has a custom pivot point, as exported from packages like Texture Packer.
+	 *
+	 * @since 1.0.0
+	 *
+	 * @param frame - The name or index of the frame within the Texture.
+	 * @param updateSize - Should this call adjust the size of the Game Object?
+	 * @param updateOrigin - Should this call adjust the origin of the Game Object?
+	 *
+	 * @return This Game Object instance.
+	**/
+	public function setFrame(frame:Either<String, Int>, updateSize:Bool = true,
+		updateOrigin:Bool = true):ITextureCrop;
+
+	/**
 	 * Internal method that returns a blank, well-formed crop object for use by a Game Object.
 	 *
 	 * @since 1.0.0
@@ -86,64 +128,75 @@ interface ICrop
 	private function resetCropObject():ResetCropObject;
 }
 
-@:structInit
-final class ResetCropObject
+final class TextureCropImplementation
 {
-	public var u0:Float = 0.0;
-	public var v0:Float = 0.0;
-	public var u1:Float = 0.0;
-	public var v1:Float = 0.0;
-	public var width:Float = 0.0;
-	public var height:Float = 0.0;
-	public var x:Float = 0.0;
-	public var y:Float = 0.0;
-	public var flipX:Bool = false;
-	public var flipY:Bool = false;
-	public var cx:Float = 0.0;
-	public var cy:Float = 0.0;
-	public var cw:Float = 0.0;
-	public var ch:Float = 0.0;
+	private static inline var _FLAG = 8;
 
-	public function new() {}
-}
-
-final class CropImplementation
-{
 	public inline static function setCrop<T:ICrop & IFlip>(self:T,
 			?x:Either<Rectangle, Float>, ?y:Float, ?width:Float, ?height:Float):T
 	{
-		if (x == null)
-		{
-			self.isCropped = false;
-		}
-		else if (self.frame != null && Std.is(self, Sprite))
-		{
-			if (Std.is(x, Float))
-			{
-				self.frame.setCropUVs(self._crop, (cast x : Float), y, width, height,
-					self.flipX, self.flipY);
-			}
-			else
-			{
-				final rect = (cast x : Rectangle);
-
-				self.frame.setCropUVs(self._crop, rect.x, rect.y, rect.width,
-					rect.height, self.flipX, self.flipY);
-			}
-
-			self.isCropped = true;
-		}
-
-		return self;
+		return CropImplementation.setCrop(self, x, y, width, height);
 	}
 
 	public inline static function resetCropObject():ResetCropObject
 	{
-		return new ResetCropObject();
+		return CropImplementation.resetCropObject();
+	}
+
+	public inline static function setTexture<T:ITextureCrop & GameObject>(self:T,
+			key:String, ?frame:Either<String, Int>):T
+	{
+		self.texture = self.scene.sys.textures.get(key);
+
+		return cast self.setFrame(frame);
+	}
+
+	public inline static function setFrame<T:ITextureCrop & GameObject & IFlip>(self:T,
+			frame:Either<String, Int>, updateSize:Bool = true,
+			updateOrigin:Bool = true):T
+	{
+		self.frame = (cast self.texture).get(frame);
+
+		if (self.frame.cutWidth != 0 || self.frame.cutHeight != 0)
+		{
+			self.renderFlags &= ~_FLAG;
+		}
+		else
+		{
+			self.renderFlags |= _FLAG;
+		}
+
+		final selfSizeComp = Std.downcast(cast self, ISize);
+
+		if (selfSizeComp != null && updateSize)
+		{
+			selfSizeComp.setSizeToFrame();
+		}
+
+		final selfOriginComp = Std.downcast(cast self, IOrigin);
+
+		if (selfOriginComp != null && updateOrigin)
+		{
+			if (self.frame.customPivot)
+			{
+				selfOriginComp.setOrigin(self.frame.pivotX, self.frame.pivotY);
+			}
+			else
+			{
+				selfOriginComp.updateDisplayOrigin();
+			}
+		}
+
+		if (self.isCropped)
+		{
+			self.frame.updateCropUVs(self._crop, self.flipX, self.flipY);
+		}
+
+		return self;
 	}
 }
 
-final class CropMixin implements ICrop implements IFlip
+final class TextureCropMixin extends GameObject implements ITextureCrop implements IFlip
 {
 	/**
 	 * The internal crop data object, as used by `setCrop` and passed to the `Frame.setCropUVs` method.
@@ -208,9 +261,51 @@ final class CropMixin implements ICrop implements IFlip
 	 * @return This Game Object instance.
 	**/
 	public function setCrop(?x:Either<Rectangle, Float>, ?y:Float, ?width:Float,
-			?height:Float):CropMixin
+			?height:Float):TextureCropMixin
 	{
-		return CropImplementation.setCrop(this, x, y, width, height);
+		return TextureCropImplementation.setCrop(this, x, y, width, height);
+	}
+
+	/**
+	 * Sets the texture and frame this Game Object will use to render with.
+	 *
+	 * Textures are referenced by their string-based keys, as stored in the Texture Manager.
+	 *
+	 * @method Phaser.GameObjects.Components.TextureCrop#setTexture
+	 * @since 3.0.0
+	 *
+	 * @param key - The key of the texture to be used, as stored in the Texture Manager.
+	 * @param frame - The name or index of the frame within the Texture.
+	 *
+	 * @return This Game Object instance.
+	**/
+	public function setTexture(key:String, ?frame:Either<String, Int>):TextureCropMixin
+	{
+		return TextureCropImplementation.setTexture(this, key, frame);
+	}
+
+	/**
+	 * Sets the frame this Game Object will use to render with.
+	 *
+	 * The Frame has to belong to the current Texture being used.
+	 *
+	 * It can be either a string or an index.
+	 *
+	 * Calling `setFrame` will modify the `width` and `height` properties of your Game Object.
+	 * It will also change the `origin` if the Frame has a custom pivot point, as exported from packages like Texture Packer.
+	 *
+	 * @since 1.0.0
+	 *
+	 * @param frame - The name or index of the frame within the Texture.
+	 * @param updateSize - Should this call adjust the size of the Game Object?
+	 * @param updateOrigin - Should this call adjust the origin of the Game Object?
+	 *
+	 * @return This Game Object instance.
+	**/
+	public function setFrame(frame:Either<String, Int>, updateSize:Bool = true,
+			updateOrigin:Bool = true):TextureCropMixin
+	{
+		return TextureCropImplementation.setFrame(this, frame, updateSize, updateOrigin);
 	}
 
 	/**
@@ -222,7 +317,7 @@ final class CropMixin implements ICrop implements IFlip
 	**/
 	private function resetCropObject():ResetCropObject
 	{
-		return CropImplementation.resetCropObject();
+		return TextureCropImplementation.resetCropObject();
 	}
 
 	// IFlip implementation

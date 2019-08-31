@@ -1,6 +1,7 @@
 package phaserHaxe.gameobjects.components;
 
 @:allow(phaserHaxe.gameobjects.components.VisibleImplementation)
+@:phaserHaxe.Mixin(phaserHaxe.gameobjects.components.IVisible.VisibleMixin)
 interface IVisible
 {
 	/**

@@ -1,5 +1,8 @@
 package phaserHaxe.gameobjects.components;
 
+import haxe.macro.CompilationServer;
+import phaserHaxe.textures.Frame;
+
 @:phaserHaxe.Mixin(phaserHaxe.gameobjects.components.IComputedSize.ComputedSizeMixin)
 interface IComputedSize extends ISize
 {
@@ -46,6 +49,25 @@ interface IComputedSize extends ISize
 	 * @since 1.0.0
 	**/
 	public var displayHeight(get, set):Float;
+
+	/**
+	 * Sets the size of this Game Object to be that of the given Frame.
+	 *
+	 * This will not change the size that the Game Object is rendered in-game.
+	 * For that you need to either set the scale of the Game Object (`setScale`) or call the
+	 * `setDisplaySize` method, which is the same thing as changing the scale but allows you
+	 * to do so by giving pixel values.
+	 *
+	 * If you have enabled this Game Object for input, changing the size will _not_ change the
+	 * size of the hit area. To do this you should adjust the `input.hitArea` object directly.
+	 *
+	 * @since 1.0.0
+	 *
+	 * @param frame - The frame to base the size of this Game Object on.
+	 *
+	 * @return This Game Object instance.
+	**/
+	public function setSizeToFrame(?frame:Frame):IComputedSize;
 
 	/**
 	 * Sets the internal size of this Game Object, as used for frame or physics body creation.
@@ -106,6 +128,16 @@ final class ComputedSizeImplementation
 		return self.scaleY = value / self.height;
 	}
 
+	public static inline function setSizeToFrame<T:ISize & ICrop>(self:T, ?frame:Frame):T
+	{
+		final frame:Frame = frame != null ? frame : self.frame;
+
+		self.width = frame.realWidth;
+		self.height = frame.realHeight;
+
+		return self;
+	}
+
 	public static function setSize<T:IComputedSize>(self:T, width:Float, height:Float):T
 	{
 		self.width = width;
@@ -122,7 +154,8 @@ final class ComputedSizeImplementation
 	}
 }
 
-final class ComputedSizeMixin implements IComputedSize implements ITransform
+final class ComputedSizeMixin extends GameObject implements IComputedSize
+		implements ITransform implements ICrop
 {
 	/**
 	 * The native (un-scaled) width of this Game Object.
@@ -189,6 +222,28 @@ final class ComputedSizeMixin implements IComputedSize implements ITransform
 	}
 
 	/**
+	 * Sets the size of this Game Object to be that of the given Frame.
+	 *
+	 * This will not change the size that the Game Object is rendered in-game.
+	 * For that you need to either set the scale of the Game Object (`setScale`) or call the
+	 * `setDisplaySize` method, which is the same thing as changing the scale but allows you
+	 * to do so by giving pixel values.
+	 *
+	 * If you have enabled this Game Object for input, changing the size will _not_ change the
+	 * size of the hit area. To do this you should adjust the `input.hitArea` object directly.
+	 *
+	 * @since 1.0.0
+	 *
+	 * @param frame - The frame to base the size of this Game Object on.
+	 *
+	 * @return This Game Object instance.
+	**/
+	public function setSizeToFrame(?frame:Frame):ComputedSizeMixin
+	{
+		return ComputedSizeImplementation.setSizeToFrame(this, frame);
+	}
+
+	/**
 	 * Sets the internal size of this Game Object, as used for frame or physics body creation.
 	 *
 	 * This will not change the size that the Game Object is rendered in-game.
@@ -208,7 +263,7 @@ final class ComputedSizeMixin implements IComputedSize implements ITransform
 	**/
 	public function setSize(width:Float, height:Float):ComputedSizeMixin
 	{
-		return cast ComputedSizeImplementation.setSize(cast this, width, height);
+		return ComputedSizeImplementation.setSize(this, width, height);
 	}
 
 	/**
@@ -225,7 +280,7 @@ final class ComputedSizeMixin implements IComputedSize implements ITransform
 	**/
 	public function setDisplaySize(width:Float, height:Float):ComputedSizeMixin
 	{
-		return cast ComputedSizeImplementation.setDisplaySize(cast this, width, height);
+		return ComputedSizeImplementation.setDisplaySize(this, width, height);
 	}
 
 	// Transform implementation

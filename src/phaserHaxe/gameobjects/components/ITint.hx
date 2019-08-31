@@ -1,6 +1,7 @@
 package phaserHaxe.gameobjects.components;
 
 @:allow(phaserHaxe.gameobjects.components.TintImplantation)
+@:phaserHaxe.Mixin(phaserHaxe.gameobjects.components.ITint.TintMixin)
 interface ITint
 {
 	/**
@@ -290,7 +291,7 @@ final class TintImplantation
 	}
 }
 
-final class TintMixin implements ITint
+final class TintMixin extends GameObject implements ITint
 {
 	/**
 	 * Private internal value. Holds the top-left tint value.

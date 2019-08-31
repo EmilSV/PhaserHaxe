@@ -44,6 +44,7 @@ final class MixinValidator
 			final miType = mi.t.get();
 			if (!localClassInterfaces.exists(lc -> isSameClass(miType, lc.t.get())))
 			{
+				trace(localClassInterfaces);
 				Context.error('${getFullName(localClass)} does not implement ${getFullName(miType)} which is needed to mixin ${getFullName(mixinClass)}',
 					Context.currentPos());
 				return false;
@@ -109,6 +110,14 @@ final class MixinValidator
 		{
 			for (i in current.interfaces)
 			{
+				final interfaceClassType = i.t.get();
+				if (interfaceClassType.interfaces.length != 0)
+				{
+					for (i in getAllInterface(interfaceClassType))
+					{
+						output.push(i);
+					}
+				}
 				output.push(i);
 			}
 

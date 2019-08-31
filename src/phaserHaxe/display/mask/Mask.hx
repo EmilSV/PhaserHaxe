@@ -1,10 +1,14 @@
 package phaserHaxe.display.mask;
 
+import phaserHaxe.renderer.webgl.WebGLRenderer;
+import phaserHaxe.cameras.scene2D.Camera;
 import phaserHaxe.renderer.canvas.CanvasRenderer;
 import phaserHaxe.gameobjects.GameObject;
 
-interface IMask
+class Mask
 {
+	private function new() {}
+
 	/**
 	 * Prepares the WebGL Renderer to render a Game Object with this mask applied.
 	 *
@@ -17,8 +21,8 @@ interface IMask
 	 * @param maskedObject - The masked Game Object which will be drawn.
 	 * @param camera - The Camera to render to.
 	**/
-	function preRenderWebGL(renderer:CanvasRenderer, maskedObject:GameObject,
-		camera:Camera):Void;
+	public function preRenderWebGL(renderer:WebGLRenderer, maskedObject:GameObject,
+		camera:Camera):Void {}
 
 	/**
 	 * Finalizes rendering of a masked Game Object.
@@ -29,7 +33,7 @@ interface IMask
 	 *
 	 * @param renderer - The WebGL Renderer to clean up.
 	**/
-	function postRenderWebGL(renderer:CanvasRenderer, camera:Camera):Void;
+	public function postRenderWebGL(renderer:WebGLRenderer, camera:Camera):Void {}
 
 	/**
 	 * This is a NOOP method. Bitmap Masks are not supported by the Canvas Renderer.
@@ -40,8 +44,8 @@ interface IMask
 	 * @param mask - The masked Game Object which would be rendered.
 	 * @param camera - The Camera to render to.
 	**/
-	function preRenderCanvas(renderer:CanvasRenderer, mask:GameObject,
-		camera:Camera):Void;
+	public function preRenderCanvas(renderer:CanvasRenderer, mask:GameObject,
+		camera:Camera):Void {}
 
 	/**
 	 * This is a NOOP method. Bitmap Masks are not supported by the Canvas Renderer.
@@ -50,7 +54,7 @@ interface IMask
 	 *
 	 * @param renderer - The Canvas Renderer which would be rendered to.
 	**/
-	function postRenderCanvas(renderer:CanvasRenderer):Void;
+	public function postRenderCanvas(renderer:CanvasRenderer):Void {}
 
 	/**
 	 * Destroys this BitmapMask and nulls any references it holds.
@@ -60,5 +64,5 @@ interface IMask
 	 *
 	 * @since 1.0.0
 	**/
-	function destroy():Void;
+	public function destroy():Void {}
 }

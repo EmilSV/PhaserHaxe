@@ -5,16 +5,15 @@ import phaserHaxe.Scene;
 import phaserHaxe.gameobjects.GameObject;
 import haxe.ds.Either;
 
-@:build(phaserHaxe.macro.Mixin.build(FlipMixin, ComputedSizeMixin, TransformMixin))
-class TestG extends GameObject implements IFlip implements IComputedSize
-		implements ITransform
-{
-	public function new(scene:Scene, type:String)
-	{
-		super(scene, type);
-	}
-}
-
+// @:build(phaserHaxe.macro.Mixin.build(FlipMixin, ComputedSizeMixin, TransformMixin))
+// class TestG extends GameObject implements IFlip implements IComputedSize
+// 		implements ITransform
+// {
+// 	public function new(scene:Scene, type:String)
+// 	{
+// 		super(scene, type);
+// 	}
+// }
 class Main
 {
 	static public function test(v:Either<String, Float>) {}
@@ -23,6 +22,6 @@ class Main
 
 	static public function main():Void
 	{
-		var n = new TestG(null, null);
+		// var n = new TestG(null, null);
 	}
 }

@@ -4,6 +4,7 @@ import phaserHaxe.gameobjects.components.ICrop;
 import phaserHaxe.gameobjects.components.ISize;
 
 @:allow(phaserHaxe.gameobjects.components.OriginImplementation)
+@:phaserHaxe.Mixin(phaserHaxe.gameobjects.components.IOrigin.OriginMixin)
 interface IOrigin
 {
 	/**
