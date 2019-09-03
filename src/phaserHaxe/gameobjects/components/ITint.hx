@@ -182,7 +182,7 @@ interface ITint
 
 final class TintImplantation
 {
-	private static function GetColor(value:Int)
+	public static function getColor(value:Int)
 	{
 		return (value >> 16) + (value & 0xff00) + ((value & 0xff) << 16);
 	}
@@ -210,10 +210,10 @@ final class TintImplantation
 			bottomRight = topLeft;
 		}
 
-		self._tintTL = GetColor(topLeft);
-		self._tintTR = GetColor(topRight);
-		self._tintBL = GetColor(bottomLeft);
-		self._tintBR = GetColor(bottomRight);
+		self._tintTL = getColor(topLeft);
+		self._tintTR = getColor(topRight);
+		self._tintBL = getColor(bottomLeft);
+		self._tintBR = getColor(bottomRight);
 
 		self._isTinted = true;
 
@@ -238,7 +238,7 @@ final class TintImplantation
 
 	public static inline function set_tintTopLeft<T:ITint>(self:T, value:Int):Int
 	{
-		self._tintTL = GetColor(value);
+		self._tintTL = getColor(value);
 		self._isTinted = true;
 		return value;
 	}
@@ -250,7 +250,7 @@ final class TintImplantation
 
 	public static inline function set_tintTopRight<T:ITint>(self:T, value:Int):Int
 	{
-		self._tintTR = GetColor(value);
+		self._tintTR = getColor(value);
 		self._isTinted = true;
 		return value;
 	}
@@ -262,7 +262,7 @@ final class TintImplantation
 
 	public static inline function set_tintBottomLeft<T:ITint>(self:T, value:Int):Int
 	{
-		self._tintBL = GetColor(value);
+		self._tintBL = getColor(value);
 		self._isTinted = true;
 		return value;
 	}
@@ -274,7 +274,7 @@ final class TintImplantation
 
 	public static inline function set_tintBottomRight<T:ITint>(self:T, value:Int):Int
 	{
-		self._tintBR = GetColor(value);
+		self._tintBR = getColor(value);
 		self._isTinted = true;
 		return value;
 	}

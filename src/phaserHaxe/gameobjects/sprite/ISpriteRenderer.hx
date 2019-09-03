@@ -51,7 +51,7 @@ final class SpriteRendererImplementation
 			renderer:CanvasRenderer, src:Sprite, interpolationPercentage:Float,
 			camera:Camera, parentMatrix:TransformMatrix):Void
 	{
-		renderer.batchSprite(src, src.frame, camera, parentMatrix);
+		renderer.batchSprite(src, (cast src).frame, camera, parentMatrix);
 	}
 
 	public static inline function renderWebGL<T:ISpriteRenderer & IPipeline>(self:T,

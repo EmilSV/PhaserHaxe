@@ -1,6 +1,6 @@
 package phaserHaxe.macro;
 
-#if eval
+#if (eval || macro)
 import haxe.macro.Type;
 import haxe.macro.Context;
 import haxe.macro.Expr;
@@ -41,10 +41,10 @@ final class Mixin
 		for (cme in classMixinExprs)
 		{
 			final mixinClass = getClassFromExpr(cme);
-			if (MixinValidator.isValid(mixinClass, localClass))
-			{
-				addFromClassExpr(mixinClass, localClass, outputFelids);
-			}
+			// if (MixinValidator.isValid(mixinClass, localClass))
+			// {
+			addFromClassExpr(mixinClass, localClass, outputFelids);
+			// }
 		}
 
 		return outputFelids;

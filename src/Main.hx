@@ -20,8 +20,5 @@ class Main
 
 	static public function anym(value:{}) {}
 
-	static public function main():Void
-	{
-		// var n = new TestG(null, null);
-	}
+	static public function main():Void {}
 }

@@ -54,8 +54,8 @@ phaserHaxe.geom.TriangleUtil
 phaserHaxe.geom.earcut.EarcutApi
 phaserHaxe.geom.Intersects
 phaserHaxe.gameobjects.components.ITransform
+phaserHaxe.gameobjects.sprite.Sprite
 
 -main Main
 
--dce std
 --interp

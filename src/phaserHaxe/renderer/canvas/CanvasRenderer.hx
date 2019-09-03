@@ -6,8 +6,6 @@ import phaserHaxe.textures.Frame;
 import phaserHaxe.cameras.scene2D.Camera;
 import phaserHaxe.display.canvas.Smoothing;
 import phaserHaxe.structs.Size;
-import js.html.CanvasRenderingContext2D;
-import js.html.CanvasElement;
 import phaserHaxe.display.Color;
 import phaserHaxe.Const;
 import phaserHaxe.renderer.Snapshot.SnapshotState;
@@ -15,6 +13,10 @@ import phaserHaxe.gameobjects.components.TransformMatrix;
 import phaserHaxe.scale.Events as ScaleEvents;
 import phaserHaxe.renderer.Snapshot;
 import phaserHaxe.math.MathInt;
+#if js
+import js.html.CanvasRenderingContext2D;
+import js.html.CanvasElement;
+#end
 
 @:structInit
 final class CanvasRendererConfig
@@ -27,6 +29,7 @@ final class CanvasRendererConfig
 	public var transparent:Bool = false;
 }
 
+#if js
 class CanvasRenderer
 {
 	/**
@@ -505,6 +508,7 @@ class CanvasRenderer
 	public function batchSprite(sprite:Sprite, frame:Frame, camera:Camera,
 			parentTransformMatrix:TransformMatrix)
 	{
+		var sprite:Dynamic = sprite;
 		var alpha = camera.alpha * sprite.alpha;
 		if (alpha == 0)
 		{
@@ -610,3 +614,13 @@ class CanvasRenderer
 		ctx.restore();
 	}
 }
+#else
+@:forward()
+abstract CanvasRenderer(Dynamic)
+{
+	public function new(game:Game)
+	{
+		this = null;
+	}
+}
+#end

@@ -1,6 +1,6 @@
 package phaserHaxe.macro;
 
-#if eval
+#if (eval || macro)
 import haxe.macro.Expr;
 
 typedef ClassMatch =
@@ -439,17 +439,17 @@ class TypeReplacer
 		}
 	}
 
-	private function replaceEFunction(name:Null<String>, f:Function):Null<ExprDef>
+	private function replaceEFunction(name:String, f:Function):Null<ExprDef>
 	{
 		final newF = replaceFunction(f);
 
-		return if (newF != null)
+		if (newF != null)
 		{
-			EFunction(name, newF);
+			return EFunction(name, newF);
 		}
 		else
 		{
-			null;
+			return null;
 		}
 	}
 

@@ -73,7 +73,7 @@ final class PipelineImplementation
 	public static inline function initPipeline<T:IPipeline & GameObject>(self:T,
 			pipelineName:String = "TextureTintPipeline"):Bool
 	{
-		var renderer = self.scene.sys.game.renderer;
+		var renderer:Dynamic = self.scene.sys.game.renderer;
 
 		if (renderer != null && renderer.gl != null && renderer.hasPipeline(pipelineName))
 		{
@@ -99,7 +99,7 @@ final class PipelineImplementation
 	public static inline function setPipeline<T:IPipeline & GameObject>(self:T,
 			pipelineName:String):T
 	{
-		var renderer = self.scene.sys.game.renderer;
+		var renderer:Dynamic = self.scene.sys.game.renderer;
 
 		if (renderer != null && renderer.gl != null && renderer.hasPipeline(pipelineName))
 		{

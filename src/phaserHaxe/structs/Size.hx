@@ -1,6 +1,8 @@
 package phaserHaxe.structs;
 
+#if js
 import js.html.HtmlElement;
+#end
 import phaserHaxe.math.MathConst;
 import phaserHaxe.math.MathUtility.clamp as clamp;
 import phaserHaxe.math.Snap.snapFloor as snapFloor;
@@ -519,6 +521,7 @@ class Size
 			'[{ Size (width=$_width height=$_height aspectRatio=$aspectRatio aspectMode=$aspectMode) }]';
 	}
 
+	#if js
 	/**
 	 * Sets the values of this Size component to the `element.style.width` and `height`
 	 * properties of the given DOM Element. The properties are set as `px` values.
@@ -535,6 +538,7 @@ class Size
 			element.style.height = '${_height}px';
 		}
 	}
+	#end
 
 	/**
 	 * Copies the aspect mode, aspect ratio, width and height from this Size component

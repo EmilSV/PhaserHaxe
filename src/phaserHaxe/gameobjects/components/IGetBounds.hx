@@ -1,5 +1,6 @@
 package phaserHaxe.gameobjects.components;
 
+import phaserHaxe.textures.Frame;
 import phaserHaxe.math.Vector2;
 import phaserHaxe.geom.Rectangle;
 import phaserHaxe.math.MathUtility.rotateAround as rotateAround;
@@ -151,7 +152,7 @@ interface IGetBounds
 
 final class GetBoundsImplementation
 {
-	private static final tempVector = new Vector2();
+	public static final tempVector = new Vector2();
 
 	/**
 	 * Processes the bounds output vector before returning it.
@@ -424,7 +425,7 @@ final class GetBoundsImplementation
 	 *
 	 * @return The values stored in the output object.
 	**/
-	public static inline function getBounds<T:GameObject & IGetBounds & ITransform & ISize & IOrigin>(self:T,
+	public static function getBounds<T:GameObject & IGetBounds & ITransform & ISize & IOrigin>(self:T,
 		?output:Rectangle):Rectangle
 	{
 		if (output == null)
@@ -827,6 +828,10 @@ final class GetBoundsMixin implements IGetBounds implements ITransform implement
 
 	@:phaserHaxe.mixinIgnore
 	private function set_displayHeight(value:Float):Float
+		throw "Not Implemented";
+
+	@:phaserHaxe.mixinIgnore
+	public function setSizeToFrame(?frame:Frame):GetBoundsMixin
 		throw "Not Implemented";
 
 	@:phaserHaxe.mixinIgnore
