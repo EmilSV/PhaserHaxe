@@ -11,7 +11,7 @@ final class Pow2
 	 *
 	 * @return The nearest power of 2 to `value`.
 	**/
-	public static function GetPowerOfTwo(value:Int):Int
+	public static function getPowerOfTwo(value:Int):Int
 	{
 		var index = Math.log(value) / 0.6931471805599453;
 		return (1 << Math.ceil(index));
@@ -28,7 +28,7 @@ final class Pow2
 	 *
 	 * @return`true` if `width` and `height` are a power of two, otherwise `false`.
 	**/
-	public static function IsSizePowerOfTwo(width:Int, height:Int):Bool
+	public static function isSizePowerOfTwo(width:Int, height:Int):Bool
 	{
 		return (width > 0 && (width & (width - 1)) == 0 && height > 0 && (height & (height - 1)) == 0);
 	}
@@ -42,7 +42,7 @@ final class Pow2
 	 *
 	 * @return Returns `true` if `value` is a power of two, otherwise `false`.
 	**/
-	public static function IsValuePowerOfTwo(value:Int):Bool
+	public static function isValuePowerOfTwo(value:Int):Bool
 	{
 		return (value > 0 && (value & (value - 1)) == 0);
 	}

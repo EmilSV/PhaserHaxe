@@ -1,4 +1,4 @@
-package phaserHaxe;
+package phaserHaxe.renderer;
 
 /**
  * Phaser Scale Modes.

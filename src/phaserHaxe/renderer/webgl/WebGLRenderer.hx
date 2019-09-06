@@ -1,4 +1,4 @@
-package phaserHaxe.renderer.webgl;
+    package phaserHaxe.renderer.webgl;
 
 @:forward
 abstract WebGLRenderer(Dynamic) {
