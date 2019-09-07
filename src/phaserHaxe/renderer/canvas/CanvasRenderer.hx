@@ -30,7 +30,7 @@ final class CanvasRendererConfig
 }
 
 #if js
-class b
+class CanvasRenderer
 {
 	/**
 	 * The Phaser Game instance that owns this renderer.
@@ -350,76 +350,76 @@ class b
 	**/
 	public function render(scene:Scene, children, interpolationPercentage, camera)
 	{
-		var list = children.list;
-		var childCount = list.length;
-		var cx = camera._cx;
-		var cy = camera._cy;
-		var cw = camera._cw;
-		var ch = camera._ch;
-		var ctx = (camera.renderToTexture) ? camera.context : scene.sys.context;
-		//  Save context pre-clip
-		ctx.save();
-		if (this.game.scene.customViewports)
-		{
-			ctx.beginPath();
-			ctx.rect(cx, cy, cw, ch);
-			ctx.clip();
-		}
-		this.currentContext = ctx;
-		var mask = camera.mask;
-		if (mask)
-		{
-			mask.preRenderCanvas(this, null, camera._maskCamera);
-		}
-		if (!camera.transparent)
-		{
-			ctx.fillStyle = camera.backgroundColor.rgba;
-			ctx.fillRect(cx, cy, cw, ch);
-		}
-		ctx.globalAlpha = camera.alpha;
-		ctx.globalCompositeOperation = 'source-over';
-		this.drawCount += list.length;
-		if (camera.renderToTexture)
-		{
-			camera.emit(CameraEvents.PRE_RENDER, camera);
-		}
-		camera.matrix.copyToContext(ctx);
-		for (var i = 0;
-		i < childCount;
-		i++)
-		{
-			var child = list[i];
-			if (!child.willRender(camera))
-			{
-				continue;
-			}
-			if (child.mask)
-			{
-				child.mask.preRenderCanvas(this, child, camera);
-			}
-			child.renderCanvas(this, child, interpolationPercentage, camera);
-			if (child.mask)
-			{
-				child.mask.postRenderCanvas(this, child, camera);
-			}
-		}
-		ctx.setTransform(1, 0, 0, 1, 0, 0);
-		ctx.globalCompositeOperation = 'source-over';
-		ctx.globalAlpha = 1;
-		camera.flashEffect.postRenderCanvas(ctx);
-		camera.fadeEffect.postRenderCanvas(ctx);
-		camera.dirty = false;
-		if (mask)
-		{
-			mask.postRenderCanvas(this);
-		}
-		//  Restore pre-clip context
-		ctx.restore();
-		if (camera.renderToTexture)
-		{
-			camera.emit(CameraEvents.POST_RENDER, camera);
-			scene.sys.context.drawImage(camera.canvas, cx, cy);
-		}
+		// var list = children.list;
+		// var childCount = list.length;
+		// var cx = camera._cx;
+		// var cy = camera._cy;
+		// var cw = camera._cw;
+		// var ch = camera._ch;
+		// var ctx = (camera.renderToTexture) ? camera.context : scene.sys.context;
+		// //  Save context pre-clip
+		// ctx.save();
+		// if (this.game.scene.customViewports)
+		// {
+		// 	ctx.beginPath();
+		// 	ctx.rect(cx, cy, cw, ch);
+		// 	ctx.clip();
+		// }
+		// this.currentContext = ctx;
+		// var mask = camera.mask;
+		// if (mask)
+		// {
+		// 	mask.preRenderCanvas(this, null, camera._maskCamera);
+		// }
+		// if (!camera.transparent)
+		// {
+		// 	ctx.fillStyle = camera.backgroundColor.rgba;
+		// 	ctx.fillRect(cx, cy, cw, ch);
+		// }
+		// ctx.globalAlpha = camera.alpha;
+		// ctx.globalCompositeOperation = 'source-over';
+		// this.drawCount += list.length;
+		// if (camera.renderToTexture)
+		// {
+		// 	camera.emit(CameraEvents.PRE_RENDER, camera);
+		// }
+		// camera.matrix.copyToContext(ctx);
+
+		// for (i in 0...childCount)
+		// {
+		// 	var child = list[i];
+		// 	if (!child.willRender(camera))
+		// 	{
+		// 		continue;
+		// 	}
+		// 	if (child.mask)
+		// 	{
+		// 		child.mask.preRenderCanvas(this, child, camera);
+		// 	}
+		// 	child.renderCanvas(this, child, interpolationPercentage, camera);
+		// 	if (child.mask)
+		// 	{
+		// 		child.mask.postRenderCanvas(this, child, camera);
+		// 	}
+		// }
+
+		// ctx.setTransform(1, 0, 0, 1, 0, 0);
+		// ctx.globalCompositeOperation = 'source-over';
+		// ctx.globalAlpha = 1;
+		// camera.flashEffect.postRenderCanvas(ctx);
+		// camera.fadeEffect.postRenderCanvas(ctx);
+		// camera.dirty = false;
+		// if (mask)
+		// {
+		// 	mask.postRenderCanvas(this);
+		// }
+		// //  Restore pre-clip context
+		// ctx.restore();
+		// if (camera.renderToTexture)
+		// {
+		// 	camera.emit(CameraEvents.POST_RENDER, camera);
+		// 	scene.sys.context.drawImage(camera.canvas, cx, cy);
+		// }
 	}
 
 	/**
