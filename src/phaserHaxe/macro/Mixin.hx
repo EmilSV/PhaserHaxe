@@ -41,10 +41,10 @@ final class Mixin
 		for (cme in classMixinExprs)
 		{
 			final mixinClass = getClassFromExpr(cme);
-			// if (MixinValidator.isValid(mixinClass, localClass))
-			// {
-			addFromClassExpr(mixinClass, localClass, outputFelids);
-			// }
+			if (MixinValidator.isValid(mixinClass, localClass))
+			{
+				addFromClassExpr(mixinClass, localClass, outputFelids);
+			}
 		}
 
 		return outputFelids;

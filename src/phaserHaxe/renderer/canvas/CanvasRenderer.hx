@@ -30,7 +30,7 @@ final class CanvasRendererConfig
 }
 
 #if js
-class CanvasRenderer
+class b
 {
 	/**
 	 * The Phaser Game instance that owns this renderer.
@@ -339,6 +339,90 @@ class CanvasRenderer
 	}
 
 	/**
+	 * Renders the Scene to the given Camera.
+	 *
+	 * @since 1.0.0
+	 *
+	 * @param scene - The Scene to render.
+	 * @param children - The Game Objects within the Scene to be rendered.
+	 * @param interpolationPercentage - The interpolation percentage to apply. Currently unused.
+	 * @param camera - The Scene Camera to render with.
+	**/
+	public function render(scene:Scene, children, interpolationPercentage, camera)
+	{
+		var list = children.list;
+		var childCount = list.length;
+		var cx = camera._cx;
+		var cy = camera._cy;
+		var cw = camera._cw;
+		var ch = camera._ch;
+		var ctx = (camera.renderToTexture) ? camera.context : scene.sys.context;
+		//  Save context pre-clip
+		ctx.save();
+		if (this.game.scene.customViewports)
+		{
+			ctx.beginPath();
+			ctx.rect(cx, cy, cw, ch);
+			ctx.clip();
+		}
+		this.currentContext = ctx;
+		var mask = camera.mask;
+		if (mask)
+		{
+			mask.preRenderCanvas(this, null, camera._maskCamera);
+		}
+		if (!camera.transparent)
+		{
+			ctx.fillStyle = camera.backgroundColor.rgba;
+			ctx.fillRect(cx, cy, cw, ch);
+		}
+		ctx.globalAlpha = camera.alpha;
+		ctx.globalCompositeOperation = 'source-over';
+		this.drawCount += list.length;
+		if (camera.renderToTexture)
+		{
+			camera.emit(CameraEvents.PRE_RENDER, camera);
+		}
+		camera.matrix.copyToContext(ctx);
+		for (var i = 0;
+		i < childCount;
+		i++)
+		{
+			var child = list[i];
+			if (!child.willRender(camera))
+			{
+				continue;
+			}
+			if (child.mask)
+			{
+				child.mask.preRenderCanvas(this, child, camera);
+			}
+			child.renderCanvas(this, child, interpolationPercentage, camera);
+			if (child.mask)
+			{
+				child.mask.postRenderCanvas(this, child, camera);
+			}
+		}
+		ctx.setTransform(1, 0, 0, 1, 0, 0);
+		ctx.globalCompositeOperation = 'source-over';
+		ctx.globalAlpha = 1;
+		camera.flashEffect.postRenderCanvas(ctx);
+		camera.fadeEffect.postRenderCanvas(ctx);
+		camera.dirty = false;
+		if (mask)
+		{
+			mask.postRenderCanvas(this);
+		}
+		//  Restore pre-clip context
+		ctx.restore();
+		if (camera.renderToTexture)
+		{
+			camera.emit(CameraEvents.POST_RENDER, camera);
+			scene.sys.context.drawImage(camera.canvas, cx, cy);
+		}
+	}
+
+	/**
 	 * Restores the game context's global settings and takes a snapshot if one is scheduled.
 	 *
 	 * The post-render step happens after all Cameras in all Scenes have been rendered.
@@ -497,19 +581,18 @@ class CanvasRenderer
 	/**
 	 * Takes a Sprite Game Object, or any object that extends it, and draws it to the current context.
 	 *
-	 * @method Phaser.Renderer.Canvas.CanvasRenderer#batchSprite
-	 * @since 3.12.0
+	 * @since 1.0.0
 	 *
-	 * @param {Phaser.GameObjects.GameObject} sprite - The texture based Game Object to draw.
-	 * @param {Phaser.Textures.Frame} frame - The frame to draw, doesn't have to be that owned by the Game Object.
-	 * @param {Phaser.Cameras.Scene2D.Camera} camera - The Camera to use for the rendering transform.
-	 * @param {Phaser.GameObjects.Components.TransformMatrix} [parentTransformMatrix] - The transform matrix of the parent container, if set.
+	 * @param sprite - The texture based Game Object to draw.
+	 * @param frame - The frame to draw, doesn't have to be that owned by the Game Object.
+	 * @param camera - The Camera to use for the rendering transform.
+	 * @param parentTransformMatrix - The transform matrix of the parent container, if set.
 	 */
 	public function batchSprite(sprite:Sprite, frame:Frame, camera:Camera,
-			parentTransformMatrix:TransformMatrix)
+			?parentTransformMatrix:TransformMatrix)
 	{
-		var sprite:Dynamic = sprite;
 		var alpha = camera.alpha * sprite.alpha;
+
 		if (alpha == 0)
 		{
 			//  Nothing to see, so abort early
@@ -517,33 +600,45 @@ class CanvasRenderer
 		}
 
 		var ctx = this.currentContext;
+
 		var camMatrix = this._tempMatrix1;
 		var spriteMatrix = this._tempMatrix2;
 		var calcMatrix = this._tempMatrix3;
+
 		var cd = frame.canvasData;
+
 		var frameX = cd.x;
 		var frameY = cd.y;
-		var frameWidth = frame.cutWidth;
-		var frameHeight = frame.cutHeight;
+		var frameWidth:Float = frame.cutWidth;
+		var frameHeight:Float = frame.cutHeight;
 		var customPivot = frame.customPivot;
+
 		var res = frame.source.resolution;
+
 		var displayOriginX = sprite.displayOriginX;
 		var displayOriginY = sprite.displayOriginY;
-		var x = -displayOriginX + frame.x;
-		var y = -displayOriginY + frame.y;
+
+		var x:Float = -displayOriginX + frame.x;
+		var y:Float = -displayOriginY + frame.y;
+
 		if (sprite.isCropped)
 		{
 			var crop = sprite._crop;
+
 			if (crop.flipX != sprite.flipX || crop.flipY != sprite.flipY)
 			{
-				frame.updateCropUVs(crop, sprite.flipX, sprite.flipY);
+				frame.updateCropUVs(cast crop, sprite.flipX, sprite.flipY);
 			}
+
 			frameWidth = crop.cw;
 			frameHeight = crop.ch;
+
 			frameX = crop.cx;
 			frameY = crop.cy;
+
 			x = -displayOriginX + crop.x;
 			y = -displayOriginY + crop.y;
+
 			if (sprite.flipX)
 			{
 				if (x >= 0)
@@ -552,9 +647,10 @@ class CanvasRenderer
 				}
 				else if (x < 0)
 				{
-					x = (MathInt.abs(x) - frameWidth);
+					x = (Math.abs(x) - frameWidth);
 				}
 			}
+
 			if (sprite.flipY)
 			{
 				if (y >= 0)
@@ -563,20 +659,24 @@ class CanvasRenderer
 				}
 				else if (y < 0)
 				{
-					y = (MathInt.abs(y) - frameHeight);
+					y = (Math.abs(y) - frameHeight);
 				}
 			}
 		}
+
 		var flipX = 1;
 		var flipY = 1;
+
 		if (sprite.flipX)
 		{
 			if (!customPivot)
 			{
 				x += (-frame.realWidth + (displayOriginX * 2));
 			}
+
 			flipX = -1;
 		}
+
 		//  Auto-invert the flipY if this is coming from a GLTexture
 		if (sprite.flipY)
 		{
@@ -584,17 +684,23 @@ class CanvasRenderer
 			{
 				y += (-frame.realHeight + (displayOriginY * 2));
 			}
+
 			flipY = -1;
 		}
+
 		spriteMatrix.applyITRS(sprite.x, sprite.y, sprite.rotation, sprite.scaleX * flipX, sprite.scaleY * flipY);
+
 		camMatrix.copyFrom(camera.matrix);
-		if (parentTransformMatrix)
+
+		if (parentTransformMatrix != null)
 		{
 			//  Multiply the camera by the parent matrix
 			camMatrix.multiplyWithOffset(parentTransformMatrix, -camera.scrollX * sprite.scrollFactorX, -camera.scrollY * sprite.scrollFactorY);
+
 			//  Undo the camera scroll
 			spriteMatrix.e = sprite.x;
 			spriteMatrix.f = sprite.y;
+
 			//  Multiply by the Sprite matrix, store result in calcMatrix
 			camMatrix.multiply(spriteMatrix, calcMatrix);
 		}
@@ -602,16 +708,35 @@ class CanvasRenderer
 		{
 			spriteMatrix.e -= camera.scrollX * sprite.scrollFactorX;
 			spriteMatrix.f -= camera.scrollY * sprite.scrollFactorY;
+
 			//  Multiply by the Sprite matrix, store result in calcMatrix
 			camMatrix.multiply(spriteMatrix, calcMatrix);
 		}
 		ctx.save();
+
 		calcMatrix.setToContext(ctx);
+
 		ctx.globalCompositeOperation = this.blendModes[sprite.blendMode];
+
 		ctx.globalAlpha = alpha;
-		ctx.drawImage(frame.source.image, frameX, frameY, frameWidth, frameHeight, x, y,
-			frameWidth / res, frameHeight / res);
+
+		ctx.drawImage(cast frame.source.image, frameX, frameY, frameWidth, frameHeight,
+			x, y, frameWidth / res, frameHeight / res);
+
 		ctx.restore();
+	}
+
+	/**
+	 * Destroys all object references in the Canvas Renderer.
+	 *
+	 * @since 1.0.0
+	**/
+	public function destroy():Void
+	{
+		this.gameCanvas = null;
+		this.gameContext = null;
+
+		this.game = null;
 	}
 }
 #else

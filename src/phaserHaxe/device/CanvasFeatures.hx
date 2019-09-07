@@ -18,6 +18,8 @@ final class CanvasFeatures
 				CanvasFeatures.supportNewBlendModes = checkBlendMode();
 				CanvasFeatures.supportInverseAlpha = checkInverseAlpha();
 			}
+
+			null;
 		}
 
 	private static function checkBlendMode()

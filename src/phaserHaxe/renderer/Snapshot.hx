@@ -1,5 +1,6 @@
 package phaserHaxe.renderer;
 
+import js.Browser;
 import phaserHaxe.display.canvas.CanvasPool;
 import phaserHaxe.display.Color;
 #if js
@@ -107,7 +108,7 @@ final class SnapShoot
 		else if (x != 0 || y != 0 || width != canvas.width || height != canvas.height)
 		{
 			//  Area Grab
-			var copyCanvas = CanvasPool.createWebGL(this, width, height);
+			var copyCanvas = CanvasPool.createWebGL(Browser.window, width, height);
 			var ctx = copyCanvas.getContext('2d');
 
 			ctx.drawImage(canvas, x, y, width, height, 0, 0, width, height);

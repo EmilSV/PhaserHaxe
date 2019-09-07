@@ -114,8 +114,8 @@ class TypeReplacer
 			case EVars(vars):
 				replaceEVars(vars);
 
-			case EFunction(name, f):
-				replaceEFunction(name, f);
+			case EFunction(kind, f):
+				replaceEFunction(kind, f);
 
 			case EBlock(exprs):
 				replaceEBlock(exprs);
@@ -439,13 +439,13 @@ class TypeReplacer
 		}
 	}
 
-	private function replaceEFunction(name:String, f:Function):Null<ExprDef>
+	private function replaceEFunction(kind:Null<FunctionKind>, f:Function):Null<ExprDef>
 	{
 		final newF = replaceFunction(f);
 
 		if (newF != null)
 		{
-			return EFunction(name, newF);
+			return EFunction(kind, newF);
 		}
 		else
 		{

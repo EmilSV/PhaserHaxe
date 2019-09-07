@@ -1,11 +1,10 @@
 package phaserHaxe.gameobjects.components;
 
 import phaserHaxe.geom.Rectangle;
-import phaserHaxe.gameobjects.components.IFlip;
-import phaserHaxe.gameobjects.sprite.Sprite;
 import phaserHaxe.textures.Texture;
 import phaserHaxe.textures.CanvasTexture;
 import phaserHaxe.textures.Frame;
+import phaserHaxe.gameobjects.sprite.Sprite;
 
 @:allow(phaserHaxe.gameobjects.components.CropImplementation)
 @:phaserHaxe.Mixin(phaserHaxe.gameobjects.components.ICrop.CropMixin)
@@ -16,7 +15,7 @@ interface ICrop
 	 *
 	 * @since 1.0.0
 	**/
-	private var _crop:ResetCropObject;
+	private var _crop:CropDataObject;
 
 	/**
 	 * The Texture this Game Object is using to render with.
@@ -83,28 +82,7 @@ interface ICrop
 	 *
 	 * @return The crop object.
 	**/
-	private function resetCropObject():ResetCropObject;
-}
-
-@:structInit
-final class ResetCropObject
-{
-	public var u0:Float = 0.0;
-	public var v0:Float = 0.0;
-	public var u1:Float = 0.0;
-	public var v1:Float = 0.0;
-	public var width:Float = 0.0;
-	public var height:Float = 0.0;
-	public var x:Float = 0.0;
-	public var y:Float = 0.0;
-	public var flipX:Bool = false;
-	public var flipY:Bool = false;
-	public var cx:Float = 0.0;
-	public var cy:Float = 0.0;
-	public var cw:Float = 0.0;
-	public var ch:Float = 0.0;
-
-	public function new() {}
+	private function resetCropObject():CropDataObject;
 }
 
 final class CropImplementation
@@ -137,9 +115,9 @@ final class CropImplementation
 		return self;
 	}
 
-	public inline static function resetCropObject():ResetCropObject
+	public inline static function resetCropObject():CropDataObject
 	{
-		return new ResetCropObject();
+		return new CropDataObject();
 	}
 }
 
@@ -150,7 +128,7 @@ final class CropMixin implements ICrop implements IFlip
 	 *
 	 * @since 1.0.0
 	**/
-	private var _crop:ResetCropObject = new ResetCropObject();
+	private var _crop:CropDataObject = new CropDataObject();
 
 	/**
 	 * The Texture this Game Object is using to render with.
@@ -220,7 +198,7 @@ final class CropMixin implements ICrop implements IFlip
 	 *
 	 * @return The crop object.
 	**/
-	private function resetCropObject():ResetCropObject
+	private function resetCropObject():CropDataObject
 	{
 		return CropImplementation.resetCropObject();
 	}

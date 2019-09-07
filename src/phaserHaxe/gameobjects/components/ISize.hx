@@ -1,6 +1,5 @@
 package phaserHaxe.gameobjects.components;
 
-import phaserHaxe.gameobjects.components.ICrop.ResetCropObject;
 import phaserHaxe.geom.Rectangle;
 import phaserHaxe.textures.CanvasTexture;
 import phaserHaxe.textures.Texture;
@@ -464,7 +463,7 @@ final class SizeMixin extends GameObject implements ISize implements ITransform
 	// endregion
 	// region Crop implementation
 	@:phaserHaxe.mixinIgnore
-	private var _crop:ResetCropObject;
+	private var _crop:CropDataObject;
 
 	@:phaserHaxe.mixinIgnore
 	public var texture:Either<Texture, CanvasTexture> = null;
@@ -483,7 +482,7 @@ final class SizeMixin extends GameObject implements ISize implements ITransform
 	}
 
 	@:phaserHaxe.mixinIgnore
-	private function resetCropObject():ResetCropObject
+	private function resetCropObject():CropDataObject
 	{
 		throw "Not Implemented";
 	}

@@ -6,7 +6,6 @@ import phaserHaxe.gameobjects.components.IFlip;
 import phaserHaxe.textures.Texture;
 import phaserHaxe.textures.CanvasTexture;
 import phaserHaxe.textures.Frame;
-import phaserHaxe.gameobjects.components.ICrop.ResetCropObject;
 
 /**
  * Provides methods used for getting and setting the texture of a Game Object.
@@ -22,7 +21,7 @@ interface ITextureCrop extends ICrop
 	 *
 	 * @since 1.0.0
 	**/
-	private var _crop:ResetCropObject;
+	private var _crop:CropDataObject;
 
 	/**
 	 * The Texture this Game Object is using to render with.
@@ -125,7 +124,7 @@ interface ITextureCrop extends ICrop
 	 *
 	 * @return The crop object.
 	**/
-	private function resetCropObject():ResetCropObject;
+	private function resetCropObject():CropDataObject;
 }
 
 final class TextureCropImplementation
@@ -138,7 +137,7 @@ final class TextureCropImplementation
 		return CropImplementation.setCrop(self, x, y, width, height);
 	}
 
-	public inline static function resetCropObject():ResetCropObject
+	public inline static function resetCropObject():CropDataObject
 	{
 		return CropImplementation.resetCropObject();
 	}
@@ -151,7 +150,7 @@ final class TextureCropImplementation
 		return cast self.setFrame(frame);
 	}
 
-	public inline static function setFrame<T:ITextureCrop & GameObject & IFlip>(self:T,
+	public static function setFrame<T:ITextureCrop & GameObject & IFlip>(self:T,
 			frame:Either<String, Int>, updateSize:Bool = true,
 			updateOrigin:Bool = true):T
 	{
@@ -166,14 +165,14 @@ final class TextureCropImplementation
 			self.renderFlags |= _FLAG;
 		}
 
-		final selfSizeComp = Std.downcast(cast self, ISize);
+		final selfSizeComp = Std.is(self, ISize) ? (cast self : ISize) : null;
 
 		if (selfSizeComp != null && updateSize)
 		{
 			selfSizeComp.setSizeToFrame();
 		}
 
-		final selfOriginComp = Std.downcast(cast self, IOrigin);
+		final selfOriginComp = Std.is(self, IOrigin) ? (cast self : IOrigin) : null;
 
 		if (selfOriginComp != null && updateOrigin)
 		{
@@ -203,7 +202,7 @@ final class TextureCropMixin extends GameObject implements ITextureCrop implemen
 	 *
 	 * @since 1.0.0
 	**/
-	private var _crop:ResetCropObject = new ResetCropObject();
+	private var _crop:CropDataObject = new CropDataObject();
 
 	/**
 	 * The Texture this Game Object is using to render with.
@@ -315,7 +314,7 @@ final class TextureCropMixin extends GameObject implements ITextureCrop implemen
 	 *
 	 * @return The crop object.
 	**/
-	private function resetCropObject():ResetCropObject
+	private function resetCropObject():CropDataObject
 	{
 		return TextureCropImplementation.resetCropObject();
 	}

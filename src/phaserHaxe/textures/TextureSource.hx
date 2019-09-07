@@ -11,10 +11,20 @@ import js.html.ImageElement as HTMLImageElement;
 import phaserHaxe.gameobjects.RenderTexture;
 import phaserHaxe.renderer.Renderer;
 import phaserHaxe.math.MathUtility;
+import phaserHaxe.textures.FilterMode;
 
 abstract DataSource(Dynamic) from WebGLTexture from HTMLCanvasElement
 	from HTMLImageElement from RenderTexture {}
 
+/**
+ * A Texture Source is the encapsulation of the actual source data for a Texture.
+ * This is typically an Image Element, loaded from the file system or network, or a Canvas Element.
+ *
+ * A Texture can contain multiple Texture Sources, which only happens when a multi-atlas is loaded.
+ *
+ * @since 1.0.0
+ *
+**/
 class TextureSource
 {
 	/**
@@ -121,9 +131,15 @@ class TextureSource
 	**/
 	public var glTexture:WebGLTexture;
 
+	/**
+	 * @param texture - The Texture this TextureSource belongs to.
+	 * @param source - The source image data.
+	 * @param width - Optional width of the source image. If not given it's derived from the source itself.
+	 * @param height - Optional height of the source image. If not given it's derived from the source itself.
+	**/
 	public function new(texture:Texture, source:DataSource, ?width:Int, ?height:Int)
 	{
-		var game = texture.manager.game;
+		var game:Game = texture.manager.game;
 
 		this.renderer = game.renderer;
 
@@ -184,40 +200,56 @@ class TextureSource
 		this.isPowerOf2 = Pow2.isSizePowerOfTwo(width, height);
 
 		this.glTexture = null;
+
+		this.init(game);
 	}
 
-	function init(game:Game)
+	/**
+	 * Creates a WebGL Texture, if required, and sets the Texture filter mode.
+	 *
+	 * @since 1.0.0
+	 *
+	 * @param game - A reference to the Phaser Game instance.
+	**/
+	public function init(game:Game):Void
 	{
-		if (renderer != null)
-		{
-			if (Std.is(renderer, WebGLRenderer))
-			{
-				if (this.isCanvas)
-				{
-					this.glTexture = (renderer.canvasToTexture(this.image);
-				}
-				else if (this.isRenderTexture)
-				{
-					this.image = this.source.canvas;
-					this.glTexture = this.renderer.createTextureFromSource(null, this.width, this.height, this.scaleMode);
-				}
-				else if (this.isGLTexture)
-				{
-					this.glTexture = this.source;
-				}
-				else
-				{
-					this.glTexture = this.renderer.createTextureFromSource(this.image, this.width, this.height, this.scaleMode);
-				}
-			}
-			else if (this.isRenderTexture)
-			{
-				this.image = this.source.canvas;
-			}
-		}
-		if (!game.config.antialias)
-		{
-			this.setFilter(1);
-		}
+		throw "Not Implemented";
+	}
+
+	/**
+	 * Sets the Filter Mode for this Texture.
+	 *
+	 * The mode can be either Linear, the default, or Nearest.
+	 *
+	 * For pixel-art you should use Nearest.
+	 *
+	 * @since 1.0.0
+	 *
+	 * @param filterMode - The Filter Mode.
+	**/
+	public function setFilter(filterMode:FilterMode):Void
+	{
+		throw "Not Implemented";
+	}
+
+	/**
+	 * If this TextureSource is backed by a Canvas and is running under WebGL,
+	 * it updates the WebGLTexture using the canvas data.
+	 *
+	 * @since 1.0.0
+	**/
+	public function update():Void
+	{
+		throw "Not Implemented";
+	}
+
+	/**
+	 * Destroys this Texture Source and nulls the references.
+	 *
+	 * @since 1.0.0
+	**/
+	public function destroy()
+	{
+		throw "Not Implemented";
 	}
 }

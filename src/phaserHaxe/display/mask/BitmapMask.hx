@@ -114,6 +114,7 @@ class BitmapMask extends Mask
 
 	public function new(scene:Scene, renderable:GameObject)
 	{
+		super();
 		throw "Not Implemented";
 	}
 
