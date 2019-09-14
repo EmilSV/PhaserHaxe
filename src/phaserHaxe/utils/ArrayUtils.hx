@@ -1,5 +1,7 @@
 package phaserHaxe.utils;
 
+import phaserHaxe.math.MathInt;
+import phaserHaxe.math.MathUtility;
 import phaserHaxe.Error;
 import haxe.ds.ArraySort;
 import haxe.Constraints.Function;
@@ -582,6 +584,225 @@ final class ArrayUtils
 	}
 
 	/**
+	 * Create an array representing the range of integers between, and inclusive of,
+	 * the given `start` and `end` arguments. For example:
+	 *
+	 * `var array = numberArray(2, 4); // array = [2, 3, 4]`
+	 * `var array = numberArray(0, 9); // array = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9]`
+	 *
+	 * This is equivalent to `numberArrayStep(start, end, 1)`.
+	 *
+	 * @since 1.0.0
+	 *
+	 * @param start - The minimum value the array starts with.
+	 * @param end - The maximum value the array contains.
+	 *
+	 * @return The array of number values.
+	**/
+	public static function numberArray(start:Int, end:Int):Array<Int>
+	{
+		var result = [];
+		for (i in start...end)
+		{
+			result.push(i);
+		}
+		return result;
+	}
+
+	/**
+	 * Create an array representing the range of numbers (usually integers), between, and inclusive of,
+	 * the given `start` and `end` arguments with a prefix and / or suffix string. For example:
+	 *
+	 * `var array = numberArray(1, 4, 'Level '); // array = ["Level 1", "Level 2", "Level 3", "Level 4"]`
+	 * `var array = numberArray(5, 7, 'HD-', '.png'); // array = ["HD-5.png", "HD-6.png", "HD-7.png"]`
+	 *
+	 * @since 1.0.0
+	 *
+	 * @param start - The minimum value the array starts with.
+	 * @param end - The maximum value the array contains.
+	 * @param prefix - Optional prefix to place before the number. If provided the array will contain strings, not integers.
+	 * @param suffix - Optional suffix to place after the number. If provided the array will contain strings, not integers.
+	 *
+	 * @return The array of strings values.
+	**/
+	public static function numberArrayFixed(start:Int, end:Int, ?prefix:String,
+			?suffix:String):Array<String>
+	{
+		var result = [];
+		for (i in start...end)
+		{
+			var key = (prefix != null) ? prefix + Std.string(i) : Std.string(i);
+
+			if (suffix != null)
+			{
+				key = key + suffix;
+			}
+
+			result.push(key);
+		}
+
+		return result;
+	}
+
+	/**
+	 * Create an array of numbers (positive and/or negative) progressing from `start`
+	 * up to but not including `end` by advancing by `step`.
+	 *
+	 * If `start` is less than `end` a zero-length range is created unless a negative `step` is specified.
+	 *
+	 * Certain values for `start` and `end` (eg. NaN/undefined/null) are currently coerced to 0;
+	 * for forward compatibility make sure to pass in actual numbers.
+	 *
+	 * @example
+	 * NumberArrayStep(4);
+	 * // => [0, 1, 2, 3]
+	 *
+	 * NumberArrayStep(1, 5);
+	 * // => [1, 2, 3, 4]
+	 *
+	 * NumberArrayStep(0, 20, 5);
+	 * // => [0, 5, 10, 15]
+	 *
+	 * NumberArrayStep(0, -4, -1);
+	 * // => [0, -1, -2, -3]
+	 *
+	 * NumberArrayStep(1, 4, 0);
+	 * // => [1, 1, 1]
+	 *
+	 * NumberArrayStep(0);
+	 * // => []
+	 *
+	 * @since 1.0.0
+	 *
+	 * @param start - The start of the range.
+	 * @param end - The end of the range.
+	 * @param step - The value to increment or decrement by.
+	 *
+	 * @return The array of number values.
+	**/
+	public static function numberArrayStep(start:Int = 0, ?end:Int,
+			step:Int = 1):Array<Int>
+	{
+		final step = step != 0 ? step : 1;
+
+		if (end == null)
+		{
+			end = start;
+			start = 0;
+		}
+
+		var result = [];
+
+		var total = Std.int(Math.max(MathUtility.roundAwayFromZero((end - start) / step), 0));
+
+		for (i in 0...total)
+		{
+			result.push(start);
+			start += step;
+		}
+
+		return result;
+	}
+
+	/**
+	 * A [Floyd-Rivest](https://en.wikipedia.org/wiki/Floyd%E2%80%93Rivest_algorithm) quick selection algorithm.
+	 *
+	 * Rearranges the array items so that all items in the [left, k] range are smaller than all items in [k, right];
+	 * The k-th element will have the (k - left + 1)th smallest value in [left, right].
+	 *
+	 * The array is modified in-place.
+	 *
+	 * Based on code by [Vladimir Agafonkin](https://www.npmjs.com/~mourner)
+	 *
+	 * @function Phaser.Utils.Array.QuickSelect
+	 * @since 3.0.0
+	 *
+	 * @param {array} arr - The array to sort.
+	 * @param {integer} k - The k-th element index.
+	 * @param {integer} [left=0] - The index of the left part of the range.
+	 * @param {integer} [right] - The index of the right part of the range.
+	 * @param {function} [compare] - An optional comparison function. Is passed two elements and should return 0, 1 or -1.
+	**/
+	public static function quickSelect<T>(arr:Array<T>, k:Int, left:Int = 0, ?right:Int,
+			?compare:(a:T, b:T) -> Int)
+	{
+		inline function swap<T>(arr:Array<T>, i:Int, j:Int)
+		{
+			var tmp = arr[i];
+			arr[i] = arr[j];
+			arr[j] = tmp;
+		}
+
+		var right:Int = right != null ? right : arr.length - 1;
+		final compare:(T, T) -> Int = compare != null ? compare : Reflect.compare;
+
+		while (right > left)
+		{
+			if (right - left > 600)
+			{
+				var n = right - left + 1;
+				var m = k - left + 1;
+				var z = Math.log(n);
+				var s = 0.5 * Math.exp(2 * z / 3);
+				var sd = 0.5 * Math.sqrt(z * s * (n - s) / n) * (m - n / 2 < 0 ? -1 : 1);
+				var newLeft = MathInt.max(left, Math.floor(k - m * s / n + sd));
+				var newRight = MathInt.min(right, Math.floor(k + (n - m) * s / n + sd));
+
+				quickSelect(arr, k, newLeft, newRight, compare);
+			}
+
+			var t = arr[k];
+			var i = left;
+			var j = right;
+
+			swap(arr, left, k);
+
+			if (compare(arr[right], t) > 0)
+			{
+				swap(arr, left, right);
+			}
+
+			while (i < j)
+			{
+				swap(arr, i, j);
+
+				i++;
+				j--;
+
+				while (compare(arr[i], t) < 0)
+				{
+					i++;
+				}
+
+				while (compare(arr[j], t) > 0)
+				{
+					j--;
+				}
+			}
+
+			if (compare(arr[left], t) == 0)
+			{
+				swap(arr, left, j);
+			}
+			else
+			{
+				j++;
+				swap(arr, j, right);
+			}
+
+			if (j <= k)
+			{
+				left = j + 1;
+			}
+
+			if (k <= j)
+			{
+				right = j - 1;
+			}
+		}
+	}
+
+	/**
 	 * Tests if the start and end indexes are a safe range for the given array.
 	 *
 	 * @since 1.0.0
@@ -612,3 +833,4 @@ final class ArrayUtils
 			return true;
 		}
 	}
+}
