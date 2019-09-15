@@ -1,10 +1,12 @@
 package phaserHaxe.utils;
 
+import js.html.svg.Length;
 import phaserHaxe.math.MathInt;
 import phaserHaxe.math.MathUtility;
 import phaserHaxe.Error;
 import haxe.ds.ArraySort;
 import haxe.Constraints.Function;
+import phaserHaxe.utils.Iterator;
 
 typedef RangeOptions =
 {
@@ -263,23 +265,6 @@ final class ArrayUtils
 	}
 
 	/**
-	 * A stable array sort, because `Array#sort()` is not guaranteed stable.
-	 *
-	 * @since 1.0.0
-	 *
-	 * @param arr - The input array to be sorted.
-	 * @param comp - The comparison handler.
-	 *
-	 * @return The sorted result.
-	**/
-	public static inline function stableSort<T>(arr:Array<T>,
-			comp:(a:T, b:T) -> Int):Array<T>
-	{
-		ArraySort.sort(arr, comp);
-		return arr;
-	}
-
-	/**
 	 * Returns the total number of elements in the array which have a property matching the given value.
 	 *
 	 * @since 1.0.0
@@ -292,7 +277,7 @@ final class ArrayUtils
 	 *
 	 * @return The total number of elements with properties matching the given value.
 	**/
-	public inline function countAllMatching<T1, T2>(array:Array<T1>,
+	public static inline function countAllMatching<T1, T2>(array:Array<T1>,
 			propertyAccessor:(item:T1) -> T2, value:T2, startIndex:Int = 0,
 			?endIndex:Int):Int
 	{
@@ -594,6 +579,34 @@ final class ArrayUtils
 	}
 
 	/**
+	 * Moves the given array element up one place in the array.
+	 * The array is modified in-place.
+	 *
+	 * @since 1.0.0
+	 *
+	 * @param array - The input array.
+	 * @param item - The element to move up the array.
+	 *
+	 * @return The input array.
+	**/
+	public static function moveUp<T>(array:Array<T>, item:T):Array<T>
+	{
+		var currentIndex = array.indexOf(item);
+
+		if (currentIndex != -1 && currentIndex < array.length - 1)
+		{
+			//  The element one above `item` in the array
+			var item2 = array[currentIndex + 1];
+			var index2 = array.indexOf(item2);
+
+			array[currentIndex] = item2;
+			array[index2] = item;
+		}
+
+		return array;
+	}
+
+	/**
 	 * Create an array representing the range of integers between, and inclusive of,
 	 * the given `start` and `end` arguments. For example:
 	 *
@@ -812,30 +825,6 @@ final class ArrayUtils
 	}
 
 	/**
-	 * Shuffles the contents of the given array using the Fisher-Yates implementation.
-	 *
-	 * The original array is modified directly and returned.
-	 *
-	 * @since 1.0.0
-	 *
-	 * @param array - The array to shuffle. This array is modified in place.
-	 *
-	 * @return The shuffled array.
-	**/
-	public static function shuffle<T>(array:Array<T>):Array<T>
-	{
-		for (i in new ReverseIterator((array.length - 1), 0))
-		{
-			var j = Math.floor(Math.random() * (i + 1));
-			var temp = array[i];
-			array[i] = array[j];
-			array[j] = temp;
-		}
-
-		return array;
-	}
-
-	/**
 	 * Creates an array populated with a range of values, based on the given arguments and configuration object.
 	 *
 	 * Range ([a,b,c], [1,2,3]) =
@@ -950,7 +939,7 @@ final class ArrayUtils
 			}
 		}
 
-		for (i in new InclusiveIterator(0, repeat))
+		for (i in Iterator.inclusive(0, repeat))
 		{
 			var chunk = buildChunk(a, b, qty);
 
@@ -977,26 +966,37 @@ final class ArrayUtils
 		return out;
 	}
 
-	public function Remove<T>(array:Array<T>, item:Either<T, Array<T>>, callback,
-			context)
+	/**
+	 * Removes the given item, or array of items, from the array.
+	 *
+	 * The array is modified in-place.
+	 *
+	 * You can optionally specify a callback to be invoked for each item successfully removed from the array.
+	 *
+	 * @since 1.0.0
+	 *
+	 * @param array - The array to be modified.
+	 * @param item - The item, or array of items, to be removed from the array.
+	 * @param callback - A callback to be invoked for each item successfully removed from the array.
+	 *
+	 * @return The item, or array of items, that were successfully removed from the array.
+	**/
+	public static function remove<T1, T2:Either<T1, Array<T1>>>(array:Array<T1>,
+			item:T2, ?callback:(T1) -> Void):Null<T2>
 	{
 		var index;
-
 		//  Fast path to avoid array mutation and iteration
 		if (!Std.is(item, Array))
 		{
-			final item = cast(item : T);
-			index = array.indexOf(item);
-
+			final itemSingle = (cast item : T1);
+			index = array.indexOf(itemSingle);
 			if (index != -1)
 			{
-				SpliceOne(array, index);
-
-				if (callback)
+				spliceOne(array, index);
+				if (callback != null)
 				{
-					callback.call(context, item);
+					callback(itemSingle);
 				}
-
 				return item;
 			}
 			else
@@ -1005,35 +1005,205 @@ final class ArrayUtils
 			}
 		}
 
+		final itemArray = (cast item : Array<T1>);
+
 		//  If we got this far, we have an array of items to remove
-
-		var itemLength = item.length - 1;
-
+		var itemLength = itemArray.length - 1;
 		while (itemLength >= 0)
 		{
-			var entry = item[itemLength];
-
+			var entry = itemArray[itemLength];
 			index = array.indexOf(entry);
-
-			if (index != = -1)
+			if (index != -1)
 			{
-				SpliceOne(array, index);
-
-				if (callback)
+				spliceOne(array, index);
+				if (callback != null)
 				{
-					callback.call(context, entry);
+					callback(entry);
 				}
 			}
 			else
 			{
 				//  Item wasn't found in the array, so remove it from our return results
-				item.pop();
+				itemArray.pop();
 			}
-
 			itemLength--;
 		}
 
 		return item;
+	}
+
+	/**
+	 * Removes the item from the given position in the array.
+	 *
+	 * The array is modified in-place.
+	 *
+	 * You can optionally specify a callback to be invoked for the item if it is successfully removed from the array.
+	 *
+	 * @since 1.0.0
+	 *
+	 * @param array - The array to be modified.
+	 * @param index - The array index to remove the item from. The index must be in bounds or it will throw an error.
+	 * @param callback - A callback to be invoked for the item removed from the array.
+	 *
+	 * @return The item that was removed.
+	**/
+	public static function removeAt<T>(array:Array<T>, index:Int,
+			?callback:(T) -> Void):T
+	{
+		if (index < 0 || index > array.length - 1)
+		{
+			throw new Error("Index out of bounds");
+		}
+
+		var item = spliceOne(array, index);
+
+		if (callback != null)
+		{
+			callback(item);
+		}
+
+		return item;
+	}
+
+	/**
+	 * Removes the item within the given range in the array.
+	 *
+	 * The array is modified in-place.
+	 *
+	 * You can optionally specify a callback to be invoked for the item/s successfully removed from the array.
+	 *
+	 * @since 1.0.0
+	 *
+	 * @param array - The array to be modified.
+	 * @param startIndex - The start index to remove from.
+	 * @param endIndex - The end index to remove to.
+	 * @param callback - A callback to be invoked for the item removed from the array.
+	 *
+	 * @return An array of items that were removed.
+	**/
+	public static function removeBetween<T>(array:Array<T>, startIndex:Int = 0,
+			?endIndex:Int, ?callback:(T) -> Void):Array<T>
+	{
+		final endIndex:Int = endIndex != null ? endIndex : array.length;
+
+		if (safeRange(array, startIndex, endIndex))
+		{
+			var size = endIndex - startIndex;
+
+			var removed = array.splice(startIndex, size);
+
+			if (callback != null)
+			{
+				for (entry in removed)
+				{
+					callback(entry);
+				}
+			}
+
+			return removed;
+		}
+		else
+		{
+			return [];
+		}
+	}
+
+	/**
+	 * Removes a random object from the given array and returns it.
+	 * Will return null if there are no array items that fall within the specified range or if there is no item for the randomly chosen index.
+	 *
+	 * @since 1.0.0
+	 *
+	 * @param array - The array to removed a random element from.
+	 * @param start - The array index to start the search from.
+	 * @param length - Optional restriction on the number of elements to randomly select from.
+	 *
+	 * @return The random element that was removed, or `null` if there were no array elements that fell within the given range.
+	**/
+	public static function removeRandomElement<T>(array:Array<T>, start:Int = 0,
+			?length:Int)
+	{
+		final length:Int = length != null ? length : array.length;
+
+		var randomIndex = start + Math.floor(Math.random() * length);
+
+		return spliceOne(array, randomIndex);
+	}
+
+	/**
+	 * Replaces an element of the array with the new element.
+	 * The new element cannot already be a member of the array.
+	 * The array is modified in-place.
+	 *
+	 * @since 1.0.0
+	 *
+	 * @param oldChild - The element in the array that will be replaced.
+	 * @param newChild - The element to be inserted into the array at the position of `oldChild`.
+	 *
+	 * @return Returns true if the oldChild was successfully replaced, otherwise returns false.
+	**/
+	public static function replace<T>(array:Array<T>, oldChild:T, newChild:T):Bool
+	{
+		var index1 = array.indexOf(oldChild);
+		var index2 = array.indexOf(newChild);
+
+		if (index1 != -1 && index2 == -1)
+		{
+			array[index1] = newChild;
+			return true;
+		}
+		else
+		{
+			return false;
+		}
+	}
+
+	/**
+	 * Moves the element at the start of the array to the end, shifting all items in the process.
+	 * The "rotation" happens to the left.
+	 *
+	 * @since 1.0.0
+	 *
+	 * @param array - The array to shift to the left. This array is modified in place.
+	 * @param total - The number of times to shift the array.
+	 *
+	 * @return The most recently shifted element.
+	**/
+	public static function rotateLeft<T>(array:Array<T>, total:Int = 1):Null<T>
+	{
+		var element = null;
+
+		for (i in 0...total)
+		{
+			element = array.shift();
+			array.push(element);
+		}
+
+		return element;
+	}
+
+	/**
+	 * Moves the element at the end of the array to the start, shifting all items in the process.
+	 * The "rotation" happens to the right.
+	 *
+	 * @since 1.0.0
+	 *
+	 * @param array - The array to shift to the right. This array is modified in place.
+	 * @param total - The number of times to shift the array.
+	 *
+	 * @return The most recently shifted element.
+	**/
+	public static function rotateRight<T>(array:Array<T>, total:Int = 1):Null<T>
+	{
+		var element = null;
+
+		for (i in 0...total)
+		{
+			element = array.pop();
+			array.unshift(element);
+		}
+
+		return element;
 	}
 
 	/**
@@ -1066,5 +1236,175 @@ final class ArrayUtils
 		{
 			return true;
 		}
+	}
+
+	/**
+	 * Moves the given element to the bottom of the array.
+	 * The array is modified in-place.
+	 *
+	 * @since 1.0.0
+	 *
+	 * @param array - The array.
+	 * @param item - The element to move.
+	 *
+	 * @return The element that was moved.
+	**/
+	public static function sendToBack<T>(array:Array<T>, item:T):T
+	{
+		var currentIndex = array.indexOf(item);
+
+		if (currentIndex != -1 && currentIndex > 0)
+		{
+			array.splice(currentIndex, 1);
+			array.unshift(item);
+		}
+
+		return item;
+	}
+
+	/**
+	 * TODO: fix description of function
+	 *
+	 * Scans the array for elements with the given property. If found, the property is set to the `value`.
+	 *
+	 * For example: `SetAll('visible', true)` would set all elements that have a `visible` property to `false`.
+	 *
+	 * Optionally you can specify a start and end index. For example if the array had 100 elements,
+	 * and you set `startIndex` to 0 and `endIndex` to 50, it would update only the first 50 elements.
+	 *
+	 * @since 1.0.0
+	 *
+	 * @param array - The array to search.
+	 * @param propertySetter - The property to test for on each array element.
+	 * @param value - The value to set the property to.
+	 * @param startIndex - An optional start index to search from.
+	 * @param endIndex - An optional end index to search to.
+	 *
+	 * @return The input array.
+	**/
+	public static inline function setAll<T1, T2>(array:Array<T1>,
+			propertySetter:(T1, T2) -> Void, value:T2, startIndex:Int = 0,
+			?endIndex:Int):Array<T1>
+	{
+		final endIndex:Int = endIndex != null ? endIndex : array.length;
+
+		if (safeRange(array, startIndex, endIndex))
+		{
+			for (i in startIndex...endIndex)
+			{
+				var entry = array[i];
+
+				propertySetter(entry, value);
+			}
+		}
+
+		return array;
+	}
+
+	/**
+	 * Removes a single item from an array and returns it without creating gc, like the native splice does.
+	 * Based on code by Mike Reinstein.
+	 *
+	 * @since 1.0.0
+	 *
+	 * @param array - The array to splice from.
+	 * @param index - The index of the item which should be spliced.
+	 *
+	 * @return The item which was spliced (removed).
+	**/
+	public static function spliceOne<T>(array:Array<T>, index:Int):Null<T>
+	{
+		if (index >= array.length)
+		{
+			return null;
+		}
+
+		var len = array.length - 1;
+
+		var item = array[index];
+
+		for (i in index...len)
+		{
+			array[i] = array[i + 1];
+		}
+
+		array.resize(len);
+
+		return item;
+	}
+
+	/**
+	 * Shuffles the contents of the given array using the Fisher-Yates implementation.
+	 *
+	 * The original array is modified directly and returned.
+	 *
+	 * @since 1.0.0
+	 *
+	 * @param array - The array to shuffle. This array is modified in place.
+	 *
+	 * @return The shuffled array.
+	**/
+	public static function shuffle<T>(array:Array<T>):Array<T>
+	{
+		for (i in Iterator.reverse((array.length - 1), 0))
+		{
+			var j = Math.floor(Math.random() * (i + 1));
+			var temp = array[i];
+			array[i] = array[j];
+			array[j] = temp;
+		}
+
+		return array;
+	}
+
+	/**
+	 * A stable array sort, because `Array#sort()` is not guaranteed stable.
+	 *
+	 * @since 1.0.0
+	 *
+	 * @param arr - The input array to be sorted.
+	 * @param comp - The comparison handler.
+	 *
+	 * @return The sorted result.
+	**/
+	public static inline function stableSort<T>(arr:Array<T>,
+			?comp:(a:T, b:T) -> Int):Array<T>
+	{
+		ArraySort.sort(arr, comp != null ? comp : Reflect.compare);
+		return arr;
+	}
+
+	/**
+	 * Swaps the position of two elements in the given array.
+	 * The elements must exist in the same array.
+	 * The array is modified in-place.
+	 *
+	 * @since 1.0.0
+	 *
+	 * @param array - The input array.
+	 * @param item1 - The first element to swap.
+	 * @param item2 - The second element to swap.
+	 *
+	 * @return The input array.
+	**/
+	public static function swap<T>(array:Array<T>, item1:T, item2:T):Array<T>
+	{
+		if (item1 == item2)
+		{
+			return null;
+		}
+
+		var index1 = array.indexOf(item1);
+		var index2 = array.indexOf(item2);
+
+		if (index1 < 0 || index2 < 0)
+		{
+			throw new Error("Supplied items must be elements of the same array");
+		}
+
+		array[index1] = item2;
+		array[index2] = item1;
+
+		return array;
 	}
 }
