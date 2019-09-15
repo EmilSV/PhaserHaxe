@@ -6,6 +6,16 @@ import phaserHaxe.Error;
 import haxe.ds.ArraySort;
 import haxe.Constraints.Function;
 
+typedef RangeOptions =
+{
+	var ?max:Int;
+	var ?qty:Int;
+	var ?random:Bool;
+	var ?randomB:Bool;
+	var ?repeat:Int;
+	var ?yoyo:Bool;
+}
+
 final class ArrayUtils
 {
 	/**
@@ -714,14 +724,13 @@ final class ArrayUtils
 	 *
 	 * Based on code by [Vladimir Agafonkin](https://www.npmjs.com/~mourner)
 	 *
-	 * @function Phaser.Utils.Array.QuickSelect
-	 * @since 3.0.0
+	 * @since 1.0.0
 	 *
-	 * @param {array} arr - The array to sort.
-	 * @param {integer} k - The k-th element index.
-	 * @param {integer} [left=0] - The index of the left part of the range.
-	 * @param {integer} [right] - The index of the right part of the range.
-	 * @param {function} [compare] - An optional comparison function. Is passed two elements and should return 0, 1 or -1.
+	 * @param arr - The array to sort.
+	 * @param k - The k-th element index.
+	 * @param left - The index of the left part of the range.
+	 * @param right - The index of the right part of the range.
+	 * @param compare - An optional comparison function. Is passed two elements and should return 0, 1 or -1.
 	**/
 	public static function quickSelect<T>(arr:Array<T>, k:Int, left:Int = 0, ?right:Int,
 			?compare:(a:T, b:T) -> Int)
@@ -800,6 +809,231 @@ final class ArrayUtils
 				right = j - 1;
 			}
 		}
+	}
+
+	/**
+	 * Shuffles the contents of the given array using the Fisher-Yates implementation.
+	 *
+	 * The original array is modified directly and returned.
+	 *
+	 * @since 1.0.0
+	 *
+	 * @param array - The array to shuffle. This array is modified in place.
+	 *
+	 * @return The shuffled array.
+	**/
+	public static function shuffle<T>(array:Array<T>):Array<T>
+	{
+		for (i in new ReverseIterator((array.length - 1), 0))
+		{
+			var j = Math.floor(Math.random() * (i + 1));
+			var temp = array[i];
+			array[i] = array[j];
+			array[j] = temp;
+		}
+
+		return array;
+	}
+
+	/**
+	 * Creates an array populated with a range of values, based on the given arguments and configuration object.
+	 *
+	 * Range ([a,b,c], [1,2,3]) =
+	 * a1, a2, a3, b1, b2, b3, c1, c2, c3
+	 *
+	 * Range ([a,b], [1,2,3], qty = 3) =
+	 * a1, a1, a1, a2, a2, a2, a3, a3, a3, b1, b1, b1, b2, b2, b2, b3, b3, b3
+	 *
+	 * Range ([a,b,c], [1,2,3], repeat x1) =
+	 * a1, a2, a3, b1, b2, b3, c1, c2, c3, a1, a2, a3, b1, b2, b3, c1, c2, c3
+	 *
+	 * Range ([a,b], [1,2], repeat -1 = endless, max = 14) =
+	 * Maybe if max is set then repeat goes to -1 automatically?
+	 * a1, a2, b1, b2, a1, a2, b1, b2, a1, a2, b1, b2, a1, a2 (capped at 14 elements)
+	 *
+	 * Range ([a], [1,2,3,4,5], random = true) =
+	 * a4, a1, a5, a2, a3
+	 *
+	 * Range ([a, b], [1,2,3], random = true) =
+	 * b3, a2, a1, b1, a3, b2
+	 *
+	 * Range ([a, b, c], [1,2,3], randomB = true) =
+	 * a3, a1, a2, b2, b3, b1, c1, c3, c2
+	 *
+	 * Range ([a], [1,2,3,4,5], yoyo = true) =
+	 * a1, a2, a3, a4, a5, a5, a4, a3, a2, a1
+	 *
+	 * Range ([a, b], [1,2,3], yoyo = true) =
+	 * a1, a2, a3, b1, b2, b3, b3, b2, b1, a3, a2, a1
+	 *
+	 * @since 1.0.0
+	 *
+	 * @param a - The first array of range elements.
+	 * @param b - The second array of range elements.
+	 * @param options - A range configuration object. Can contain: repeat, random, randomB, yoyo, max, qty.
+	 *
+	 * @return An array of arranged elements.
+	**/
+	public static function range<T1, T2>(a:Array<T1>, b:Array<T2>,
+			?options:RangeOptions):Array<Pair<T1, T2>>
+	{
+		inline function buildChunk<T1, T2>(a:Array<T1>, b:Array<T2>, qty:Int)
+		{
+			var out:Array<Pair<T1, T2>> = [];
+
+			for (aIndex in 0...a.length)
+			{
+				for (bIndex in 0...b.length)
+				{
+					for (i in 0...qty)
+					{
+						out.push(new Pair(a[aIndex], b[bIndex]));
+					}
+				}
+			}
+
+			return out;
+		}
+
+		inline function getValue<T>(value:T, defaultValue:T)
+		{
+			return value != null ? value : defaultValue;
+		}
+
+		var max, qty, random;
+		var randomB, repeat, yoyo;
+
+		if (options != null)
+		{
+			max = getValue(options.max, 0);
+			qty = getValue(options.qty, 1);
+			random = getValue(options.random, false);
+			randomB = getValue(options.randomB, false);
+			repeat = getValue(options.repeat, 0);
+			yoyo = getValue(options.yoyo, false);
+		}
+		else
+		{
+			max = 0;
+			qty = 1;
+			random = false;
+			randomB = false;
+			repeat = 0;
+			yoyo = false;
+		}
+
+		var out = [];
+
+		if (randomB)
+		{
+			shuffle(b);
+		}
+
+		//  Endless repeat, so limit by max
+		if (repeat == -1)
+		{
+			if (max == 0)
+			{
+				repeat = 0;
+			}
+			else
+			{
+				//  Work out how many repeats we need
+				var total = (a.length * b.length) * qty;
+
+				if (yoyo)
+				{
+					total *= 2;
+				}
+
+				repeat = Math.ceil(max / total);
+			}
+		}
+
+		for (i in new InclusiveIterator(0, repeat))
+		{
+			var chunk = buildChunk(a, b, qty);
+
+			if (random)
+			{
+				shuffle(chunk);
+			}
+
+			out = out.concat(chunk);
+
+			if (yoyo)
+			{
+				chunk.reverse();
+
+				out = out.concat(chunk);
+			}
+		}
+
+		if (max != 0)
+		{
+			out.splice(max, out.length - max);
+		}
+
+		return out;
+	}
+
+	public function Remove<T>(array:Array<T>, item:Either<T, Array<T>>, callback,
+			context)
+	{
+		var index;
+
+		//  Fast path to avoid array mutation and iteration
+		if (!Std.is(item, Array))
+		{
+			final item = cast(item : T);
+			index = array.indexOf(item);
+
+			if (index != -1)
+			{
+				SpliceOne(array, index);
+
+				if (callback)
+				{
+					callback.call(context, item);
+				}
+
+				return item;
+			}
+			else
+			{
+				return null;
+			}
+		}
+
+		//  If we got this far, we have an array of items to remove
+
+		var itemLength = item.length - 1;
+
+		while (itemLength >= 0)
+		{
+			var entry = item[itemLength];
+
+			index = array.indexOf(entry);
+
+			if (index != = -1)
+			{
+				SpliceOne(array, index);
+
+				if (callback)
+				{
+					callback.call(context, entry);
+				}
+			}
+			else
+			{
+				//  Item wasn't found in the array, so remove it from our return results
+				item.pop();
+			}
+
+			itemLength--;
+		}
+
+		return item;
 	}
 
 	/**

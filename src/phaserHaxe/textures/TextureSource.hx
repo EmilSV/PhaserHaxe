@@ -1,8 +1,6 @@
 package phaserHaxe.textures;
 
-import phaserHaxe.renderer.webgl.WebGLRenderer;
 import phaserHaxe.math.Pow2;
-import js.html.HtmlElement;
 import js.html.webgl.Texture as WebGLTexture;
 import js.html.CanvasElement as HTMLCanvasElement;
 import js.Syntax as JsSyntax;
@@ -10,7 +8,6 @@ import phaserHaxe.renderer.ScaleModes;
 import js.html.ImageElement as HTMLImageElement;
 import phaserHaxe.gameobjects.RenderTexture;
 import phaserHaxe.renderer.Renderer;
-import phaserHaxe.math.MathUtility;
 import phaserHaxe.textures.FilterMode;
 
 abstract DataSource(Dynamic) from WebGLTexture from HTMLCanvasElement
