@@ -1,16 +1,17 @@
 package phaserHaxe.textures;
 
+import phaserHaxe.textures.ImageData;
 import phaserHaxe.math.Pow2;
 import js.html.webgl.Texture as WebGLTexture;
 import js.html.CanvasElement as HTMLCanvasElement;
+import js.html.ImageElement as HTMLImageElement;
 import js.Syntax as JsSyntax;
 import phaserHaxe.renderer.ScaleModes;
-import js.html.ImageElement as HTMLImageElement;
 import phaserHaxe.gameobjects.RenderTexture;
 import phaserHaxe.renderer.Renderer;
 import phaserHaxe.textures.FilterMode;
 
-abstract DataSource(Dynamic) from WebGLTexture from HTMLCanvasElement
+abstract HtmlSource(Dynamic) from WebGLTexture from HTMLCanvasElement
 	from HTMLImageElement from RenderTexture {}
 
 /**
@@ -44,7 +45,7 @@ class TextureSource
 	 *
 	 * @since 1.0.0
 	**/
-	public var source:DataSource;
+	public var source:HtmlSource;
 
 	/**
 	 * The image data.
@@ -52,7 +53,7 @@ class TextureSource
 	 *
 	 * @since 1.0.0
 	**/
-	public var image:Either<HTMLImageElement, HTMLCanvasElement>;
+	public var image:ImageData;
 
 	/**
 	 * Currently un-used.
@@ -134,7 +135,7 @@ class TextureSource
 	 * @param width - Optional width of the source image. If not given it's derived from the source itself.
 	 * @param height - Optional height of the source image. If not given it's derived from the source itself.
 	**/
-	public function new(texture:Texture, source:DataSource, ?width:Int, ?height:Int)
+	public function new(texture:Texture, source:HtmlSource, ?width:Int, ?height:Int)
 	{
 		var game:Game = texture.manager.game;
 

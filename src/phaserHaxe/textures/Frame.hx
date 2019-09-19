@@ -14,38 +14,40 @@ final class FrameData
 	public var radius:Float;
 	public var drawImage:FrameDataDrawImage;
 
+	public function new(cut:FrameDataCut, trim:Bool, sourceSize:FrameDataSourceSize,
+			spriteSourceSize:FrameDataSpriteSourceSize, radius:Float,
+			drawImage:FrameDataDrawImage)
+	{
+		this.cut = cut;
+		this.trim = trim;
+		this.sourceSize = sourceSize;
+		this.spriteSourceSize = spriteSourceSize;
+		this.radius = radius;
+		this.drawImage = drawImage;
+	}
+
 	public function deepCopy():FrameData
 	{
 		return {
-			cut: {
-				x: this.cut.x,
-				y: this.cut.y,
-				w: this.cut.w,
-				h: this.cut.h,
-				r: this.cut.r,
-				b: this.cut.b,
-			},
+			cut: this.cut.copy(),
 			trim: this.trim,
-			sourceSize: {
-				w: this.sourceSize.w,
-				h: this.sourceSize.h,
-			},
-			spriteSourceSize: {
-				x: this.spriteSourceSize.x,
-				y: this.spriteSourceSize.y,
-				w: this.spriteSourceSize.w,
-				h: this.spriteSourceSize.h,
-				r: this.spriteSourceSize.r,
-				b: this.spriteSourceSize.b,
-			},
+			sourceSize: this.sourceSize.copy(),
+			spriteSourceSize: this.spriteSourceSize.copy(),
 			radius: this.radius,
-			drawImage: {
-				x: this.drawImage.x,
-				y: this.drawImage.y,
-				width: this.drawImage.width,
-				height: this.drawImage.height,
-			}
+			drawImage: this.drawImage.copy()
 		};
+	}
+
+	public static function newDefault():FrameData
+	{
+		return {
+			cut: FrameDataCut.newDefault(),
+			trim: false,
+			sourceSize: FrameDataSourceSize.newDefault(),
+			spriteSourceSize: FrameDataSpriteSourceSize.newDefault(),
+			radius: 0,
+			drawImage: FrameDataDrawImage.newDefault()
+		}
 	}
 }
 
@@ -58,6 +60,26 @@ final class FrameDataCut
 	public var h:Float;
 	public var r:Float;
 	public var b:Float;
+
+	public function new(x:Float, y:Float, w:Float, h:Float, r:Float, b:Float)
+	{
+		this.x = x;
+		this.y = y;
+		this.w = w;
+		this.h = h;
+		this.r = r;
+		this.b = b;
+	}
+
+	public inline function copy():FrameDataCut
+	{
+		return new FrameDataCut(x, y, w, h, r, b);
+	}
+
+	public static inline function newDefault():FrameDataCut
+	{
+		return new FrameDataCut(0, 0, 0, 0, 0, 0);
+	}
 }
 
 @:structInit
@@ -65,6 +87,22 @@ final class FrameDataSourceSize
 {
 	public var w:Float;
 	public var h:Float;
+
+	public function new(w:Float, h:Float)
+	{
+		this.w = w;
+		this.h = h;
+	}
+
+	public inline function copy():FrameDataSourceSize
+	{
+		return new FrameDataSourceSize(w, h);
+	}
+
+	public static inline function newDefault():FrameDataSourceSize
+	{
+		return new FrameDataSourceSize(0, 0);
+	}
 }
 
 @:structInit
@@ -76,6 +114,26 @@ final class FrameDataSpriteSourceSize
 	public var h:Float;
 	public var r:Float;
 	public var b:Float;
+
+	public function new(x:Float, y:Float, w:Float, h:Float, r:Float, b:Float)
+	{
+		this.x = x;
+		this.y = y;
+		this.w = w;
+		this.h = h;
+		this.r = r;
+		this.b = b;
+	}
+
+	public inline function copy():FrameDataSpriteSourceSize
+	{
+		return new FrameDataSpriteSourceSize(x, y, w, h, r, b);
+	}
+
+	public static inline function newDefault():FrameDataSpriteSourceSize
+	{
+		return new FrameDataSpriteSourceSize(0, 0, 0, 0, 0, 0);
+	}
 }
 
 @:structInit
@@ -85,6 +143,24 @@ final class FrameDataDrawImage
 	public var y:Float;
 	public var width:Float;
 	public var height:Float;
+
+	public function new(x:Float, y:Float, width:Float, height:Float)
+	{
+		this.x = x;
+		this.y = y;
+		this.width = width;
+		this.height = height;
+	}
+
+	public inline function copy():FrameDataDrawImage
+	{
+		return new FrameDataDrawImage(x, y, width, height);
+	}
+
+	public static inline function newDefault():FrameDataDrawImage
+	{
+		return new FrameDataDrawImage(0, 0, 0, 0);
+	}
 }
 
 /**
@@ -373,36 +449,7 @@ class Frame
 
 		this.glTexture = this.source.glTexture;
 
-		this.data = {
-			cut: {
-				x: 0,
-				y: 0,
-				w: 0,
-				h: 0,
-				r: 0,
-				b: 0
-			},
-			trim: false,
-			sourceSize: {
-				w: 0,
-				h: 0
-			},
-			spriteSourceSize: {
-				x: 0,
-				y: 0,
-				w: 0,
-				h: 0,
-				r: 0,
-				b: 0
-			},
-			radius: 0,
-			drawImage: {
-				x: 0,
-				y: 0,
-				width: 0,
-				height: 0
-			}
-		};
+		this.data = FrameData.newDefault();
 
 		this.setSize(width, height, x, y);
 	}

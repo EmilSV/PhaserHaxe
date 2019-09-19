@@ -1,6 +1,4 @@
 package phaserHaxe;
 
 @:forward
-abstract Scene(Dynamic) {
-    
-}
+abstract Scene(Dynamic) {}
