@@ -155,8 +155,10 @@ class EventEmitter
 	 * @param event - The event name.
 	 * @returns `true` if the event had listeners, else `false`.
 	**/
-	public function emit(event, args:Array<Dynamic>):Bool
+	public function emit(event:String, ?args:Array<Dynamic>):Bool
 	{
+		final args:Array<Dynamic> = args != null ? args : [];
+
 		final listeners = _events.get(event);
 		if (listeners == null)
 		{
@@ -187,7 +189,7 @@ class EventEmitter
 	 * @param context - The context to invoke the listener with.
 	 * @returns `this`.
 	**/
-	public inline function on(event:String, fn:Function, ?context:Dynamic):EventEmitter
+	public function on(event:String, fn:Function, ?context:Dynamic):EventEmitter
 	{
 		return s_addListener(this, event, fn, context, false);
 	}
@@ -214,8 +216,8 @@ class EventEmitter
 	 * @param once - Only remove one-time listeners.
 	 * @returns `this`.
 	**/
-	public function removeListener(event:String, fn:Function, context:Dynamic,
-			once:Bool):EventEmitter
+	public function removeListener(event:String, ?fn:Function, ?context:Dynamic,
+			once:Bool = false):EventEmitter
 	{
 		final listeners = _events.get(event);
 
@@ -288,8 +290,8 @@ class EventEmitter
 	 * @param once - Only remove one-time listeners.
 	 * @returns `this`.
 	**/
-	public inline function off(event:String, fn:Function, context:Dynamic,
-			once:Bool):EventEmitter
+	public function off(event:String, ?fn:Function, ?context:Dynamic,
+			once:Bool = false):EventEmitter
 	{
 		return removeListener(event, fn, context, once);
 	}

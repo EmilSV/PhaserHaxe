@@ -1,8 +1,8 @@
 package phaserHaxe.textures;
 
+import haxe.ds.StringMap;
 import phaserHaxe.utils.MultipleOrOne;
 import phaserHaxe.utils.StringOrInt;
-import phaserHaxe.utils.StringOrIntMap;
 import haxe.ds.Map;
 
 /**
@@ -95,7 +95,7 @@ class Texture
 	 * @param height - The height of the Texture. This is optional and automatically derived from the source images.
 	**/
 	public function new(manager:TextureManager, key:String,
-			source:MultipleOrOne<TextureSource.HtmlSource>, width:Int, height:Int)
+			source:MultipleOrOne<TextureSource.HtmlSource>, ?width:Int, ?height:Int)
 	{
 		this.manager = manager;
 
@@ -105,7 +105,7 @@ class Texture
 
 		this.dataSource = [];
 
-		this.frames = new StringOrIntMap();
+		this.frames = new Map();
 
 		this.customData = {};
 
@@ -331,7 +331,6 @@ class Texture
 	 *
 	 * This will return the actual DOM Image or Canvas element.
 	 *
-	 * @method Phaser.Textures.Texture#getSourceImage
 	 * @since 1.0.0
 	 *
 	 * @param name - The string-based name, or integer based index, of the Frame to get from this Texture.
@@ -385,7 +384,7 @@ class Texture
 			name.forceString();
 		}
 
-		var frame = this.frames[name];
+		var frame = frames[name];
 		var idx;
 
 		if (frame == null)
@@ -403,6 +402,34 @@ class Texture
 	}
 
 	/**
+	 * Adds a data source image to this Texture.
+	 *
+	 * An example of a data source image would be a normal map, where all of the Frames for this Texture
+	 * equally apply to the normal map.
+	 *
+	 * @since 1.0.0
+	 *
+	 * @param data - The source image.
+	**/
+	public function setDataSource(data:MultipleOrOne<TextureSource.HtmlSource>)
+	{
+		final data:Array<TextureSource.HtmlSource> = if (data.isArray())
+		{
+			data.getArray();
+		}
+		else
+		{
+			[data.getOne()];
+		}
+
+		for (i in 0...data.length)
+		{
+			var source = source[i];
+			dataSource.push(new TextureSource(this, data[i], source.width, source.height));
+		}
+	}
+
+	/**
 	 * Sets the Filter Mode for this Texture.
 	 *
 	 * The mode can be either Linear, the default, or Nearest.
@@ -417,16 +444,14 @@ class Texture
 	**/
 	public function setFilter(filterMode:FilterMode)
 	{
-		var i;
-
 		for (i in 0...source.length)
 		{
-			this.source[i].setFilter(filterMode);
+			source[i].setFilter(filterMode);
 		}
 
 		for (i in 0...dataSource.length)
 		{
-			this.dataSource[i].setFilter(filterMode);
+			dataSource[i].setFilter(filterMode);
 		}
 	}
 
@@ -439,22 +464,22 @@ class Texture
 	{
 		for (i in 0...source.length)
 		{
-			this.source[i].destroy();
+			source[i].destroy();
 		}
 
 		for (i in 0...dataSource.length)
 		{
-			this.dataSource[i].destroy();
+			dataSource[i].destroy();
 		}
 
 		frames.clear();
 
-		this.source = [];
-		this.dataSource = [];
-		this.frames = new Map();
+		source = [];
+		dataSource = [];
+		frames = new Map();
 
-		this.manager.removeKey(this.key);
+		manager.removeKey(this.key);
 
-		this.manager = null;
+		manager = null;
 	}
 }

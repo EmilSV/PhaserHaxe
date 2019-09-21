@@ -6,4 +6,9 @@ final class Console
 	{
 		js.Browser.console.warn(data);
 	}
+
+	public static function error(data:Dynamic):Void
+	{
+		js.Browser.console.error(data);
+	}
 }
