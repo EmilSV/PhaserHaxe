@@ -1,7 +1,5 @@
 package phaserHaxe.utils;
 
-import haxe.ds.Either;
-
 abstract MultipleOrOne<T>(Dynamic) from Array<T> from T
 {
 	public inline function isArray():Bool

@@ -1,5 +1,7 @@
 package phaserHaxe.textures;
 
+import phaserHaxe.gameobjects.RenderTexture;
+import phaserHaxe.utils.MultipleOrOne;
 import phaserHaxe.utils.StringOrInt;
 import haxe.Constraints.Function;
 import phaserHaxe.display.canvas.CanvasPool;
@@ -10,6 +12,7 @@ import phaserHaxe.core.GameEvents;
 import js.html.Image as HTMLImage;
 import phaserHaxe.textures.Parser;
 import js.html.ImageElement as HTMLImageElement;
+import js.html.webgl.Texture as WebGLTexture;
 
 /**
  * Textures are managed by the global TextureManager. This is a singleton class that is
@@ -344,6 +347,60 @@ import js.html.ImageElement as HTMLImageElement;
 	}
 
 	/**
+	 * Takes a WebGL Texture and creates a Phaser Texture from it, which is added to the Texture Manager using the given key.
+	 *
+	 * This allows you to then use the Texture as a normal texture for texture based Game Objects like Sprites.
+	 *
+	 * This is a WebGL only feature.
+	 *
+	 * @since 1.0.0
+	 *
+	 * @param key - The unique string-based key of the Texture.
+	 * @param glTexture - The source Render Texture.
+	 *
+	 * @return The Texture that was created, or `null` if the key is already in use.
+	**/
+	public function addGLTexture(key:String, glTexture:WebGLTexture, ?width:Int,
+			?height:Int)
+	{
+		var texture = null;
+
+		if (checkKey(key))
+		{
+			texture = create(key, glTexture, width, height);
+
+			texture.add("__BASE", 0, 0, 0, width, height);
+
+			emit(ADD, [key, texture]);
+		}
+
+		return texture;
+	}
+
+	/**
+	 * Adds a Render Texture to the Texture Manager using the given key.
+	 * This allows you to then use the Render Texture as a normal texture for texture based Game Objects like Sprites.
+	 *
+	 * @since 1.0.0
+	 *
+	 * @param key - The unique string-based key of the Texture.
+	 * @param renderTexture - The source Render Texture.
+	 *
+	 * @return The Texture that was created, or `null` if the key is already in use.
+	**/
+	public function addRenderTexture(key, renderTexture:RenderTexture)
+	{
+		var texture = null;
+		if (checkKey(key))
+		{
+			texture = create(key, cast renderTexture);
+			texture.add('__BASE', 0, 0, 0, renderTexture.width, renderTexture.height);
+			emit(ADD, [key, texture]);
+		}
+		return texture;
+	}
+
+	/**
 	 * Returns a Texture from the Texture Manager that matches the given key.
 	 * If the key is undefined it will return the `__DEFAULT` Texture.
 	 * If the key is given, but not found, it will return the `__MISSING` Texture.
@@ -437,8 +494,8 @@ import js.html.ImageElement as HTMLImageElement;
 	 *
 	 * @return The Texture that was created, or `null` if the key is already in use.
 	**/
-	public function create(key:String, source:HTMLImageElement, ?width:Int,
-			?height:Int):Null<Texture>
+	public function create(key:String, source:MultipleOrOne<TextureSource.HtmlSource>,
+			?width:Int, ?height:Int):Null<Texture>
 	{
 		var texture = null;
 
