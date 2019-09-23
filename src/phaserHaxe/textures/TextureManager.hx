@@ -13,6 +13,7 @@ import js.html.Image as HTMLImage;
 import phaserHaxe.textures.Parser;
 import js.html.ImageElement as HTMLImageElement;
 import js.html.webgl.Texture as WebGLTexture;
+import phaserHaxe.Create;
 
 /**
  * Textures are managed by the global TextureManager. This is a singleton class that is
@@ -395,6 +396,65 @@ import js.html.webgl.Texture as WebGLTexture;
 		{
 			texture = create(key, cast renderTexture);
 			texture.add('__BASE', 0, 0, 0, renderTexture.width, renderTexture.height);
+			emit(ADD, [key, texture]);
+		}
+		return texture;
+	}
+
+	/**
+	 * Creates a new Texture using the given config values.
+	 * Generated textures consist of a Canvas element to which the texture data is drawn.
+	 * See the Phaser.Create function for the more direct way to create textures.
+	 *
+	 * @since 1.0.0
+	 *
+	 * @param key - The unique string-based key of the Texture.
+	 * @param config - The configuration object needed to generate the texture.
+	 *
+	 * @return The Texture that was created, or `null` if the key is already in use.
+	**/
+	public function generate(key, config)
+	{
+		if (this.checkKey(key))
+		{
+			var canvas = CanvasPool.create(this, 1, 1);
+
+			config.canvas = canvas;
+
+			Create.generateTexture(config);
+
+			return addCanvas(key, canvas);
+		}
+		else
+		{
+			return null;
+		}
+	}
+
+	/**
+	 * Creates a new Canvas Texture object from an existing Canvas element
+	 * and adds it to this Texture Manager, unless `skipCache` is true.
+	 *
+	 * @since 1.0.0
+	 *
+	 * @param key - The unique string-based key of the Texture.
+	 * @param source - The Canvas element to form the base of the new Texture.
+	 * @param skipCache - Skip adding this Texture into the Cache?
+	 *
+	 * @return The Canvas Texture that was created, or `null` if the key is already in use.
+	**/
+	public function addCanvas(key:String, source:HTMLCanvasElement,
+			skipCache:Bool = false)
+	{
+		var texture = null;
+		if (skipCache)
+		{
+			texture = new CanvasTexture(this, key, source, source.width, source.height);
+		}
+		else if (this.checkKey(key))
+		{
+			texture = new CanvasTexture(this, key, source, source.width, source.height);
+			list[key] = texture;
 			emit(ADD, [key, texture]);
 		}
 		return texture;
