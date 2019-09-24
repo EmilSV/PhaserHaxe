@@ -451,13 +451,356 @@ import phaserHaxe.Create;
 		{
 			texture = new CanvasTexture(this, key, source, source.width, source.height);
 		}
-		else if (this.checkKey(key))
+		else if (checkKey(key))
 		{
 			texture = new CanvasTexture(this, key, source, source.width, source.height);
+
 			list[key] = texture;
+
 			emit(ADD, [key, texture]);
 		}
 		return texture;
+	}
+
+	/**
+	 * Adds a new Texture Atlas to this Texture Manager.
+	 * It can accept either JSON Array or JSON Hash formats, as exported by Texture Packer and similar software.
+	 *
+	 * @since 1.0.0
+	 *
+	 * @param key - The unique string-based key of the Texture.
+	 * @param source - The source Image element.
+	 * @param data - The Texture Atlas data.
+	 * @param dataSource - An optional data Image element.
+	 *
+	 * @return The Texture that was created, or `null` if the key is already in use.
+	**/
+	function addAtlas(key:String, source:HTMLImageElement, data:Dynamic,
+			?dataSource:MultipleOrOne<Either<HTMLImageElement,
+			HTMLCanvasElement>>):Null<Texture>
+	{
+		//  New Texture Packer format?
+		if (Std.is(data.textures, Array) || Std.is(data.frames, Array))
+		{
+			return addAtlasJSONArray(key, source, data, dataSource);
+		}
+		else
+		{
+			return addAtlasJSONHash(key, source, data, dataSource);
+		}
+	}
+
+	/**
+	 * Adds a Texture Atlas to this Texture Manager.
+	 * The frame data of the atlas must be stored in an Array within the JSON.
+	 * This is known as a JSON Array in software such as Texture Packer.
+	 *
+	 * @since 1.0.0
+	 *
+	 * @param key - The unique string-based key of the Texture.
+	 * @param source - The source Image element/s.
+	 * @param data - The Texture Atlas data/s.
+	 * @param dataSource - An optional data Image element.
+	 *
+	 * @return The Texture that was created, or `null` if the key is already in use.
+	**/
+	public function addAtlasJSONArray(key:String,
+			source:MultipleOrOne<HTMLImageElement>, data:Dynamic,
+			?dataSource:MultipleOrOne<Either<HTMLImageElement,
+			HTMLCanvasElement>>):Null<Texture>
+	{
+		var texture = null;
+
+		if (checkKey(key))
+		{
+			texture = create(key, source);
+
+			//  Multi-Atlas?
+			if (Std.is(data, Array))
+			{
+				var singleAtlasFile = data.length == 1; // multi-pack with one atlas file for all images
+
+				//  !! Assumes the textures are in the same order in the source array as in the json data !!
+				for (i in 0...texture.source.length)
+				{
+					var atlasData = singleAtlasFile ? data[0] : data[i];
+
+					Parser.jsonArray(texture, i, atlasData);
+				}
+			}
+			else
+			{
+				Parser.jsonArray(texture, 0, data);
+			}
+
+			if (dataSource != null)
+			{
+				texture.setDataSource(dataSource);
+			}
+
+			emit(ADD, [key, texture]);
+		}
+
+		return texture;
+	}
+
+	/**
+	 * Adds a Texture Atlas to this Texture Manager.
+	 * The frame data of the atlas must be stored in an Object within the JSON.
+	 * This is known as a JSON Hash in software such as Texture Packer.
+	 *
+	 * @since 1.0.0
+	 *
+	 * @param key - The unique string-based key of the Texture.
+	 * @param source - The source Image element.
+	 * @param data - The Texture Atlas data.
+	 * @param dataSource - An optional data Image element.
+	 *
+	 * @return The Texture that was created, or `null` if the key is already in use.
+	**/
+	public function addAtlasJSONHash(key:String, source:HTMLImageElement, data:Dynamic,
+			?dataSource:MultipleOrOne<Either<HTMLImageElement,
+			HTMLCanvasElement>>):Null<Texture>
+	{
+		var texture = null;
+
+		if (checkKey(key))
+		{
+			texture = create(key, source);
+
+			if (Std.is(data, Array))
+			{
+				for (i in 0...data.length)
+				{
+					Parser.jsonHash(texture, i, data[i]);
+				}
+			}
+			else
+			{
+				Parser.jsonHash(texture, 0, data);
+			}
+
+			if (dataSource != null)
+			{
+				texture.setDataSource(dataSource);
+			}
+
+			emit(ADD, [key, texture]);
+		}
+
+		return texture;
+	}
+
+	/**
+	 * Adds a Texture Atlas to this Texture Manager, where the atlas data is given
+	 * in the XML format.
+	 *
+	 * @since 1.0.0
+	 *
+	 * @param key - The unique string-based key of the Texture.
+	 * @param source - The source Image element.
+	 * @param data - The Texture Atlas XML data.
+	 * @param dataSource - An optional data Image element.
+	 *
+	 * @return The Texture that was created, or `null` if the key is already in use.
+	**/
+	public function addAtlasXML(key:String, source:HTMLImageElement, data:Dynamic,
+			?dataSource:MultipleOrOne<Either<HTMLImageElement,
+			HTMLCanvasElement>>):Null<Texture>
+	{
+		var texture = null;
+
+		if (checkKey(key))
+		{
+			texture = create(key, source);
+
+			Parser.atlasXML(texture, 0, data);
+
+			if (dataSource != null)
+			{
+				texture.setDataSource(dataSource);
+			}
+
+			emit(ADD, [key, texture]);
+		}
+		return texture;
+	}
+
+	/**
+	 * Adds a Unity Texture Atlas to this Texture Manager.
+	 * The data must be in the form of a Unity YAML file.
+	 *
+	 * @method Phaser.Textures.TextureManager#addUnityAtlas
+	 * @fires Phaser.Textures.Events#ADD
+	 * @since 3.0.0
+	 *
+	 * @param {string} key - The unique string-based key of the Texture.
+	 * @param {HTMLImageElement} source - The source Image element.
+	 * @param {object} data - The Texture Atlas data.
+	 * @param {HTMLImageElement|HTMLCanvasElement|HTMLImageElement[]|HTMLCanvasElement[]} [dataSource] - An optional data Image element.
+	 *
+	 * @return The Texture that was created, or `null` if the key is already in use.
+	**/
+	public function addUnityAtlas(key:String, source:HTMLImageElement, data:Dynamic,
+			?dataSource:MultipleOrOne<Either<HTMLImageElement,
+			HTMLCanvasElement>>):Null<Texture>
+	{
+		var texture = null;
+
+		if (this.checkKey(key))
+		{
+			texture = this.create(key, source);
+
+			Parser.unityYAML(texture, 0, data);
+
+			if (dataSource != null)
+			{
+				texture.setDataSource(dataSource);
+			}
+
+			emit(ADD, [key, texture]);
+		}
+
+		return texture;
+	}
+
+	/**
+	 * Adds a Sprite Sheet to this Texture Manager.
+	 *
+	 * In Phaser terminology a Sprite Sheet is a texture containing different frames, but each frame is the exact
+	 * same size and cannot be trimmed or rotated.
+	 *
+	 * @since 1.0.0
+	 *
+	 * @param key - The unique string-based key of the Texture.
+	 * @param source - The source Image element.
+	 * @param config - The configuration object for this Sprite Sheet.
+	 *
+	 * @return The Texture that was created, or `null` if the key is already in use.
+	**/
+	public function addSpriteSheet(key:String, source:HTMLImageElement,
+			config:SpriteSheetConfig)
+	{
+		var texture = null;
+
+		if (checkKey(key))
+		{
+			texture = create(key, source);
+
+			var width = texture.source[0].width;
+			var height = texture.source[0].height;
+
+			Parser.spriteSheet(texture, 0, 0, 0, width, height, config);
+
+			emit(ADD, [key, texture]);
+		}
+
+		return texture;
+	}
+
+	/**
+	 * Adds a Sprite Sheet to this Texture Manager, where the Sprite Sheet exists as a Frame within a Texture Atlas.
+	 *
+	 * In Phaser terminology a Sprite Sheet is a texture containing different frames, but each frame is the exact
+	 * same size and cannot be trimmed or rotated.
+	 *
+	 * @since 1.0.0
+	 *
+	 * @param key - The unique string-based key of the Texture.
+	 * @param {Phaser.Types.Textures.SpriteSheetFromAtlasConfig} config - The configuration object for this Sprite Sheet.
+	 *
+	 * @return {?Phaser.Textures.Texture} The Texture that was created, or `null` if the key is already in use.
+	**/
+	public function addSpriteSheetFromAtlas(key:String,
+			config:SpriteSheetFromAtlasConfig):Null<Texture>
+	{
+		if (!checkKey(key))
+		{
+			return null;
+		}
+
+		var atlasKey, atlasFrame;
+
+		if (config != null)
+		{
+			atlasKey = config.atlas;
+			atlasFrame = config.frame;
+		}
+		else
+		{
+			atlasKey = null;
+			atlasFrame = null;
+		}
+
+		if (atlasKey == null || atlasFrame == null)
+		{
+			return null;
+		}
+
+		var atlas = get(atlasKey);
+		var sheet = atlas.get(atlasFrame);
+		
+		if (sheet != null)
+		{
+			var texture = create(key, cast sheet.source.image);
+			if (sheet.trimmed)
+			{
+				//  If trimmed we need to help the parser adjust
+				Parser.spriteSheetFromAtlas(texture, sheet, config);
+			}
+			else
+			{
+				Parser.spriteSheet(texture, 0, sheet.cutX, sheet.cutY, sheet.cutWidth,
+					sheet.cutHeight, config);
+			}
+
+			emit(ADD, [key, texture]);
+
+			return texture;
+		}
+
+		return null;
+	}
+
+	/**
+	 * Creates a new Texture using the given source and dimensions.
+	 *
+	 * @since 1.0.0
+	 *
+	 * @param key - The unique string-based key of the Texture.
+	 * @param source - The source Image element.
+	 * @param width - The width of the Texture.
+	 * @param height - The height of the Texture.
+	 *
+	 * @return The Texture that was created, or `null` if the key is already in use.
+	**/
+	public function create(key:String, source:MultipleOrOne<TextureSource.HtmlSource>,
+			?width:Int, ?height:Int):Null<Texture>
+	{
+		var texture = null;
+
+		if (checkKey(key))
+		{
+			texture = new Texture(this, key, source, width, height);
+			list[key] = texture;
+		}
+
+		return texture;
+	}
+
+	/**
+	 * Checks the given key to see if a Texture using it exists within this Texture Manager.
+	 *
+	 * @method Phaser.Textures.TextureManager#exists
+	 * @since 3.0.0
+	 *
+	 * @param key - The unique string-based key of the Texture.
+	 *
+	 * @return Returns `true` if a Texture matching the given key exists in this Texture Manager.
+	**/
+	public function exists(key:String):Bool
+	{
+		return list.exists(key);
 	}
 
 	/**
@@ -479,7 +822,7 @@ import phaserHaxe.Create;
 		}
 		else
 		{
-			return list['__MISSING'];
+			return list["__MISSING"];
 		}
 	}
 
@@ -525,47 +868,6 @@ import phaserHaxe.Create;
 		{
 			return null;
 		}
-	}
-
-	/**
-	 * Checks the given key to see if a Texture using it exists within this Texture Manager.
-	 *
-	 * @method Phaser.Textures.TextureManager#exists
-	 * @since 3.0.0
-	 *
-	 * @param key - The unique string-based key of the Texture.
-	 *
-	 * @return Returns `true` if a Texture matching the given key exists in this Texture Manager.
-	**/
-	public function exists(key:String):Bool
-	{
-		return list.exists(key);
-	}
-
-	/**
-	 * Creates a new Texture using the given source and dimensions.
-	 *
-	 * @since 1.0.0
-	 *
-	 * @param key - The unique string-based key of the Texture.
-	 * @param source - The source Image element.
-	 * @param width - The width of the Texture.
-	 * @param height - The height of the Texture.
-	 *
-	 * @return The Texture that was created, or `null` if the key is already in use.
-	**/
-	public function create(key:String, source:MultipleOrOne<TextureSource.HtmlSource>,
-			?width:Int, ?height:Int):Null<Texture>
-	{
-		var texture = null;
-
-		if (checkKey(key))
-		{
-			texture = new Texture(this, key, source, width, height);
-			list[key] = texture;
-		}
-
-		return texture;
 	}
 
 	/**

@@ -401,6 +401,13 @@ class Frame
 	public var radius(get, never):Float;
 
 	/**
+	 * Is the Frame trimmed or not?
+	 *
+	 * @since 1.0.0
+	**/
+	public var trimmed(get, never):Bool;
+
+	/**
 	 * The Canvas drawImage data object.
 	 *
 	 * @since 1.0.0
@@ -420,6 +427,11 @@ class Frame
 	public inline function get_radius():Float
 	{
 		return data.radius;
+	}
+
+	public inline function get_trimmed():Bool
+	{
+		return data.trim;
 	}
 
 	public inline function get_canvasData():FrameDataDrawImage
