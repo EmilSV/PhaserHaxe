@@ -28,7 +28,7 @@ interface ITextureCrop extends ICrop
 	 *
 	 * @since 1.0.0
 	**/
-	public var texture:Either<Texture, CanvasTexture>;
+	public var texture:Texture;
 
 	/**
 	 * The Texture Frame this Game Object is using to render with.
@@ -209,7 +209,7 @@ final class TextureCropMixin extends GameObject implements ITextureCrop implemen
 	 *
 	 * @since 1.0.0
 	**/
-	public var texture:Either<Texture, CanvasTexture> = null;
+	public var texture:Texture = null;
 
 	/**
 	 * The Texture Frame this Game Object is using to render with.

@@ -1,18 +1,21 @@
 package phaserHaxe.textures;
 
+import js.html.Image as HTMLImage;
+import js.html.CanvasElement as HTMLCanvasElement;
+import js.html.CanvasRenderingContext2D;
+import js.html.ImageElement as HTMLImageElement;
+import js.html.webgl.Texture as WebGLTexture;
+import haxe.Constraints.Function;
+import haxe.ds.Map;
+import phaserHaxe.gameobjects.components.ICrop;
+import phaserHaxe.gameobjects.GameObject;
+import phaserHaxe.display.Color;
 import phaserHaxe.gameobjects.RenderTexture;
 import phaserHaxe.utils.MultipleOrOne;
 import phaserHaxe.utils.StringOrInt;
-import haxe.Constraints.Function;
 import phaserHaxe.display.canvas.CanvasPool;
-import haxe.ds.Map;
-import js.html.CanvasElement as HTMLCanvasElement;
-import js.html.CanvasRenderingContext2D;
 import phaserHaxe.core.GameEvents;
-import js.html.Image as HTMLImage;
 import phaserHaxe.textures.Parser;
-import js.html.ImageElement as HTMLImageElement;
-import js.html.webgl.Texture as WebGLTexture;
 import phaserHaxe.Create;
 
 /**
@@ -449,11 +452,11 @@ import phaserHaxe.Create;
 		var texture = null;
 		if (skipCache)
 		{
-			texture = new CanvasTexture(this, key, source, source.width, source.height);
+			texture = new CanvasTexture(cast this, key, source, source.width, source.height);
 		}
 		else if (checkKey(key))
 		{
-			texture = new CanvasTexture(this, key, source, source.width, source.height);
+			texture = new CanvasTexture(cast this, key, source, source.width, source.height);
 
 			list[key] = texture;
 
@@ -630,14 +633,12 @@ import phaserHaxe.Create;
 	 * Adds a Unity Texture Atlas to this Texture Manager.
 	 * The data must be in the form of a Unity YAML file.
 	 *
-	 * @method Phaser.Textures.TextureManager#addUnityAtlas
-	 * @fires Phaser.Textures.Events#ADD
-	 * @since 3.0.0
+	 * @since 1.0.0
 	 *
-	 * @param {string} key - The unique string-based key of the Texture.
-	 * @param {HTMLImageElement} source - The source Image element.
-	 * @param {object} data - The Texture Atlas data.
-	 * @param {HTMLImageElement|HTMLCanvasElement|HTMLImageElement[]|HTMLCanvasElement[]} [dataSource] - An optional data Image element.
+	 * @param key - The unique string-based key of the Texture.
+	 * @param source - The source Image element.
+	 * @param data - The Texture Atlas data.
+	 * @param dataSource - An optional data Image element.
 	 *
 	 * @return The Texture that was created, or `null` if the key is already in use.
 	**/
@@ -707,9 +708,9 @@ import phaserHaxe.Create;
 	 * @since 1.0.0
 	 *
 	 * @param key - The unique string-based key of the Texture.
-	 * @param {Phaser.Types.Textures.SpriteSheetFromAtlasConfig} config - The configuration object for this Sprite Sheet.
+	 * @param config - The configuration object for this Sprite Sheet.
 	 *
-	 * @return {?Phaser.Textures.Texture} The Texture that was created, or `null` if the key is already in use.
+	 * @return The Texture that was created, or `null` if the key is already in use.
 	**/
 	public function addSpriteSheetFromAtlas(key:String,
 			config:SpriteSheetFromAtlasConfig):Null<Texture>
@@ -739,7 +740,7 @@ import phaserHaxe.Create;
 
 		var atlas = get(atlasKey);
 		var sheet = atlas.get(atlasFrame);
-		
+
 		if (sheet != null)
 		{
 			var texture = create(key, cast sheet.source.image);
@@ -791,8 +792,7 @@ import phaserHaxe.Create;
 	/**
 	 * Checks the given key to see if a Texture using it exists within this Texture Manager.
 	 *
-	 * @method Phaser.Textures.TextureManager#exists
-	 * @since 3.0.0
+	 * @since 1.0.0
 	 *
 	 * @param key - The unique string-based key of the Texture.
 	 *
@@ -871,11 +871,204 @@ import phaserHaxe.Create;
 	}
 
 	/**
+	 * Returns an array with all of the keys of all Textures in this Texture Manager.
+	 * The output array will exclude the `__DEFAULT` and `__MISSING` keys.
+	 *
+	 * @since 1.0.0
+	 *
+	 * @return An array containing all of the Texture keys stored in this Texture Manager.
+	**/
+	function getTextureKeys():Array<String>
+	{
+		var output = [];
+
+		for (key => _ in list)
+		{
+			if (key != '__DEFAULT' && key != '__MISSING')
+			{
+				output.push(key);
+			}
+		}
+
+		return output;
+	}
+
+	/**
+	 * Given a Texture and an `x` and `y` coordinate this method will return a new
+	 * Color object that has been populated with the color and alpha values of the pixel
+	 * at that location in the Texture.
+	 *
+	 * @since 1.0.0
+	 *
+	 * @param x - The x coordinate of the pixel within the Texture.
+	 * @param y - The y coordinate of the pixel within the Texture.
+	 * @param key - The unique string-based key of the Texture.
+	 * @param frame - The string or index of the Frame.
+	 *
+	 * @return A Color object populated with the color values of the requested pixel,
+	 * or `null` if the coordinates were out of bounds.
+	**/
+	public function getPixel(x:Int, y:Int, key:String, ?frame:StringOrInt):Null<Color>
+	{
+		var textureFrame = this.getFrame(key, frame);
+
+		if (textureFrame != null)
+		{
+			//  Adjust for trim (if not trimmed x and y are just zero)
+			x -= textureFrame.x;
+			y -= textureFrame.y;
+
+			var data = textureFrame.data.cut;
+
+			x += data.x;
+			y += data.y;
+
+			if (x >= data.x && x < data.r && y >= data.y && y < data.b)
+			{
+				var ctx = this._tempContext;
+
+				ctx.clearRect(0, 0, 1, 1);
+				ctx.drawImage(cast textureFrame.source.image, x, y, 1, 1, 0, 0, 1, 1);
+
+				var rgb = ctx.getImageData(0, 0, 1, 1);
+
+				return new Color(rgb.data[0], rgb.data[1], rgb.data[2], rgb.data[3]);
+			}
+		}
+
+		return null;
+	}
+
+	/**
+	 * Given a Texture and an `x` and `y` coordinate this method will return a value between 0 and 255
+	 * corresponding to the alpha value of the pixel at that location in the Texture. If the coordinate
+	 * is out of bounds it will return null.
+	 *
+	 * @since 1.0.0
+	 *
+	 * @param x - The x coordinate of the pixel within the Texture.
+	 * @param y - The y coordinate of the pixel within the Texture.
+	 * @param key - The unique string-based key of the Texture.
+	 * @param frame - The string or index of the Frame.
+	 *
+	 * @return A value between 0 and 255, or `null` if the coordinates were out of bounds.
+	**/
+	public function getPixelAlpha(x:Float, y:Float, key:String,
+			frame:StringOrInt):Null<Int>
+	{
+		var textureFrame = getFrame(key, frame);
+
+		if (textureFrame != null)
+		{
+			//  Adjust for trim (if not trimmed x and y are just zero)
+			x -= textureFrame.x;
+			y -= textureFrame.y;
+
+			var data = textureFrame.data.cut;
+
+			x += data.x;
+			y += data.y;
+
+			if (x >= data.x && x < data.r && y >= data.y && y < data.b)
+			{
+				var ctx = _tempContext;
+
+				ctx.clearRect(0, 0, 1, 1);
+				ctx.drawImage(cast textureFrame.source.image, x, y, 1, 1, 0, 0, 1, 1);
+
+				var rgb = ctx.getImageData(0, 0, 1, 1);
+
+				return rgb.data[3];
+			}
+		}
+
+		return null;
+	}
+
+	/**
+	 * Sets the given Game Objects `texture` and `frame` properties so that it uses
+	 * the Texture and Frame specified in the `key` and `frame` arguments to this method.
+	 *
+	 * @since 1.0.0
+	 *
+	 * @param gameObject - The Game Object the texture would be set on.
+	 * @param key - The unique string-based key of the Texture.
+	 * @param frame - The string or index of the Frame.
+	 *
+	 * @return The Game Object the texture was set on.
+	**/
+	public function setTexture<T:GameObject & ICrop>(gameObject:T, key:String,
+			?frame:StringOrInt):GameObject
+	{
+		if (list.exists(key))
+		{
+			gameObject.texture = this.list[key];
+			gameObject.frame = gameObject.texture.get(frame);
+		}
+		return gameObject;
+	}
+
+	/**
+	 * Changes the key being used by a Texture to the new key provided.
+	 *
+	 * The old key is removed, allowing it to be re-used.
+	 *
+	 * Game Objects are linked to Textures by a reference to the Texture object, so
+	 * all existing references will be retained.
+	 *
+	 * @since 1.0.0
+	 *
+	 * @param currentKey - The current string-based key of the Texture you wish to rename.
+	 * @param newKey - The new unique string-based key to use for the Texture.
+	 *
+	 * @return `true` if the Texture key was successfully renamed, otherwise `false`.
+	**/
+	public function renameTexture(currentKey:String, newKey:String):Bool
+	{
+		var texture = get(currentKey);
+
+		if (texture != null && currentKey != newKey)
+		{
+			texture.key = newKey;
+
+			list[newKey] = texture;
+
+			list.remove(currentKey);
+
+			return true;
+		}
+
+		return false;
+	}
+
+	/**
+	 * Passes all Textures to the given callback.
+	 *
+	 * @since 1.0.0
+	 *
+	 * @param callback - The callback function to be sent the Textures.
+	 * @param scope - The value to use as `this` when executing the callback.
+	 * @param args - Additional arguments that will be passed to the callback, after the child.
+	**/
+	public function each(callback:Function, ?scope:Dynamic, ?args:Array<Dynamic>):Void
+	{
+		var args:Array<Dynamic> = args != null ? args : [];
+
+		args.insert(0, null);
+
+		for (texture in list)
+		{
+			args[0] = texture;
+			Reflect.callMethod(scope, callback, args);
+		}
+	}
+
+	/**
 	 * Destroys the Texture Manager and all Textures stored within it.
 	 *
 	 * @since 1.0.0
 	**/
-	public function destroy()
+	public function destroy():Void
 	{
 		for (texture in list)
 		{

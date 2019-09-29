@@ -3,6 +3,7 @@ package phaserHaxe.textures;
 import phaserHaxe.math.MathUtility;
 import js.html.webgl.Texture as WebGLTexture;
 import phaserHaxe.gameobjects.components.CropDataObject;
+import phaserHaxe.utils.CustomData;
 
 @:structInit
 final class FrameData
@@ -54,14 +55,14 @@ final class FrameData
 @:structInit
 final class FrameDataCut
 {
-	public var x:Float;
-	public var y:Float;
-	public var w:Float;
-	public var h:Float;
-	public var r:Float;
-	public var b:Float;
+	public var x:Int;
+	public var y:Int;
+	public var w:Int;
+	public var h:Int;
+	public var r:Int;
+	public var b:Int;
 
-	public function new(x:Float, y:Float, w:Float, h:Float, r:Float, b:Float)
+	public function new(x:Int, y:Int, w:Int, h:Int, r:Int, b:Int)
 	{
 		this.x = x;
 		this.y = y;
@@ -85,10 +86,10 @@ final class FrameDataCut
 @:structInit
 final class FrameDataSourceSize
 {
-	public var w:Float;
-	public var h:Float;
+	public var w:Int;
+	public var h:Int;
 
-	public function new(w:Float, h:Float)
+	public function new(w:Int, h:Int)
 	{
 		this.w = w;
 		this.h = h;
@@ -108,14 +109,14 @@ final class FrameDataSourceSize
 @:structInit
 final class FrameDataSpriteSourceSize
 {
-	public var x:Float;
-	public var y:Float;
-	public var w:Float;
-	public var h:Float;
-	public var r:Float;
-	public var b:Float;
+	public var x:Int;
+	public var y:Int;
+	public var w:Int;
+	public var h:Int;
+	public var r:Int;
+	public var b:Int;
 
-	public function new(x:Float, y:Float, w:Float, h:Float, r:Float, b:Float)
+	public function new(x:Int, y:Int, w:Int, h:Int, r:Int, b:Int)
 	{
 		this.x = x;
 		this.y = y;
@@ -139,12 +140,12 @@ final class FrameDataSpriteSourceSize
 @:structInit
 final class FrameDataDrawImage
 {
-	public var x:Float;
-	public var y:Float;
-	public var width:Float;
-	public var height:Float;
+	public var x:Int;
+	public var y:Int;
+	public var width:Int;
+	public var height:Int;
 
-	public function new(x:Float, y:Float, width:Float, height:Float)
+	public function new(x:Int, y:Int, width:Int, height:Int)
 	{
 		this.x = x;
 		this.y = y;
@@ -340,8 +341,8 @@ class Frame
 	 *
 	 * @since 1.0.0
 	**/
-	public var customData:{};
-
+	public var customData:CustomData = new CustomData();
+	
 	/**
 	 * WebGL UV u0 value.
 	 *

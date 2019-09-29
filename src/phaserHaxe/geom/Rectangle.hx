@@ -11,6 +11,7 @@ import phaserHaxe.math.MathUtility;
  * @since 1.0.0
  *
 **/
+@:structInit
 class Rectangle
 {
 	/**

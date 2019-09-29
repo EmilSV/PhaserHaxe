@@ -466,7 +466,7 @@ final class SizeMixin extends GameObject implements ISize implements ITransform
 	private var _crop:CropDataObject;
 
 	@:phaserHaxe.mixinIgnore
-	public var texture:Either<Texture, CanvasTexture> = null;
+	public var texture:Texture = null;
 
 	@:phaserHaxe.mixinIgnore
 	public var frame:Frame = null;

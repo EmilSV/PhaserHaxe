@@ -456,7 +456,7 @@ final class ComputedSizeMixin extends GameObject implements IComputedSize
 	private var _crop:CropDataObject = new CropDataObject();
 
 	@:phaserHaxe.mixinIgnore
-	public var texture:Either<Texture, CanvasTexture> = null;
+	public var texture:Texture = null;
 
 	@:phaserHaxe.mixinIgnore
 	public var frame:Frame = null;

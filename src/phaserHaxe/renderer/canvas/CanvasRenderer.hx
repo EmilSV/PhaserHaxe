@@ -633,8 +633,8 @@ class CanvasRenderer
 			frameWidth = crop.cw;
 			frameHeight = crop.ch;
 
-			frameX = crop.cx;
-			frameY = crop.cy;
+			frameX = Std.int(crop.cx);
+			frameY = Std.int(crop.cy);
 
 			x = -displayOriginX + crop.x;
 			y = -displayOriginY + crop.y;

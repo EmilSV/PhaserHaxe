@@ -3,6 +3,7 @@ package phaserHaxe.textures;
 import haxe.ds.StringMap;
 import phaserHaxe.utils.MultipleOrOne;
 import phaserHaxe.utils.StringOrInt;
+import phaserHaxe.utils.CustomData;
 import haxe.ds.Map;
 
 /**
@@ -68,7 +69,7 @@ class Texture
 	 *
 	 * @since 1.0.0
 	**/
-	public var customData:Dynamic;
+	public var customData:CustomData;
 
 	/**
 	 * The name of the first frame of the Texture.
@@ -107,7 +108,7 @@ class Texture
 
 		this.frames = new Map();
 
-		this.customData = {};
+		this.customData = new CustomData();
 
 		this.firstFrame = "__BASE";
 
@@ -118,12 +119,12 @@ class Texture
 		{
 			for (item in source.getArray())
 			{
-				this.source.push(new TextureSource(this, item, width, height));
+				this.source.push(new TextureSource(cast this, item, width, height));
 			}
 		}
 		else
 		{
-			this.source.push(new TextureSource(this, source.getOne(), width, height));
+			this.source.push(new TextureSource(cast this, source.getOne(), width, height));
 		}
 	}
 

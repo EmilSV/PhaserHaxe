@@ -472,7 +472,7 @@ final class FrameBasedSizeMixin implements IFrameBasedSize implements ITransform
 
 	// ICrop implementation
 	@:phaserHaxe.mixinIgnore
-	public var texture:Either<Texture, CanvasTexture> = null;
+	public var texture:Texture = null;
 
 	@:phaserHaxe.mixinIgnore
 	public var frame:Frame = null;

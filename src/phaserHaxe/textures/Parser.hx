@@ -1,5 +1,59 @@
 package phaserHaxe.textures;
 
+import phaserHaxe.math.MathInt;
+import phaserHaxe.geom.Rectangle;
+import phaserHaxe.utils.CustomData;
+
+private typedef JsonData =
+{
+	var ?textures:Array<JsonSource>;
+	var ?frames:Array<JsonFrame>;
+};
+
+private typedef JsonSource =
+{
+	var ?frames:Array<JsonFrame>;
+};
+
+private typedef JsonFrame =
+{
+	var ?filename:String;
+	var ?frame:JsonFrameDimensions;
+	var ?sourceSize:JsonSourceSize;
+	var ?spriteSourceSize:JsonSpriteSourceSize;
+	var ?anchor:JsonAnchor;
+	var ?trimmed:Bool;
+	var ?rotated:Bool;
+};
+
+private typedef JsonFrameDimensions =
+{
+	var ?x:Float;
+	var ?y:Float;
+	var ?w:Float;
+	var ?h:Float;
+};
+
+private typedef JsonSourceSize =
+{
+	var ?w:Float;
+	var ?h:Float;
+};
+
+private typedef JsonSpriteSourceSize =
+{
+	var ?x:Float;
+	var ?y:Float;
+	var ?w:Float;
+	var ?h:Float;
+};
+
+private typedef JsonAnchor =
+{
+	var ?x:Float;
+	var ?y:Float;
+};
+
 final class Parser
 {
 	/**
@@ -16,7 +70,7 @@ final class Parser
 	{
 		var source = texture.source[sourceIndex];
 
-		texture.add('__BASE', sourceIndex, 0, 0, source.width, source.height);
+		texture.add("__BASE", sourceIndex, 0, 0, source.width, source.height);
 
 		return texture;
 	}
@@ -36,7 +90,59 @@ final class Parser
 	public static function jsonArray(texture:Texture, sourceIndex:Int,
 			json:Dynamic):Null<Texture>
 	{
-		throw new Error("not implemented");
+		final json:JsonData = json;
+
+		if (json.frames == null && json.textures == null)
+		{
+			Console.warn("Invalid Texture Atlas JSON Array");
+			return null;
+		}
+
+		//  Add in a __BASE entry (for the entire atlas)
+		var source = texture.source[sourceIndex];
+
+		texture.add("__BASE", sourceIndex, 0, 0, source.width, source.height);
+
+		var frames = Std.is(json.textures, Array) ? json.textures[sourceIndex].frames : json.frames;
+
+		var newFrame;
+
+		for (i in 0...frames.length)
+		{
+			var src = frames[i];
+
+			//  The frame values are the exact coordinates to cut the frame out of the atlas from
+			newFrame = texture.add(src.filename, sourceIndex, Std.int(src.frame.x), Std.int(src.frame.y), Std.int(src.frame.w), Std.int(src.frame.h));
+
+			//  These are the original (non-trimmed) sprite values
+			if (src.trimmed)
+			{
+				newFrame.setTrim(Std.int(src.sourceSize.w), Std.int(src.sourceSize.h),
+					Std.int(src.spriteSourceSize.x), Std.int(src.spriteSourceSize.y),
+					Std.int(src.spriteSourceSize.w), Std.int(src.spriteSourceSize.h));
+			}
+
+			if (src.rotated)
+			{
+				newFrame.rotated = true;
+				newFrame.updateUVsInverted();
+			}
+
+			if (src.anchor != null)
+			{
+				newFrame.customPivot = true;
+				newFrame.pivotX = Std.int(src.anchor.x);
+				newFrame.pivotY = Std.int(src.anchor.y);
+			}
+
+			//  Copy over any extra data
+			newFrame.customData = CustomData.cloneFromDynamic(src);
+		}
+
+		//  Copy over any additional data that was in the JSON to Texture.customData
+		CustomData.assignFromDynamic(texture.customData, json, (name) -> name != "frames");
+
+		return texture;
 	}
 
 	/**
@@ -69,55 +175,62 @@ final class Parser
 	 * @return The Texture modified by this parser.
 	**/
 	public static function atlasXML(texture:Texture, sourceIndex:Int,
-			xml:Dynamic):Null<Texture>
+			xml:Xml):Null<Texture>
 	{
-		throw new Error("not implemented");
+		inline function parseInt(value:String, defaultValue:Int = 0):Int
+		{
+			var n = Std.parseInt(value);
+			if (n != null)
+			{
+				return n;
+			}
+			else
+			{
+				return defaultValue;
+			}
+		}
 
-		// //  Malformed?
-		// if (!xml.getElementsByTagName('TextureAtlas'))
-		// {
-		// 	console.warn('Invalid Texture Atlas XML given');
-		// 	return;
-		// }
+		//  Malformed?
+		if (!xml.elementsNamed("TextureAtlas").hasNext())
+		{
+			Console.warn("Invalid Texture Atlas XML given");
+			return null;
+		}
 
-		// //  Add in a __BASE entry (for the entire atlas)
-		// var source = texture.source[sourceIndex];
+		//  Add in a __BASE entry (for the entire atlas)
+		var source = texture.source[sourceIndex];
 
-		// texture.add('__BASE', sourceIndex, 0, 0, source.width, source.height);
+		texture.add("__BASE", sourceIndex, 0, 0, source.width, source.height);
 
-		// //  By this stage frames is a fully parsed array
-		// var frames = xml.getElementsByTagName('SubTexture');
+		//  By this stage frames is a fully parsed array
+		var frames = xml.elementsNamed("SubTexture");
 
-		// var newFrame;
+		var newFrame:Frame;
 
-		// for (var i = 0;
-		// i < frames.length;
-		// i++)
-		// {
-		// 	var frame = frames[i].attributes;
+		for (frame in frames)
+		{
+			var name = frame.get("name");
+			var x = parseInt(frame.get("x"), 10);
+			var y = parseInt(frame.get("y"), 10);
+			var width = parseInt(frame.get("width"), 10);
+			var height = parseInt(frame.get("height"), 10);
 
-		// 	var name = frame.name.value;
-		// 	var x = parseInt(frame.x.value, 10);
-		// 	var y = parseInt(frame.y.value, 10);
-		// 	var width = parseInt(frame.width.value, 10);
-		// 	var height = parseInt(frame.height.value, 10);
+			//  The frame values are the exact coordinates to cut the frame out of the atlas from
+			newFrame = texture.add(name, sourceIndex, x, y, width, height);
 
-		// 	//  The frame values are the exact coordinates to cut the frame out of the atlas from
-		// 	newFrame = texture.add(name, sourceIndex, x, y, width, height);
+			//  These are the original (non-trimmed) sprite values
+			if (frame.get("frameX") != null)
+			{
+				var frameX = MathInt.abs(parseInt(frame.get("frameX"), 10));
+				var frameY = MathInt.abs(parseInt(frame.get("frameY"), 10));
+				var frameWidth = parseInt(frame.get("width"), 10);
+				var frameHeight = parseInt(frame.get("frameHeight"), 10);
 
-		// 	//  These are the original (non-trimmed) sprite values
-		// 	if (frame.frameX)
-		// 	{
-		// 		var frameX = Math.abs(parseInt(frame.frameX.value, 10));
-		// 		var frameY = Math.abs(parseInt(frame.frameY.value, 10));
-		// 		var frameWidth = parseInt(frame.frameWidth.value, 10);
-		// 		var frameHeight = parseInt(frame.frameHeight.value, 10);
+				newFrame.setTrim(width, height, frameX, frameY, frameWidth, frameHeight);
+			}
+		}
 
-		// 		newFrame.setTrim(width, height, frameX, frameY, frameWidth, frameHeight);
-		// 	}
-		// }
-
-		// return texture;
+		return texture;
 	}
 
 	/**
@@ -133,85 +246,107 @@ final class Parser
 	 * @return The Texture modified by this parser.
 	**/
 	public static function unityYAML(texture:Texture, sourceIndex:Int,
-			yaml:Dynamic):Null<Texture>
+			yaml:String):Null<Texture>
 	{
-		throw new Error("not implemented");
+		var imageHeight;
 
-		// //  Add in a __BASE entry (for the entire atlas)
-		// var source = texture.source[sourceIndex];
+		inline function addFrame(texture:Texture, sourceIndex:Int, name:String,
+				frame:Rectangle)
+		{
+			var y = imageHeight - frame.y - frame.height;
 
-		// texture.add('__BASE', sourceIndex, 0, 0, source.width, source.height);
+			texture.add(name, sourceIndex, Std.int(frame.x), Std.int(y), Std.int(frame.width), Std.int(frame.height));
+		}
 
-		// imageHeight = source.height;
+		inline function parseInt(value:String, defaultValue:Int = 0):Int
+		{
+			var n = Std.parseInt(value);
+			if (n != null)
+			{
+				return n;
+			}
+			else
+			{
+				return defaultValue;
+			}
+		}
 
-		// var data = yaml.split('\n');
+		//  Add in a __BASE entry (for the entire atlas)
+		var source = texture.source[sourceIndex];
 
-		// var lineRegExp = /^[ ]*(- )*(\w+)+[: ]+(.*)/;
+		texture.add("__BASE", sourceIndex, 0, 0, source.width, source.height);
 
-		// var prevSprite = '';
-		// var currentSprite = '';
-		// var rect = { x: 0, y: 0, width: 0, height: 0 };
+		imageHeight = source.height;
 
-		// // var pivot = { x: 0, y: 0 };
-		// // var border = { x: 0, y: 0, z: 0, w: 0 };
+		var data = yaml.split("\n");
 
-		// for (var i = 0; i < data.length; i++)
-		// {
-		// 	var results = data[i].match(lineRegExp);
+		var lineRegExp = ~/^[ ]*(- )*(\w+)+[: ]+(.*)/;
 
-		// 	if (!results)
-		// 	{
-		// 		continue;
-		// 	}
+		var prevSprite = "";
+		var currentSprite = "";
+		var rect:Rectangle = {
+			x: 0,
+			y: 0,
+			width: 0,
+			height: 0
+		};
 
-		// 	var isList = (results[1] === '- ');
-		// 	var key = results[2];
-		// 	var value = results[3];
+		for (i in 0...data.length)
+		{
+			var results = lineRegExp.split(data[i]);
 
-		// 	if (isList)
-		// 	{
-		// 		if (currentSprite !== prevSprite)
-		// 		{
-		// 			addFrame(texture, sourceIndex, currentSprite, rect);
+			if (results == null)
+			{
+				continue;
+			}
 
-		// 			prevSprite = currentSprite;
-		// 		}
+			var isList = (results[1] == "- ");
+			var key = results[2];
+			var value = results[3];
 
-		// 		rect = { x: 0, y: 0, width: 0, height: 0 };
-		// 	}
+			if (isList)
+			{
+				if (currentSprite != prevSprite)
+				{
+					addFrame(texture, sourceIndex, currentSprite, rect);
 
-		// 	if (key === 'name')
-		// 	{
-		// 		//  Start new list
-		// 		currentSprite = value;
-		// 		continue;
-		// 	}
+					prevSprite = currentSprite;
+				}
 
-		// 	switch (key)
-		// 	{
-		// 		case 'x':
-		// 		case 'y':
-		// 		case 'width':
-		// 		case 'height':
-		// 			rect[key] = parseInt(value, 10);
-		// 			break;
+				rect = {
+					x: 0,
+					y: 0,
+					width: 0,
+					height: 0
+				};
+			}
 
-		// 		// case 'pivot':
-		// 		//     pivot = eval('var obj = ' + value);
-		// 		//     break;
+			if (key == "name")
+			{
+				//  Start new list
+				currentSprite = value;
+				continue;
+			}
 
-		// 		// case 'border':
-		// 		//     border = eval('var obj = ' + value);
-		// 		//     break;
-		// 	}
-		// }
+			switch (key)
+			{
+				case "x":
+					rect.x = parseInt(value, 10);
+				case "y":
+					rect.y = parseInt(value, 10);
+				case "width":
+					rect.width = parseInt(value, 10);
+				case "height":
+					rect.height = parseInt(value, 10);
+			}
+		}
 
-		// if (currentSprite !== prevSprite)
-		// {
-		// 	addFrame(texture, sourceIndex, currentSprite, rect);
-		// }
+		if (currentSprite != prevSprite)
+		{
+			addFrame(texture, sourceIndex, currentSprite, rect);
+		}
 
-		// return texture;
+		return texture;
 	}
 
 	/**
@@ -231,89 +366,90 @@ final class Parser
 	public static function spriteSheet(texture:Texture, sourceIndex:Int, x:Int, y:Int,
 			width:Int, height:Int, config:SpriteSheetConfig):Null<Texture>
 	{
-		throw new Error("not implemented");
+		inline function getValue<T>(value:T, defaultValue:T)
+		{
+			return value != null ? value : defaultValue;
+		}
 
-		// var frameWidth = GetFastValue(config, 'frameWidth', null);
-		// var frameHeight = GetFastValue(config, 'frameHeight', frameWidth);
+		var frameWidth = config.frameWidth;
+		var frameHeight = getValue(config.frameHeight, frameWidth);
 
-		// //  If missing we can't proceed
-		// if (frameWidth == = null)
-		// {
-		// 	throw new Error('TextureManager.SpriteSheet: Invalid frameWidth given.');
-		// }
+		//  If missing we can't proceed
+		if (frameWidth == null)
+		{
+			throw new Error("TextureManager.SpriteSheet: Invalid frameWidth given.");
+		}
 
-		// //  Add in a __BASE entry (for the entire atlas)
-		// var source = texture.source[sourceIndex];
+		//  Add in a __BASE entry (for the entire atlas)
+		var source = texture.source[sourceIndex];
 
-		// texture.add('__BASE', sourceIndex, 0, 0, source.width, source.height);
+		texture.add("__BASE", sourceIndex, 0, 0, source.width, source.height);
 
-		// var startFrame = GetFastValue(config, 'startFrame', 0);
-		// var endFrame = GetFastValue(config, 'endFrame', -1);
-		// var margin = GetFastValue(config, 'margin', 0);
-		// var spacing = GetFastValue(config, 'spacing', 0);
+		var startFrame = getValue(config.startFrame, 0);
+		var endFrame = getValue(config.endFrame, -1);
+		var margin = getValue(config.margin, 0);
+		var spacing = getValue(config.spacing, 0);
 
-		// var row = Math.floor((width - margin + spacing) / (frameWidth + spacing));
-		// var column = Math.floor((height - margin + spacing) / (frameHeight + spacing));
-		// var total = row * column;
+		var row = Math.floor((width - margin + spacing) / (frameWidth + spacing));
+		var column = Math.floor((height - margin + spacing) / (frameHeight + spacing));
+		var total = row * column;
 
-		// if (total == = 0)
-		// {
-		// 	console.warn('SpriteSheet frame dimensions will result in zero frames.');
-		// }
+		if (total == 0)
+		{
+			Console.warn("SpriteSheet frame dimensions will result in zero frames.");
+		}
 
-		// if (startFrame > total || startFrame < -total)
-		// {
-		// 	startFrame = 0;
-		// }
+		if (startFrame > total || startFrame < -total)
+		{
+			startFrame = 0;
+		}
 
-		// if (startFrame < 0)
-		// {
-		// 	//  Allow negative skipframes.
-		// 	startFrame = total + startFrame;
-		// }
+		if (startFrame < 0)
+		{
+			//  Allow negative skipframes.
+			startFrame = total + startFrame;
+		}
 
-		// if (endFrame != = -1)
-		// {
-		// 	total = startFrame + (endFrame + 1);
-		// }
+		if (endFrame != -1)
+		{
+			total = startFrame + (endFrame + 1);
+		}
 
-		// var fx = margin;
-		// var fy = margin;
-		// var ax = 0;
-		// var ay = 0;
+		var fx = margin;
+		var fy = margin;
+		var ax = 0;
+		var ay = 0;
 
-		// for (var i = 0;
-		// i < total;
-		// i++)
-		// {
-		// 	ax = 0;
-		// 	ay = 0;
+		for (i in 0...total)
+		{
+			ax = 0;
+			ay = 0;
 
-		// 	var w = fx + frameWidth;
-		// 	var h = fy + frameHeight;
+			var w = fx + frameWidth;
+			var h = fy + frameHeight;
 
-		// 	if (w > width)
-		// 	{
-		// 		ax = w - width;
-		// 	}
+			if (w > width)
+			{
+				ax = w - width;
+			}
 
-		// 	if (h > height)
-		// 	{
-		// 		ay = h - height;
-		// 	}
+			if (h > height)
+			{
+				ay = h - height;
+			}
 
-		// 	texture.add(i, sourceIndex, x + fx, y + fy, frameWidth - ax, frameHeight - ay);
+			texture.add(i, sourceIndex, x + fx, y + fy, frameWidth - ax, frameHeight - ay);
 
-		// 	fx += frameWidth + spacing;
+			fx += frameWidth + spacing;
 
-		// 	if (fx + frameWidth > width)
-		// 	{
-		// 		fx = margin;
-		// 		fy += frameHeight + spacing;
-		// 	}
-		// }
+			if (fx + frameWidth > width)
+			{
+				fx = margin;
+				fy += frameHeight + spacing;
+			}
+		}
 
-		// return texture;
+		return texture;
 	}
 
 	/**
@@ -324,165 +460,169 @@ final class Parser
 	 *
 	 * @since 1.0.0
 	 *
-	 * @param {Phaser.Textures.Texture} texture - The Texture to add the Frames to.
-	 * @param {Phaser.Textures.Frame} frame - The Frame that contains the Sprite Sheet.
-	 * @param {object} config - An object describing how to parse the Sprite Sheet.
+	 * @param texture - The Texture to add the Frames to.
+	 * @param frame - The Frame that contains the Sprite Sheet.
+	 * @param config - An object describing how to parse the Sprite Sheet.
 	 *
 	 * @return The Texture modified by this parser.
 	**/
 	public static function spriteSheetFromAtlas(texture:Texture, frame:Frame,
 			config:SpriteSheetFromAtlasConfig):Null<Texture>
 	{
-		throw new Error("not implemented");
+		inline function getValue<T>(value:T, defaultValue:T)
+		{
+			return value != null ? value : defaultValue;
+		}
 
-		// var frameWidth = GetFastValue(config, 'frameWidth', null);
-		// var frameHeight = GetFastValue(config, 'frameHeight', frameWidth);
+		var frameWidth = config.frameWidth;
+		var frameHeight = getValue(config.frameHeight, frameWidth);
 
-		// //  If missing we can't proceed
-		// if (!frameWidth)
-		// {
-		// 	throw new Error('TextureManager.SpriteSheetFromAtlas: Invalid frameWidth given.');
-		// }
+		//  If missing we can't proceed
+		if (frameWidth == null)
+		{
+			throw new Error("TextureManager.SpriteSheetFromAtlas: Invalid frameWidth given.");
+		}
 
-		// //  Add in a __BASE entry (for the entire atlas frame)
-		// var source = texture.source[0];
-		// texture.add('__BASE', 0, 0, 0, source.width, source.height);
+		//  Add in a __BASE entry (for the entire atlas frame)
+		var source = texture.source[0];
+		texture.add("__BASE", 0, 0, 0, source.width, source.height);
 
-		// var startFrame = GetFastValue(config, 'startFrame', 0);
-		// var endFrame = GetFastValue(config, 'endFrame', -1);
-		// var margin = GetFastValue(config, 'margin', 0);
-		// var spacing = GetFastValue(config, 'spacing', 0);
+		var startFrame = getValue(config.startFrame, 0);
+		var endFrame = getValue(config.endFrame, -1);
+		var margin = getValue(config.margin, 0);
+		var spacing = getValue(config.spacing, 0);
 
-		// var x = frame.cutX;
-		// var y = frame.cutY;
+		var x = frame.cutX;
+		var y = frame.cutY;
 
-		// var cutWidth = frame.cutWidth;
-		// var cutHeight = frame.cutHeight;
-		// var sheetWidth = frame.realWidth;
-		// var sheetHeight = frame.realHeight;
+		var cutWidth = frame.cutWidth;
+		var cutHeight = frame.cutHeight;
+		var sheetWidth = frame.realWidth;
+		var sheetHeight = frame.realHeight;
 
-		// var row = Math.floor((sheetWidth - margin + spacing) / (frameWidth + spacing));
-		// var column = Math.floor((sheetHeight - margin + spacing) / (frameHeight + spacing));
-		// var total = row * column;
+		var row = Math.floor((sheetWidth - margin + spacing) / (frameWidth + spacing));
+		var column = Math.floor((sheetHeight - margin + spacing) / (frameHeight +
+			spacing));
+		var total = row * column;
 
-		// //  trim offsets
+		// trim offsets
 
-		// var leftPad = frame.x;
-		// var leftWidth = frameWidth - leftPad;
+		var leftPad = frame.x;
+		var leftWidth = frameWidth - leftPad;
 
-		// var rightWidth = frameWidth - ((sheetWidth - cutWidth) - leftPad);
+		var rightWidth = frameWidth - ((sheetWidth - cutWidth) - leftPad);
 
-		// var topPad = frame.y;
-		// var topHeight = frameHeight - topPad;
+		var topPad = frame.y;
+		var topHeight = frameHeight - topPad;
 
-		// var bottomHeight = frameHeight - ((sheetHeight - cutHeight) - topPad);
+		var bottomHeight = frameHeight - ((sheetHeight - cutHeight) - topPad);
 
-		// if (startFrame > total || startFrame < -total)
-		// {
-		// 	startFrame = 0;
-		// }
+		if (startFrame > total || startFrame < -total)
+		{
+			startFrame = 0;
+		}
 
-		// if (startFrame < 0)
-		// {
-		// 	//  Allow negative skipframes.
-		// 	startFrame = total + startFrame;
-		// }
+		if (startFrame < 0)
+		{
+			//  Allow negative skipframes.
+			startFrame = total + startFrame;
+		}
 
-		// if (endFrame !== -1)
-		// {
-		// 	total = startFrame + (endFrame + 1);
-		// }
+		if (endFrame != -1)
+		{
+			total = startFrame + (endFrame + 1);
+		}
 
-		// var sheetFrame;
-		// var frameX = margin;
-		// var frameY = margin;
-		// var frameIndex = 0;
-		// var sourceIndex = frame.sourceIndex;
+		var sheetFrame;
+		var frameX = margin;
+		var frameY = margin;
+		var frameIndex = 0;
+		var sourceIndex = frame.sourceIndex;
 
-		// for (var sheetY = 0; sheetY < column; sheetY++)
-		// {
-		// 	var topRow = (sheetY === 0);
-		// 	var bottomRow = (sheetY === column - 1);
+		for (sheetY in 0...column)
+		{
+			var topRow = (sheetY == 0);
+			var bottomRow = (sheetY == column - 1);
 
-		// 	for (var sheetX = 0; sheetX < row; sheetX++)
-		// 	{
-		// 		var leftRow = (sheetX === 0);
-		// 		var rightRow = (sheetX === row - 1);
+			for (sheetX in 0...row)
+			{
+				var leftRow = (sheetX == 0);
+				var rightRow = (sheetX == row - 1);
 
-		// 		sheetFrame = texture.add(frameIndex, sourceIndex, x + frameX, y + frameY, frameWidth, frameHeight);
+				sheetFrame = texture.add(frameIndex, sourceIndex, x + frameX, y + frameY, frameWidth, frameHeight);
 
-		// 		if (leftRow || topRow || rightRow || bottomRow)
-		// 		{
-		// 			var destX = (leftRow) ? leftPad : 0;
-		// 			var destY = (topRow) ? topPad : 0;
+				if (leftRow || topRow || rightRow || bottomRow)
+				{
+					var destX = (leftRow) ? leftPad : 0;
+					var destY = (topRow) ? topPad : 0;
 
-		// 			var trimWidth = 0;
-		// 			var trimHeight = 0;
+					var trimWidth = 0;
+					var trimHeight = 0;
 
-		// 			if (leftRow)
-		// 			{
-		// 				trimWidth += (frameWidth - leftWidth);
-		// 			}
+					if (leftRow)
+					{
+						trimWidth += (frameWidth - leftWidth);
+					}
 
-		// 			if (rightRow)
-		// 			{
-		// 				trimWidth += (frameWidth - rightWidth);
-		// 			}
+					if (rightRow)
+					{
+						trimWidth += Std.int(frameWidth - rightWidth);
+					}
 
-		// 			if (topRow)
-		// 			{
-		// 				trimHeight += (frameHeight - topHeight);
-		// 			}
+					if (topRow)
+					{
+						trimHeight += (frameHeight - topHeight);
+					}
 
-		// 			if (bottomRow)
-		// 			{
-		// 				trimHeight += (frameHeight - bottomHeight);
-		// 			}
+					if (bottomRow)
+					{
+						trimHeight += Std.int(frameHeight - bottomHeight);
+					}
 
-		// 			var destWidth = frameWidth - trimWidth;
-		// 			var destHeight = frameHeight - trimHeight;
+					var destWidth = frameWidth - trimWidth;
+					var destHeight = frameHeight - trimHeight;
 
-		// 			sheetFrame.cutWidth = destWidth;
-		// 			sheetFrame.cutHeight = destHeight;
+					sheetFrame.cutWidth = destWidth;
+					sheetFrame.cutHeight = destHeight;
 
-		// 			sheetFrame.setTrim(frameWidth, frameHeight, destX, destY, destWidth, destHeight);
-		// 		}
+					sheetFrame.setTrim(frameWidth, frameHeight, destX, destY, destWidth, destHeight);
+				}
 
-		// 		frameX += spacing;
+				frameX += spacing;
 
-		// 		if (leftRow)
-		// 		{
-		// 			frameX += leftWidth;
-		// 		}
-		// 		else if (rightRow)
-		// 		{
-		// 			frameX += rightWidth;
-		// 		}
-		// 		else
-		// 		{
-		// 			frameX += frameWidth;
-		// 		}
+				if (leftRow)
+				{
+					frameX += leftWidth;
+				}
+				else if (rightRow)
+				{
+					frameX += Std.int(rightWidth);
+				}
+				else
+				{
+					frameX += frameWidth;
+				}
 
-		// 		frameIndex++;
-		// 	}
+				frameIndex++;
+			}
 
-		// 	frameX = margin;
-		// 	frameY += spacing;
+			frameX = margin;
+			frameY += spacing;
 
-		// 	if (topRow)
-		// 	{
-		// 		frameY += topHeight;
-		// 	}
-		// 	else if (bottomRow)
-		// 	{
-		// 		frameY += bottomHeight;
-		// 	}
-		// 	else
-		// 	{
-		// 		frameY += frameHeight;
-		// 	}
-		// }
+			if (topRow)
+			{
+				frameY += topHeight;
+			}
+			else if (bottomRow)
+			{
+				frameY += Std.int(bottomHeight);
+			}
+			else
+			{
+				frameY += frameHeight;
+			}
+		}
 
-		// return texture;
+		return texture;
 	}
 }
