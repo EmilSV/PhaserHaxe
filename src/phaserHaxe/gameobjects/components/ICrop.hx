@@ -15,6 +15,7 @@ interface ICrop
 	 *
 	 * @since 1.0.0
 	**/
+	@:allow(phaserHaxe)
 	private var _crop:CropDataObject;
 
 	/**
