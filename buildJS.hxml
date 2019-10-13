@@ -56,6 +56,7 @@ phaserHaxe.geom.Intersects
 phaserHaxe.display.Bounds
 phaserHaxe.gameobjects.components.ITransform
 phaserHaxe.gameobjects.components.IComputedSize
+phaserHaxe.gameobjects.components.Animation
 
 -main Main
 

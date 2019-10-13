@@ -373,39 +373,45 @@ final class ArrayUtils
 	 * @param array - The array to search, which must be sorted.
 	 * @param propertyAccessor - The The function to get the property to search by.
 	 *
-	 * @return The nearest value found in the array, or if a `key` was given, the nearest object with the matching property value.
+	 * @return the nearest object with the matching property value.
 	**/
 	public static inline function findClosestInSorted<T>(value:Float, array:Array<T>,
-			propertyAccessor:(T) -> Float):Float
+			propertyAccessor:(T) -> Float):T
 	{
-		if (array.length == 0)
+		return if (array.length == 0)
 		{
-			return Math.NaN;
+			return null;
 		}
 		else if (array.length == 1)
 		{
-			return propertyAccessor(array[0]);
+			array[0];
 		}
-		var i = 1, low:Float, high:Float;
-
-		if (value < propertyAccessor(array[0]))
+		else
 		{
-			return propertyAccessor(array[0]);
-		}
-		while (propertyAccessor(array[i]) < value)
-		{
-			i++;
-		}
+			var i = 1, low, high;
 
-		if (i > array.length)
-		{
-			i = array.length;
-		}
+			if (value < propertyAccessor(array[0]))
+			{
+				array[0];
+			}
+			else
+			{
+				while (propertyAccessor(array[i]) < value)
+				{
+					i++;
+				}
 
-		low = propertyAccessor(array[i - 1]);
-		high = propertyAccessor(array[i]);
-		return
-			((high - value) <= (value - low)) ? propertyAccessor(array[i]) : propertyAccessor(array[i - 1]);
+				if (i > array.length)
+				{
+					i = array.length;
+				}
+
+				low = propertyAccessor(array[i - 1]);
+				high = propertyAccessor(array[i]);
+
+				high - value <= value - low ? array[i] : array[i - 1];
+			}
+		}
 	}
 
 	/**

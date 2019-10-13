@@ -1,11 +1,8 @@
 package phaserHaxe.animations;
 
-/**
- * [description]
- *
- * @since 1.0.0
-**/
-typedef AnimationConfig =
+import phaserHaxe.animations.AnimationFrameData;
+
+typedef AnimationData =
 {
 	/**
 	 * The key that the animation will be associated with. i.e. sprite.animations.play(key)
@@ -22,11 +19,11 @@ typedef AnimationConfig =
 	public var ?type:String;
 
 	/**
-	 * An object containing data used to generate the frames for the animation
+	 *  An object containing data used to generate the frames for the animation
 	 *
 	 * @since 1.0.0
 	**/
-	public var ?frames:Array<AnimationFrameConfig>;
+	public var ?frames:Array<AnimationFrameData>;
 
 	/**
 	 * The key of the texture all frames of the animation will use. Can be overridden on a per frame basis.
@@ -64,7 +61,7 @@ typedef AnimationConfig =
 	public var ?delay:Int;
 
 	/**
-	 * Delay before starting playback. Value given in milliseconds.
+	 * Number of times to repeat the animation (-1 for infinity)
 	 *
 	 * @since 1.0.0
 	**/
@@ -92,7 +89,7 @@ typedef AnimationConfig =
 	public var ?showOnStart:Bool;
 
 	/**
-	 * Should sprite.visible = true when the animation starts to play?
+	 * Should sprite.visible = false when the animation finishes?
 	 *
 	 * @since 1.0.0
 	**/

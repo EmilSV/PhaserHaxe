@@ -1,11 +1,8 @@
 package phaserHaxe.gameobjects.components;
 
-import phaserHaxe.math.MathConst;
-import phaserHaxe.animations.AnimationEvents;
 import phaserHaxe.animations.AnimationFrame;
 import phaserHaxe.animations.AnimationManager;
 import phaserHaxe.animations.Animation as BaseAnimation;
-import phaserHaxe.gameobjects.components.IAnimation.IAnimationController;
 
 /**
  * A Game Object Animation Controller.
@@ -14,7 +11,7 @@ import phaserHaxe.gameobjects.components.IAnimation.IAnimationController;
  *
  * @since 1.0.0
 **/
-typedef Animation<ParentT:GameObject & ICrop & IFlip & IOrigin & ISize & IVisible> = AnimationController<ParentT>;
+typedef IAnimation = IAnimationController;
 
 /**
  * A Game Object Animation Controller.
@@ -23,14 +20,14 @@ typedef Animation<ParentT:GameObject & ICrop & IFlip & IOrigin & ISize & IVisibl
  *
  * @since 1.0.0
 **/
-	class AnimationController<ParentT:GameObject & ICrop & IFlip & IOrigin & ISize & IVisible> implements IAnimationController
+interface IAnimationController
 {
 	/**
 	 * The Game Object to which this animation controller belongs.
 	 *
 	 * @since 1.0.0
 	**/
-	public var parent:ParentT;
+	public var parentGameObject(get, set):GameObject;
 
 	/**
 	 * A reference to the global Animation Manager.
@@ -44,35 +41,34 @@ typedef Animation<ParentT:GameObject & ICrop & IFlip & IOrigin & ISize & IVisibl
 	 *
 	 * @since 1.0.0
 	**/
-	public var isPlaying:Bool = false;
+	public var isPlaying:Bool;
 
 	/**
 	 * The current Animation loaded into this Animation Controller.
 	 *
 	 * @since 1.0.0
 	**/
-	public var currentAnim:BaseAnimation = null;
+	public var currentAnim:BaseAnimation;
 
 	/**
 	 * The current AnimationFrame being displayed by this Animation Controller.
 	 *
 	 * @since 1.0.0
-	**/
-	public var currentFrame:AnimationFrame = null;
+	**/ public var currentFrame:AnimationFrame;
 
 	/**
 	 * The key of the next Animation to be loaded into this Animation Controller when the current animation completes.
 	 *
 	 * @since 1.0.0
 	**/
-	public var nextAnim:Null<String> = null;
+	public var nextAnim:Null<String>;
 
 	/**
 	 * Time scale factor.
 	 *
 	 * @since 1.0.0
 	**/
-	private var _timeScale:Float = 1;
+	private var _timeScale:Float;
 
 	/**
 	 * The frame rate of playback in frames per second.
@@ -80,7 +76,8 @@ typedef Animation<ParentT:GameObject & ICrop & IFlip & IOrigin & ISize & IVisibl
 	 *
 	 * @since 1.0.0
 	**/
-	private var frameRate:Float = 0;
+	@:allow(phaserHaxe)
+	private var frameRate:Float;
 
 	/**
 	 * How long the animation should play for, in milliseconds.
@@ -89,56 +86,56 @@ typedef Animation<ParentT:GameObject & ICrop & IFlip & IOrigin & ISize & IVisibl
 	 *
 	 * @since 1.0.0
 	**/
-	public var duration:Float = 0;
+	public var duration:Float;
 
 	/**
 	 * ms per frame, not including frame specific modifiers that may be present in the Animation data.
 	 *
 	 * @since 1.0.0
 	**/
-	public var msPerFrame:Float = 0;
+	public var msPerFrame:Float;
 
 	/**
 	 * Skip frames if the time lags, or always advanced anyway?
 	 *
 	 * @since 1.0.0
 	**/
-	public var skipMissedFrames:Bool = true;
+	public var skipMissedFrames:Bool;
 
 	/**
 	 * A delay before starting playback, in milliseconds.
 	 *
 	 * @since 1.0.0
 	**/
-	public var _delay:Int = 0;
+	public var _delay:Int;
 
 	/**
 	 * Number of times to repeat the animation (-1 for infinity)
 	 *
 	 * @since 1.0.0
 	**/
-	public var _repeat:Int = 0;
+	public var _repeat:Int;
 
 	/**
 	 * Delay before the repeat starts, in milliseconds.
 	 *
 	 * @since 1.0.0
 	**/
-	public var _repeatDelay:Float = 0;
+	public var _repeatDelay:Float;
 
 	/**
 	 * Should the animation yoyo? (reverse back down to the start) before repeating?
 	 *
 	 * @since 1.0.0
 	**/
-	public var _yoyo:Bool = false;
+	public var _yoyo:Bool;
 
 	/**
 	 * Will the playhead move forwards (`true`) or in reverse (`false`).
 	 *
 	 * @since 1.0.0
 	**/
-	public var forward:Bool = true;
+	public var forward:Bool;
 
 	/**
 	 * An Internal trigger that's play the animation in reverse mode ('true') or not ('false'),
@@ -146,49 +143,53 @@ typedef Animation<ParentT:GameObject & ICrop & IFlip & IOrigin & ISize & IVisibl
 	 *
 	 * @since 1.0.0
 	**/
-	private var _reverse:Bool = false;
+	@:allow(phaserHaxe)
+	private var _reverse:Bool;
 
 	/**
 	 * Internal time overflow accumulator.
 	 *
 	 * @since 1.0.0
 	**/
-	private var accumulator:Float = 0;
+	@:allow(phaserHaxe)
+	private var accumulator:Float;
 
 	/**
 	 * The time point at which the next animation frame will change.
 	 *
 	 * @since 1.0.0
 	**/
-	private var nextTick:Float = 0;
+	@:allow(phaserHaxe)
+	private var nextTick:Float;
 
 	/**
 	 * An internal counter keeping track of how many repeats are left to play.
 	 *
 	 * @since 1.0.0
 	**/
-	private var repeatCounter:Int = 0;
+	@:allow(phaserHaxe)
+	private var repeatCounter:Int;
 
 	/**
 	 * An internal flag keeping track of pending repeats.
 	 *
 	 * @since 1.0.0
 	**/
-	public var pendingRepeat:Bool = false;
+	public var pendingRepeat:Bool;
 
 	/**
 	 * Is the Animation paused?
 	 *
 	 * @since 1.0.0
 	**/
-	public var _paused:Bool = false;
+	public var _paused:Bool;
 
 	/**
 	 * Was the animation previously playing before being paused?
 	 *
 	 * @since 1.0.0
 	**/
-	public var _wasPlaying:Bool = false;
+	public var _wasPlaying:Bool;
 
 	/**
 	 * Internal property tracking if this Animation is waiting to stop.
@@ -200,7 +201,7 @@ typedef Animation<ParentT:GameObject & ICrop & IFlip & IOrigin & ISize & IVisibl
 	 *
 	 * @since 1.0.0
 	**/
-	public var _pendingStop:Int = 0;
+	public var _pendingStop:Int;
 
 	/**
 	 * Internal property used by _pendingStop.
@@ -215,52 +216,6 @@ typedef Animation<ParentT:GameObject & ICrop & IFlip & IOrigin & ISize & IVisibl
 	 * @since 1.0.0
 	**/
 	public var isPaused(get, never):Bool;
-
-	/**
-	 * The Game Object to which this animation controller belongs.
-	 *
-	 * @since 1.0.0
-	**/
-	@:noCompletion
-	public var parentGameObject(get, set):GameObject;
-
-	/**
-	 * @param parent - The Game Object to which this animation controller belongs.
-	**/
-	public function new(parent:ParentT)
-	{
-		this.parent = parent;
-
-		this.animationManager = parent.scene.sys.anims;
-
-		this.animationManager.once(AnimationEvents.REMOVE_ANIMATION, this.remove, this);
-	}
-
-	private inline function get_isPaused():Bool
-	{
-		return _paused;
-	}
-
-	private inline function get_parentGameObject():GameObject
-	{
-		return parent;
-	}
-
-	private function set_parentGameObject(value:GameObject):GameObject
-	{
-		if (Std.is(value, ICrop)
-			&& Std.is(value, IFlip)
-			&& Std.is(value, IOrigin)
-			&& Std.is(value, ISize)
-			&& Std.is(value, IVisible))
-		{
-			return parent = cast value;
-		}
-		else
-		{
-			throw new Error("gameObject do not implement all the needed components : ICrop, IFlip, IOrigin, ISize, IVisible");
-		}
-	}
 
 	/**
 	 * Sets an animation to be played immediately after the current one completes.
@@ -280,21 +235,7 @@ typedef Animation<ParentT:GameObject & ICrop & IFlip & IOrigin & ISize & IVisibl
 	 *
 	 * @return The Game Object that owns this Animation Component.
 	**/
-	public function chain(?key:Either<String, BaseAnimation>):ParentT
-	{
-		final key = if (Std.is(key, BaseAnimation))
-		{
-			(cast key : BaseAnimation).key;
-		}
-		else
-		{
-			(cast key : String);
-		}
-
-		nextAnim = key;
-
-		return parent;
-	}
+	public function chain(?key:Either<String, BaseAnimation>):GameObject;
 
 	/**
 	 * Sets the amount of time, in milliseconds, that the animation will be delayed before starting playback.
@@ -305,11 +246,7 @@ typedef Animation<ParentT:GameObject & ICrop & IFlip & IOrigin & ISize & IVisibl
 	 *
 	 * @return The Game Object that owns this Animation Component.
 	**/
-	public function setDelay(value:Int = 0):ParentT
-	{
-		_delay = value;
-		return parent;
-	}
+	public function setDelay(value:Int = 0):GameObject;
 
 	/**
 	 * Gets the amount of time, in milliseconds that the animation will be delayed before starting playback.
@@ -318,10 +255,7 @@ typedef Animation<ParentT:GameObject & ICrop & IFlip & IOrigin & ISize & IVisibl
 	 *
 	 * @return The amount of time, in milliseconds, the Animation will wait before starting playback.
 	**/
-	public function getDelay():Int
-	{
-		return _delay;
-	}
+	public function getDelay():Int;
 
 	/**
 	 * Waits for the specified delay, in milliseconds, then starts playback of the requested animation.
@@ -334,14 +268,7 @@ typedef Animation<ParentT:GameObject & ICrop & IFlip & IOrigin & ISize & IVisibl
 	 *
 	 * @return The Game Object that owns this Animation Component.
 	**/
-	public function delayedPlay(delay:Int, key:String, startFrame:Int = 0):ParentT
-	{
-		play(key, true, startFrame);
-
-		nextTick += delay;
-
-		return parent;
-	}
+	public function delayedPlay(delay:Int, key:String, startFrame:Int = 0):GameObject;
 
 	/**
 	 * Returns the key of the animation currently loaded into this component.
@@ -350,17 +277,7 @@ typedef Animation<ParentT:GameObject & ICrop & IFlip & IOrigin & ISize & IVisibl
 	 *
 	 * @return The key of the Animation loaded into this component.
 	**/
-	public function getCurrentKey():Null<String>
-	{
-		if (currentAnim != null)
-		{
-			return currentAnim.key;
-		}
-		else
-		{
-			return null;
-		}
-	}
+	public function getCurrentKey():Null<String>;
 
 	/**
 	 * Internal method used to load an animation into this component.
@@ -372,18 +289,7 @@ typedef Animation<ParentT:GameObject & ICrop & IFlip & IOrigin & ISize & IVisibl
 	 *
 	 * @return The Game Object that owns this Animation Component.
 	 */
-	private function load(key:String, startFrame:Int = 0):ParentT
-	{
-		if (isPlaying)
-		{
-			stop();
-		}
-
-		//  Load the new animation in
-		animationManager.load(this, key, startFrame);
-
-		return parent;
-	}
+	private function load(key:String, startFrame:Int = 0):GameObject;
 
 	/**
 	 * Pause the current animation and set the `isPlaying` property to `false`.
@@ -395,22 +301,7 @@ typedef Animation<ParentT:GameObject & ICrop & IFlip & IOrigin & ISize & IVisibl
 	 *
 	 * @return The Game Object that owns this Animation Component.
 	**/
-	public function pause(?atFrame:AnimationFrame):ParentT
-	{
-		if (!_paused)
-		{
-			_paused = true;
-			_wasPlaying = isPlaying;
-			isPlaying = false;
-		}
-
-		if (atFrame != null)
-		{
-			updateFrame(atFrame);
-		}
-
-		return parent;
-	}
+	public function pause(?atFrame:AnimationFrame):GameObject;
 
 	/**
 	 * Resumes playback of a paused animation and sets the `isPlaying` property to `true`.
@@ -422,21 +313,7 @@ typedef Animation<ParentT:GameObject & ICrop & IFlip & IOrigin & ISize & IVisibl
 	 *
 	 * @return The Game Object that owns this Animation Component.
 	**/
-	public function resume(?fromFrame:AnimationFrame):ParentT
-	{
-		if (_paused)
-		{
-			_paused = false;
-			isPlaying = _wasPlaying;
-		}
-
-		if (fromFrame != null)
-		{
-			updateFrame(fromFrame);
-		}
-
-		return parent;
-	}
+	public function resume(?fromFrame:AnimationFrame):GameObject;
 
 	/**
 	 * Plays an Animation on a Game Object that has the Animation component, such as a Sprite.
@@ -452,27 +329,7 @@ typedef Animation<ParentT:GameObject & ICrop & IFlip & IOrigin & ISize & IVisibl
 	 * @return The Game Object that owns this Animation Component.
 	**/
 	public function play(key:Either<String, BaseAnimation>,
-			ignoreIfPlaying:Bool = false, startFrame:Int = 0):ParentT
-	{
-		var key = if (Std.is(key, BaseAnimation))
-		{
-			(cast key : BaseAnimation).key;
-		}
-		else
-		{
-			(cast key : String);
-		}
-
-		if (ignoreIfPlaying && isPlaying && currentAnim.key == key)
-		{
-			return parent;
-		}
-
-		forward = true;
-		_reverse = false;
-
-		return _startAnimation(key, startFrame);
-	}
+		ignoreIfPlaying:Bool = false, startFrame:Int = 0):GameObject;
 
 	/**
 	 * Plays an Animation (in reverse mode) on the Game Object that owns this Animation Component.
@@ -487,27 +344,7 @@ typedef Animation<ParentT:GameObject & ICrop & IFlip & IOrigin & ISize & IVisibl
 	 * @return The Game Object that owns this Animation Component.
 	**/
 	public function playReverse(key:Either<String, BaseAnimation>,
-			ignoreIfPlaying:Bool = false, startFrame:Int = 0):ParentT
-	{
-		final key = if (Std.is(key, BaseAnimation))
-		{
-			(cast key : BaseAnimation).key;
-		}
-		else
-		{
-			(cast key : String);
-		}
-
-		if (ignoreIfPlaying && isPlaying && currentAnim.key == key)
-		{
-			return parent;
-		}
-
-		forward = false;
-		_reverse = true;
-
-		return _startAnimation(key, startFrame);
-	}
+		ignoreIfPlaying:Bool = false, startFrame:Int = 0):GameObject;
 
 	/**
 	 * Load an Animation and fires 'onStartEvent' event, extracted from 'play' method.
@@ -522,42 +359,7 @@ typedef Animation<ParentT:GameObject & ICrop & IFlip & IOrigin & ISize & IVisibl
 	 *
 	 * @return The Game Object that owns this Animation Component.
 	**/
-	public function _startAnimation(key:String, startFrame:Int = 0):ParentT
-	{
-		throw new Error("Not Implemented");
-		// this.load(key, startFrame);
-
-		// var anim = this.currentAnim;
-		// var gameObject = this.parent;
-
-		// if (!anim)
-		// {
-		// 	return gameObject;
-		// }
-
-		// //  Should give us 9,007,199,254,740,991 safe repeats
-		// this.repeatCounter = (this._repeat == -1) ? MathConst.INT_MAX : this._repeat;
-
-		// anim.getFirstTick(this);
-
-		// this.isPlaying = true;
-		// this.pendingRepeat = false;
-
-		// if (anim.showOnStart)
-		// {
-		// 	gameObject.visible = true;
-		// }
-
-		// var frame = this.currentFrame;
-
-		// anim.emit(AnimationEvents.ANIMATION_START, [anim, frame, gameObject]);
-
-		// gameObject.emit(AnimationEvents.SPRITE_ANIMATION_KEY_START + key, [anim, frame, gameObject]);
-
-		// gameObject.emit(AnimationEvents.SPRITE_ANIMATION_START, [anim, frame, gameObject]);
-
-		// return gameObject;
-	}
+	public function _startAnimation(key:String, startFrame:Int = 0):GameObject;
 
 	/**
 	 * Reverse the Animation that is already playing on the Game Object.
@@ -566,17 +368,7 @@ typedef Animation<ParentT:GameObject & ICrop & IFlip & IOrigin & ISize & IVisibl
 	 *
 	 * @return The Game Object that owns this Animation Component.
 	**/
-	public function reverse():ParentT
-	{
-		if (isPlaying)
-		{
-			_reverse = !_reverse;
-
-			forward = !forward;
-		}
-
-		return parent;
-	}
+	public function reverse():GameObject;
 
 	/**
 	 * Returns a value between 0 and 1 indicating how far this animation is through, ignoring repeats and yoyos.
@@ -587,17 +379,7 @@ typedef Animation<ParentT:GameObject & ICrop & IFlip & IOrigin & ISize & IVisibl
 	 *
 	 * @return The progress of the current animation, between 0 and 1.
 	**/
-	public function getProgress():Float
-	{
-		var p = currentFrame.progress;
-
-		if (!forward)
-		{
-			p = 1 - p;
-		}
-
-		return p;
-	}
+	public function getProgress():Float;
 
 	/**
 	 * Takes a value between 0 and 1 and uses it to set how far this animation is through playback.
@@ -609,19 +391,7 @@ typedef Animation<ParentT:GameObject & ICrop & IFlip & IOrigin & ISize & IVisibl
 	 *
 	 * @return The Game Object that owns this Animation Component.
 	**/
-	public function setProgress(value:Float = 0):ParentT
-	{
-		throw new Error("Not Implemented");
-
-		// if (!forward)
-		// {
-		// 	value = 1 - value;
-		// }
-
-		// setCurrentFrame(currentAnim.getFrameByProgress(value));
-
-		// return parent;
-	}
+	public function setProgress(value:Float = 0):GameObject;
 
 	/**
 	 * Handle the removal of an animation from the Animation Manager.
@@ -631,20 +401,7 @@ typedef Animation<ParentT:GameObject & ICrop & IFlip & IOrigin & ISize & IVisibl
 	 * @param key - The key of the removed Animation.
 	 * @param animation - The removed Animation.
 	**/
-	public function remove(?key:String, ?animation:BaseAnimation):Void
-	{
-		if (animation == null)
-		{
-			animation = this.currentAnim;
-		}
-
-		if (isPlaying && animation.key == currentAnim.key)
-		{
-			stop();
-
-			setCurrentFrame(currentAnim.frames[0]);
-		}
-	}
+	public function remove(?key:String, ?animation:BaseAnimation):Void;
 
 	/**
 	 * Gets the number of times that the animation will repeat
@@ -656,10 +413,7 @@ typedef Animation<ParentT:GameObject & ICrop & IFlip & IOrigin & ISize & IVisibl
 	 *
 	 * @return The number of times that the animation will repeat.
 	**/
-	public function getRepeat():Int
-	{
-		return _repeat;
-	}
+	public function getRepeat():Int;
 
 	/**
 	 * Sets the number of times that the animation should repeat
@@ -673,12 +427,7 @@ typedef Animation<ParentT:GameObject & ICrop & IFlip & IOrigin & ISize & IVisibl
 	 *
 	 * @return The Game Object that owns this Animation Component.
 	**/
-	public function setRepeat(value:Int):GameObject
-	{
-		_repeat = value;
-		repeatCounter = (value == -1) ? MathConst.INT_MAX : value;
-		return parent;
-	}
+	public function setRepeat(value:Int):GameObject;
 
 	/**
 	 * Gets the amount of delay between repeats, if any.
@@ -688,10 +437,7 @@ typedef Animation<ParentT:GameObject & ICrop & IFlip & IOrigin & ISize & IVisibl
 	 *
 	 * @return {number} The delay between repeats.
 	**/
-	public function getRepeatDelay()
-	{
-		return this._repeatDelay;
-	}
+	public function getRepeatDelay():Float;
 
 	/**
 	 * Sets the amount of time in seconds between repeats.
@@ -705,11 +451,7 @@ typedef Animation<ParentT:GameObject & ICrop & IFlip & IOrigin & ISize & IVisibl
 	 *
 	 * @return The Game Object that owns this Animation Component.
 	**/
-	public function setRepeatDelay(value:Float):GameObject
-	{
-		_repeatDelay = value;
-		return parent;
-	}
+	public function setRepeatDelay(value:Float):GameObject;
 
 	/**
 	 * Restarts the current animation from its beginning, optionally including its delay value.
@@ -723,29 +465,7 @@ typedef Animation<ParentT:GameObject & ICrop & IFlip & IOrigin & ISize & IVisibl
 	 *
 	 * @return The Game Object that owns this Animation Component.
 	**/
-	public function restart(includeDelay:Bool = false):ParentT
-	{
-		throw new Error("Not Implemented");
-
-		// var anim = this.currentAnim;
-		// anim.getFirstTick(this, includeDelay);
-		// this.forward = true;
-		// this.isPlaying = true;
-		// this.pendingRepeat = false;
-		// this._paused = false;
-		// //  Set frame
-		// this.updateFrame(anim.frames[0]);
-
-		// var gameObject = this.parent;
-		// var frame = this.currentFrame;
-
-		// anim.emit(AnimationEvents.ANIMATION_RESTART, [anim, frame, gameObject]);
-
-		// gameObject.emit(AnimationEvents.SPRITE_ANIMATION_KEY_RESTART + anim.key, [anim, frame, gameObject]);
-		// gameObject.emit(AnimationEvents.SPRITE_ANIMATION_RESTART, [anim, frame, gameObject]);
-
-		// return this.parent;
-	}
+	public function restart(includeDelay:Bool = false):GameObject;
 
 	/**
 	 * Immediately stops the current animation from playing and dispatches the `animationcomplete` event.
@@ -759,31 +479,7 @@ typedef Animation<ParentT:GameObject & ICrop & IFlip & IOrigin & ISize & IVisibl
 	 *
 	 * @return The Game Object that owns this Animation Component.
 	**/
-	public function stop():ParentT
-	{
-		_pendingStop = 0;
-		isPlaying = false;
-
-		var gameObject = parent;
-		var anim = currentAnim;
-		var frame = currentFrame;
-
-		if (anim != null)
-		{
-			anim.emit(AnimationEvents.ANIMATION_COMPLETE, [anim, frame, gameObject]);
-			gameObject.emit(AnimationEvents.SPRITE_ANIMATION_KEY_COMPLETE + anim.key, [anim, frame, gameObject]);
-			gameObject.emit(AnimationEvents.SPRITE_ANIMATION_COMPLETE, [anim, frame, gameObject]);
-		}
-
-		if (nextAnim != null)
-		{
-			var key = this.nextAnim;
-			nextAnim = null;
-			play(key);
-		}
-
-		return gameObject;
-	}
+	public function stop():GameObject;
 
 	/**
 	 * Stops the current animation from playing after the specified time delay, given in milliseconds.
@@ -795,12 +491,7 @@ typedef Animation<ParentT:GameObject & ICrop & IFlip & IOrigin & ISize & IVisibl
 	 *
 	 * @return The Game Object that owns this Animation Component.
 	**/
-	public function stopAfterDelay(delay:Int):ParentT
-	{
-		_pendingStop = 1;
-		_pendingStopValue = delay;
-		return parent;
-	}
+	public function stopAfterDelay(delay:Int):GameObject;
 
 	/**
 	 * Stops the current animation from playing when it next repeats.
@@ -810,11 +501,7 @@ typedef Animation<ParentT:GameObject & ICrop & IFlip & IOrigin & ISize & IVisibl
 	 *
 	 * @return The Game Object that owns this Animation Component.
 	**/
-	public function stopOnRepeat():ParentT
-	{
-		_pendingStop = 2;
-		return parent;
-	}
+	public function stopOnRepeat():GameObject;
 
 	/**
 	 * Stops the current animation from playing when it next sets the given frame.
@@ -827,12 +514,7 @@ typedef Animation<ParentT:GameObject & ICrop & IFlip & IOrigin & ISize & IVisibl
 	 *
 	 * @return The Game Object that owns this Animation Component.
 	**/
-	public function stopOnFrame(frame:AnimationFrame):GameObject
-	{
-		_pendingStop = 3;
-		_pendingStopValue = frame;
-		return parent;
-	}
+	public function stopOnFrame(frame:AnimationFrame):GameObject;
 
 	/**
 	 * Sets the Time Scale factor, allowing you to make the animation go go faster or slower than default.
@@ -844,15 +526,7 @@ typedef Animation<ParentT:GameObject & ICrop & IFlip & IOrigin & ISize & IVisibl
 	 *
 	 * @return The Game Object that owns this Animation Component.
 	**/
-	public function setTimeScale(value:Float = 1):ParentT
-	{
-		if (value == null)
-		{
-			value = 1;
-		}
-		_timeScale = value;
-		return parent;
-	}
+	public function setTimeScale(value:Float = 1):GameObject;
 
 	/**
 	 * Gets the Time Scale factor.
@@ -861,10 +535,7 @@ typedef Animation<ParentT:GameObject & ICrop & IFlip & IOrigin & ISize & IVisibl
 	 *
 	 * @return The Time Scale value.
 	**/
-	public function getTimeScale():Float
-	{
-		return _timeScale;
-	}
+	public function getTimeScale():Float;
 
 	/**
 	 * Returns the total number of frames in this animation.
@@ -873,10 +544,7 @@ typedef Animation<ParentT:GameObject & ICrop & IFlip & IOrigin & ISize & IVisibl
 	 *
 	 * @return The total number of frames in this animation.
 	**/
-	public function getTotalFrames():Int
-	{
-		return currentAnim.frames.length;
-	}
+	public function getTotalFrames():Int;
 
 	/**
 	 * The internal update loop for the Animation Component.
@@ -886,39 +554,7 @@ typedef Animation<ParentT:GameObject & ICrop & IFlip & IOrigin & ISize & IVisibl
 	 * @param time - The current timestamp.
 	 * @param delta - The delta time, in ms, elapsed since the last frame.
 	**/
-	public function update(time:Float, delta:Float)
-	{
-		throw new Error("Not Implemented");
-
-		// if (currentAnim == null || !isPlaying || currentAnim.paused)
-		// {
-		// 	return;
-		// }
-
-		// accumulator += delta * _timeScale;
-
-		// if (_pendingStop == 1)
-		// {
-		// 	_pendingStopValue = if (Std.is(_pendingStopValue, Float))
-		// 	{
-		// 		(cast _pendingStopValue : Float) - delta;
-		// 	}
-		// 	else
-		// 	{
-		// 		Math.NaN;
-		// 	}
-
-		// 	if ((cast _pendingStopValue : Float) <= 0)
-		// 	{
-		// 		return currentAnim.completeAnimation(this);
-		// 	}
-		// }
-
-		// if (accumulator >= nextTick)
-		// {
-		// 	currentAnim.setFrame(this);
-		// }
-	}
+	public function update(time:Float, delta:Float):Void;
 
 	/**
 	 * Sets the given Animation Frame as being the current frame
@@ -930,33 +566,7 @@ typedef Animation<ParentT:GameObject & ICrop & IFlip & IOrigin & ISize & IVisibl
 	 *
 	 * @return The Game Object this Animation Component belongs to.
 	**/
-	public function setCurrentFrame(animationFrame:AnimationFrame):ParentT
-	{
-		var gameObject = this.parent;
-
-		this.currentFrame = animationFrame;
-
-		gameObject.texture = animationFrame.frame.texture;
-		gameObject.frame = animationFrame.frame;
-
-		if (gameObject.isCropped)
-		{
-			gameObject.frame.updateCropUVs(gameObject._crop, gameObject.flipX, gameObject.flipY);
-		}
-
-		gameObject.setSizeToFrame();
-
-		if (animationFrame.frame.customPivot)
-		{
-			gameObject.setOrigin(animationFrame.frame.pivotX, animationFrame.frame.pivotY);
-		}
-		else
-		{
-			gameObject.updateDisplayOrigin();
-		}
-
-		return gameObject;
-	}
+	public function setCurrentFrame(animationFrame:AnimationFrame):GameObject;
 
 	/**
 	 * Internal frame change handler.
@@ -967,30 +577,8 @@ typedef Animation<ParentT:GameObject & ICrop & IFlip & IOrigin & ISize & IVisibl
 	 *
 	 * @param animationFrame - The animation frame to change to.
 	**/
-	private function updateFrame(animationFrame:AnimationFrame):Void
-	{
-		throw new Error("Not Implemented");
-
-		// var gameObject = setCurrentFrame(animationFrame);
-
-		// if (isPlaying)
-		// {
-		// 	if (animationFrame.setAlpha)
-		// 	{
-		// 		gameObject.alpha = animationFrame.alpha;
-		// 	}
-
-		// 	var anim = this.currentAnim;
-
-		// 	gameObject.emit(AnimationEvents.SPRITE_ANIMATION_KEY_UPDATE + anim.key, [anim, animationFrame, gameObject]);
-		// 	gameObject.emit(AnimationEvents.SPRITE_ANIMATION_UPDATE, [anim, animationFrame, gameObject]);
-
-		// 	if (_pendingStop == 3 && _pendingStopValue == animationFrame)
-		// 	{
-		// 		currentAnim.completeAnimation(this);
-		// 	}
-		// }
-	}
+	@:allow(phaserHaxe)
+	private function updateFrame(animationFrame:AnimationFrame):Void;
 
 	/**
 	 * Advances the animation to the next frame, regardless of the time or animation state.
@@ -1003,17 +591,7 @@ typedef Animation<ParentT:GameObject & ICrop & IFlip & IOrigin & ISize & IVisibl
 	 *
 	 * @return The Game Object this Animation Component belongs to.
 	**/
-	public function nextFrame():ParentT
-	{
-		throw new Error("Not Implemented");
-
-		// if (currentAnim != null)
-		// {
-		// 	currentAnim.nextFrame(this);
-		// }
-
-		// return parent;
-	}
+	public function nextFrame():GameObject;
 
 	/**
 	 * Advances the animation to the previous frame, regardless of the time or animation state.
@@ -1026,18 +604,7 @@ typedef Animation<ParentT:GameObject & ICrop & IFlip & IOrigin & ISize & IVisibl
 	 *
 	 * @return The Game Object this Animation Component belongs to.
 	**/
-	public function previousFrame():ParentT
-	{
-		throw new Error("Not Implemented");
-
-		// if (currentAnim != null)
-		// {
-		// 	currentAnim.previousFrame(this);
-		// }
-
-		// return parent;
-	}
-	
+	public function previousFrame():GameObject;
 
 	/**
 	 * Sets if the current Animation will yoyo when it reaches the end.
@@ -1049,11 +616,7 @@ typedef Animation<ParentT:GameObject & ICrop & IFlip & IOrigin & ISize & IVisibl
 	 *
 	 * @return The Game Object this Animation Component belongs to.
 	**/
-	public function setYoyo(value:Bool = false):ParentT
-	{
-		_yoyo = value;
-		return parent;
-	}
+	public function setYoyo(value:Bool = false):GameObject;
 
 	/**
 	 * Gets if the current Animation will yoyo when it reaches the end.
@@ -1063,10 +626,7 @@ typedef Animation<ParentT:GameObject & ICrop & IFlip & IOrigin & ISize & IVisibl
 	 *
 	 * @return `true` if the animation is set to yoyo, `false` if not.
 	**/
-	public function getYoyo():Bool
-	{
-		return _yoyo;
-	}
+	public function getYoyo():Bool;
 
 	/**
 	 * Destroy this Animation component.
@@ -1075,12 +635,5 @@ typedef Animation<ParentT:GameObject & ICrop & IFlip & IOrigin & ISize & IVisibl
 	 *
 	 * @since 1.0.0
 	**/
-	public function destroy()
-	{
-		animationManager.off(AnimationEvents.REMOVE_ANIMATION, remove, this);
-		animationManager = null;
-		parent = null;
-		currentAnim = null;
-		currentFrame = null;
-	}
+	public function destroy():Void;
 }

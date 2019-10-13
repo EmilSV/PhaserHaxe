@@ -1,4 +1,5 @@
 package phaserHaxe.gameobjects.components;
+import phaserHaxe.gameobjects.components.Animation;
 
 @:structInit
 final class CropDataObject
@@ -18,5 +19,7 @@ final class CropDataObject
 	public var cw:Float = 0.0;
 	public var ch:Float = 0.0;
 
-	public function new() {}
+	public function new() {
+		
+	}
 }

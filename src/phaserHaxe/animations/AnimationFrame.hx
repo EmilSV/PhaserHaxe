@@ -101,7 +101,7 @@ class AnimationFrame
 	 *
 	 * @return The AnimationFrame data.
 	**/
-	public function toJSON():{key:String, frame:StringOrInt, duration:Float}
+	public function toJSON():JSONAnimationFrame
 	{
 		return {
 			key: textureKey,
