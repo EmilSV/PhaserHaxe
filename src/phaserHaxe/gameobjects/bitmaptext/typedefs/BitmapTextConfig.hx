@@ -3,11 +3,9 @@ package phaserHaxe.gameobjects.bitmaptext.typedefs;
 import phaserHaxe.gameobjects.typedefs.GameObjectConfig;
 
 /**
- * @typedef {object} Phaser.Types.GameObjects.BitmapText.BitmapTextConfig
- * @extends Phaser.Types.GameObjects.GameObjectConfig
- * @since 1.0.0
  *
- */
+ * @since 1.0.0
+**/
 typedef BitmapTextConfig = GameObjectConfig &
 {
 	/**

@@ -1,11 +1,43 @@
+package phaserHaxe.gameobjects.bitmaptext.typedefs;
+
 /**
- * @typedef {object} Phaser.Types.GameObjects.BitmapText.JSONBitmapText
- * @extends {Phaser.Types.GameObjects.JSONGameObject}
- * @since 3.0.0
  *
- * @property {string} font - The name of the font.
- * @property {string} text - The text that this Bitmap Text displays.
- * @property {number} fontSize - The size of the font.
- * @property {number} letterSpacing - Adds / Removes spacing between characters.
- * @property {integer} align - The alignment of the text in a multi-line BitmapText object.
- */
+ * @since 1.0.0
+**/
+typedef JSONBitmapText =
+{
+	/**
+	 * The name of the font.
+	 *
+	 * @since 1.0.0
+	**/
+	public var font:String;
+
+	/**
+	 * The text that this Bitmap Text displays.
+	 *
+	 * @since 1.0.0
+	**/
+	public var text:String;
+
+	/**
+	 * The size of the font.
+	 *
+	 * @since 1.0.0
+	**/
+	public var fontSize:Float;
+
+	/**
+	 * Adds / Removes spacing between characters.
+	 *
+	 * @since 1.0.0
+	**/
+	public var letterSpacing:Float;
+
+	/**
+	 * The alignment of the text in a multi-line BitmapText object.
+	 *
+	 * @since 1.0.0
+	**/
+	public var align:Int;
+};

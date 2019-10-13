@@ -1,22 +1,80 @@
-/**
- * @typedef {object} Phaser.Types.GameObjects.BitmapText.DisplayCallbackConfig
- * @since 3.0.0
- * 
- * @property {Phaser.GameObjects.DynamicBitmapText} parent - The Dynamic Bitmap Text object that owns this character being rendered.
- * @property {Phaser.Types.GameObjects.BitmapText.TintConfig} tint - The tint of the character being rendered. Always zero in Canvas.
- * @property {number} index - The index of the character being rendered.
- * @property {number} charCode - The character code of the character being rendered.
- * @property {number} x - The x position of the character being rendered.
- * @property {number} y - The y position of the character being rendered.
- * @property {number} scale - The scale of the character being rendered.
- * @property {number} rotation - The rotation of the character being rendered.
- * @property {any} data - Custom data stored with the character being rendered.
- */
+package phaserHaxe.gameobjects.bitmaptext.typedefs;
+
+import phaserHaxe.gameobjects.bitmaptext.dynamicText.DynamicBitmapText;
 
 /**
- * @callback Phaser.Types.GameObjects.BitmapText.DisplayCallback
  *
- * @param {Phaser.Types.GameObjects.BitmapText.DisplayCallbackConfig} display - Settings of the character that is about to be rendered.
+ * @since 1.0.0
+**/
+typedef DisplayCallbackConfig =
+{
+	/**
+	 * The Dynamic Bitmap Text object that owns this character being rendered.
+	 *
+	 * @since 1.0.0
+	**/
+	public var parent:DynamicBitmapText;
+
+	/**
+	 * The tint of the character being rendered. Always zero in Canvas.
+	 *
+	 * @since 1.0.0
+	**/
+	public var tint:TintConfig;
+
+	/**
+	 * The index of the character being rendered.
+	 *
+	 * @since 1.0.0
+	**/
+	public var index:Float;
+
+	/**
+	 * The character code of the character being rendered.
+	 *
+	 * @since 1.0.0
+	**/
+	public var charCode:Int;
+
+	/**
+	 * The x position of the character being rendered.
+	 *
+	 * @since 1.0.0
+	**/
+	public var x:Float;
+
+	/**
+	 * The y position of the character being rendered.
+	 *
+	 * @since 1.0.0
+	**/
+	public var y:Float;
+
+	/**
+	 * The scale of the character being rendered.
+	 *
+	 * @since 1.0.0
+	**/
+	public var scale:Float;
+
+	/**
+	 * The rotation of the character being rendered.
+	 *
+	 * @since 1.0.0
+	**/
+	public var rotation:Float;
+
+	/**
+	 * Custom data stored with the character being rendered.
+	 *
+	 * @since 1.0.0
+	**/
+	public var data:Dynamic;
+};
+
+/**
+ * @param display - Settings of the character that is about to be rendered.
  *
- * @return {Phaser.Types.GameObjects.BitmapText.DisplayCallbackConfig} Altered position, scale and rotation values for the character that is about to be rendered.
- */
+ * @return Altered position, scale and rotation values for the character that is about to be rendered.
+**/
+typedef DisplayCallback = (display:DisplayCallbackConfig) -> DisplayCallbackConfig;

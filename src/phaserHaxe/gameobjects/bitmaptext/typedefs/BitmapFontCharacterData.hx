@@ -1,3 +1,5 @@
+package phaserHaxe.gameobjects.bitmaptext.typedefs;
+
 /**
  * The font data for an individual character of a Bitmap Font.
  *

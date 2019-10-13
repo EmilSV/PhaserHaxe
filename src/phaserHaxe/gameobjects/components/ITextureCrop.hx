@@ -1,10 +1,10 @@
 package phaserHaxe.gameobjects.components;
 
+import phaserHaxe.utils.StringOrInt;
 import phaserHaxe.gameobjects.components.ICrop.CropImplementation;
 import phaserHaxe.geom.Rectangle;
 import phaserHaxe.gameobjects.components.IFlip;
 import phaserHaxe.textures.Texture;
-import phaserHaxe.textures.CanvasTexture;
 import phaserHaxe.textures.Frame;
 
 /**
@@ -14,7 +14,7 @@ import phaserHaxe.textures.Frame;
 **/
 @:allow(phaserHaxe.gameobjects.components.TextureCropImplementation)
 @:phaserHaxe.Mixin(phaserHaxe.gameobjects.components.ITextureCrop.TextureCropMixin)
-interface ITextureCrop extends ICrop
+interface ITextureCrop extends ICrop extends ITexture
 {
 	/**
 	 * The internal crop data object, as used by `setCrop` and passed to the `Frame.setCropUVs` method.
@@ -94,7 +94,7 @@ interface ITextureCrop extends ICrop
 	 *
 	 * @return This Game Object instance.
 	**/
-	public function setTexture(key:String, ?frame:Either<String, Int>):ITextureCrop;
+	public function setTexture(key:String, ?frame:StringOrInt):ITextureCrop;
 
 	/**
 	 * Sets the frame this Game Object will use to render with.
@@ -114,7 +114,7 @@ interface ITextureCrop extends ICrop
 	 *
 	 * @return This Game Object instance.
 	**/
-	public function setFrame(frame:Either<String, Int>, updateSize:Bool = true,
+	public function setFrame(frame:StringOrInt, updateSize:Bool = true,
 		updateOrigin:Bool = true):ITextureCrop;
 
 	/**
@@ -143,7 +143,7 @@ final class TextureCropImplementation
 	}
 
 	public inline static function setTexture<T:ITextureCrop & GameObject>(self:T,
-			key:String, ?frame:Either<String, Int>):T
+			key:String, ?frame:StringOrInt):T
 	{
 		self.texture = self.scene.sys.textures.get(key);
 
@@ -151,7 +151,7 @@ final class TextureCropImplementation
 	}
 
 	public static function setFrame<T:ITextureCrop & GameObject & IFlip>(self:T,
-			frame:Either<String, Int>, updateSize:Bool = true,
+			frame:StringOrInt, updateSize:Bool = true,
 			updateOrigin:Bool = true):T
 	{
 		self.frame = (cast self.texture).get(frame);
@@ -278,7 +278,7 @@ final class TextureCropMixin extends GameObject implements ITextureCrop implemen
 	 *
 	 * @return This Game Object instance.
 	**/
-	public function setTexture(key:String, ?frame:Either<String, Int>):TextureCropMixin
+	public function setTexture(key:String, ?frame:StringOrInt):TextureCropMixin
 	{
 		return TextureCropImplementation.setTexture(this, key, frame);
 	}
@@ -301,7 +301,7 @@ final class TextureCropMixin extends GameObject implements ITextureCrop implemen
 	 *
 	 * @return This Game Object instance.
 	**/
-	public function setFrame(frame:Either<String, Int>, updateSize:Bool = true,
+	public function setFrame(frame:StringOrInt, updateSize:Bool = true,
 			updateOrigin:Bool = true):TextureCropMixin
 	{
 		return TextureCropImplementation.setFrame(this, frame, updateSize, updateOrigin);

@@ -1,11 +1,37 @@
+package phaserHaxe.gameobjects.bitmaptext.typedefs;
+
 /**
  * The position and size of the Bitmap Text in local space, taking just the font size into account.
  *
- * @typedef {object} Phaser.Types.GameObjects.BitmapText.LocalBitmapTextSize
- * @since 3.0.0
- *
- * @property {number} x - The x position of the BitmapText.
- * @property {number} y - The y position of the BitmapText.
- * @property {number} width - The width of the BitmapText.
- * @property {number} height - The height of the BitmapText.
- */
+ * @since 1.0.0
+**/
+typedef LocalBitmapTextSize =
+{
+	/**
+	 * The x position of the BitmapText.
+	 *
+	 * @since 1.0.0
+	**/
+	public var x:Float;
+
+	/**
+	 * The y position of the BitmapText.
+	 *
+	 * @since 1.0.0
+	**/
+	public var y:Float;
+
+	/**
+	 * The width of the BitmapText.
+	 *
+	 * @since 1.0.0
+	**/
+	public var width:Float;
+
+	/**
+	 * The height of the BitmapText.
+	 *
+	 * @since 1.0.0
+	**/
+	public var height:Float;
+};
