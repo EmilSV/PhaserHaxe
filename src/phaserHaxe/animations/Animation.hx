@@ -433,7 +433,7 @@ class Animation extends EventEmitter
 	 *
 	 * @param component - [description]
 	**/
-	function getNextTick(component:IAnimationController):Void
+	public function getNextTick(component:IAnimationController):Void
 	{
 		// accumulator += delta * _timeScale
 		// after a large delta surge (perf issue for example) we need to adjust for it here
@@ -451,7 +451,8 @@ class Animation extends EventEmitter
 	 *
 	 * @param component - The Animation Component to load values into.
 	 * @param startFrame - The start frame of the animation to load.
-	 */
+	**/
+	@:allow(phaserHaxe)
 	private function load(component:IAnimationController, startFrame:Int):Void
 	{
 		if (startFrame >= frames.length)

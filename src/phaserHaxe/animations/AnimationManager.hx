@@ -1,5 +1,7 @@
 package phaserHaxe.animations;
 
+import phaserHaxe.gameobjects.GameObject;
+import phaserHaxe.utils.MultipleOrOne;
 import phaserHaxe.iterator.StepIterator;
 import haxe.Json;
 import phaserHaxe.animations.JSONAnimation;
@@ -7,8 +9,33 @@ import phaserHaxe.core.GameEvents;
 import phaserHaxe.textures.TextureManager;
 import phaserHaxe.Game;
 import phaserHaxe.utils.StringUtils;
+import phaserHaxe.gameobjects.components.IHaveAnimations;
 
 typedef JSONData = Either3<String, JSONAnimation, JSONAnimations>;
+
+abstract MultipleOrOneJSONAnimation(Either<JSONAnimation, JSONAnimations>)
+	from Either<JSONAnimation, JSONAnimations>
+{
+	public inline function isOne():Bool
+	{
+		return !Reflect.hasField(this, "anims");
+	}
+
+	public inline function isArray():Bool
+	{
+		return Reflect.hasField(this, "anims");
+	}
+
+	public inline function getOne():JSONAnimation
+	{
+		return (cast this : JSONAnimation);
+	}
+
+	public inline function getArray():JSONAnimations
+	{
+		return (cast this : JSONAnimations);
+	}
+}
 
 /**
  * The Animation Manager.
@@ -155,15 +182,16 @@ class AnimationManager extends EventEmitter
 	public function create(config:AnimationData):Null<Animation>
 	{
 		var key = config.key;
-		var anim = false;
+		var anim = null;
 		if (key != null)
 		{
 			anim = get(key);
-			if (!anim)
+			if (anim == null)
 			{
 				var anim = new Animation(this, key, config);
-				this.anims.set(key, anim);
-				this.emit(AnimationEvents.ADD_ANIMATION, [key, anim]);
+				anims.set(key, anim);
+				emit(AnimationEvents.ADD_ANIMATION, [key, anim]);
+
 				return anim;
 			}
 		}
@@ -371,204 +399,221 @@ class AnimationManager extends EventEmitter
 		return out;
 	}
 
-	// /**
-	//  * Get an Animation.
-	//  *
-	//  * @method Phaser.Animations.AnimationManager#get
-	//  * @since 3.0.0
-	//  *
-	//  * @param {string} key - The key of the Animation to retrieve.
-	//  *
-	//  * @return {Phaser.Animations.Animation} The Animation.
-	//  */
-	// get: function (key)
-	// {
-	//     return this.anims.get(key);
-	// },
-	// /**
-	//  * Load an Animation into a Game Object's Animation Component.
-	//  *
-	//  * @method Phaser.Animations.AnimationManager#load
-	//  * @since 3.0.0
-	//  *
-	//  * @param {Phaser.GameObjects.GameObject} child - The Game Object to load the animation into.
-	//  * @param {string} key - The key of the animation to load.
-	//  * @param {(string|integer)} [startFrame] - The name of a start frame to set on the loaded animation.
-	//  *
-	//  * @return {Phaser.GameObjects.GameObject} The Game Object with the animation loaded into it.
-	//  */
-	// load: function (child, key, startFrame)
-	// {
-	//     var anim = this.get(key);
-	//     if (anim)
-	//     {
-	//         anim.load(child, startFrame);
-	//     }
-	//     else
-	//     {
-	//         console.warn('Missing animation: ' + key);
-	//     }
-	//     return child;
-	// },
-	// /**
-	//  * Pause all animations.
-	//  *
-	//  * @method Phaser.Animations.AnimationManager#pauseAll
-	//  * @fires Phaser.Animations.Events#PAUSE_ALL
-	//  * @since 3.0.0
-	//  *
-	//  * @return {Phaser.Animations.AnimationManager} This Animation Manager.
-	//  */
-	// pauseAll: function ()
-	// {
-	//     if (!this.paused)
-	//     {
-	//         this.paused = true;
-	//         this.emit(Events.PAUSE_ALL);
-	//     }
-	//     return this;
-	// },
-	// /**
-	//  * Play an animation on the given Game Objects that have an Animation Component.
-	//  *
-	//  * @method Phaser.Animations.AnimationManager#play
-	//  * @since 3.0.0
-	//  *
-	//  * @param {string} key - The key of the animation to play on the Game Object.
-	//  * @param {Phaser.GameObjects.GameObject|Phaser.GameObjects.GameObject[]} child - The Game Objects to play the animation on.
-	//  *
-	//  * @return {Phaser.Animations.AnimationManager} This Animation Manager.
-	//  */
-	// play: function (key, child)
-	// {
-	//     if (!Array.isArray(child))
-	//     {
-	//         child = [ child ];
-	//     }
-	//     var anim = this.get(key);
-	//     if (!anim)
-	//     {
-	//         return;
-	//     }
-	//     for (var i = 0; i < child.length; i++)
-	//     {
-	//         child[i].anims.play(key);
-	//     }
-	//     return this;
-	// },
-	// /**
-	//  * Remove an animation.
-	//  *
-	//  * @method Phaser.Animations.AnimationManager#remove
-	//  * @fires Phaser.Animations.Events#REMOVE_ANIMATION
-	//  * @since 3.0.0
-	//  *
-	//  * @param {string} key - The key of the animation to remove.
-	//  *
-	//  * @return {Phaser.Animations.Animation} [description]
-	//  */
-	// remove: function (key)
-	// {
-	//     var anim = this.get(key);
-	//     if (anim)
-	//     {
-	//         this.emit(Events.REMOVE_ANIMATION, key, anim);
-	//         this.anims.delete(key);
-	//     }
-	//     return anim;
-	// },
-	// /**
-	//  * Resume all paused animations.
-	//  *
-	//  * @method Phaser.Animations.AnimationManager#resumeAll
-	//  * @fires Phaser.Animations.Events#RESUME_ALL
-	//  * @since 3.0.0
-	//  *
-	//  * @return {Phaser.Animations.AnimationManager} This Animation Manager.
-	//  */
-	// resumeAll: function ()
-	// {
-	//     if (this.paused)
-	//     {
-	//         this.paused = false;
-	//         this.emit(Events.RESUME_ALL);
-	//     }
-	//     return this;
-	// },
-	// /**
-	//  * Takes an array of Game Objects that have an Animation Component and then
-	//  * starts the given animation playing on them, each one offset by the
-	//  * `stagger` amount given to this method.
-	//  *
-	//  * @method Phaser.Animations.AnimationManager#staggerPlay
-	//  * @since 3.0.0
-	//  *
-	//  * @generic {Phaser.GameObjects.GameObject[]} G - [items,$return]
-	//  *
-	//  * @param {string} key - The key of the animation to play on the Game Objects.
-	//  * @param {Phaser.GameObjects.GameObject|Phaser.GameObjects.GameObject[]} children - An array of Game Objects to play the animation on. They must have an Animation Component.
-	//  * @param {number} [stagger=0] - The amount of time, in milliseconds, to offset each play time by.
-	//  *
-	//  * @return {Phaser.Animations.AnimationManager} This Animation Manager.
-	//  */
-	// staggerPlay: function (key, children, stagger)
-	// {
-	//     if (stagger === undefined) { stagger = 0; }
-	//     if (!Array.isArray(children))
-	//     {
-	//         children = [ children ];
-	//     }
-	//     var anim = this.get(key);
-	//     if (!anim)
-	//     {
-	//         return;
-	//     }
-	//     for (var i = 0; i < children.length; i++)
-	//     {
-	//         children[i].anims.delayedPlay(stagger * i, key);
-	//     }
-	//     return this;
-	// },
-	// /**
-	//  * Get the animation data as javascript object by giving key, or get the data of all animations as array of objects, if key wasn't provided.
-	//  *
-	//  * @method Phaser.Animations.AnimationManager#toJSON
-	//  * @since 3.0.0
-	//  *
-	//  * @param {string} key - [description]
-	//  *
-	//  * @return {Phaser.Types.Animations.JSONAnimations} [description]
-	//  */
-	// toJSON: function (key)
-	// {
-	//     if (key !== undefined && key !== '')
-	//     {
-	//         return this.anims.get(key).toJSON();
-	//     }
-	//     else
-	//     {
-	//         var output = {
-	//             anims: [],
-	//             globalTimeScale: this.globalTimeScale
-	//         };
-	//         this.anims.each(function (animationKey, animation)
-	//         {
-	//             output.anims.push(animation.toJSON());
-	//         });
-	//         return output;
-	//     }
-	// },
-	// /**
-	//  * Destroy this Animation Manager and clean up animation definitions and references to other objects.
-	//  * This method should not be called directly. It will be called automatically as a response to a `destroy` event from the Phaser.Game instance.
-	//  *
-	//  * @method Phaser.Animations.AnimationManager#destroy
-	//  * @since 3.0.0
-	//  */
-	// destroy: function ()
-	// {
-	//     this.anims.clear();
-	//     this.textureManager = null;
-	//     this.game = null;
-	// }
+	/**
+	 * Get an Animation.
+	 *
+	 * @since 1.0.0
+	 *
+	 * @param key - The key of the Animation to retrieve.
+	 *
+	 * @return The Animation.
+	**/
+	public function get(key:String):Animation
+	{
+		return anims.get(key);
+	}
+
+	/**
+	 * Load an Animation into a Game Object's Animation Component.
+	 *
+	 * @method Phaser.Animations.AnimationManager#load
+	 * @since 3.0.0
+	 *
+	 * @param {Phaser.GameObjects.GameObject} child - The Game Object to load the animation into.
+	 * @param {string} key - The key of the animation to load.
+	 * @param {(string|integer)} [startFrame] - The name of a start frame to set on the loaded animation.
+	 *
+	 * @return {Phaser.GameObjects.GameObject} The Game Object with the animation loaded into it.
+	 */
+	public function load(child:Dynamic, key:String, startFrame:Int)
+	{
+		var anim = this.get(key);
+
+		if (anim != null)
+		{
+			anim.load(child, startFrame);
+		}
+		else
+		{
+			Console.warn('Missing animation: ' + key);
+		}
+		return child;
+	}
+
+	/**
+	 * Pause all animations.
+	 *
+	 * @since 1.0.0
+	 *
+	 * @return This Animation Manager.
+	**/
+	public function pauseAll():AnimationManager
+	{
+		if (!paused)
+		{
+			paused = true;
+			emit(AnimationEvents.PAUSE_ALL);
+		}
+
+		return this;
+	}
+
+	/**
+	 * Play an animation on the given Game Objects that have an Animation Component.
+	 *
+	 * @since 1.0.0
+	 *
+	 * @param key - The key of the animation to play on the Game Object.
+	 * @param child - The Game Objects to play the animation on.
+	 *
+	 * @return This Animation Manager.
+	**/
+	public function play(key:String, child:MultipleOrOne<GameObject>):AnimationManager
+	{
+		if (child.isOne())
+		{
+			child = [child.getOne()];
+		}
+
+		var child = child.getArray();
+
+		var anim = this.get(key);
+
+		if (anim == null)
+		{
+			return this;
+		}
+
+		for (i in 0...child.length)
+		{
+			(cast child[i] : IHaveAnimations).anims.play(key);
+		}
+
+		return this;
+	}
+
+	/**
+	 * Remove an animation.
+	 *
+	 * @since 1.0.0
+	 *
+	 * @param key - The key of the animation to remove.
+	 *
+	 * @return [description]
+	**/
+	public function remove(key:String):Animation
+	{
+		var anim = get(key);
+
+		if (anim != null)
+		{
+			emit(AnimationEvents.REMOVE_ANIMATION, [key, anim]);
+
+			anims.remove(key);
+		}
+
+		return anim;
+	}
+
+	/**
+	 * Resume all paused animations.
+	 *
+	 * @fires Phaser.Animations.Events#RESUME_ALL
+	 * @since 1.0.0
+	 *
+	 * @return This Animation Manager.
+	**/
+	public function resumeAll():AnimationManager
+	{
+		if (paused)
+		{
+			paused = false;
+
+			emit(AnimationEvents.RESUME_ALL);
+		}
+
+		return this;
+	}
+
+	/**
+	 * Takes an array of Game Objects that have an Animation Component and then
+	 * starts the given animation playing on them, each one offset by the
+	 * `stagger` amount given to this method.
+	 *
+	 * @since 1.0.0
+	 *
+	 * @param key - The key of the animation to play on the Game Objects.
+	 * @param children - An array of Game Objects to play the animation on. They must have an Animation Component.
+	 * @param stagger - The amount of time, in milliseconds, to offset each play time by.
+	 *
+	 * @return This Animation Manager.
+	**/
+	public function staggerPlay(key, children:MultipleOrOne<GameObject>,
+			stagger:Int = 0):AnimationManager
+	{
+		if (children.isOne())
+		{
+			children = [children.getOne()];
+		}
+
+		var children = children.getArray();
+
+		var anim = this.get(key);
+
+		if (anim == null)
+		{
+			return this;
+		}
+
+		for (i in 0...children.length)
+		{
+			(cast children[i] : IHaveAnimations).anims.delayedPlay(stagger * i, key);
+		}
+
+		return this;
+	}
+
+	/**
+	 * Get the animation data as javascript object by giving key, or get the data of all animations as array of objects, if key wasn't provided.
+	 *
+	 * @since 1.0.0
+	 *
+	 * @param key - [description]
+	 *
+	 * @return [description]
+	**/
+	public function toJSON(?key:String):MultipleOrOneJSONAnimation
+	{
+		if (key != null && key != '')
+		{
+			return anims.get(key).toJSON();
+		}
+		else
+		{
+			var output = {
+				anims: [],
+				globalTimeScale: this.globalTimeScale
+			};
+
+			for (animation in this.anims)
+			{
+				output.anims.push(animation.toJSON());
+			}
+
+			return output;
+		}
+	}
+
+	/**
+	 * Destroy this Animation Manager and clean up animation definitions and references to other objects.
+	 * This method should not be called directly. It will be called automatically as a response to a `destroy` event from the Phaser.Game instance.
+	 *
+	 * @since 1.0.0
+	**/
+	public function destroy()
+	{
+		anims.clear();
+		textureManager = null;
+		game = null;
+	}
 }
