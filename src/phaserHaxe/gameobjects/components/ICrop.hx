@@ -8,7 +8,7 @@ import phaserHaxe.gameobjects.sprite.Sprite;
 
 @:allow(phaserHaxe.gameobjects.components.CropImplementation)
 @:phaserHaxe.Mixin(phaserHaxe.gameobjects.components.ICrop.CropMixin)
-interface ICrop
+interface ICrop extends IBaseTexture
 {
 	/**
 	 * The internal crop data object, as used by `setCrop` and passed to the `Frame.setCropUVs` method.

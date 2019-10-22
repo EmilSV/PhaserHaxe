@@ -1,5 +1,7 @@
 package phaserHaxe.gameobjects.bitmaptext.typedefs;
 
+import phaserHaxe.gameobjects.bitmaptext.typedefs.BitmapFontCharacterData;
+
 /**
  * Bitmap Font data that can be used by a BitmapText Game Object.
  *
@@ -34,7 +36,7 @@ typedef BitmapFontData =
 	 *
 	 * @since 1.0.0
 	**/
-	public var retroFont:Bool;
+	public var ?retroFont:Bool;
 
 	/**
 	 * The character data of the font, keyed by character code.
@@ -42,5 +44,5 @@ typedef BitmapFontData =
 	 *
 	 * @since 1.0.0
 	**/
-	public var chars:Dynamic;
+	public var chars:Map<Int, BitmapFontCharacterData>;
 };

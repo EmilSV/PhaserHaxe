@@ -10,7 +10,7 @@ import phaserHaxe.textures.Texture;
  * @since 1.0.0
 **/
 @:phaserHaxe.Mixin(phaserHaxe.gameobjects.components.ITexture.TextureMixin)
-interface ITexture
+interface ITexture extends IBaseTexture
 {
 	/**
 	 * The Texture this Game Object is using to render with.

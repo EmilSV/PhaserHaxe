@@ -21,4 +21,11 @@ typedef BitmapTextSize =
 	 * @since 1.0.0
 	**/
 	public var local:LocalBitmapTextSize;
+
+	public var ?lines:
+		{
+			shortest:Float,
+			longest:Float,
+			lengths:Dynamic
+		};
 };

@@ -65,6 +65,8 @@ typedef BitmapFontCharacterData =
 	**/
 	public var yOffset:Float;
 
+	public var ?xAdvance:Int;
+
 	/**
 	 * Extra data for the character.
 	 *
@@ -77,5 +79,5 @@ typedef BitmapFontCharacterData =
 	 *
 	 * @since 1.0.0
 	**/
-	public var kerning:Dynamic;
+	public var kerning:Map<Int, Float>;
 };

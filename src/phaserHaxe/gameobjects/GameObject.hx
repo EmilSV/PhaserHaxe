@@ -4,7 +4,7 @@ import phaserHaxe.Scene;
 import phaserHaxe.gameobjects.Container;
 import phaserHaxe.input.types.HitAreaCallback;
 import phaserHaxe.input.types.InputConfiguration;
-import phaserHaxe.gameobjects.types.JSONGameObject;
+import phaserHaxe.gameobjects.typedefs.JSONGameObject;
 import phaserHaxe.cameras.scene2D.Camera;
 import phaserHaxe.data.DataManager;
 import phaserHaxe.types.input.InteractiveObject;

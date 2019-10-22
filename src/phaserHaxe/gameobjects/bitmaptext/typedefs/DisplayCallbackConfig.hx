@@ -1,6 +1,6 @@
 package phaserHaxe.gameobjects.bitmaptext.typedefs;
 
-import phaserHaxe.gameobjects.bitmaptext.dynamicText.DynamicBitmapText;
+import phaserHaxe.gameobjects.bitmaptext.DynamicBitmapText;
 
 /**
  *
@@ -64,6 +64,8 @@ typedef DisplayCallbackConfig =
 	**/
 	public var rotation:Float;
 
+	public var color:Int;
+
 	/**
 	 * Custom data stored with the character being rendered.
 	 *
@@ -72,9 +74,4 @@ typedef DisplayCallbackConfig =
 	public var data:Dynamic;
 };
 
-/**
- * @param display - Settings of the character that is about to be rendered.
- *
- * @return Altered position, scale and rotation values for the character that is about to be rendered.
-**/
-typedef DisplayCallback = (display:DisplayCallbackConfig) -> DisplayCallbackConfig;
+

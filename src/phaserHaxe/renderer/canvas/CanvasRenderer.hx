@@ -103,6 +103,13 @@ class CanvasRenderer
 	public var currentContext:CanvasRenderingContext2D;
 
 	/**
+	 * Should the Canvas use Image Smoothing or not when drawing Sprites?
+	 *
+	 * @since 1.0.0
+	**/
+	public var antialias:Bool;
+
+	/**
 	 * The blend modes supported by the Canvas Renderer.
 	 *
 	 * This object maps the {@link Phaser.BlendModes} to canvas compositing operations.
@@ -132,6 +139,7 @@ class CanvasRenderer
 	 *
 	 * @since 1.0.0
 	**/
+	@:allow(phaserHaxe.renderer.canvas)
 	private var _tempMatrix1:TransformMatrix;
 
 	/**
@@ -139,6 +147,7 @@ class CanvasRenderer
 	 *
 	 * @since 1.0.0
 	**/
+	@:allow(phaserHaxe.renderer.canvas)
 	private var _tempMatrix2:TransformMatrix;
 
 	/**
@@ -146,6 +155,7 @@ class CanvasRenderer
 	 *
 	 * @since 1.0.0
 	**/
+	@:allow(phaserHaxe.renderer.canvas)
 	private var _tempMatrix3:TransformMatrix;
 
 	/**
@@ -153,6 +163,7 @@ class CanvasRenderer
 	 *
 	 * @since 1.0.0
 	**/
+	@:allow(phaserHaxe.renderer.canvas)
 	private var _tempMatrix4:TransformMatrix;
 
 	public function new(game:Game)
