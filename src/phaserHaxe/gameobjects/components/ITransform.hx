@@ -450,7 +450,7 @@ final class TransformImplementation
 			parentMatrix = new TransformMatrix();
 		}
 
-		var parent = go.parentContainer;
+		var parent:ITransform = go.parentContainer;
 
 		if (parent == null)
 		{
@@ -465,7 +465,7 @@ final class TransformImplementation
 
 			parentMatrix.multiply(tempMatrix, tempMatrix);
 
-			parent = parent.parentContainer;
+			parent = (cast parent : GameObject).parentContainer;
 		}
 
 		return tempMatrix;

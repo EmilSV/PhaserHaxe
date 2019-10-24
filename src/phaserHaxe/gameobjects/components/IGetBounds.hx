@@ -164,7 +164,7 @@ final class GetBoundsImplementation
 	 *
 	 * @return The values stored in the output object.
 	**/
-	public static inline function prepareBoundsOutput<T:ITransform & GameObject>(self:T,
+	public static function prepareBoundsOutput<T:ITransform & GameObject>(self:T,
 			?output:Vector2, includeParent:Bool = false):Vector2
 	{
 		if (output != null)
@@ -179,7 +179,8 @@ final class GetBoundsImplementation
 
 		if (includeParent && self.parentContainer != null)
 		{
-			var parentMatrix:TransformMatrix = self.parentContainer.getBoundsTransformMatrix();
+			var parentMatrix:TransformMatrix = (self.parentContainer : IContainer)
+				.getBoundsTransformMatrix();
 
 			parentMatrix.transformPoint(output.x, output.y, output);
 		}
@@ -441,7 +442,8 @@ final class GetBoundsImplementation
 		// defined per corner we only do it once.
 		if (self.parentContainer != null)
 		{
-			var parentMatrix:TransformMatrix = self.parentContainer.getBoundsTransformMatrix();
+			var parentMatrix:TransformMatrix = (self.parentContainer : IContainer)
+				.getBoundsTransformMatrix();
 
 			self.getTopLeft(tempVector);
 			parentMatrix.transformPoint(tempVector.x, tempVector.y, tempVector);
