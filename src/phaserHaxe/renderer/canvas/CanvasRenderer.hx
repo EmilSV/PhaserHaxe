@@ -1,5 +1,7 @@
 package phaserHaxe.renderer.canvas;
 
+import phaserHaxe.utils.types.Union3;
+import phaserHaxe.utils.types.StringOrInt;
 import phaserHaxe.gameobjects.sprite.Sprite;
 import phaserHaxe.gameobjects.GameObject;
 import phaserHaxe.textures.Frame;
@@ -133,6 +135,9 @@ class CanvasRenderer
 	 * @since 1.0.0
 	**/
 	public var snapshotState:SnapshotState;
+
+	@:allow(phaserHaxe)
+	private var currentBlendMode:Int;
 
 	/**
 	 * A temporary Transform Matrix, re-used internally during batching.
@@ -286,9 +291,9 @@ class CanvasRenderer
 	 *
 	 * @return This CanvasRenderer object.
 	**/
-	public function setBlendMode(blendMode:String):CanvasRenderer
+	public function setBlendMode(blendMode:Union3<Int, String, BlendModes>):CanvasRenderer
 	{
-		currentContext.globalCompositeOperation = blendMode;
+		currentContext.globalCompositeOperation = cast blendMode;
 		return this;
 	}
 

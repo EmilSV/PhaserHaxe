@@ -173,6 +173,13 @@ final class FrameBasedSizeImplementation
 final class FrameBasedSizeMixin implements IFrameBasedSize implements ITransform implements ICrop
 {
 	/**
+	 * The internal crop data object, as used by `setCrop` and passed to the `Frame.setCropUVs` method.
+	 *
+	 * @since 1.0.0
+	**/
+	private var _crop:CropDataObject;
+
+	/**
 	 * A property indicating that a Game Object has this component.
 	 *
 	 * @since 1.0.0

@@ -179,7 +179,7 @@ final class GetBoundsImplementation
 
 		if (includeParent && self.parentContainer != null)
 		{
-			var parentMatrix:TransformMatrix = (self.parentContainer : IContainer)
+			var parentMatrix:TransformMatrix = (self.parentContainer : IGetBoundsTransformMatrix)
 				.getBoundsTransformMatrix();
 
 			parentMatrix.transformPoint(output.x, output.y, output);
@@ -442,7 +442,7 @@ final class GetBoundsImplementation
 		// defined per corner we only do it once.
 		if (self.parentContainer != null)
 		{
-			var parentMatrix:TransformMatrix = (self.parentContainer : IContainer)
+			var parentMatrix:TransformMatrix = (self.parentContainer : IGetBoundsTransformMatrix)
 				.getBoundsTransformMatrix();
 
 			self.getTopLeft(tempVector);

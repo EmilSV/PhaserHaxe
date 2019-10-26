@@ -18,7 +18,7 @@ interface IPipeline
 	 * The current WebGL pipeline of this Game Object.
 	 *
 	 * @webglOnly
-	 * @since 1s.0.0
+	 * @since 1.0.0
 	**/
 	public var pipeline:WebGLPipeline;
 

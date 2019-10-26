@@ -56,7 +56,7 @@ class GameObject extends EventEmitter
 	 *
 	 * @since 1.0.0
 	**/
-	public var parentContainer:Null<Container> = null;
+	public var parentContainer:Container = null;
 
 	/**
 	 * The name of this Game Object.
@@ -471,7 +471,7 @@ class GameObject extends EventEmitter
 		{
 			indexes.unshift(parent.getIndex(child));
 
-			child = parent;
+			child = parent.toGameObject();
 
 			if (parent.parentContainer == null)
 			{
@@ -488,7 +488,7 @@ class GameObject extends EventEmitter
 		return indexes;
 	}
 
-	public dynamic function preDestroy() {};
+	public function preDestroy() {};
 
 	/**
 	 * Destroys this Game Object removing it from the Display List and Update List and
@@ -571,5 +571,11 @@ class GameObject extends EventEmitter
 		parentContainer = null;
 
 		removeAllListeners();
+	}
+
+	@:noCompletion
+	public inline function toGameObject():GameObject
+	{
+		return this;
 	}
 }

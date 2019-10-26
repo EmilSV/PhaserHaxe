@@ -1,5 +1,19 @@
 package phaserHaxe.gameobjects;
 
+import phaserHaxe.gameobjects.sprite.ISpriteRenderer;
+import phaserHaxe.renderer.webgl.WebGLRenderer;
+import phaserHaxe.cameras.scene2D.Camera;
+import phaserHaxe.renderer.canvas.CanvasRenderer;
+import phaserHaxe.gameobjects.components.IOrigin;
+import phaserHaxe.gameobjects.components.TransformMatrix;
+import phaserHaxe.gameobjects.components.IVisible;
+import phaserHaxe.gameobjects.components.ITransform;
+import phaserHaxe.gameobjects.components.IMask;
+import phaserHaxe.gameobjects.components.IDepth;
+import phaserHaxe.gameobjects.components.IComputedSize;
+import phaserHaxe.gameobjects.components.IBlendMode;
+import phaserHaxe.gameobjects.components.IAlpha;
+import phaserHaxe.gameobjects.components.IScrollFactor;
 import phaserHaxe.gameobjects.components.IScrollFactor;
 import phaserHaxe.gameobjects.GameObject;
 import phaserHaxe.utils.types.MultipleOrOne;
@@ -18,9 +32,13 @@ import phaserHaxe.gameobjects.components.IComputedSize.ComputedSizeImplementatio
 import phaserHaxe.gameobjects.components.IBlendMode.BlendModeMixin;
 import phaserHaxe.gameobjects.components.IAlpha.AlphaMixin;
 import phaserHaxe.geom.RectangleUtil;
+import phaserHaxe.gameobjects.IGetBoundsTransformMatrix;
 
 @:build(phaserHaxe.macro.Mixin.build(AlphaMixin, BlendModeMixin, DepthMixin, MaskMixin, TransformMixin, VisibleMixin))
-class Container extends GameObject implements IContainer
+class Container extends GameObject implements IAlpha implements IBlendMode
+		implements IComputedSize implements IDepth implements IMask
+		implements ITransform implements IVisible implements IOrigin
+		implements IGetBoundsTransformMatrix implements ISpriteRenderer
 {
 	/**
 	 * An array holding the children of this Container.
@@ -625,7 +643,7 @@ class Container extends GameObject implements IContainer
 	 *
 	 * @return This Container instance.
 	**/
-	public function add(child:Array<GameObject>)
+	public function add(child:Array<GameObject>):Container
 	{
 		ArrayUtils.add(this.list, child, this.maxSize, this.addHandler);
 
@@ -719,7 +737,7 @@ class Container extends GameObject implements IContainer
 	 *
 	 * @return The first child with a matching name, or `null` if none were found.
 	**/
-	public function getByName(name:String):Null<GameObject>
+	public inline function getByName(name:String):Null<GameObject>
 	{
 		return ArrayUtils.getFirst(list, go -> go.name, name);
 	}
@@ -1143,7 +1161,7 @@ class Container extends GameObject implements IContainer
 	 *
 	 * @return This Container instance.
 	**/
-	public inline function each(callback:(GameObject) -> Void)
+	public inline function each(callback:(GameObject) -> Void):Container
 	{
 		for (item in list.copy())
 		{
@@ -1164,7 +1182,7 @@ class Container extends GameObject implements IContainer
 	 *
 	 * @return This Container instance.
 	**/
-	public inline function iterate(callback:(GameObject) -> Void)
+	public inline function iterate(callback:(GameObject) -> Void):Container
 	{
 		for (item in list)
 		{
@@ -1231,6 +1249,111 @@ class Container extends GameObject implements IContainer
 			}
 		}
 		return this;
+	}
+
+	/**
+	 * Renders this Game Object with the WebGL Renderer to the given Camera.
+	 * The object will not render if any of its renderFlags are set or it is being actively filtered out by the Camera.
+	 * This method should not be called directly. It is a utility function of the Render module.
+	 *
+	 * @since 1.0.0
+	 *
+	 * @param renderer - A reference to the current active WebGL renderer.
+	 * @param src - The Game Object being rendered in this call.
+	 * @param interpolationPercentage - Reserved for future use and custom pipelines.
+	 * @param camera - The Camera that is rendering the Game Object.
+	 * @param parentMatrix - This transform matrix is defined if the game object is nested
+	**/
+	@:allow(phaserHaxe)
+	private function renderWebGL(renderer:WebGLRenderer, src:GameObject,
+		interpolationPercentage:Float, camera:Camera,
+		parentMatrix:TransformMatrix):Void {}
+
+	/**
+	 * Renders this Game Object with the Canvas Renderer to the given Camera.
+	 * The object will not render if any of its renderFlags are set or it is being actively filtered out by the Camera.
+	 * This method should not be called directly. It is a utility function of the Render module.
+	 *
+	 * @since 1.0.0
+	 *
+	 * @param renderer - A reference to the current active Canvas renderer.
+	 * @param src - The Game Object being rendered in this call.
+	 * @param interpolationPercentage - Reserved for future use and custom pipelines.
+	 * @param camera - The Camera that is rendering the Game Object.
+	 * @param parentMatrix - This transform matrix is defined if the game object is nested
+	**/
+	@:allow(phaserHaxe)
+	private function renderCanvas(renderer:CanvasRenderer, src:GameObject,
+			interpolationPercentage:Float, camera:Camera,
+			parentMatrix:TransformMatrix):Void
+	{
+		var children = list;
+
+		if (children.length == 0)
+		{
+			return;
+		}
+
+		var transformMatrix = localTransform;
+
+		if (parentMatrix != null)
+		{
+			transformMatrix.loadIdentity();
+			transformMatrix.multiply(parentMatrix);
+			transformMatrix.translate(x, y);
+			transformMatrix.rotate(rotation);
+			transformMatrix.scale(scaleX, scaleY);
+		}
+		else
+		{
+			transformMatrix.applyITRS(x, y, rotation, scaleX, scaleY);
+		}
+
+		var containerHasBlendMode = (blendMode != -1);
+
+		if (!containerHasBlendMode)
+		{
+			//  If Container is SKIP_TEST then set blend mode to be Normal
+			renderer.setBlendMode(0);
+		}
+
+		var alpha = _alpha;
+		var scrollFactorX = scrollFactorX;
+		var scrollFactorY = scrollFactorY;
+
+		for (i in 0...children.length)
+		{
+			var child = children[i];
+
+			if (!child.willRender(camera))
+			{
+				continue;
+			}
+
+			var childAlpha = (cast child : IAlpha).alpha;
+			var childScrollFactorX = (cast child : IScrollFactor).scrollFactorX;
+			var childScrollFactorY = (cast child : IScrollFactor).scrollFactorY;
+
+			if (!containerHasBlendMode && (cast child : IBlendMode).blendMode != renderer.currentBlendMode)
+			{
+				//  If Container doesn't have its own blend mode, then a child can have one
+				renderer.setBlendMode((cast child : IBlendMode).blendMode);
+			}
+
+			//  Set parent values
+			(cast child : IScrollFactor)
+				.setScrollFactor(childScrollFactorX * scrollFactorX, childScrollFactorY * scrollFactorY);
+			(cast child : IAlpha).setAlpha(childAlpha * alpha);
+
+			//  Render
+			(cast child : ISpriteRenderer)
+				.renderCanvas(renderer, child, interpolationPercentage, camera, transformMatrix);
+
+			//  Restore original values
+			(cast child : IAlpha).setAlpha(childAlpha);
+			(cast child : IScrollFactor)
+				.setScrollFactor(childScrollFactorX, childScrollFactorY);
+		}
 	}
 }
 
