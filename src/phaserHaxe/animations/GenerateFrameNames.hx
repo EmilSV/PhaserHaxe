@@ -1,6 +1,7 @@
 package phaserHaxe.animations;
 
 import phaserHaxe.animations.AnimationFrameConfig;
+import phaserHaxe.utils.types.Union;
 
 /**
  *
@@ -56,7 +57,7 @@ typedef GenerateFrameNames =
 	 *
 	 * @since 1.0.0
 	**/
-	public var ?frames:Either<Bool, Array<String>>;
+	public var ?frames:Union<Bool, Array<String>>;
 };
 
 /**

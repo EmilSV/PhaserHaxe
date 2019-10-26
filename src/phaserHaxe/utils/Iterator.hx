@@ -1,5 +1,7 @@
 package phaserHaxe.utils;
 
+import phaserHaxe.utils.iterators.*;
+
 final class Iterator
 {
 	public static inline function reverse(start:Int, end:Int):ReverseIterator

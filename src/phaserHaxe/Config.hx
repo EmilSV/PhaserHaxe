@@ -1,29 +1,19 @@
 package phaserHaxe;
 
-import phaserHaxe.utils.Utils;
-import haxe.macro.Expr.Case;
-import haxe.ds.Option;
-import phaserHaxe.core.GamepadInputConfig;
-import phaserHaxe.core.TouchInputConfig;
-import phaserHaxe.core.MouseInputConfig;
-import phaserHaxe.core.KeyboardInputConfig;
 import js.Browser;
-import phaserHaxe.core.InputConfig;
-import phaserHaxe.Const;
-import haxe.ds.ReadOnlyArray;
-import phaserHaxe.core.WebGameConfig;
 import js.html.webgl.PowerPreference;
-import phaserHaxe.core.PhysicsConfig;
-import phaserHaxe.core.BootCallback;
-import phaserHaxe.display.Color;
-import phaserHaxe.core.RenderConfig;
-import phaserHaxe.core.FPSConfig;
-import phaserHaxe.core.AudioConfig;
 import js.html.webgl.WebGL2RenderingContext;
 import js.html.CanvasRenderingContext2D;
 import js.html.CanvasElement;
-import phaserHaxe.core.ScaleConfig;
 import js.html.HtmlElement;
+import phaserHaxe.utils.StringOrInt;
+import phaserHaxe.Const;
+import phaserHaxe.core.WebGameConfig;
+import phaserHaxe.core.PhysicsConfig;
+import phaserHaxe.core.BootCallback;
+import phaserHaxe.display.Color;
+import phaserHaxe.core.FPSConfig;
+import phaserHaxe.core.AudioConfig;
 import phaserHaxe.scale.CenterType;
 import phaserHaxe.scale.ScaleModeType;
 import phaserHaxe.scale.ZoomType;
@@ -37,14 +27,14 @@ class Config
 	 *
 	 * @since 1.0.0
 	**/
-	public final width:Either<Int, String>;
+	public final width:StringOrInt;
 
 	/**
 	 * The height of the underlying canvas, in pixels.
 	 *
 	 * @since 1.0.0
 	**/
-	public final height:Either<Int, String>;
+	public final height:StringOrInt;
 
 	/**
 	 * The zoom factor, as used by the Scale Manager.

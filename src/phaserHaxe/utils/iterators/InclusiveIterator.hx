@@ -1,4 +1,4 @@
-package phaserHaxe.utils;
+package phaserHaxe.utils.iterators;
 
 class InclusiveIterator
 {

@@ -42,9 +42,9 @@ final class Components
 			out.depth = gameObject.depth;
 		}
 
-		if (Std.is(gameObject, IOrigin))
+		if (Std.is(gameObject, IOriginSimple))
 		{
-			final gameObject = (cast gameObject : IOrigin);
+			final gameObject = (cast gameObject : IOriginSimple);
 			out.origin = {
 				x: gameObject.originX,
 				y: gameObject.originY

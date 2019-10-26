@@ -2,7 +2,7 @@ package phaserHaxe.display.canvas;
 
 #if js
 import js.Syntax as JsSyntax;
-import phaserHaxe.Either;
+import phaserHaxe.utils.types.Union;
 import js.html.CanvasRenderingContext2D;
 import js.html.webgl.WebGL2RenderingContext;
 
@@ -15,7 +15,7 @@ final class Smoothing
 
 	private static var prefix = '';
 
-	public static function getPrefix(context:Either<CanvasRenderingContext2D,
+	public static function getPrefix(context:Union<CanvasRenderingContext2D,
 		WebGL2RenderingContext>):String
 	{
 		js.Syntax.code("        
@@ -46,7 +46,7 @@ final class Smoothing
 	 *
 	 * @return The provided context.
 	**/
-	public static function enable<T:Either<CanvasRenderingContext2D,
+	public static function enable<T:Union<CanvasRenderingContext2D,
 		WebGL2RenderingContext>>(context:T):T
 	{
 		if (JsSyntax.strictEq(prefix, ""))
@@ -75,7 +75,7 @@ final class Smoothing
 	 *
 	 * @return The provided context.
 	**/
-	public static function disable<T:Either<CanvasRenderingContext2D,
+	public static function disable<T:Union<CanvasRenderingContext2D,
 		WebGL2RenderingContext>>(context:T):T
 	{
 		if (JsSyntax.strictEq(prefix, ""))
@@ -101,7 +101,7 @@ final class Smoothing
 	 *
 	 * @return `true` if smoothing is enabled on the context, otherwise `false`. `null` if not supported.
 	**/
-	function isEnabled(context:Either<CanvasRenderingContext2D,
+	function isEnabled(context:Union<CanvasRenderingContext2D,
 		WebGL2RenderingContext>):Null<Bool>
 	{
 		return (JsSyntax.strictEq(prefix, null)) ? JsSyntax.field(context, prefix) : null;

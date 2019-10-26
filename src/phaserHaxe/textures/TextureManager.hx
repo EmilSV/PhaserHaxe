@@ -11,12 +11,13 @@ import phaserHaxe.gameobjects.components.ICrop;
 import phaserHaxe.gameobjects.GameObject;
 import phaserHaxe.display.Color;
 import phaserHaxe.gameobjects.RenderTexture;
-import phaserHaxe.utils.MultipleOrOne;
-import phaserHaxe.utils.StringOrInt;
+import phaserHaxe.utils.types.MultipleOrOne;
+import phaserHaxe.utils.types.StringOrInt;
 import phaserHaxe.display.canvas.CanvasPool;
 import phaserHaxe.core.GameEvents;
 import phaserHaxe.textures.Parser;
 import phaserHaxe.Create;
+import phaserHaxe.utils.types.Union;
 
 /**
  * Textures are managed by the global TextureManager. This is a singleton class that is
@@ -192,7 +193,7 @@ import phaserHaxe.Create;
 	 *
 	 * @return The Texture Manager.
 	**/
-	public function remove(key:Either<String, Texture>):TextureManager
+	public function remove(key:Union<String, Texture>):TextureManager
 	{
 		if (Std.is(key, String))
 		{
@@ -479,7 +480,7 @@ import phaserHaxe.Create;
 	 * @return The Texture that was created, or `null` if the key is already in use.
 	**/
 	function addAtlas(key:String, source:HTMLImageElement, data:Dynamic,
-			?dataSource:MultipleOrOne<Either<HTMLImageElement,
+			?dataSource:MultipleOrOne<Union<HTMLImageElement,
 			HTMLCanvasElement>>):Null<Texture>
 	{
 		//  New Texture Packer format?
@@ -509,7 +510,7 @@ import phaserHaxe.Create;
 	**/
 	public function addAtlasJSONArray(key:String,
 			source:MultipleOrOne<HTMLImageElement>, data:Dynamic,
-			?dataSource:MultipleOrOne<Either<HTMLImageElement,
+			?dataSource:MultipleOrOne<Union<HTMLImageElement,
 			HTMLCanvasElement>>):Null<Texture>
 	{
 		var texture = null;
@@ -562,7 +563,7 @@ import phaserHaxe.Create;
 	 * @return The Texture that was created, or `null` if the key is already in use.
 	**/
 	public function addAtlasJSONHash(key:String, source:HTMLImageElement, data:Dynamic,
-			?dataSource:MultipleOrOne<Either<HTMLImageElement,
+			?dataSource:MultipleOrOne<Union<HTMLImageElement,
 			HTMLCanvasElement>>):Null<Texture>
 	{
 		var texture = null;
@@ -608,7 +609,7 @@ import phaserHaxe.Create;
 	 * @return The Texture that was created, or `null` if the key is already in use.
 	**/
 	public function addAtlasXML(key:String, source:HTMLImageElement, data:Dynamic,
-			?dataSource:MultipleOrOne<Either<HTMLImageElement,
+			?dataSource:MultipleOrOne<Union<HTMLImageElement,
 			HTMLCanvasElement>>):Null<Texture>
 	{
 		var texture = null;
@@ -643,7 +644,7 @@ import phaserHaxe.Create;
 	 * @return The Texture that was created, or `null` if the key is already in use.
 	**/
 	public function addUnityAtlas(key:String, source:HTMLImageElement, data:Dynamic,
-			?dataSource:MultipleOrOne<Either<HTMLImageElement,
+			?dataSource:MultipleOrOne<Union<HTMLImageElement,
 			HTMLCanvasElement>>):Null<Texture>
 	{
 		var texture = null;

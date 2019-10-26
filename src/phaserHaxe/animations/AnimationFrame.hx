@@ -1,7 +1,7 @@
 package phaserHaxe.animations;
 
 import phaserHaxe.textures.Frame;
-import phaserHaxe.utils.StringOrInt;
+import phaserHaxe.utils.types.StringOrInt;
 
 class AnimationFrame
 {

@@ -1,5 +1,6 @@
 package phaserHaxe.gameobjects;
 
+import phaserHaxe.gameobjects.components.IOrigin;
 import phaserHaxe.gameobjects.components.TransformMatrix;
 import phaserHaxe.gameobjects.components.IVisible;
 import phaserHaxe.gameobjects.components.ITransform;
@@ -9,7 +10,7 @@ import phaserHaxe.gameobjects.components.IComputedSize;
 import phaserHaxe.gameobjects.components.IBlendMode;
 import phaserHaxe.gameobjects.components.IAlpha;
 
-interface IContainer extends IAlpha extends IBlendMode extends IComputedSize extends IDepth extends IMask extends ITransform extends IVisible
+interface IContainer extends IAlpha extends IBlendMode extends IComputedSize extends IDepth extends IMask extends ITransform extends IVisible extends IOrigin
 {
 	/**
 	 * Returns the world transform matrix as used for Bounds checks.

@@ -1,5 +1,6 @@
 package phaserHaxe.gameobjects;
 
+import phaserHaxe.utils.types.StringOrInt;
 import phaserHaxe.Scene;
 import phaserHaxe.gameobjects.Container;
 import phaserHaxe.input.types.HitAreaCallback;
@@ -10,6 +11,7 @@ import phaserHaxe.data.DataManager;
 import phaserHaxe.types.input.InteractiveObject;
 import phaserHaxe.physics.arcade.Body;
 import phaserHaxe.gameobjects.components.IVisible;
+import phaserHaxe.utils.types.Union;
 
 /**
  * The base class that all Game Objects extend.
@@ -47,7 +49,7 @@ class GameObject extends EventEmitter
 	 * If you need to store complex data about your Game Object, look at using the Data Component instead.
 	 * @since 1.0.0
 	**/
-	public var state:Either<Int, String> = 0;
+	public var state:StringOrInt = 0;
 
 	/**
 	 * The parent Container of this Game Object, if it has one.
@@ -199,7 +201,7 @@ class GameObject extends EventEmitter
 	 *
 	 * @return This GameObject.
 	**/
-	public function setState(value:Either<Int, String>):GameObject
+	public function setState(value:StringOrInt):GameObject
 	{
 		state = value;
 		return this;
@@ -270,7 +272,7 @@ class GameObject extends EventEmitter
 	 *
 	 * @return This GameObject.
 	**/
-	public function setData(key:Either<String, {}>, ?value:Dynamic):GameObject
+	public function setData(key:Union<String, {}>, ?value:Dynamic):GameObject
 	{
 		if (data == null)
 		{
@@ -310,7 +312,7 @@ class GameObject extends EventEmitter
 	 *
 	 * @return The value belonging to the given key, or an array of values, the order of which will match the input array.
 	**/
-	public function getData(key:Either<String, Array<String>>):Dynamic
+	public function getData(key:Union<String, Array<String>>):Dynamic
 	{
 		/* TODO: fix GameObject Class
 			if (!this.data)
@@ -339,13 +341,13 @@ class GameObject extends EventEmitter
 	 *
 	 * @since 1.0.0
 	 *
-	 * @param shape - Either an input configuration object, or a geometric shape that defines the hit area for the Game Object. If not specified a Rectangle will be used.
+	 * @param shape - either an input configuration object, or a geometric shape that defines the hit area for the Game Object. If not specified a Rectangle will be used.
 	 * @param callback - A callback to be invoked when the Game Object is interacted with. If you provide a shape you must also provide a callback.
 	 * @param dropZone - Should this Game Object be treated as a drop zone target?
 	 *
 	 * @return This GameObject.
 	**/
-	public function setInteractive(?shape:Either<InputConfiguration, Any>,
+	public function setInteractive(?shape:Union<InputConfiguration, Any>,
 			?callback:HitAreaCallback, dropZone:Bool = false):GameObject
 	{
 		scene.sys.input.enable(this, shape, callback, dropZone);
@@ -460,7 +462,7 @@ class GameObject extends EventEmitter
 	**/
 	public function getIndexList():Array<Int>
 	{
-		var child:Either<GameObject, Container> = this;
+		var child:GameObject = this;
 		var parent = this.parentContainer;
 
 		var indexes = [];
@@ -471,7 +473,7 @@ class GameObject extends EventEmitter
 
 			child = parent;
 
-			if (!parent.parentContainer)
+			if (parent.parentContainer == null)
 			{
 				break;
 			}
@@ -523,7 +525,7 @@ class GameObject extends EventEmitter
 			this.preDestroy();
 		}
 
-		this.emit(Events.Destroy, [this]);
+		this.emit(Events.DESTROY, [this]);
 
 		var sys = this.scene.sys;
 

@@ -6,6 +6,7 @@ import phaserHaxe.animations.AnimationFrame;
 import phaserHaxe.animations.AnimationManager;
 import phaserHaxe.animations.Animation as BaseAnimation;
 import phaserHaxe.gameobjects.components.IAnimation.IAnimationController;
+import phaserHaxe.utils.types.Union;
 
 /**
  * A Game Object Animation Controller.
@@ -23,7 +24,7 @@ typedef Animation<ParentT:GameObject & ICrop & IFlip & IOrigin & ISize & IVisibl
  *
  * @since 1.0.0
 **/
-	class AnimationController<ParentT:GameObject & ICrop & IFlip & IOrigin & ISize & IVisible> implements IAnimationController
+class AnimationController<ParentT:GameObject & ICrop & IFlip & IOrigin & ISize & IVisible> implements IAnimationController
 {
 	/**
 	 * The Game Object to which this animation controller belongs.
@@ -207,7 +208,7 @@ typedef Animation<ParentT:GameObject & ICrop & IFlip & IOrigin & ISize & IVisibl
 	 *
 	 * @since 1.0.0
 	**/
-	private var _pendingStopValue:Either<AnimationFrame, Float>;
+	private var _pendingStopValue:Union<AnimationFrame, Float>;
 
 	/**
 	 * `true` if the current animation is paused, otherwise `false`.
@@ -280,7 +281,7 @@ typedef Animation<ParentT:GameObject & ICrop & IFlip & IOrigin & ISize & IVisibl
 	 *
 	 * @return The Game Object that owns this Animation Component.
 	**/
-	public function chain(?key:Either<String, BaseAnimation>):ParentT
+	public function chain(?key:Union<String, BaseAnimation>):ParentT
 	{
 		final key = if (Std.is(key, BaseAnimation))
 		{
@@ -451,7 +452,7 @@ typedef Animation<ParentT:GameObject & ICrop & IFlip & IOrigin & ISize & IVisibl
 	 *
 	 * @return The Game Object that owns this Animation Component.
 	**/
-	public function play(key:Either<String, BaseAnimation>,
+	public function play(key:Union<String, BaseAnimation>,
 			ignoreIfPlaying:Bool = false, startFrame:Int = 0):ParentT
 	{
 		var key = if (Std.is(key, BaseAnimation))
@@ -486,7 +487,7 @@ typedef Animation<ParentT:GameObject & ICrop & IFlip & IOrigin & ISize & IVisibl
 	 *
 	 * @return The Game Object that owns this Animation Component.
 	**/
-	public function playReverse(key:Either<String, BaseAnimation>,
+	public function playReverse(key:Union<String, BaseAnimation>,
 			ignoreIfPlaying:Bool = false, startFrame:Int = 0):ParentT
 	{
 		final key = if (Std.is(key, BaseAnimation))
@@ -1037,7 +1038,6 @@ typedef Animation<ParentT:GameObject & ICrop & IFlip & IOrigin & ISize & IVisibl
 
 		// return parent;
 	}
-	
 
 	/**
 	 * Sets if the current Animation will yoyo when it reaches the end.

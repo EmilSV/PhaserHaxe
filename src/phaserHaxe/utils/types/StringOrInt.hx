@@ -1,4 +1,4 @@
-package phaserHaxe.utils;
+package phaserHaxe.utils.types;
 
 abstract StringOrInt(Dynamic) from Int from String
 {

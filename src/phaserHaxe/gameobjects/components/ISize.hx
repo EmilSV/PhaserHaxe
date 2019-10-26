@@ -4,6 +4,7 @@ import phaserHaxe.geom.Rectangle;
 import phaserHaxe.textures.CanvasTexture;
 import phaserHaxe.textures.Texture;
 import phaserHaxe.textures.Frame;
+import phaserHaxe.utils.types.Union;
 
 /**
  * Provides methods used for getting and setting the size of a Game Object.
@@ -475,7 +476,7 @@ final class SizeMixin extends GameObject implements ISize implements ITransform
 	public var isCropped:Bool = false;
 
 	@:phaserHaxe.mixinIgnore
-	public function setCrop(?x:Either<Rectangle, Float>, ?y:Float, ?width:Float,
+	public function setCrop(?x:Union<Rectangle, Float>, ?y:Float, ?width:Float,
 			?height:Float):ICrop
 	{
 		throw "Not Implemented";

@@ -1,6 +1,6 @@
 package phaserHaxe.animations;
 
-import phaserHaxe.utils.StringOrInt;
+import phaserHaxe.utils.types.StringOrInt;
 
 /**
  *

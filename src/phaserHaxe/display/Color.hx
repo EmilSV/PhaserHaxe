@@ -3,8 +3,9 @@ package phaserHaxe.display;
 import phaserHaxe.Compatibility.toIntSafe as toIntSafe;
 import phaserHaxe.math.MathInt;
 import phaserHaxe.display.HSVColorObject;
-import phaserHaxe.Either;
+import phaserHaxe.utils.types.Union;
 import phaserHaxe.utils.Utils;
+import phaserHaxe.utils.types.Union3;
 
 /**
  * The Color class holds a single color value and allows for easy modification and reading of it.
@@ -507,7 +508,7 @@ class Color
 	 *
 	 * @return A Color object.
 	**/
-	public static function valueToColor(input:Either3<String, Int, InputColorObject>)
+	public static function valueToColor(input:Union3<String, Int, InputColorObject>)
 	{
 		if (Std.is(input, String))
 		{
@@ -623,7 +624,7 @@ class Color
 	 *
 	 * @return The combined color value.
 	**/
-	public static function rgbToHSV<T:Either<HSVColorObject, Color>>(r:Float, g:Float,
+	public static function rgbToHSV<T:Union<HSVColorObject, Color>>(r:Float, g:Float,
 			b:Float, out:T):T
 	{
 		r /= 255;
@@ -692,7 +693,7 @@ class Color
 	 *
 	 * @return An object with the red, green and blue values set in the r, g and b properties.
 	**/
-	public static function hsvToRGB<T:Either<ColorObject, Color>>(h:Float, s:Float = 1,
+	public static function hsvToRGB<T:Union<ColorObject, Color>>(h:Float, s:Float = 1,
 			v:Float = 1, out:T):T
 	{
 		var i = Math.floor(h * 6);

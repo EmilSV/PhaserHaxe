@@ -3,8 +3,8 @@ package phaserHaxe.gameobjects.components;
 import phaserHaxe.geom.Rectangle;
 import phaserHaxe.textures.CanvasTexture;
 import phaserHaxe.textures.Texture;
-import haxe.macro.CompilationServer;
 import phaserHaxe.textures.Frame;
+import phaserHaxe.utils.types.Union;
 
 @:phaserHaxe.Mixin(phaserHaxe.gameobjects.components.IComputedSize.ComputedSizeMixin)
 interface IComputedSize extends ISize
@@ -465,7 +465,7 @@ final class ComputedSizeMixin extends GameObject implements IComputedSize
 	public var isCropped:Bool = false;
 
 	@:phaserHaxe.mixinIgnore
-	public function setCrop(?x:Either<Rectangle, Float>, ?y:Float, ?width:Float,
+	public function setCrop(?x:Union<Rectangle, Float>, ?y:Float, ?width:Float,
 			?height:Float):ComputedSizeMixin
 		throw "Not Implemented";
 

@@ -1,6 +1,6 @@
 package phaserHaxe.gameobjects.components;
 
-import phaserHaxe.utils.StringOrInt;
+import phaserHaxe.utils.types.StringOrInt;
 import phaserHaxe.textures.Frame;
 import phaserHaxe.textures.Texture;
 

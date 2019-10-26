@@ -57,6 +57,7 @@ phaserHaxe.display.Bounds
 phaserHaxe.gameobjects.components.ITransform
 phaserHaxe.gameobjects.components.IComputedSize
 phaserHaxe.gameobjects.components.Animation
+phaserHaxe.gameobjects.Container
 
 -main Main
 

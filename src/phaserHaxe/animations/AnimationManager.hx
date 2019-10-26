@@ -1,7 +1,7 @@
 package phaserHaxe.animations;
 
 import phaserHaxe.gameobjects.GameObject;
-import phaserHaxe.utils.MultipleOrOne;
+import phaserHaxe.utils.types.MultipleOrOne;
 import phaserHaxe.iterator.StepIterator;
 import haxe.Json;
 import phaserHaxe.animations.JSONAnimation;
@@ -10,11 +10,13 @@ import phaserHaxe.textures.TextureManager;
 import phaserHaxe.Game;
 import phaserHaxe.utils.StringUtils;
 import phaserHaxe.gameobjects.components.IHaveAnimations;
+import phaserHaxe.utils.types.Union;
+import phaserHaxe.utils.types.Union3;
 
-typedef JSONData = Either3<String, JSONAnimation, JSONAnimations>;
+typedef JSONData = Union3<String, JSONAnimation, JSONAnimations>;
 
-abstract MultipleOrOneJSONAnimation(Either<JSONAnimation, JSONAnimations>)
-	from Either<JSONAnimation, JSONAnimations>
+abstract MultipleOrOneJSONAnimation(Union<JSONAnimation, JSONAnimations>)
+	from Union<JSONAnimation, JSONAnimations>
 {
 	public inline function isOne():Bool
 	{

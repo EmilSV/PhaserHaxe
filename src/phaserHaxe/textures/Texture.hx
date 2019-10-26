@@ -1,8 +1,8 @@
 package phaserHaxe.textures;
 
 import haxe.ds.StringMap;
-import phaserHaxe.utils.MultipleOrOne;
-import phaserHaxe.utils.StringOrInt;
+import phaserHaxe.utils.types.MultipleOrOne;
+import phaserHaxe.utils.types.StringOrInt;
 import phaserHaxe.utils.CustomData;
 import haxe.ds.Map;
 

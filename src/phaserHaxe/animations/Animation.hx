@@ -7,6 +7,7 @@ import phaserHaxe.textures.TextureManager;
 import phaserHaxe.gameobjects.components.IAnimation.IAnimationController;
 import phaserHaxe.math.MathUtility.clamp;
 import phaserHaxe.utils.ArrayUtils.findClosestInSorted;
+import phaserHaxe.utils.types.Union;
 
 /**
  * A Frame based Animation.
@@ -207,8 +208,8 @@ class Animation extends EventEmitter
 	 * @param config - [description]
 	 *
 	 * @return This Animation object.
-	 */
-	public function addFrame(config:Either<String, Array<AnimationFrameConfig>>):Animation
+	**/
+	public function addFrame(config:Union<String, Array<AnimationFrameConfig>>):Animation
 	{
 		return addFrameAt(frames.length, config);
 	}
@@ -224,7 +225,7 @@ class Animation extends EventEmitter
 	 * @return This Animation object.
 	**/
 	public function addFrameAt(index:Int,
-			config:Either<String, Array<AnimationFrameConfig>>):Animation
+			config:Union<String, Array<AnimationFrameConfig>>):Animation
 	{
 		var newFrames = getFrames(manager.textureManager, config);
 
@@ -330,7 +331,7 @@ class Animation extends EventEmitter
 	 * @return {Phaser.Animations.AnimationFrame[]} [description]
 	**/
 	function getFrames(textureManager:TextureManager,
-			frames:Either<String, Array<AnimationFrameConfig>>,
+			frames:Union<String, Array<AnimationFrameConfig>>,
 			?defaultTextureKey:String):Array<AnimationFrame>
 	{
 		inline function getValue<T>(value:T, defaultValue:T)

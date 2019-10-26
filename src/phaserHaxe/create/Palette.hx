@@ -1,16 +1,16 @@
 package phaserHaxe.create;
 
-import phaserHaxe.utils.StringOrInt;
-import phaserHaxe.utils.ReadOnlyVector;
+import phaserHaxe.utils.types.StringOrInt;
+import phaserHaxe.utils.types.ReadOnlyVector;
 import haxe.ds.ReadOnlyArray;
 import haxe.ds.Vector;
-import phaserHaxe.Either;
+import phaserHaxe.utils.types.Union;
 
 abstract Palette(ReadOnlyVector<String>)
 {
 	public var colors(get, never):ReadOnlyVector<String>;
 
-	public function new(colors:Either<ReadOnlyArray<String>, Dynamic>)
+	public function new(colors:Union<ReadOnlyArray<String>, Dynamic>)
 	{
 		if (Std.is(colors, Array))
 		{
@@ -46,7 +46,7 @@ abstract Palette(ReadOnlyVector<String>)
 		return this;
 	}
 
-	@:arrayAccess function get(i:StringOrInt):String
+	@:arrayAccess function get(i:StringOrInt):Null<String>
 	{
 		final i = i.isInt() ? i.getInt() : i.getString().charCodeAt(0);
 

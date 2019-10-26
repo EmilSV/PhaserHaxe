@@ -2,6 +2,7 @@ package phaserHaxe.structs;
 
 import haxe.Constraints.Function;
 import phaserHaxe.utils.ArrayUtils;
+import phaserHaxe.utils.types.Union;
 
 /**
  * @param item - The item which is currently being processed.
@@ -163,7 +164,7 @@ class List<T>
 	 *
 	 * @return The list's underlying array.
 	**/
-	public inline function add<TChild:Either<T, Array<T>>>(child:TChild,
+	public inline function add<TChild:Union<T, Array<T>>>(child:TChild,
 			skipCallback:Bool):TChild
 	{
 		return if (skipCallback)
@@ -187,7 +188,7 @@ class List<T>
 	 *
 	 * @return The List's underlying array.
 	**/
-	public inline function addAt<TChild:Either<T, Array<T>>>(child:TChild,
+	public inline function addAt<TChild:Union<T, Array<T>>>(child:TChild,
 			index:Int = 0, skipCallback:Bool = false):TChild
 	{
 		return if (skipCallback)

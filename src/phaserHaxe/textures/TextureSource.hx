@@ -10,9 +10,10 @@ import phaserHaxe.renderer.ScaleModes;
 import phaserHaxe.gameobjects.RenderTexture;
 import phaserHaxe.renderer.Renderer;
 import phaserHaxe.textures.FilterMode;
+import phaserHaxe.utils.types.Union;
 
 abstract HtmlSource(Dynamic) from RenderTexture from WebGLTexture from HTMLCanvasElement
-	from HTMLImageElement from Either<HTMLImageElement, HTMLCanvasElement> {}
+	from HTMLImageElement from Union<HTMLImageElement, HTMLCanvasElement> {}
 
 /**
  * A Texture Source is the encapsulation of the actual source data for a Texture.

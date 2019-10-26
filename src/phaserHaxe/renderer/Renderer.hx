@@ -2,6 +2,6 @@ package phaserHaxe.renderer;
 
 import phaserHaxe.renderer.webgl.WebGLRenderer;
 import phaserHaxe.renderer.canvas.CanvasRenderer;
-import phaserHaxe.Either;
+import phaserHaxe.utils.types.Union;
 
-abstract Renderer(Either<CanvasRenderer, WebGLRenderer>) {}
+abstract Renderer(Union<CanvasRenderer, WebGLRenderer>) {}

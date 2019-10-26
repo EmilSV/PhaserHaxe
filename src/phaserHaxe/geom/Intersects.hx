@@ -434,20 +434,20 @@ final class Intersects
 
 		//  Are any of the triangle points within the rectangle?
 
-		if (RectangleUtil.Contains(rect, triA.x1, triA
-			.y1) || RectangleUtil.Contains(rect, triA.x2, triA.y2))
+		if (RectangleUtil.contains(rect, triA.x1, triA
+			.y1) || RectangleUtil.contains(rect, triA.x2, triA.y2))
 		{
 			return true;
 		}
 
-		if (RectangleUtil.Contains(rect, triB.x1, triB
-			.y1) || RectangleUtil.Contains(rect, triB.x2, triB.y2))
+		if (RectangleUtil.contains(rect, triB.x1, triB
+			.y1) || RectangleUtil.contains(rect, triB.x2, triB.y2))
 		{
 			return true;
 		}
 
-		if (RectangleUtil.Contains(rect, triC.x1, triC
-			.y1) || RectangleUtil.Contains(rect, triC.x2, triC.y2))
+		if (RectangleUtil.contains(rect, triC.x1, triC
+			.y1) || RectangleUtil.contains(rect, triC.x2, triC.y2))
 		{
 			return true;
 		}
@@ -479,7 +479,7 @@ final class Intersects
 
 		//  None of the lines intersect, so are any rectangle points within the triangle?
 
-		var points = RectangleUtil.Decompose(rect);
+		var points = RectangleUtil.decompose(rect);
 		var within = TriangleUtil.ContainsArray(triangle, points, true);
 
 		return (within.length > 0);

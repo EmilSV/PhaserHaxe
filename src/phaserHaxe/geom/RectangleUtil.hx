@@ -15,7 +15,7 @@ final class RectangleUtil
 	 *
 	 * @return The area of the Rectangle object.
 	**/
-	public static function Area(rect:Rectangle):Float
+	public static function area(rect:Rectangle):Float
 	{
 		return rect.width * rect.height;
 	}
@@ -31,7 +31,7 @@ final class RectangleUtil
 	 *
 	 * @return The modified `out` Rectangle, or a new Rectangle if none was provided.
 	**/
-	public static function Union(rectA:Rectangle, rectB:Rectangle, ?out:Rectangle)
+	public static function union(rectA:Rectangle, rectB:Rectangle, ?out:Rectangle)
 	{
 		if (out == null)
 		{
@@ -56,7 +56,7 @@ final class RectangleUtil
 	 *
 	 * @return The adjusted Rectangle.
 	**/
-	public static function Ceil(rect:Rectangle):Rectangle
+	public static function ceil(rect:Rectangle):Rectangle
 	{
 		rect.x = Math.ceil(rect.x);
 		rect.y = Math.ceil(rect.y);
@@ -73,7 +73,7 @@ final class RectangleUtil
 	 *
 	 * @return The modified Rectangle.
 	**/
-	public static function CeilAll(rect:Rectangle):Rectangle
+	public static function ceilAll(rect:Rectangle):Rectangle
 	{
 		rect.x = Math.ceil(rect.x);
 		rect.y = Math.ceil(rect.y);
@@ -94,7 +94,7 @@ final class RectangleUtil
 	 *
 	 * @return The centered rectangle.
 	**/
-	public static function CenterOn(rect:Rectangle, x:Float, y:Float):Rectangle
+	public static function centerOn(rect:Rectangle, x:Float, y:Float):Rectangle
 	{
 		rect.x = x - (rect.width / 2);
 		rect.y = y - (rect.height / 2);
@@ -110,7 +110,7 @@ final class RectangleUtil
 	 *
 	 * @return The newly created Rectangle, which is separate from the given one.
 	**/
-	public static function Clone(source:Rectangle):Rectangle
+	public static function clone(source:Rectangle):Rectangle
 	{
 		return new Rectangle(source.x, source.y, source.width, source.height);
 	}
@@ -124,7 +124,7 @@ final class RectangleUtil
 		*s
 		* @return The newly created Rectangle, which is separate from the given one.
 	**/
-	public static inline function InlineClone(source:Rectangle):Rectangle
+	public static inline function inlineClone(source:Rectangle):Rectangle
 	{
 		return inline new Rectangle(source.x, source.y, source.width, source.height);
 	}
@@ -140,7 +140,7 @@ final class RectangleUtil
 	 *
 	 * @return `true` if the point is within the Rectangle's bounds, otherwise `false`.
 	**/
-	public static function Contains(rect:Rectangle, x:Float, y:Float):Bool
+	public static function contains(rect:Rectangle, x:Float, y:Float):Bool
 	{
 		if (rect.width <= 0 || rect.height <= 0)
 		{
@@ -159,9 +159,9 @@ final class RectangleUtil
 	 *
 	 * @return A value of true if the Rectangle object contains the specified point, otherwise false.
 	**/
-	public static inline function ContainsPoint<T:Vector2Like>(rect:Rectangle, point:T):Bool
+	public static inline function containsPoint<T:Vector2Like>(rect:Rectangle, point:T):Bool
 	{
-		return Contains(rect, point.x, point.y);
+		return contains(rect, point.x, point.y);
 	}
 
 	/**
@@ -174,7 +174,7 @@ final class RectangleUtil
 	 *
 	 * @return True only if rectA fully contains rectB.
 	**/
-	public static function ContainsRect(rectA:Rectangle, rectB:Rectangle):Bool
+	public static function containsRect(rectA:Rectangle, rectB:Rectangle):Bool
 	{
 		//  Volume check (if rectB volume > rectA then rectA cannot contain it)
 		if ((rectB.width * rectB.height) > (rectA.width * rectA.height))
@@ -198,7 +198,7 @@ final class RectangleUtil
 	 *
 	 * @return The destination Rectangle.
 	**/
-	public static function CopyFrom(source:Rectangle, dest:Rectangle):Rectangle
+	public static function copyFrom(source:Rectangle, dest:Rectangle):Rectangle
 	{
 		return dest.setTo(source.x, source.y, source.width, source.height);
 	}
@@ -214,7 +214,7 @@ final class RectangleUtil
 	 *
 	 * @return Will return the array you specified or a new array containing the points of the Rectangle.
 	**/
-	public static function Decompose(rect:Rectangle, ?out:Array<Point>):Array<Point>
+	public static function decompose(rect:Rectangle, ?out:Array<Point>):Array<Point>
 	{
 		if (out == null)
 		{
@@ -239,7 +239,7 @@ final class RectangleUtil
 	 *
 	 * @return true` if the rectangles' properties are an exact match, otherwise `false`.
 	**/
-	public static function Equals(rect, toCompare)
+	public static function equals(rect, toCompare)
 	{
 		return (rect.x == toCompare.x && rect.y == toCompare.y && rect.width == toCompare.width
 			&& rect.height == toCompare.height);
@@ -259,11 +259,11 @@ final class RectangleUtil
 	 *
 	 * @return The modified target rectangle instance.
 	**/
-	public static function FitInside(target:Rectangle, source:Rectangle):Rectangle
+	public static function fitInside(target:Rectangle, source:Rectangle):Rectangle
 	{
-		var ratio = GetAspectRatio(target);
+		var ratio = getAspectRatio(target);
 
-		if (ratio < GetAspectRatio(source))
+		if (ratio < getAspectRatio(source))
 		{
 			//  Taller than Wide
 			target.setSize(source.height * ratio, source.height);
@@ -294,11 +294,11 @@ final class RectangleUtil
 	 *
 	 * @return The modified target rectangle instance.
 	**/
-	public static function FitOutside(target:Rectangle, source:Rectangle)
+	public static function fitOutside(target:Rectangle, source:Rectangle)
 	{
-		var ratio = GetAspectRatio(target);
+		var ratio = getAspectRatio(target);
 
-		if (ratio > GetAspectRatio(source))
+		if (ratio > getAspectRatio(source))
 		{
 			//  Wider than Tall
 			target.setSize(source.height * ratio, source.height);
@@ -324,7 +324,7 @@ final class RectangleUtil
 	 *
 	 * @return {Phaser.Geom.Rectangle} The rectangle that was passed to this function with its co-ordinates floored.
 	 */
-	public static function Floor(rect)
+	public static function floor(rect)
 	{
 		rect.x = Math.floor(rect.x);
 		rect.y = Math.floor(rect.y);
@@ -343,7 +343,7 @@ final class RectangleUtil
 	 *
 	 * @return {Phaser.Geom.Rectangle} The adjusted Rectangle.
 	 */
-	public static function FloorAll(rect)
+	public static function floorAll(rect)
 	{
 		rect.x = Math.floor(rect.x);
 		rect.y = Math.floor(rect.y);
@@ -365,7 +365,7 @@ final class RectangleUtil
 	 *
 	 * @return {Phaser.Geom.Rectangle} The adjusted `out` Rectangle, or a new Rectangle if none was provided.
 	**/
-	public static function FromPoints(points:Array<Point>, out)
+	public static function fromPoints(points:Array<Point>, out)
 	{
 		if (out == null)
 		{
@@ -414,7 +414,7 @@ final class RectangleUtil
 	 *
 	 * @return {number} The width/height ratio of the rectangle.
 	**/
-	public static function GetAspectRatio(rect:Rectangle):Float
+	public static function getAspectRatio(rect:Rectangle):Float
 	{
 		return (rect.height == 0) ? Math.NaN : rect.width / rect.height;
 	}
@@ -432,7 +432,7 @@ final class RectangleUtil
 	 *
 	 * @return {(Phaser.Geom.Point|object)} The modified `out` object, or a new Point if none was provided.
 	**/
-	public static function GetCenter(rect, out)
+	public static function getCenter(rect, out)
 	{
 		if (out == null)
 		{
@@ -454,7 +454,7 @@ final class RectangleUtil
 	 *
 	 * @return [description]
 	**/
-	public static function GetPoint(rectangle:Rectangle, position:Float, ?out:Point)
+	public static function getPoint(rectangle:Rectangle, position:Float, ?out:Point)
 	{
 		if (out == null)
 		{
@@ -510,7 +510,7 @@ final class RectangleUtil
 	 *
 	 * @return An array of Points from the perimeter of the rectangle.
 	**/
-	public static function GetPoints(rectangle:Rectangle, quantity:Int, stepRate:Float, ?out:Array<Point>)
+	public static function getPoints(rectangle:Rectangle, quantity:Int, stepRate:Float, ?out:Array<Point>)
 	{
 		if (out == null)
 		{
@@ -530,7 +530,7 @@ final class RectangleUtil
 		{
 			var position = i / quantityFloat;
 
-			out.push(GetPoint(rectangle, position));
+			out.push(getPoint(rectangle, position));
 		}
 
 		return out;
@@ -547,7 +547,7 @@ final class RectangleUtil
 	 *
 	 * @return [description]
 	**/
-	public static function GetSize(rect:Rectangle, out:Point):Point
+	public static function getSize(rect:Rectangle, out:Point):Point
 	{
 		if (out == null)
 		{
@@ -573,14 +573,14 @@ final class RectangleUtil
 	 *
 	 * @return The inflated Rectangle.
 	**/
-	public static function Inflate(rect:Rectangle, x:Float, y:Float):Rectangle
+	public static function inflate(rect:Rectangle, x:Float, y:Float):Rectangle
 	{
 		var cx = rect.centerX;
 		var cy = rect.centerY;
 
 		rect.setSize(rect.width + (x * 2), rect.height + (y * 2));
 
-		return CenterOn(rect, cx, cy);
+		return centerOn(rect, cx, cy);
 	}
 
 	/**
@@ -596,7 +596,7 @@ final class RectangleUtil
 	 *
 	 * @return The intersection result. If the width and height are zero, no intersection occurred.
 	**/
-	public static function Intersection(rectA:Rectangle, rectB:Rectangle, ?out:Rectangle)
+	public static function intersection(rectA:Rectangle, rectB:Rectangle, ?out:Rectangle)
 	{
 		if (out == null)
 		{
@@ -945,7 +945,7 @@ final class RectangleUtil
 		{
 			out = new Point();
 		}
-		if (ContainsRect(outer, inner))
+		if (containsRect(outer, inner))
 		{
 			//  Pick a random quadrant
 			//

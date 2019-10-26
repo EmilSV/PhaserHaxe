@@ -217,7 +217,7 @@ class Rectangle
 	**/
 	public function contains(x:Float, y:Float)
 	{
-		return inline RectangleUtil.Contains(this, x, y);
+		return inline RectangleUtil.contains(this, x, y);
 	}
 
 	/**
@@ -238,7 +238,7 @@ class Rectangle
 	**/
 	public function getPoint(position:Float, ?output:Point):Point
 	{
-		return inline RectangleUtil.GetPoint(this, position, output);
+		return inline RectangleUtil.getPoint(this, position, output);
 	}
 
 	/**
@@ -254,7 +254,7 @@ class Rectangle
 	**/
 	public function getPoints(quantity:Int, stepRate:Float, ?output:Array<Point>):Array<Point>
 	{
-		return inline RectangleUtil.GetPoints(this, quantity, stepRate, output);
+		return inline RectangleUtil.getPoints(this, quantity, stepRate, output);
 	}
 
 	/**

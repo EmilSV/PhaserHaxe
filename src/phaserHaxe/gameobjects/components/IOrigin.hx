@@ -8,14 +8,6 @@ import phaserHaxe.gameobjects.components.ISize;
 interface IOrigin
 {
 	/**
-	 * A property indicating that a Game Object has this component.
-	 *
-	 * @default true
-	 * @since 1.0.0
-	**/
-	private var _originComponent:Bool;
-
-	/**
 	 * The horizontal origin of this Game Object.
 	 * The origin maps the relationship between the size and position of the Game Object.
 	 * The default value is 0.5, meaning all Game Objects are positioned based on their center.
@@ -24,7 +16,7 @@ interface IOrigin
 	 * @default 0.5
 	 * @since 1.0.0
 	**/
-	public var originX:Float;
+	public var originX(get, set):Float;
 
 	/**
 	 * The vertical origin of this Game Object.
@@ -35,7 +27,7 @@ interface IOrigin
 	 * @default 0.5
 	 * @since 1.0.0
 	 */
-	public var originY:Float;
+	public var originY(get, set):Float;
 
 	//  private + read only
 	private var _displayOriginX:Float;
@@ -113,14 +105,14 @@ final class OriginImplementation
 		return self._displayOriginX;
 	}
 
-	public static inline function set_displayOriginX<T:IOrigin>(self:T,
+	public static function set_displayOriginX<T:IOrigin>(self:T,
 			value:Float):Float
 	{
-		final selfSize = cast(self, ISize);
-
 		self._displayOriginX = value;
-		self.originX = value / selfSize.width;
-
+		if (Std.is(self, ISize))
+		{
+			self.originX = value / (cast self : ISize).width;
+		}
 		return value;
 	}
 
@@ -129,19 +121,18 @@ final class OriginImplementation
 		return self._displayOriginY;
 	}
 
-	public static inline function set_displayOriginY<T:IOrigin>(self:T,
+	public static function set_displayOriginY<T:IOrigin>(self:T,
 			value:Float):Float
 	{
-		final selfSize = cast(self, ISize);
-
 		self._displayOriginY = value;
-		self.originY = value / selfSize.height;
-
+		if (Std.is(self, ISize))
+		{
+			self.originY = value / (cast self : ISize).height;
+		}
 		return value;
 	}
 
-	public static inline function setOrigin<T:IOrigin>(self:T, x:Float = 0.5,
-			?y:Float):T
+	public static inline function setOrigin<T:IOrigin>(self:T, x:Float = 0.5, ?y:Float):T
 	{
 		self.originX = x;
 		self.originY = y != null ? y : x;
@@ -188,12 +179,8 @@ final class OriginImplementation
 @:phaserHaxe.NoMixin
 final class OriginMixin implements IOrigin
 {
-	/**
-	 * A property indicating that a Game Object has this component.
-	 *
-	 * @since 1.0.0
-	**/
-	private var _originComponent:Bool = true;
+	public var _originX:Float = 0.5;
+	public var _originY:Float = 0.5;
 
 	/**
 	 * The horizontal origin of this Game Object.
@@ -203,7 +190,7 @@ final class OriginMixin implements IOrigin
 	 *
 	 * @since 1.0.0
 	**/
-	public var originX:Float = 0.5;
+	public var originX(get, set):Float;
 
 	/**
 	 * The vertical origin of this Game Object.
@@ -213,7 +200,7 @@ final class OriginMixin implements IOrigin
 	 *
 	 * @since 1.0.0
 	 */
-	public var originY:Float = 0.5;
+	public var originY(get, set):Float;
 
 	//  private + read only
 	private var _displayOriginX:Float = 0;
@@ -242,19 +229,39 @@ final class OriginMixin implements IOrigin
 		return OriginImplementation.get_displayOriginX(this);
 	}
 
-	private function set_displayOriginX(value:Float):Float
+	private inline function set_displayOriginX(value:Float):Float
 	{
 		return OriginImplementation.set_displayOriginX(this, value);
 	}
 
 	private function get_displayOriginY():Float
 	{
-		return OriginImplementation.get_displayOriginX(this);
+		return  OriginImplementation.get_displayOriginX(this);
 	}
 
-	private function set_displayOriginY(value:Float):Float
+	private inline function set_displayOriginY(value:Float):Float
 	{
-		return OriginImplementation.set_displayOriginX(this, value);
+		return OriginImplementation.set_displayOriginY(this, value);
+	}
+
+	private inline function get_originX():Float
+	{
+		return _originX;
+	}
+
+	private inline function set_originX(value:Float):Float
+	{
+		return _originX = value;
+	}
+
+	private inline function get_originY():Float
+	{
+		return _originY;
+	}
+
+	private inline function set_originY(value:Float):Float
+	{
+		return _originY = value;
 	}
 
 	/**

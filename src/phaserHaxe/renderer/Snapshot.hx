@@ -1,13 +1,14 @@
 package phaserHaxe.renderer;
 
-import js.Browser;
 import phaserHaxe.display.canvas.CanvasPool;
 import phaserHaxe.display.Color;
+import phaserHaxe.utils.types.Union;
 #if js
+import js.Browser;
 import js.html.CanvasElement;
 import js.html.Image;
 
-typedef SnapShootCallback = (data:Null<Either<Color, Image>>) -> Void;
+typedef SnapShootCallback = (data:Null<Union<Color, Image>>) -> Void;
 #else
 typedef SnapShootCallback = (data:Dynamic) -> Void;
 #end

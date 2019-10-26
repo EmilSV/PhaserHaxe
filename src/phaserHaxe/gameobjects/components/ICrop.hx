@@ -5,6 +5,7 @@ import phaserHaxe.textures.Texture;
 import phaserHaxe.textures.CanvasTexture;
 import phaserHaxe.textures.Frame;
 import phaserHaxe.gameobjects.sprite.Sprite;
+import phaserHaxe.utils.types.Union;
 
 @:allow(phaserHaxe.gameobjects.components.CropImplementation)
 @:phaserHaxe.Mixin(phaserHaxe.gameobjects.components.ICrop.CropMixin)
@@ -73,7 +74,7 @@ interface ICrop extends IBaseTexture
 	 *
 	 * @return This Game Object instance.
 	**/
-	public function setCrop(?x:Either<Rectangle, Float>, ?y:Float, ?width:Float,
+	public function setCrop(?x:Union<Rectangle, Float>, ?y:Float, ?width:Float,
 		?height:Float):ICrop;
 
 	/**
@@ -89,7 +90,7 @@ interface ICrop extends IBaseTexture
 final class CropImplementation
 {
 	public inline static function setCrop<T:ICrop & IFlip>(self:T,
-			?x:Either<Rectangle, Float>, ?y:Float, ?width:Float, ?height:Float):T
+			?x:Union<Rectangle, Float>, ?y:Float, ?width:Float, ?height:Float):T
 	{
 		if (x == null)
 		{
@@ -186,7 +187,7 @@ final class CropMixin implements ICrop implements IFlip
 	 *
 	 * @return This Game Object instance.
 	**/
-	public function setCrop(?x:Either<Rectangle, Float>, ?y:Float, ?width:Float,
+	public function setCrop(?x:Union<Rectangle, Float>, ?y:Float, ?width:Float,
 			?height:Float):CropMixin
 	{
 		return CropImplementation.setCrop(this, x, y, width, height);

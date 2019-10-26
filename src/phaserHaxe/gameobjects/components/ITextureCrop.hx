@@ -1,11 +1,12 @@
 package phaserHaxe.gameobjects.components;
 
-import phaserHaxe.utils.StringOrInt;
+import phaserHaxe.utils.types.StringOrInt;
 import phaserHaxe.gameobjects.components.ICrop.CropImplementation;
 import phaserHaxe.geom.Rectangle;
 import phaserHaxe.gameobjects.components.IFlip;
 import phaserHaxe.textures.Texture;
 import phaserHaxe.textures.Frame;
+import phaserHaxe.utils.types.Union;
 
 /**
  * Provides methods used for getting and setting the texture of a Game Object.
@@ -78,7 +79,7 @@ interface ITextureCrop extends ICrop extends ITexture
 	 *
 	 * @return This Game Object instance.
 	**/
-	public function setCrop(?x:Either<Rectangle, Float>, ?y:Float, ?width:Float,
+	public function setCrop(?x:Union<Rectangle, Float>, ?y:Float, ?width:Float,
 		?height:Float):ICrop;
 
 	/**
@@ -132,7 +133,7 @@ final class TextureCropImplementation
 	private static inline var _FLAG = 8;
 
 	public inline static function setCrop<T:ICrop & IFlip>(self:T,
-			?x:Either<Rectangle, Float>, ?y:Float, ?width:Float, ?height:Float):T
+			?x:Union<Rectangle, Float>, ?y:Float, ?width:Float, ?height:Float):T
 	{
 		return CropImplementation.setCrop(self, x, y, width, height);
 	}
@@ -259,7 +260,7 @@ final class TextureCropMixin extends GameObject implements ITextureCrop implemen
 	 *
 	 * @return This Game Object instance.
 	**/
-	public function setCrop(?x:Either<Rectangle, Float>, ?y:Float, ?width:Float,
+	public function setCrop(?x:Union<Rectangle, Float>, ?y:Float, ?width:Float,
 			?height:Float):TextureCropMixin
 	{
 		return TextureCropImplementation.setCrop(this, x, y, width, height);

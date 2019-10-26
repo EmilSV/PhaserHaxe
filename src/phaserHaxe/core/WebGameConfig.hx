@@ -1,5 +1,6 @@
 package phaserHaxe.core;
 
+import phaserHaxe.utils.StringOrInt;
 import js.html.webgl.PowerPreference;
 import haxe.ds.Option;
 import js.html.HtmlElement;
@@ -19,14 +20,14 @@ typedef WebGameConfig =
 	 *
 	 * @since 1.0.0
 	**/
-	public var ?width:Either<Int, String>;
+	public var ?width:StringOrInt;
 
 	/**
 	 * The height of the game, in game pixels.
 	 *
 	 * @since 1.0.0
 	**/
-	public var ?height:Either<Int, String>;
+	public var ?height:StringOrInt;
 
 	/**
 	 * Simple scale applied to the game canvas. 2 is double size, 0.5 is half size, etc.

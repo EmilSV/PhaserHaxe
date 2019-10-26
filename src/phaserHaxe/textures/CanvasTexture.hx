@@ -7,12 +7,13 @@ import phaserHaxe.compatibility.UInt8ClampedArray;
 import haxe.io.UInt8Array;
 import phaserHaxe.display.Color;
 import js.html.CanvasRenderingContext2D as HTMLCanvasRenderingContext2D;
-import phaserHaxe.utils.StringOrInt;
+import phaserHaxe.utils.types.StringOrInt;
 import js.html.CanvasElement as HTMLCanvasElement;
 import js.html.ImageElement as HTMLImageElement;
 import js.html.ImageData as HTMLImageData;
 import phaserHaxe.textures.Texture;
 import haxe.io.ArrayBufferView;
+import phaserHaxe.utils.types.Union;
 
 /**
  * A Canvas Texture is a special kind of Texture that is backed by an HTML Canvas Element as its source.
@@ -148,7 +149,7 @@ class CanvasTexture extends Texture
 	 * @return This CanvasTexture.
 	**/
 	public function draw(x:Int, y:Int,
-			source:Either<HTMLImageElement, HTMLCanvasElement>)
+			source:Union<HTMLImageElement, HTMLCanvasElement>)
 	{
 		throw new Error("Not Implemented");
 	}

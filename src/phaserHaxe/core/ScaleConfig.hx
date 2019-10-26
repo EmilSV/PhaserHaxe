@@ -1,5 +1,6 @@
 package phaserHaxe.core;
 
+import phaserHaxe.utils.StringOrInt;
 import phaserHaxe.scale.ZoomType;
 import phaserHaxe.scale.ScaleModeType;
 import phaserHaxe.scale.CenterType;
@@ -19,14 +20,14 @@ typedef ScaleConfig =
 	 *
 	 * @since 1.0.0
 	**/
-	public var ?width:Either<Int, String>;
+	public var ?width:StringOrInt;
 
 	/**
 	 * The base height of your game. Can be an integer or a string: '100%'. If a string it will only work if you have set a parent element that has a size.
 	 *
 	 * @since 1.0.0
 	**/
-	public var ?height:Either<Int, String>;
+	public var ?height:StringOrInt;
 
 	/**
 	 * The zoom value of the game canvas.

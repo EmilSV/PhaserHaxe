@@ -1,5 +1,5 @@
-package phaserHaxe.core;
 
+package phaserHaxe.core;
 enum abstract GameEvents(String) from String to String
 {
 	/**

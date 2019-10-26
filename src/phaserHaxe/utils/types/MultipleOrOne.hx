@@ -1,6 +1,7 @@
-package phaserHaxe.utils;
+package phaserHaxe.utils.types;
 
-abstract MultipleOrOne<T>(Dynamic) from Array<T> from T
+abstract MultipleOrOne<T>(Dynamic) from Array<T> from T from Union<T, Array<T>>
+	from Union<Array<T>, T> to Union<T, Array<T>> to Union<Array<T>, T>
 {
 	public inline function isArray():Bool
 	{

@@ -3,6 +3,7 @@ package phaserHaxe.gameobjects.components;
 import phaserHaxe.animations.AnimationFrame;
 import phaserHaxe.animations.AnimationManager;
 import phaserHaxe.animations.Animation as BaseAnimation;
+import phaserHaxe.utils.types.Union;
 
 /**
  * A Game Object Animation Controller.
@@ -208,7 +209,7 @@ interface IAnimationController
 	 *
 	 * @since 1.0.0
 	**/
-	private var _pendingStopValue:Either<AnimationFrame, Float>;
+	private var _pendingStopValue:Union<AnimationFrame, Float>;
 
 	/**
 	 * `true` if the current animation is paused, otherwise `false`.
@@ -235,7 +236,7 @@ interface IAnimationController
 	 *
 	 * @return The Game Object that owns this Animation Component.
 	**/
-	public function chain(?key:Either<String, BaseAnimation>):GameObject;
+	public function chain(?key:Union<String, BaseAnimation>):GameObject;
 
 	/**
 	 * Sets the amount of time, in milliseconds, that the animation will be delayed before starting playback.
@@ -328,7 +329,7 @@ interface IAnimationController
 	 *
 	 * @return The Game Object that owns this Animation Component.
 	**/
-	public function play(key:Either<String, BaseAnimation>,
+	public function play(key:Union<String, BaseAnimation>,
 		ignoreIfPlaying:Bool = false, startFrame:Int = 0):GameObject;
 
 	/**
@@ -343,7 +344,7 @@ interface IAnimationController
 	 *
 	 * @return The Game Object that owns this Animation Component.
 	**/
-	public function playReverse(key:Either<String, BaseAnimation>,
+	public function playReverse(key:Union<String, BaseAnimation>,
 		ignoreIfPlaying:Bool = false, startFrame:Int = 0):GameObject;
 
 	/**

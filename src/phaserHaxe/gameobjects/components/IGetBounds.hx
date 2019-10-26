@@ -848,9 +848,9 @@ final class GetBoundsMixin implements IGetBounds implements ITransform implement
 	private var _originComponent:Bool;
 
 	@:phaserHaxe.mixinIgnore
-	public var originX:Float;
+	public var originX(get, set):Float;
 	@:phaserHaxe.mixinIgnore
-	public var originY:Float;
+	public var originY(get, set):Float;
 
 	@:phaserHaxe.mixinIgnore
 	private var _displayOriginX:Float;
@@ -861,6 +861,22 @@ final class GetBoundsMixin implements IGetBounds implements ITransform implement
 	public var displayOriginX(get, set):Float;
 	@:phaserHaxe.mixinIgnore
 	public var displayOriginY(get, set):Float;
+
+	@:phaserHaxe.mixinIgnore
+	private function get_originX():Float
+		throw "Not Implemented";
+
+	@:phaserHaxe.mixinIgnore
+	private function set_originX(value:Float):Float
+		throw "Not Implemented";
+
+	@:phaserHaxe.mixinIgnore
+	private function get_originY():Float
+		throw "Not Implemented";
+
+	@:phaserHaxe.mixinIgnore
+	private function set_originY(value:Float):Float
+		throw "Not Implemented";
 
 	@:phaserHaxe.mixinIgnore
 	private function get_displayOriginX():Float

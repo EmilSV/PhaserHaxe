@@ -1,12 +1,15 @@
 package phaserHaxe.utils;
 
+import phaserHaxe.utils.types.MultipleOrOne;
 import js.html.svg.Length;
 import phaserHaxe.math.MathInt;
 import phaserHaxe.math.MathUtility;
 import phaserHaxe.Error;
 import haxe.ds.ArraySort;
 import haxe.Constraints.Function;
+import phaserHaxe.utils.types.Pair;
 import phaserHaxe.utils.Iterator;
+import phaserHaxe.utils.types.Union;
 
 typedef RangeOptions =
 {
@@ -42,7 +45,7 @@ final class ArrayUtils
 	 *
 	 * @return The input array.
 	**/
-	public static function add<T1, T2:Either<T1, Array<T1>>>(array:Array<T1>, item:T2,
+	public static function add<T1, T2:Union<T1, Array<T1>>>(array:Array<T1>, item:T2,
 			?limit:Int, ?callback:(item:T1) -> Void):T2
 	{
 		var remaining = 0;
@@ -155,7 +158,7 @@ final class ArrayUtils
 	 *
 	 * @return The input array.
 	**/
-	public static function addAt<T1, T2:Either<T1, Array<T1>>>(array:Array<T1>, item:T2,
+	public static function addAt<T1, T2:MultipleOrOne<T1>>(array:Array<T1>, item:T2,
 			index:Int = 0, ?limit:Int, ?callback:(item:T1) -> Void):T2
 	{
 		var remaining = 0;
@@ -482,18 +485,22 @@ final class ArrayUtils
 	{
 		final endIndex:Int = endIndex != null ? endIndex : array.length;
 
+		var result = null;
+
 		if (safeRange(array, startIndex, endIndex))
 		{
 			for (i in startIndex...endIndex)
-			{
+			{ 
 				final child = array[i];
 				if (propertyAccessor == null || (value != null && propertyAccessor(child) == value))
 				{
-					return child;
+					result = child;
+					break;
 				}
 			}
 		}
-		return null;
+
+		return result;
 	}
 
 	/**
@@ -514,13 +521,13 @@ final class ArrayUtils
 
 		var randomIndex = startIndex + Math.floor(Math.random() * length);
 
-		if (randomIndex >= 0 && randomIndex < array.length)
+		return if (randomIndex >= 0 && randomIndex < array.length)
 		{
-			return array[randomIndex];
+			array[randomIndex];
 		}
 		else
 		{
-			return null;
+			null;
 		}
 	}
 
@@ -987,7 +994,7 @@ final class ArrayUtils
 	 *
 	 * @return The item, or array of items, that were successfully removed from the array.
 	**/
-	public static function remove<T1, T2:Either<T1, Array<T1>>>(array:Array<T1>,
+	public static function remove<T1, T2:Union<T1, Array<T1>>>(array:Array<T1>,
 			item:T2, ?callback:(T1) -> Void):Null<T2>
 	{
 		var index;

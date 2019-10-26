@@ -1,7 +1,8 @@
 package phaserHaxe.animations;
 
 import phaserHaxe.animations.AnimationFrameConfig;
-import phaserHaxe.utils.StringOrInt;
+import phaserHaxe.utils.types.StringOrInt;
+import phaserHaxe.utils.types.Union;
 
 /**
  *
@@ -43,5 +44,5 @@ typedef GenerateFrameNumbers =
 	 *
 	 * @since 1.0.0
 	**/
-	public var ?frames:Either<Bool, Array<Int>>;
+	public var ?frames:Union<Bool, Array<Int>>;
 };

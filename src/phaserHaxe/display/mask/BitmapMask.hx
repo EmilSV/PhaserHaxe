@@ -4,6 +4,7 @@ import phaserHaxe.cameras.scene2D.Camera;
 import phaserHaxe.renderer.canvas.CanvasRenderer;
 import phaserHaxe.renderer.webgl.WebGLRenderer;
 import phaserHaxe.gameobjects.GameObject;
+import phaserHaxe.utils.types.Union;
 #if js
 import js.html.webgl.Framebuffer as WebGLFramebuffer;
 import js.html.webgl.Texture as WebGLTexture;
@@ -45,7 +46,7 @@ class BitmapMask extends Mask
 	 *
 	 * @since 1.0.0
 	**/
-	public var renderer:Either<CanvasRenderer, WebGLRenderer>;
+	public var renderer:Union<CanvasRenderer, WebGLRenderer>;
 
 	/**
 	 * A renderable Game Object that uses a texture, such as a Sprite.
@@ -123,27 +124,27 @@ class BitmapMask extends Mask
 		throw "Not Implemented";
 	}
 
-	public override function preRenderWebGL(renderer:Either<CanvasRenderer,
+	public override function preRenderWebGL(renderer:Union<CanvasRenderer,
 		WebGLRenderer>, maskedObject:GameObject,
 			camera:Camera)
 	{
 		throw "Not Implemented";
 	}
 
-	public override function postRenderWebGL(renderer:Either<CanvasRenderer,
+	public override function postRenderWebGL(renderer:Union<CanvasRenderer,
 		WebGLRenderer>, camera:Camera)
 	{
 		throw "Not Implemented";
 	}
 
-	public override function preRenderCanvas(renderer:Either<CanvasRenderer,
+	public override function preRenderCanvas(renderer:Union<CanvasRenderer,
 		WebGLRenderer>, maskedObject:GameObject,
 			camera:Camera)
 	{
 		throw "Not Implemented";
 	}
 
-	public override function postRenderCanvas(renderer:Either<CanvasRenderer,
+	public override function postRenderCanvas(renderer:Union<CanvasRenderer,
 		WebGLRenderer>)
 	{
 		throw "Not Implemented";
@@ -191,7 +192,7 @@ class BitmapMask extends Mask
 	 *
 	 * @since 1.0.0
 	**/
-	public var renderer:Either<CanvasRenderer, WebGLRenderer>;
+	public var renderer:Union<CanvasRenderer, WebGLRenderer>;
 
 	/**
 	 * A renderable Game Object that uses a texture, such as a Sprite.
@@ -269,27 +270,27 @@ class BitmapMask extends Mask
 		throw "Not Implemented";
 	}
 
-	public override function preRenderWebGL(renderer:Either<CanvasRenderer,
+	public override function preRenderWebGL(renderer:Union<CanvasRenderer,
 		WebGLRenderer>, maskedObject:GameObject,
 			camera:Camera)
 	{
 		throw "Not Implemented";
 	}
 
-	public override function postRenderWebGL(renderer:Either<CanvasRenderer,
+	public override function postRenderWebGL(renderer:Union<CanvasRenderer,
 		WebGLRenderer>, camera:Camera)
 	{
 		throw "Not Implemented";
 	}
 
-	public override function preRenderCanvas(renderer:Either<CanvasRenderer,
+	public override function preRenderCanvas(renderer:Union<CanvasRenderer,
 		WebGLRenderer>, maskedObject:GameObject,
 			camera:Camera)
 	{
 		throw "Not Implemented";
 	}
 
-	public override function postRenderCanvas(renderer:Either<CanvasRenderer,
+	public override function postRenderCanvas(renderer:Union<CanvasRenderer,
 		WebGLRenderer>)
 	{
 		throw "Not Implemented";
