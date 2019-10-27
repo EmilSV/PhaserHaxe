@@ -1,29 +1,10 @@
 package phaserHaxe.gameobjects;
 
+import phaserHaxe.gameobjects.components.*;
 import phaserHaxe.gameobjects.sprite.ISpriteRenderer;
 import phaserHaxe.renderer.webgl.WebGLRenderer;
 import phaserHaxe.cameras.scene2D.Camera;
 import phaserHaxe.renderer.canvas.CanvasRenderer;
-import phaserHaxe.gameobjects.components.IOrigin;
-import phaserHaxe.gameobjects.components.TransformMatrix;
-import phaserHaxe.gameobjects.components.IVisible;
-import phaserHaxe.gameobjects.components.ITransform;
-import phaserHaxe.gameobjects.components.IMask;
-import phaserHaxe.gameobjects.components.IDepth;
-import phaserHaxe.gameobjects.components.IComputedSize;
-import phaserHaxe.gameobjects.components.IBlendMode;
-import phaserHaxe.gameobjects.components.IAlpha;
-import phaserHaxe.gameobjects.components.IScrollFactor;
-import phaserHaxe.gameobjects.components.IScrollFactor;
-import phaserHaxe.gameobjects.GameObject;
-import phaserHaxe.utils.types.MultipleOrOne;
-import phaserHaxe.utils.ArrayUtils;
-import phaserHaxe.math.Vector2;
-import phaserHaxe.gameobjects.components.IGetBounds;
-import phaserHaxe.geom.Rectangle;
-import phaserHaxe.gameobjects.components.TransformMatrix;
-import phaserHaxe.textures.Frame;
-import phaserHaxe.gameobjects.components.ITransform;
 import phaserHaxe.gameobjects.components.IVisible.VisibleMixin;
 import phaserHaxe.gameobjects.components.ITransform.TransformMixin;
 import phaserHaxe.gameobjects.components.IMask.MaskMixin;
@@ -33,6 +14,14 @@ import phaserHaxe.gameobjects.components.IBlendMode.BlendModeMixin;
 import phaserHaxe.gameobjects.components.IAlpha.AlphaMixin;
 import phaserHaxe.geom.RectangleUtil;
 import phaserHaxe.gameobjects.IGetBoundsTransformMatrix;
+import phaserHaxe.gameobjects.GameObject;
+import phaserHaxe.utils.types.MultipleOrOne;
+import phaserHaxe.utils.ArrayUtils;
+import phaserHaxe.math.Vector2;
+import phaserHaxe.gameobjects.components.IGetBounds;
+import phaserHaxe.geom.Rectangle;
+import phaserHaxe.gameobjects.components.TransformMatrix;
+import phaserHaxe.textures.Frame;
 
 @:build(phaserHaxe.macro.Mixin.build(AlphaMixin, BlendModeMixin, DepthMixin, MaskMixin, TransformMixin, VisibleMixin))
 class Container extends GameObject implements IAlpha implements IBlendMode
@@ -261,6 +250,49 @@ class Container extends GameObject implements IAlpha implements IBlendMode
 	@:noCompletion
 	public var displayOriginY(get, set):Float;
 
+	/**
+	 * The number of Game Objects inside this Container.
+	 *
+	 * @since 1.0.0
+	**/
+	public var length(get, never):Float;
+
+	/**
+	 * Returns the first Game Object within the Container, or `null` if it is empty.
+	 *
+	 * You can move the cursor by calling `Container.next` and `Container.previous`.
+	 *
+	 * @since 1.0.0
+	**/
+	public var first(get, never):GameObject;
+
+	/**
+	 * Returns the last Game Object within the Container, or `null` if it is empty.
+	 *
+	 * You can move the cursor by calling `Container.next` and `Container.previous`.
+	 *
+	 * @since 1.0.0
+	**/
+	public var last(get, never):GameObject;
+
+	/**
+	 * Returns the next Game Object within the Container, or `null` if it is empty.
+	 *
+	 * You can move the cursor by calling `Container.next` and `Container.previous`.
+	 *
+	 * @since 1.0.0
+	**/
+	public var next(get, never):GameObject;
+
+	/**
+	 * Returns the previous Game Object within the Container, or `null` if it is empty.
+	 *
+	 * You can move the cursor by calling `Container.next` and `Container.previous`.
+	 *
+	 * @since 1.0.0
+	**/
+	public var previous(get, never):GameObject;
+
 	private inline function get_displayWidth():Float
 	{
 		return ComputedSizeImplementation.get_displayWidth(this);
@@ -319,6 +351,63 @@ class Container extends GameObject implements IAlpha implements IBlendMode
 	private inline function set_displayOriginY(value:Float):Float
 	{
 		return this.height * 0.5;
+	}
+
+	private inline function get_length()
+	{
+		return list.length;
+	}
+
+	private inline function get_first():GameObject
+	{
+		position = 0;
+		return if (list.length > 0)
+		{
+			list[0];
+		}
+		else
+		{
+			null;
+		}
+	}
+
+	private inline function get_last():GameObject
+	{
+		return if (list.length > 0)
+		{
+			position = list.length - 1;
+			list[position];
+		}
+		else
+		{
+			null;
+		}
+	}
+
+	private inline function get_next():GameObject
+	{
+		return if (position < list.length)
+		{
+			position++;
+			return list[position];
+		}
+		else
+		{
+			return null;
+		}
+	}
+
+	private inline function get_previous():GameObject
+	{
+		return if (position < list.length)
+		{
+			position--;
+			return list[position];
+		}
+		else
+		{
+			return null;
+		}
 	}
 
 	public function new(scene:Scene, x:Float, y:Float, children:Array<GameObject>)
@@ -1266,8 +1355,11 @@ class Container extends GameObject implements IAlpha implements IBlendMode
 	**/
 	@:allow(phaserHaxe)
 	private function renderWebGL(renderer:WebGLRenderer, src:GameObject,
-		interpolationPercentage:Float, camera:Camera,
-		parentMatrix:TransformMatrix):Void {}
+			interpolationPercentage:Float, camera:Camera,
+			parentMatrix:TransformMatrix):Void
+	{
+		throw new Error("Not Implemented");
+	}
 
 	/**
 	 * Renders this Game Object with the Canvas Renderer to the given Camera.
@@ -1287,29 +1379,31 @@ class Container extends GameObject implements IAlpha implements IBlendMode
 			interpolationPercentage:Float, camera:Camera,
 			parentMatrix:TransformMatrix):Void
 	{
-		var children = list;
+		var container = (cast src: Container);
+
+		var children = container.list;
 
 		if (children.length == 0)
 		{
 			return;
 		}
 
-		var transformMatrix = localTransform;
+		var transformMatrix = container.localTransform;
 
 		if (parentMatrix != null)
 		{
 			transformMatrix.loadIdentity();
 			transformMatrix.multiply(parentMatrix);
-			transformMatrix.translate(x, y);
-			transformMatrix.rotate(rotation);
-			transformMatrix.scale(scaleX, scaleY);
+			transformMatrix.translate(container.x, container.y);
+			transformMatrix.rotate(container.rotation);
+			transformMatrix.scale(container.scaleX, container.scaleY);
 		}
 		else
 		{
-			transformMatrix.applyITRS(x, y, rotation, scaleX, scaleY);
+			transformMatrix.applyITRS(container.x, container.y, container.rotation, container.scaleX, container.scaleY);
 		}
 
-		var containerHasBlendMode = (blendMode != -1);
+		var containerHasBlendMode = (container.blendMode != -1);
 
 		if (!containerHasBlendMode)
 		{
@@ -1317,9 +1411,9 @@ class Container extends GameObject implements IAlpha implements IBlendMode
 			renderer.setBlendMode(0);
 		}
 
-		var alpha = _alpha;
-		var scrollFactorX = scrollFactorX;
-		var scrollFactorY = scrollFactorY;
+		var alpha = container._alpha;
+		var scrollFactorX = container.scrollFactorX;
+		var scrollFactorY = container.scrollFactorY;
 
 		for (i in 0...children.length)
 		{
@@ -1354,6 +1448,20 @@ class Container extends GameObject implements IAlpha implements IBlendMode
 			(cast child : IScrollFactor)
 				.setScrollFactor(childScrollFactorX, childScrollFactorY);
 		}
+	}
+
+	/**
+	 * Internal destroy handler, called as part of the destroy process.
+	 *
+	 * @since 1.0.0
+	**/
+	private override function preDestroy()
+	{
+		removeAll(exclusive);
+		localTransform.destroy();
+		tempTransformMatrix.destroy();
+		list = [];
+		_displayList = null;
 	}
 }
 

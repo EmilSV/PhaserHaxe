@@ -58,8 +58,8 @@ phaserHaxe.gameobjects.components.ITransform
 phaserHaxe.gameobjects.components.IComputedSize
 phaserHaxe.gameobjects.components.Animation
 phaserHaxe.gameobjects.Container
+phaserHaxe.gameobjects.blitter.Blitter
 
 -main Main
 
--dce std
 -js dist/output.js

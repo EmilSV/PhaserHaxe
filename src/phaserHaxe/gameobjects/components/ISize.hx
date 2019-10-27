@@ -114,31 +114,31 @@ interface ISize
 
 final class SizeImplementation
 {
-	public static inline function get_displayWidth<T:ISize & ITransform & ICrop>(self:T):Float
+	public static inline function get_displayWidth<T:ISize & ITransform & IBaseTexture>(self:T):Float
 	{
 		return self.scaleX * self.frame.realWidth;
 	}
 
-	public static inline function set_displayWidth<T:ISize & ITransform & ICrop>(self:T,
+	public static inline function set_displayWidth<T:ISize & ITransform & IBaseTexture>(self:T,
 			value:Float):Float
 	{
 		self.scaleX = value / self.frame.realWidth;
 		return value;
 	}
 
-	public static inline function get_displayHeight<T:ISize & ITransform & ICrop>(self:T):Float
+	public static inline function get_displayHeight<T:ISize & ITransform & IBaseTexture>(self:T):Float
 	{
 		return self.scaleY * self.frame.realHeight;
 	}
 
-	public static inline function set_displayHeight<T:ISize & ITransform & ICrop>(self:T,
+	public static inline function set_displayHeight<T:ISize & ITransform & IBaseTexture>(self:T,
 		value:Float):Float
 	{
 		self.scaleY = value / self.frame.realHeight;
 		return value;
 	}
 
-	public static inline function setSizeToFrame<T:ISize & ICrop>(self:T, ?frame:Frame):T
+	public static inline function setSizeToFrame<T:ISize & IBaseTexture>(self:T, ?frame:Frame):T
 	{
 		final frame:Frame = frame != null ? frame : self.frame;
 
@@ -167,7 +167,7 @@ final class SizeImplementation
 }
 
 final class SizeMixin extends GameObject implements ISize implements ITransform
-		implements ICrop
+		implements IBaseTexture
 {
 	/**
 	 * The native (un-scaled) width of this Game Object.
@@ -463,8 +463,6 @@ final class SizeMixin extends GameObject implements ISize implements ITransform
 
 	// endregion
 	// region Crop implementation
-	@:phaserHaxe.mixinIgnore
-	private var _crop:CropDataObject;
 
 	@:phaserHaxe.mixinIgnore
 	public var texture:Texture = null;
@@ -474,19 +472,5 @@ final class SizeMixin extends GameObject implements ISize implements ITransform
 
 	@:phaserHaxe.mixinIgnore
 	public var isCropped:Bool = false;
-
-	@:phaserHaxe.mixinIgnore
-	public function setCrop(?x:Union<Rectangle, Float>, ?y:Float, ?width:Float,
-			?height:Float):ICrop
-	{
-		throw "Not Implemented";
-	}
-
-	@:phaserHaxe.mixinIgnore
-	private function resetCropObject():CropDataObject
-	{
-		throw "Not Implemented";
-	}
-
 	// endregion
 }

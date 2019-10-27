@@ -471,7 +471,7 @@ class GameObject extends EventEmitter
 		{
 			indexes.unshift(parent.getIndex(child));
 
-			child = parent.toGameObject();
+			child = parent;
 
 			if (parent.parentContainer == null)
 			{
@@ -488,7 +488,7 @@ class GameObject extends EventEmitter
 		return indexes;
 	}
 
-	public function preDestroy() {};
+	private function preDestroy() {};
 
 	/**
 	 * Destroys this Game Object removing it from the Display List and Update List and
@@ -520,10 +520,7 @@ class GameObject extends EventEmitter
 			return;
 		}
 
-		if (preDestroy != null)
-		{
-			this.preDestroy();
-		}
+		preDestroy();
 
 		this.emit(Events.DESTROY, [this]);
 
