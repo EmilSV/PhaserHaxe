@@ -88,7 +88,7 @@ class List<T>
 	**/
 	public var previous(get, never):T;
 
-	public function new(parent:Any)
+	public function new(?parent:Any)
 	{
 		this.parent = parent;
 	}
