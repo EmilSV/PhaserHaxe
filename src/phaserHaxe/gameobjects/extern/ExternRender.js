@@ -9,12 +9,12 @@ var renderCanvas = require('../../utils/NOOP');
 
 if (typeof WEBGL_RENDERER)
 {
-    renderWebGL = require('./BlitterWebGLRenderer');
+    renderWebGL = require('./ExternWebGLRenderer');
 }
 
 if (typeof CANVAS_RENDERER)
 {
-    renderCanvas = require('./BlitterCanvasRenderer');
+    renderCanvas = require('./ExternCanvasRenderer');
 }
 
 module.exports = {

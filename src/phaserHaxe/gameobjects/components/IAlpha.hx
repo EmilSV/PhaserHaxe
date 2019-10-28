@@ -398,8 +398,6 @@ final class AlphaMixin extends GameObject implements IAlpha
 	 * The alpha value starting from the top-left of the Game Object.
 	 * This value is interpolated from the corner to the center of the Game Object.
 	 *
-	 * @name Phaser.GameObjects.Components.Alpha#alphaTopLeft
-	 * @type {number}
 	 * @webglOnly
 	 * @since 1.0.0
 	**/

@@ -16,3 +16,4 @@ class Sprite extends GameObject implements IAlpha implements IBlendMode
 		_crop = resetCropObject();
 	}
 }
+	

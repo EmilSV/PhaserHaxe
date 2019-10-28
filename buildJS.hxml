@@ -59,6 +59,7 @@ phaserHaxe.gameobjects.components.IComputedSize
 phaserHaxe.gameobjects.components.Animation
 phaserHaxe.gameobjects.Container
 phaserHaxe.gameobjects.blitter.Blitter
+phaserHaxe.cameras.scene2D.BaseCamera
 
 -main Main
 
