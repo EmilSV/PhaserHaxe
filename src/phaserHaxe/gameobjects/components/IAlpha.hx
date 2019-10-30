@@ -158,7 +158,7 @@ final class AlphaImplantation
 		return self._alpha;
 	}
 
-	public static inline function set_alpha<T:IAlpha & GameObject>(self:T,
+	public static inline function set_alpha<T:IAlpha & IHaveRenderFlags>(self:T,
 			value:Float):Float
 	{
 		final v = clamp(value, 0, 1);
@@ -186,7 +186,7 @@ final class AlphaImplantation
 		return self._alphaTL;
 	}
 
-	public static inline function set_alphaTopLeft<T:IAlpha & GameObject>(self:T,
+	public static inline function set_alphaTopLeft<T:IAlpha & IHaveRenderFlags>(self:T,
 			value:Float):Float
 	{
 		final v = clamp(value, 0, 1);
@@ -205,7 +205,7 @@ final class AlphaImplantation
 		return self._alphaTR;
 	}
 
-	public static inline function set_alphaTopRight<T:IAlpha & GameObject>(self:T,
+	public static inline function set_alphaTopRight<T:IAlpha & IHaveRenderFlags>(self:T,
 			value:Float):Float
 	{
 		final v = clamp(value, 0, 1);
@@ -225,8 +225,8 @@ final class AlphaImplantation
 		return self._alphaBL;
 	}
 
-	public static inline function set_alphaBottomLeft<T:IAlpha & GameObject>(self:T,
-			value:Float):Float
+	public static inline function set_alphaBottomLeft<T:IAlpha & IHaveRenderFlags>(self:T,
+		value:Float):Float
 	{
 		final v = clamp(value, 0, 1);
 
@@ -245,8 +245,8 @@ final class AlphaImplantation
 		return self._alphaBR;
 	}
 
-	public static inline function set_alphaBottomRight<T:IAlpha & GameObject>(self:T,
-			value:Float):Float
+	public static inline function set_alphaBottomRight<T:IAlpha & IHaveRenderFlags>(self:T,
+		value:Float):Float
 	{
 		final v = clamp(value, 0, 1);
 
@@ -261,8 +261,11 @@ final class AlphaImplantation
 	}
 }
 
-final class AlphaMixin extends GameObject implements IAlpha
+final class AlphaMixin implements IHaveRenderFlags implements IAlpha
 {
+	@:phaserHaxe.mixinIgnore
+	public var renderFlags:RenderFlags;
+
 	/**
 	 * Private internal value. Holds the global alpha value.
 	 *

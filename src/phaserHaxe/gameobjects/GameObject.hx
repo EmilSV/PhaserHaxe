@@ -20,7 +20,7 @@ import phaserHaxe.utils.types.Union;
  *
  * @since 1.0.0
 **/
-class GameObject extends EventEmitter
+class GameObject extends EventEmitter implements IHaveRenderFlags
 {
 	public static inline var RENDER_MASK = 15;
 
@@ -99,7 +99,7 @@ class GameObject extends EventEmitter
 	 *
 	 * @since 1.0.0
 	**/
-	public var renderFlags:Int = 15;
+	public var renderFlags:RenderFlags;
 
 	/**
 	 * A bitmask that controls if this Game Object is drawn by a Camera or not.

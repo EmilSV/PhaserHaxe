@@ -44,7 +44,7 @@ final class VisibleImplementation
 		return self._visible;
 	}
 
-	public static inline function set_visible<T:IVisible & GameObject>(self:T,
+	public static inline function set_visible<T:IVisible & IHaveRenderFlags>(self:T,
 			value:Bool):Bool
 	{
 		if (value)
@@ -60,7 +60,7 @@ final class VisibleImplementation
 		return value;
 	}
 
-	public static inline function setVisible<T:IVisible & GameObject>(self:T,
+	public static inline function setVisible<T:IVisible & IHaveRenderFlags>(self:T,
 			value:Bool):T
 	{
 		self.visible = value;
@@ -68,8 +68,11 @@ final class VisibleImplementation
 	}
 }
 
-final class VisibleMixin extends GameObject implements IVisible
+final class VisibleMixin implements IHaveRenderFlags implements IVisible
 {
+	@:phaserHaxe.mixinIgnore
+	public var renderFlags:RenderFlags;
+
 	/**
 	 * Private internal value. Holds the visible value.
 	 *

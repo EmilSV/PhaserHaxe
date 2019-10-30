@@ -104,7 +104,7 @@ class MathUtility
 	 *
 	 * @return The given angle Compatibilityed to radians.
 	**/
-	public static function degToRad(degrees:Int):Float
+	public static inline function degToRad(degrees:Float):Float
 	{
 		return degrees * MathConst.DEG_TO_RAD;
 	}

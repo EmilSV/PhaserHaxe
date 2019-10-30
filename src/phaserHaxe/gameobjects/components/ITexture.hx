@@ -83,7 +83,7 @@ final class TextureImplementation
 		return self;
 	}
 
-	public static function setFrame<T:GameObject & ITexture>(self:T, frame:StringOrInt,
+	public static function setFrame<T:IHaveRenderFlags & ITexture>(self:T, frame:StringOrInt,
 			updateSize:Bool = true, updateOrigin:Bool = true):T
 	{
 		self.frame = self.texture.get(frame);

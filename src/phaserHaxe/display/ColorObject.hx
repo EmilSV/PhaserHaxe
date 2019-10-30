@@ -1,9 +1,9 @@
-package phaserHaxe.display;
+		package phaserHaxe.display;
 
 /**
  * @since 1.0.0
 **/
-typedef ColorObject =
+typedef  ColorObject =
 {
 	/**
 	 * The red color value in the range 0 to 255.

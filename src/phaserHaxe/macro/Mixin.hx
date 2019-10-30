@@ -62,7 +62,7 @@ final class Mixin
 	{
 		final localClass = Context.getLocalClass().get();
 
-		final outputFelids = Context.getBuildFields();
+		var outputFelids = Context.getBuildFields();
 
 		if (localClass.isInterface)
 		{
@@ -91,6 +91,28 @@ final class Mixin
 			if (MixinValidator.isValid(mixinClass, localClass))
 			{
 				addFromClassExpr(mixinClass, localClass, outputFelids);
+			}
+		}
+
+		var superClass = if (localClass.superClass != null)
+		{
+			localClass.superClass.t.get();
+		}
+		else
+		{
+			null;
+		}
+
+		while (superClass != null)
+		{
+			outputFelids = outputFelids.filter(i1 -> !superClass.fields.get().exists(i2 -> i2.name == i1.name));
+			superClass = if (superClass.superClass != null)
+			{
+				superClass.superClass.t.get();
+			}
+			else
+			{
+				null;
 			}
 		}
 

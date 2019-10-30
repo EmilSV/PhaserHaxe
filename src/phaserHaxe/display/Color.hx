@@ -462,7 +462,7 @@ class Color
 	**/
 	public static function integerToColor(input:Int):Color
 	{
-		var rgb = integerToRGB(input);
+		var rgb = IntColorRGBA.createFromInt(input);
 
 		return new Color(rgb.r, rgb.g, rgb.b, rgb.a);
 	}
@@ -521,7 +521,7 @@ class Color
 				return hexStringToColor(cast input);
 			}
 		}
-		else if (Std.is(input, String))
+		else if (Std.is(input, Int))
 		{
 			return integerToColor(cast input);
 		}
@@ -556,7 +556,7 @@ class Color
 	 *
 	 * @return An object with the red, green and blue values set in the r, g and b properties.
 	**/
-	public static function integerToRGB(input:Int):ColorObject
+	public static inline function integerToRGB(input:Int):ColorObject
 	{
 		return if (input > 16777215)
 		{
