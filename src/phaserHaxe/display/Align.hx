@@ -92,9 +92,4 @@ final class Align
 	 * @since 1.0.0
 	**/
 	public static inline var BOTTOM_RIGHT = 12;
-
-    @:final class To 
-    {
-        
-    }
 }

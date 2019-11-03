@@ -1,5 +1,6 @@
 package phaserHaxe.gameobjects.components;
 
+import js.html.CanvasRenderingContext2D;
 import phaserHaxe.math.Vector2;
 import phaserHaxe.geom.Point;
 import haxe.io.Float32Array;
@@ -577,11 +578,11 @@ class TransformMatrix
 	 *
 	 * @since 1.0.0
 	 *
-	 * @param {CanvasRenderingContext2D} ctx - The Canvas Rendering Context to copy the matrix values to.
+	 * @param ctx - The Canvas Rendering Context to copy the matrix values to.
 	 *
-	 * @return {CanvasRenderingContext2D} The Canvas Rendering Context.
+	 * @return The Canvas Rendering Context.
 	**/
-	public function copyToContext(ctx)
+	public function copyToContext(ctx:CanvasRenderingContext2D):CanvasRenderingContext2D
 	{
 		var matrix = matrix;
 
@@ -591,18 +592,16 @@ class TransformMatrix
 	}
 
 	/**
-	 * TODO: Add Canvas Rendering Context type
-	 *
 	 * Copy the values from this Matrix to the given Canvas Rendering Context.
 	 * This will use the Context.setTransform method.
 	 *
 	 * @since 1.0.0
 	 *
-	 * @param {CanvasRenderingContext2D} ctx - The Canvas Rendering Context to copy the matrix values to.
+	 * @param ctx - The Canvas Rendering Context to copy the matrix values to.
 	 *
-	 * @return {CanvasRenderingContext2D} The Canvas Rendering Context.
+	 * @return The Canvas Rendering Context.
 	**/
-	public function setToContext(ctx)
+	public function setToContext(ctx:CanvasRenderingContext2D)
 	{
 		var matrix = matrix;
 

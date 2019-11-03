@@ -1,6 +1,6 @@
 package phaserHaxe.gameobjects.bitmaptext;
 
-import phaserHaxe.utils.MultipleOrOne;
+import phaserHaxe.utils.types.MultipleOrOne;
 
 final class DynamicBitmapTextFactory
 {

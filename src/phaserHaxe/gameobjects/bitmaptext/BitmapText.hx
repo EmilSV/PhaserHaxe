@@ -1,5 +1,6 @@
 package phaserHaxe.gameobjects.bitmaptext;
 
+import phaserHaxe.gameobjects.sprite.ISpriteRenderer;
 import phaserHaxe.cameras.scene2D.Camera;
 import phaserHaxe.renderer.canvas.CanvasRenderer;
 import phaserHaxe.renderer.webgl.WebGLRenderer;
@@ -7,7 +8,7 @@ import phaserHaxe.gameobjects.bitmaptext.typedefs.BitmapFontCharacterData;
 import phaserHaxe.textures.Frame;
 import phaserHaxe.gameobjects.bitmaptext.typedefs.JSONBitmapText;
 import phaserHaxe.math.MathConst;
-import phaserHaxe.utils.MultipleOrOne;
+import phaserHaxe.utils.types.MultipleOrOne;
 import phaserHaxe.gameobjects.components.*;
 import phaserHaxe.gameobjects.bitmaptext.typedefs.BitmapFontData;
 import phaserHaxe.gameobjects.bitmaptext.typedefs.BitmapTextSize;
@@ -16,7 +17,7 @@ import phaserHaxe.gameobjects.bitmaptext.typedefs.BitmapTextSize;
 class BitmapText extends GameObject implements IAlpha implements IBlendMode
 		implements IDepth implements IMask implements IOrigin implements IPipeline
 		implements IScrollFactor implements ITexture implements ITint
-		implements ITransform implements IVisible implements ICustomRenderer
+		implements ITransform implements IVisible implements ISpriteRenderer
 {
 	public var font:String;
 

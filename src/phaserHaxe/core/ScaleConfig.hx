@@ -1,9 +1,11 @@
 package phaserHaxe.core;
 
-import phaserHaxe.utils.StringOrInt;
+import phaserHaxe.utils.types.StringOrInt;
+import phaserHaxe.utils.types.Union;
 import phaserHaxe.scale.ZoomType;
 import phaserHaxe.scale.ScaleModeType;
 import phaserHaxe.scale.CenterType;
+
 #if js
 import js.html.HtmlElement;
 #else
@@ -48,7 +50,7 @@ typedef ScaleConfig =
 	 *
 	 * @since 1.0.0
 	**/
-	public var ?parent:Either<HtmlElement, String>;
+	public var ?parent:Union<HtmlElement, String>;
 
 	/**
 	 * Is the Scale Manager allowed to adjust the CSS height property of the parent and/or document body to be 100%?
@@ -104,5 +106,5 @@ typedef ScaleConfig =
 	 *
 	 * @since 1.0.0
 	**/
-	public var ?fullscreenTarget:Either<HtmlElement, String>;
+	public var ?fullscreenTarget:Union<HtmlElement, String>;
 }

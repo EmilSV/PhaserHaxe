@@ -1,5 +1,10 @@
 package phaserHaxe.cameras.scene2D;
 
+import phaserHaxe.math.MathUtility;
+import phaserHaxe.cameras.scene2D.typedefs.CameraZoomCallback;
+import phaserHaxe.cameras.scene2D.typedefs.CameraPanCallback;
+import phaserHaxe.cameras.scene2D.typedefs.CameraShakeCallback;
+import phaserHaxe.utils.types.Vector1Or2;
 import phaserHaxe.cameras.scene2D.typedefs.CameraFlashCallback;
 import phaserHaxe.cameras.scene2D.typedefs.CameraFadeCallback;
 import phaserHaxe.renderer.webgl.WebGLPipeline;
@@ -218,6 +223,21 @@ class Camera extends BaseCamera implements IFlip implements ITint
 	**/
 	public var pipeline:Null<Any> = null;
 
+	public function new(x:Float, y:Float, width:Int, height:Int)
+	{
+		super(x, y, width, height);
+
+		this.fadeEffect = new Fade(this);
+
+		this.flashEffect = new Flash(this);
+
+		this.shakeEffect = new Shake(this);
+
+		this.panEffect = new Pan(this);
+
+		this.zoomEffect = new Zoom(this);
+	}
+
 	/**
 	 * Sets the Camera to render to a texture instead of to the main canvas.
 	 *
@@ -249,14 +269,13 @@ class Camera extends BaseCamera implements IFlip implements ITint
 	 * If you no longer require the Camera to render to a texture, call the `clearRenderToTexture` method,
 	 * which will delete the respective textures and free-up resources.
 	 *
-	 * @method Phaser.Cameras.Scene2D.Camera#setRenderToTexture
-	 * @since 3.13.0
+	 * @since 1.0.0
 	 *
-	 * @param {(string|Phaser.Renderer.WebGL.WebGLPipeline)} [pipeline] - An optional WebGL Pipeline to render with, can be either a string which is the name of the pipeline, or a pipeline reference.
+	 * @param pipeline - An optional WebGL Pipeline to render with, can be either a string which is the name of the pipeline, or a pipeline reference.
 	 *
-	 * @return {Phaser.Cameras.Scene2D.Camera} This Camera instance.
-	 */
-	public function setRenderToTexture(pipeline)
+	 * @return This Camera instance.
+	**/
+	public function setRenderToTexture(?pipeline:Union<String, WebGLPipeline>):Camera
 	{
 		var renderer = this.scene.sys.game.renderer;
 		if (renderer.gl)
@@ -270,7 +289,7 @@ class Camera extends BaseCamera implements IFlip implements ITint
 			this.context = this.canvas.getContext('2d');
 		}
 		this.renderToTexture = true;
-		if (pipeline)
+		if (pipeline != null)
 		{
 			this.setPipeline(pipeline);
 		}
@@ -386,7 +405,7 @@ class Camera extends BaseCamera implements IFlip implements ITint
 	 *
 	 * @return This Camera instance.
 	**/
-	public function setDeadzone(?width:Float, ?height:Float):Camera
+	public function setDeadzone(?width:Float, height:Float = 0):Camera
 	{
 		if (width == null)
 		{
@@ -527,25 +546,24 @@ class Camera extends BaseCamera implements IFlip implements ITint
 	/**
 	 * Flashes the Camera by setting it to the given color immediately and then fading it away again quickly over the duration specified.
 	 *
-	 * @method Phaser.Cameras.Scene2D.Camera#flash
 	 * @fires Phaser.Cameras.Scene2D.Events#FLASH_START
 	 * @fires Phaser.Cameras.Scene2D.Events#FLASH_COMPLETE
-	 * @since 3.0.0
+	 * @since .0.0
 	 *
-	 * @param {integer} [duration=250] - The duration of the effect in milliseconds.
-	 * @param {integer} [red=255] - The amount to fade the red channel towards. A value between 0 and 255.
-	 * @param {integer} [green=255] - The amount to fade the green channel towards. A value between 0 and 255.
-	 * @param {integer} [blue=255] - The amount to fade the blue channel towards. A value between 0 and 255.
-	 * @param {boolean} [force=false] - Force the effect to start immediately, even if already running.
-	 * @param {function} [callback] - This callback will be invoked every frame for the duration of the effect.
+	 * @param duration - The duration of the effect in milliseconds.
+	 * @param red - The amount to fade the red channel towards. A value between 0 and 255.
+	 * @param green - The amount to fade the green channel towards. A value between 0 and 255.
+	 * @param blue - The amount to fade the blue channel towards. A value between 0 and 255.
+	 * @param force - Force the effect to start immediately, even if already running.
+	 * @param callback - This callback will be invoked every frame for the duration of the effect.
 	 * It is sent two arguments: A reference to the camera and a progress amount between 0 and 1 indicating how complete the effect is.
-	 * @param {any} [context] - The context in which the callback is invoked. Defaults to the Scene to which the Camera belongs.
+	 * @param context - The context in which the callback is invoked. Defaults to the Scene to which the Camera belongs.
 	 *
-	 * @return {Phaser.Cameras.Scene2D.Camera} This Camera instance.
-	 */
+	 * @return This Camera instance.
+	**/
 	public inline function flash(duration:Int = 250, red:Int = 255, green:Int = 255,
 			blue:Int = 255, force:Bool = false, ?callback:CameraFlashCallback,
-			?context:Any)
+			?context:Any):Camera
 	{
 		return flashEffect.start(duration, red, green, blue, force, callback, context);
 	}
@@ -553,72 +571,344 @@ class Camera extends BaseCamera implements IFlip implements ITint
 	/**
 	 * Shakes the Camera by the given intensity over the duration specified.
 	 *
-	 * @method Phaser.Cameras.Scene2D.Camera#shake
 	 * @fires Phaser.Cameras.Scene2D.Events#SHAKE_START
 	 * @fires Phaser.Cameras.Scene2D.Events#SHAKE_COMPLETE
-	 * @since 3.0.0
+	 * @since 1.0.0
 	 *
-	 * @param {integer} [duration=100] - The duration of the effect in milliseconds.
-	 * @param {(number|Phaser.Math.Vector2)} [intensity=0.05] - The intensity of the shake.
-	 * @param {boolean} [force=false] - Force the shake effect to start immediately, even if already running.
-	 * @param {function} [callback] - This callback will be invoked every frame for the duration of the effect.
+	 * @param duration - The duration of the effect in milliseconds.
+	 * @param intensity - The intensity of the shake.
+	 * @param force - Force the shake effect to start immediately, even if already running.
+	 * @param callback - This callback will be invoked every frame for the duration of the effect.
 	 * It is sent two arguments: A reference to the camera and a progress amount between 0 and 1 indicating how complete the effect is.
-	 * @param {any} [context] - The context in which the callback is invoked. Defaults to the Scene to which the Camera belongs.
+	 * @param context - The context in which the callback is invoked. Defaults to the Scene to which the Camera belongs.
 	 *
-	 * @return {Phaser.Cameras.Scene2D.Camera} This Camera instance.
+	 * @return This Camera instance.
 	**/
-	public function shake(duration, intensity, force, callback, context)
+	public inline function shake(duration:Int = 250, ?intensity:Vector1Or2,
+			force:Bool = false, ?callback:CameraShakeCallback, ?context:Any):Camera
 	{
-		return this.shakeEffect.start(duration, intensity, force, callback, context);
+		return shakeEffect.start(duration, intensity, force, callback, context);
 	}
 
 	/**
 	 * This effect will scroll the Camera so that the center of its viewport finishes at the given destination,
 	 * over the duration and with the ease specified.
 	 *
-	 * @method Phaser.Cameras.Scene2D.Camera#pan
 	 * @fires Phaser.Cameras.Scene2D.Events#PAN_START
 	 * @fires Phaser.Cameras.Scene2D.Events#PAN_COMPLETE
-	 * @since 3.11.0
+	 * @since 1.0.0
 	 *
-	 * @param {number} x - The destination x coordinate to scroll the center of the Camera viewport to.
-	 * @param {number} y - The destination y coordinate to scroll the center of the Camera viewport to.
-	 * @param {integer} [duration=1000] - The duration of the effect in milliseconds.
-	 * @param {(string|function)} [ease='Linear'] - The ease to use for the pan. Can be any of the Phaser Easing constants or a custom function.
-	 * @param {boolean} [force=false] - Force the pan effect to start immediately, even if already running.
-	 * @param {Phaser.Types.Cameras.Scene2D.CameraPanCallback} [callback] - This callback will be invoked every frame for the duration of the effect.
+	 * @param x - The destination x coordinate to scroll the center of the Camera viewport to.
+	 * @param y - The destination y coordinate to scroll the center of the Camera viewport to.
+	 * @param duration - The duration of the effect in milliseconds.
+	 * @param ease - The ease to use for the pan. Can be any of the Phaser Easing constants or a custom function.
+	 * @param force - Force the pan effect to start immediately, even if already running.
+	 * @param callback - This callback will be invoked every frame for the duration of the effect.
 	 * It is sent four arguments: A reference to the camera, a progress amount between 0 and 1 indicating how complete the effect is,
 	 * the current camera scroll x coordinate and the current camera scroll y coordinate.
-	 * @param {any} [context] - The context in which the callback is invoked. Defaults to the Scene to which the Camera belongs.
+	 * @param context - The context in which the callback is invoked.
 	 *
-	 * @return {Phaser.Cameras.Scene2D.Camera} This Camera instance.
+	 * @return This Camera instance.
 	**/
-	public function pan(x, y, duration, ease, force, callback, context)
+	public inline function pan(x:Float, y:Float, duration:Int = 1000,
+			?ease:Union<String, (Float) -> Float>, force:Bool = false,
+			?callback:CameraPanCallback, ?context:Any):Camera
 	{
-		return this.panEffect.start(x, y, duration, ease, force, callback, context);
+		return panEffect.start(x, y, duration, ease, force, callback, context);
 	}
 
 	/**
 	 * This effect will zoom the Camera to the given scale, over the duration and with the ease specified.
 	 *
-	 * @method Phaser.Cameras.Scene2D.Camera#zoomTo
 	 * @fires Phaser.Cameras.Scene2D.Events#ZOOM_START
 	 * @fires Phaser.Cameras.Scene2D.Events#ZOOM_COMPLETE
-	 * @since 3.11.0
+	 * @since 1.0.0
 	 *
-	 * @param {number} zoom - The target Camera zoom value.
-	 * @param {integer} [duration=1000] - The duration of the effect in milliseconds.
-	 * @param {(string|function)} [ease='Linear'] - The ease to use for the pan. Can be any of the Phaser Easing constants or a custom function.
-	 * @param {boolean} [force=false] - Force the pan effect to start immediately, even if already running.
-	 * @param {Phaser.Types.Cameras.Scene2D.CameraPanCallback} [callback] - This callback will be invoked every frame for the duration of the effect.
+	 * @param zoom - The target Camera zoom value.
+	 * @param duration - The duration of the effect in milliseconds.
+	 * @param ease - The ease to use for the pan. Can be any of the Phaser Easing constants or a custom function.
+	 * @param force - Force the pan effect to start immediately, even if already running.
+	 * @param callback - This callback will be invoked every frame for the duration of the effect.
 	 * It is sent four arguments: A reference to the camera, a progress amount between 0 and 1 indicating how complete the effect is,
 	 * the current camera scroll x coordinate and the current camera scroll y coordinate.
-	 * @param {any} [context] - The context in which the callback is invoked. Defaults to the Scene to which the Camera belongs.
+	 * @param context - The context in which the callback is invoked.
 	 *
-	 * @return {Phaser.Cameras.Scene2D.Camera} This Camera instance.
+	 * @return This Camera instance.
 	**/
-	public function zoomTo(zoom, duration, ease, force, callback, context)
+	public inline function zoomTo(zoom:Float, duration:Int = 1000,
+			?ease:Union<String, (Float) -> Float>, force:Bool = false,
+			?callback:CameraZoomCallback, ?context:Any):Camera
 	{
-		return this.zoomEffect.start(zoom, duration, ease, force, callback, context);
+		return zoomEffect.start(zoom, duration, ease, force, callback, context);
+	}
+
+	/**
+	 * Internal preRender step.
+	 *
+	 * @since 1.0.0
+	 *
+	 * @param resolution - The game resolution, as set in the Scale Manager.
+	**/
+	private function preRender(resolution:Float)
+	{
+		var halfWidth = width * 0.5;
+		var halfHeight = height * 0.5;
+
+		var zoom = this.zoom * resolution;
+
+		var originX = width * this.originX;
+		var originY = height * this.originY;
+
+		var follow = this._follow;
+		var deadzone = this.deadzone;
+
+		var sx = this.scrollX;
+		var sy = this.scrollY;
+
+		if (deadzone != null)
+		{
+			RectangleUtil.centerOn(deadzone, this.midPoint.x, this.midPoint.y);
+		}
+
+		if (follow && !this.panEffect.isRunning)
+		{
+			var fx = (follow.x - this.followOffset.x);
+			var fy = (follow.y - this.followOffset.y);
+
+			if (deadzone != null)
+			{
+				if (fx < deadzone.x)
+				{
+					sx = MathUtility.linear(sx, sx - (deadzone.x - fx), this.lerp.x);
+				}
+				else if (fx > deadzone.right)
+				{
+					sx = MathUtility.linear(sx, sx + (fx - deadzone.right), this.lerp.x);
+				}
+
+				if (fy < deadzone.y)
+				{
+					sy = MathUtility.linear(sy, sy - (deadzone.y - fy), this.lerp.y);
+				}
+				else if (fy > deadzone.bottom)
+				{
+					sy = MathUtility.linear(sy, sy + (fy - deadzone.bottom), this.lerp.y);
+				}
+			}
+			else
+			{
+				sx = MathUtility.linear(sx, fx - originX, this.lerp.x);
+				sy = MathUtility.linear(sy, fy - originY, this.lerp.y);
+			}
+		}
+
+		if (this.useBounds)
+		{
+			sx = this.clampX(sx);
+			sy = this.clampY(sy);
+		}
+
+		if (this.roundPixels)
+		{
+			originX = Math.round(originX);
+			originY = Math.round(originY);
+		}
+
+		//  Values are in pixels and not impacted by zooming the Camera
+		this.scrollX = sx;
+		this.scrollY = sy;
+
+		var midX = sx + halfWidth;
+		var midY = sy + halfHeight;
+
+		//  The center of the camera, in world space, so taking zoom into account
+		//  Basically the pixel value of what it's looking at in the middle of the cam
+		this.midPoint.set(midX, midY);
+
+		var displayWidth = width / zoom;
+		var displayHeight = height / zoom;
+
+		this.worldView.setTo(midX - (displayWidth / 2), midY - (displayHeight / 2), displayWidth, displayHeight);
+
+		matrix.applyITRS(this.x + originX, this.y + originY, this.rotation, zoom, zoom);
+		matrix.translate(-originX, -originY);
+
+		this.shakeEffect.preRender();
+	}
+
+	/**
+	 * Sets the linear interpolation value to use when following a target.
+	 *
+	 * The default values of 1 means the camera will instantly snap to the target coordinates.
+	 * A lower value, such as 0.1 means the camera will more slowly track the target, giving
+	 * a smooth transition. You can set the horizontal and vertical values independently, and also
+	 * adjust this value in real-time during your game.
+	 *
+	 * Be sure to keep the value between 0 and 1. A value of zero will disable tracking on that axis.
+	 *
+	 * @since 1.0.0
+	 *
+	 * @param x - The amount added to the horizontal linear interpolation of the follow target.
+	 * @param y - The amount added to the vertical linear interpolation of the follow target.
+	 *
+	 * @return This Camera instance.
+	**/
+	public inline function setLerp(x:Float = 1, ?y:Float):Camera
+	{
+		lerp.set(x, y != null ? y : x);
+		return this;
+	}
+
+	/**
+	 * Sets the horizontal and vertical offset of the camera from its follow target.
+	 * The values are subtracted from the targets position during the Cameras update step.
+	 *
+	 * @since 1.0.0
+	 *
+	 * @param x - The horizontal offset from the camera follow target.x position.
+	 * @param y - The vertical offset from the camera follow target.y position.
+	 *
+	 * @return This Camera instance.
+	**/
+	public inline function setFollowOffset(x:Float = 0, y:Float = 0):Camera
+	{
+		this.followOffset.set(x, y);
+
+		return this;
+	}
+
+	/**
+	 * Sets the Camera to follow a Game Object.
+	 *
+	 * When enabled the Camera will automatically adjust its scroll position to keep the target Game Object
+	 * in its center.
+	 *
+	 * You can set the linear interpolation value used in the follow code.
+	 * Use low lerp values (such as 0.1) to automatically smooth the camera motion.
+	 *
+	 * If you find you're getting a slight "jitter" effect when following an object it's probably to do with sub-pixel
+	 * rendering of the targets position. This can be rounded by setting the `roundPixels` argument to `true` to
+	 * force full pixel rounding rendering. Note that this can still be broken if you have specified a non-integer zoom
+	 * value on the camera. So be sure to keep the camera zoom to integers.
+	 *
+	 * @since 1.0.0
+	 *
+	 * @param target - The target for the Camera to follow.
+	 * @param roundPixels - Round the camera position to whole integers to avoid sub-pixel rendering?
+	 * @param lerpX - A value between 0 and 1. This value specifies the amount of linear interpolation to use when horizontally tracking the target. The closer the value to 1, the faster the camera will track.
+	 * @param lerpY - A value between 0 and 1. This value specifies the amount of linear interpolation to use when vertically tracking the target. The closer the value to 1, the faster the camera will track.
+	 * @param offsetX - The horizontal offset from the camera follow target.x position.
+	 * @param offsetY - The vertical offset from the camera follow target.y position.
+	 *
+	 * @return This Camera instance.
+	**/
+	public function startFollow(target:{x:Float, y:Float}, roundPixels:Bool = false,
+			lerpX:Float = 1, ?lerpY:Float, offsetX:Float = 0, ?offsetY:Float)
+	{
+		var lerpY:Float = lerpY != null ? lerpY : lerpX;
+		var offsetY:Float = offsetY != null ? offsetY : offsetX;
+
+		_follow = target;
+
+		this.roundPixels = roundPixels;
+
+		lerpX = MathUtility.clamp(lerpX, 0, 1);
+		lerpY = MathUtility.clamp(lerpY, 0, 1);
+
+		lerp.set(lerpX, lerpY);
+
+		followOffset.set(offsetX, offsetY);
+
+		var originX = width / 2;
+		var originY = height / 2;
+
+		var fx = target.x - offsetX;
+		var fy = target.y - offsetY;
+
+		midPoint.set(fx, fy);
+
+		scrollX = fx - originX;
+		scrollY = fy - originY;
+
+		if (useBounds)
+		{
+			scrollX = clampX(scrollX);
+			scrollY = clampY(scrollY);
+		}
+
+		return this;
+	}
+
+	/**
+	 * Stops a Camera from following a Game Object, if previously set via `Camera.startFollow`.
+	 *
+	 * @since 1.0.0
+	 *
+	 * @return This Camera instance.
+	**/
+	public function stopFollow():Camera
+	{
+		_follow = null;
+
+		return this;
+	}
+
+	/**
+	 * Resets any active FX, such as a fade, flash or shake. Useful to call after a fade in order to
+	 * remove the fade.
+	 *
+	 * @since 1.0.0
+	 *
+	 * @return This Camera instance.
+	**/
+	public function resetFX():Camera
+	{
+		panEffect.reset();
+		shakeEffect.reset();
+		flashEffect.reset();
+		fadeEffect.reset();
+
+		return this;
+	}
+
+	/**
+	 * Internal method called automatically by the Camera Manager.
+	 *
+	 * @since 1.0.0
+	 *
+	 * @param time - The current timestamp as generated by the Request Animation Frame or SetTimeout.
+	 * @param delta - The delta time, in ms, elapsed since the last frame.
+	**/
+	private function update(time:Int, delta:Float):Void
+	{
+		if (visible)
+		{
+			panEffect.update(time, delta);
+			zoomEffect.update(time, delta);
+			shakeEffect.update(time, delta);
+			flashEffect.update(time, delta);
+			fadeEffect.update(time, delta);
+		}
+	}
+
+	/**
+	 * Destroys this Camera instance. You rarely need to call this directly.
+	 *
+	 * Called by the Camera Manager. If you wish to destroy a Camera please use `CameraManager.remove` as
+	 * cameras are stored in a pool, ready for recycling later, and calling this directly will prevent that.
+	 *
+	 * @fires Phaser.Cameras.Scene2D.Events#DESTROY
+	 * @since 1.0.0
+	**/
+	public function destroy():Void
+	{
+		clearRenderToTexture();
+		resetFX();
+
+		super.destroy();
+
+		this._follow = null;
+
+		this.deadzone = null;
 	}
 }

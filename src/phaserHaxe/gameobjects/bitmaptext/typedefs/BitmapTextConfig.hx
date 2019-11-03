@@ -1,5 +1,6 @@
 package phaserHaxe.gameobjects.bitmaptext.typedefs;
 
+import phaserHaxe.utils.types.Union;
 import phaserHaxe.gameobjects.typedefs.GameObjectConfig;
 
 /**
@@ -27,5 +28,5 @@ typedef BitmapTextConfig = GameObjectConfig &
 	 *
 	 * @since 1.0.0
 	**/
-	public var ?size:Either<Float, Bool>;
+	public var ?size:Union<Float, Bool>;
 };

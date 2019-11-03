@@ -5,7 +5,7 @@ import phaserHaxe.gameobjects.components.TransformMatrix;
 import phaserHaxe.cameras.scene2D.Camera;
 import phaserHaxe.renderer.webgl.WebGLRenderer;
 import phaserHaxe.gameobjects.bitmaptext.typedefs.DisplayCallbackConfig;
-import phaserHaxe.utils.MultipleOrOne;
+import phaserHaxe.utils.types.MultipleOrOne;
 
 /**
  * BitmapText objects work by taking a texture file and an XML or JSON file that describes the font structure.

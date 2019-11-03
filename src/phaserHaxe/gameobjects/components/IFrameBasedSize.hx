@@ -6,6 +6,7 @@ import phaserHaxe.geom.Rectangle;
 import phaserHaxe.gameobjects.components.ICrop;
 import phaserHaxe.gameobjects.components.ITransform;
 import phaserHaxe.textures.Frame;
+import phaserHaxe.utils.types.Union;
 
 @:phaserHaxe.Mixin(phaserHaxe.gameobjects.components.IFrameBasedSize.FrameBasedSizeMixin)
 interface IFrameBasedSize extends ISize
@@ -22,7 +23,7 @@ interface IFrameBasedSize extends ISize
 	 * The native (un-scaled) width of this Game Object.
 	 *
 	 * Changing this value will not change the size that the Game Object is rendered in-game.
-	 * For that you need to either set the scale of the Game Object (`setScale`) or use
+	 * For that you need to Union set the scale of the Game Object (`setScale`) or use
 	 * the `displayWidth` property.
 	 *
 	 * @since 1.0.0
@@ -33,7 +34,7 @@ interface IFrameBasedSize extends ISize
 	 * The native (un-scaled) height of this Game Object.
 	 *
 	 * Changing this value will not change the size that the Game Object is rendered in-game.
-	 * For that you need to either set the scale of the Game Object (`setScale`) or use
+	 * For that you need to Union set the scale of the Game Object (`setScale`) or use
 	 * the `displayHeight` property.
 	 *
 	 * @since 1.0.0
@@ -66,7 +67,7 @@ interface IFrameBasedSize extends ISize
 	 * Sets the size of this Game Object to be that of the given Frame.
 	 *
 	 * This will not change the size that the Game Object is rendered in-game.
-	 * For that you need to either set the scale of the Game Object (`setScale`) or call the
+	 * For that you need to Union set the scale of the Game Object (`setScale`) or call the
 	 * `setDisplaySize` method, which is the same thing as changing the scale but allows you
 	 * to do so by giving pixel values.
 	 *
@@ -85,7 +86,7 @@ interface IFrameBasedSize extends ISize
 	 * Sets the internal size of this Game Object, as used for frame or physics body creation.
 	 *
 	 * This will not change the size that the Game Object is rendered in-game.
-	 * For that you need to either set the scale of the Game Object (`setScale`) or call the
+	 * For that you need to Union set the scale of the Game Object (`setScale`) or call the
 	 * `setDisplaySize` method, which is the same thing as changing the scale but allows you
 	 * to do so by giving pixel values.
 	 *
@@ -190,7 +191,7 @@ final class FrameBasedSizeMixin implements IFrameBasedSize implements ITransform
 	 * The native (un-scaled) width of this Game Object.
 	 *
 	 * Changing this value will not change the size that the Game Object is rendered in-game.
-	 * For that you need to either set the scale of the Game Object (`setScale`) or use
+	 * For that you need to Union set the scale of the Game Object (`setScale`) or use
 	 * the `displayWidth` property.
 	 *
 	 * @since 1.0.0
@@ -201,7 +202,7 @@ final class FrameBasedSizeMixin implements IFrameBasedSize implements ITransform
 	 * The native (un-scaled) height of this Game Object.
 	 *
 	 * Changing this value will not change the size that the Game Object is rendered in-game.
-	 * For that you need to either set the scale of the Game Object (`setScale`) or use
+	 * For that you need to Union set the scale of the Game Object (`setScale`) or use
 	 * the `displayHeight` property.
 	 *
 	 * @since 1.0.0
@@ -254,7 +255,7 @@ final class FrameBasedSizeMixin implements IFrameBasedSize implements ITransform
 	 * Sets the size of this Game Object to be that of the given Frame.
 	 *
 	 * This will not change the size that the Game Object is rendered in-game.
-	 * For that you need to either set the scale of the Game Object (`setScale`) or call the
+	 * For that you need to Union set the scale of the Game Object (`setScale`) or call the
 	 * `setDisplaySize` method, which is the same thing as changing the scale but allows you
 	 * to do so by giving pixel values.
 	 *
@@ -276,7 +277,7 @@ final class FrameBasedSizeMixin implements IFrameBasedSize implements ITransform
 	 * Sets the internal size of this Game Object, as used for frame or physics body creation.
 	 *
 	 * This will not change the size that the Game Object is rendered in-game.
-	 * For that you need to either set the scale of the Game Object (`setScale`) or call the
+	 * For that you need to Union set the scale of the Game Object (`setScale`) or call the
 	 * `setDisplaySize` method, which is the same thing as changing the scale but allows you
 	 * to do so by giving pixel values.
 	 *
@@ -488,14 +489,14 @@ final class FrameBasedSizeMixin implements IFrameBasedSize implements ITransform
 	public var isCropped:Bool = false;
 
 	@:phaserHaxe.mixinIgnore
-	public function setCrop(?x:Either<Rectangle, Float>, ?y:Float, ?width:Float,
+	public function setCrop(?x:Union<Rectangle, Float>, ?y:Float, ?width:Float,
 			?height:Float):CropMixin
 	{
 		throw "Not Implemented";
 	}
 
 	@:phaserHaxe.mixinIgnore
-	private function resetCropObject():ResetCropObject
+	private function resetCropObject():CropDataObject
 	{
 		throw "Not Implemented";
 	}

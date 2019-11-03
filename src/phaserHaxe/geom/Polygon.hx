@@ -36,7 +36,7 @@ class Polygon
 	{
 		if (this.points != null)
 		{
-			setTo(points)
+			setTo(points);
 		}
 		else
 		{

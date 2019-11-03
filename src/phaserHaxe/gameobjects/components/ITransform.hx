@@ -472,7 +472,7 @@ final class TransformImplementation
 	}
 }
 
-final class TransformMixin extends GameObject
+final class TransformMixin extends GameObject implements ITransform
 {
 	/**
 	 * Private internal value. Holds the horizontal scale value.
@@ -571,7 +571,7 @@ final class TransformMixin extends GameObject
 
 	private inline function get_scale():Float
 	{
-		return TransformImplementation.get_scale(cast this);
+		return TransformImplementation.get_scale(this);
 	}
 
 	private inline function set_scale(value:Float):Float
@@ -687,7 +687,7 @@ final class TransformMixin extends GameObject
 	**/
 	public function setAngle(degrees:Float = 0):TransformMixin
 	{
-		return cast TransformImplementation.setAngle(cast this, degrees);
+		return TransformImplementation.setAngle(this, degrees);
 	}
 
 	/**

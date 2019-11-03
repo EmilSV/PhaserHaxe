@@ -1,12 +1,13 @@
 package phaserHaxe;
 
+import phaserHaxe.utils.types.Union;
 import js.Browser;
 import js.html.webgl.PowerPreference;
 import js.html.webgl.WebGL2RenderingContext;
 import js.html.CanvasRenderingContext2D;
 import js.html.CanvasElement;
 import js.html.HtmlElement;
-import phaserHaxe.utils.StringOrInt;
+import phaserHaxe.utils.types.StringOrInt;
 import phaserHaxe.Const;
 import phaserHaxe.core.WebGameConfig;
 import phaserHaxe.core.PhysicsConfig;
@@ -98,7 +99,7 @@ class Config
 	 *
 	 * @since 1.0.0
 	**/
-	public final fullscreenTarget:Null<Either<HtmlElement, String>>;
+	public final fullscreenTarget:Null<Union<HtmlElement, String>>;
 
 	/**
 	 * The minimum width, in pixels, the canvas will scale down to. A value of zero means no minimum.
@@ -147,7 +148,7 @@ class Config
 	 *
 	 * @since 1.0.0
 	**/
-	public final context:Null<Either<CanvasRenderingContext2D, WebGL2RenderingContext>>;
+	public final context:Null<Union<CanvasRenderingContext2D, WebGL2RenderingContext>>;
 
 	/**
 	 * Optional CSS attributes to be set on the canvas object created by the renderer.
@@ -245,7 +246,7 @@ class Config
 	 *
 	 * @since 1.0.0
 	**/
-	public final inputMouse:Either<Bool, Any>;
+	public final inputMouse:Union<Bool, Any>;
 
 	/**
 	 * The DOM Target to listen for mouse events on. Defaults to the game canvas if not specified.
@@ -477,11 +478,11 @@ class Config
 	public final physics:PhysicsConfig;
 
 	/**
-	 * The default physics system. It will be started for each scene. Either 'arcade', 'impact' or 'matter'.
+	 * The default physics system. It will be started for each scene. Union 'arcade', 'impact' or 'matter'.
 	 *
 	 * @since 1.0.0
 	**/
-	public final defaultPhysicsSystem:Either<Bool, String>;
+	public final defaultPhysicsSystem:Union<Bool, String>;
 
 	/**
 	 * A URL used to resolve paths given to the loader. Example: 'http://labs.phaser.io/assets/'.
@@ -826,7 +827,7 @@ class Config
 
 			var bgc = getValue(config.backgroundColor, 0);
 
-			backgroundColor = Color.valueToColor(bgc);
+			backgroundColor = Color.valueToColor(bgc.toUnion());
 
 			if (Std.is(bgc, Int) && (cast bgc : Int) == 0 && transparent)
 			{
@@ -843,7 +844,7 @@ class Config
 
 			physics = getValue(config.physics, {});
 
-			defaultPhysicsSystem = getValue((this.physics.defaultPhysics : Either<Bool,
+			defaultPhysicsSystem = getValue((this.physics.defaultPhysics : Union<Bool,
 				String>), false);
 
 			var loader = getValue(config.loader, {});

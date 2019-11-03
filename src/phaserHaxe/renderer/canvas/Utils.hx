@@ -50,7 +50,7 @@ final class CanvasUtils
 			return false;
 		}
 
-		var camMatrix = renderer._tempMatrix1.copyFromArray(camera.matrix.matrix);
+		var camMatrix = renderer._tempMatrix1.copyFrom(camera.matrix);
 		var gameObjectMatrix = renderer._tempMatrix2.applyITRS(src.x, src.y, src.rotation, src.scaleX, src.scaleY);
 		var calcMatrix = renderer._tempMatrix3;
 

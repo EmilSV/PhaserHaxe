@@ -133,7 +133,7 @@ class Shake
 		_onUpdate = callback;
 		_onUpdateScope = context;
 
-		camera.emit(Events.SHAKE_START, camera, this, duration, intensity);
+		camera.emit(Events.SHAKE_START, [camera, this, duration, intensity]);
 	}
 
 	/**
@@ -210,7 +210,7 @@ class Shake
 
 		isRunning = false;
 
-		camera.emit(Events.SHAKE_COMPLETE, this.camera, this);
+		camera.emit(Events.SHAKE_COMPLETE, [camera, this]);
 	}
 
 	/**

@@ -1,12 +1,14 @@
 package phaserHaxe.core;
 
-import phaserHaxe.utils.StringOrInt;
-import js.html.webgl.PowerPreference;
+import phaserHaxe.utils.types.StringOrInt;
 import haxe.ds.Option;
-import js.html.HtmlElement;
 import phaserHaxe.scale.CenterType;
 import phaserHaxe.scale.ScaleModeType;
+import phaserHaxe.utils.types.Union;
+
 #if js
+import js.html.webgl.PowerPreference;
+import js.html.HtmlElement;
 import js.html.CanvasRenderingContext2D;
 import js.html.CanvasElement;
 import phaserHaxe.Const;
@@ -59,7 +61,7 @@ typedef WebGameConfig =
 	 *
 	 * @since 1.0.0
 	**/
-	public var ?parent:Null<Either<Element, String>>;
+	public var ?parent:Null<Union<Element, String>>;
 
 	/**
 	 * The scale mode as used by the Scale Manager. The default is zero, which is no scaling.
@@ -102,7 +104,7 @@ typedef WebGameConfig =
 	 *
 	 * @since 1.0.0
 	**/
-	public var ?fullscreenTarget:Null<Either<HtmlElement, String>>;
+	public var ?fullscreenTarget:Null<Union<HtmlElement, String>>;
 
 	/**
 	 * The minimum width, in pixels, the canvas will scale down to. A value of zero means no minimum.
@@ -332,7 +334,7 @@ typedef WebGameConfig =
 	 *
 	 * @since 1.0.0
 	**/
-	public var ?backgroundColor:Either<String, Int>;
+	public var ?backgroundColor:StringOrInt;
 
 	/**
 	 * Optional callbacks to run before or after game boot.

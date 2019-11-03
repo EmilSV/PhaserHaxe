@@ -62,7 +62,7 @@ class Zoom
 	 *
 	 * @since 1.0.0
 	**/
-	public var ease:Function;
+	public var ease:(Float) -> Float;
 
 	/**
 	 * If this effect is running this holds the current percentage of the progress, a value between 0 and 1.
@@ -131,7 +131,7 @@ class Zoom
 	 * @return The Camera on which the effect was started.
 	**/
 	public function start(zoom:Float, duration:Int = 1000,
-			?ease:Union<String, Function>, force:Bool = false,
+			?ease:Union<String, (Float) -> Float>, force:Bool = false,
 			callback:CameraZoomCallback = null, ?context:Any):Camera
 	{
 		if (ease == null)
@@ -157,11 +157,11 @@ class Zoom
 		//  Using this ease
 		if (Std.is(ease, String) && EaseMap.exists(cast ease))
 		{
-			ease = EaseMap.get(cast ease);
+			this.ease = EaseMap.get(cast ease);
 		}
 		else if (Reflect.isFunction(ease))
 		{
-			ease = cast ease;
+			this.ease = cast ease;
 		}
 
 		_elapsed = 0;
@@ -228,7 +228,7 @@ class Zoom
 
 		isRunning = false;
 
-		camera.emit(Events.ZOOM_COMPLETE, camera, this);
+		camera.emit(Events.ZOOM_COMPLETE, [camera, this]);
 	}
 
 	/**

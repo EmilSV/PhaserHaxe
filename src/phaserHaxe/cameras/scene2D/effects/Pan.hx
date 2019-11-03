@@ -169,7 +169,7 @@ class Pan
 		_onUpdate = callback;
 		_onUpdateScope = context;
 
-		camera.emit(Events.PAN_START, this.camera, this, duration, x, y);
+		camera.emit(Events.PAN_START, [camera, this, duration, x, y]);
 
 		return cam;
 	}
@@ -239,7 +239,7 @@ class Pan
 
 		isRunning = false;
 
-		camera.emit(Events.PAN_COMPLETE, this.camera, this);
+		camera.emit(Events.PAN_COMPLETE, [camera, this]);
 	}
 
 	/**

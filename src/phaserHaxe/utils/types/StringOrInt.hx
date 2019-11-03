@@ -26,4 +26,9 @@ abstract StringOrInt(Dynamic) from Int from String
 	{
 		return isString() ? getString() : Std.string(getInt());
 	}
+
+	public inline function toUnion():Union<String,Int> 
+	{
+		return cast this;	
+	}
 }

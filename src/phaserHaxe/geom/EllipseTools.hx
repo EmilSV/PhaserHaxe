@@ -4,7 +4,7 @@ import phaserHaxe.math.MathUtility;
 import phaserHaxe.math.MathConst;
 import phaserHaxe.math.Vector2Like;
 
-class EllipseUtil
+class EllipseTools
 {
 	/**
 	 * Calculates the area of the Ellipse.
@@ -15,7 +15,7 @@ class EllipseUtil
 	 *
 	 * @return The area of the Ellipse.
 	**/
-	public static function Area(ellipse:Ellipse):Float
+	public static function area(ellipse:Ellipse):Float
 	{
 		if (ellipse.isEmpty())
 		{
@@ -35,7 +35,7 @@ class EllipseUtil
 	 *
 	 * @return The circumference of the Ellipse.
 	 */
-	public static function Circumference(ellipse:Ellipse)
+	public static function circumference(ellipse:Ellipse)
 	{
 		var rx = ellipse.width / 2;
 		var ry = ellipse.height / 2;
@@ -49,15 +49,13 @@ class EllipseUtil
 	 *
 	 * @since 1.0.0
 	 *
-	 * @generic {Phaser.Geom.Point} O - [out,$return]
-	 *
 	 * @param ellipse - The Ellipse to get the circumference point on.
 	 * @param angle - The angle from the center of the Ellipse to the circumference to return the point from. Given in radians.
 	 * @param out - A Point, or point-like object, to store the results in. If not given a Point will be created.
 	 *
 	 * @return A Point object where the `x` and `y` properties are the point on the circumference.
 	**/
-	public static function CircumferencePoint(ellipse:Ellipse, angle:Float, ?out:Point)
+	public static function circumferencePoint(ellipse:Ellipse, angle:Float, ?out:Point):Point
 	{
 		if (out == null)
 		{
@@ -86,7 +84,8 @@ class EllipseUtil
 	 *
 	 * @return A Point object where the `x` and `y` properties are the point on the circumference.
 	**/
-	public static function CircumferencePointAny<T:Vector2Like>(ellipse:Ellipse, angle:Float, out:T):T
+	public static function circumferencePointAny<T:Vector2Like>(ellipse:Ellipse,
+			angle:Float, out:T):T
 	{
 		var halfWidth = ellipse.width / 2;
 		var halfHeight = ellipse.height / 2;
@@ -106,23 +105,9 @@ class EllipseUtil
 	 *
 	 * @return A clone of the source Ellipse.
 	**/
-	public static function Clone(source)
+	public static function clone(source)
 	{
 		return new Ellipse(source.x, source.y, source.width, source.height);
-	}
-
-	/**
-	 * Creates a new inline Ellipse instance based on the values contained in the given source.
-	 *
-	 * @since 1.0.0
-	 *
-	 * @param source - The Ellipse to be cloned.
-	 *
-	 * @return A inline clone of the source Ellipse.
-	**/
-	public static inline function inlineClone(source:Ellipse):Ellipse
-	{
-		return inline new Ellipse(source.x, source.y, source.width, source.height);
 	}
 
 	/**
@@ -136,7 +121,7 @@ class EllipseUtil
 	 *
 	 * @return True if the coordinates are within the ellipse, otherwise false.
 	**/
-	public static function Contains(ellipse:Ellipse, x:Float, y:Float)
+	public static function contains(ellipse:Ellipse, x:Float, y:Float)
 	{
 		if (ellipse.width <= 0 || ellipse.height <= 0)
 		{
@@ -163,9 +148,9 @@ class EllipseUtil
 	 *
 	 * @return True if the Point coordinates are within the circle, otherwise false.
 	 */
-	public static function ContainsPoint(ellipse:Ellipse, point:Point)
+	public static function containsPoint(ellipse:Ellipse, point:Point)
 	{
-		return Contains(ellipse, point.x, point.y);
+		return contains(ellipse, point.x, point.y);
 	}
 
 	/**
@@ -178,12 +163,12 @@ class EllipseUtil
 	 *
 	 * @return True if all of the Rectangle coordinates are within the ellipse, otherwise false.
 	 */
-	public static function ContainsRect(ellipse:Ellipse, rect:Rectangle):Bool
+	public static function containsRect(ellipse:Ellipse, rect:Rectangle):Bool
 	{
-		return (Contains(ellipse, rect.x, rect.y)
-			&& Contains(ellipse, rect.right, rect.y)
-			&& Contains(ellipse, rect.x, rect.bottom)
-			&& Contains(ellipse, rect.right, rect.bottom));
+		return (contains(ellipse, rect.x, rect.y)
+			&& contains(ellipse, rect.right, rect.y)
+			&& contains(ellipse, rect.x, rect.bottom)
+			&& contains(ellipse, rect.right, rect.bottom));
 	}
 
 	/**
@@ -215,8 +200,8 @@ class EllipseUtil
 	**/
 	public static function Equals(ellipse:Ellipse, toCompare:Ellipse):Bool
 	{
-		return (ellipse.x == toCompare.x && ellipse.y == toCompare.y && ellipse.width == toCompare.width
-			&& ellipse.height == toCompare.height);
+		return (ellipse.x == toCompare.x && ellipse.y == toCompare.y
+			&& ellipse.width == toCompare.width && ellipse.height == toCompare.height);
 	}
 
 	/**
@@ -251,8 +236,6 @@ class EllipseUtil
 	 *
 	 * @since 1.0.0
 	 *
-	 * @generic {Phaser.Geom.Point} O - [out,$return]
-	 *
 	 * @param ellipse - The Ellipse to get the circumference point on.
 	 * @param position - A value between 0 and 1, where 0 equals 0 degrees, 0.5 equals 180 degrees and 1 equals 360 around the ellipse.
 	 * @param out - An Point to store the return values in. If not given a Point object will be created.
@@ -266,9 +249,9 @@ class EllipseUtil
 			out = new Point();
 		}
 
-		var angle = MathUtility.FromPercent(position, 0, MathConst.PI2);
+		var angle = MathUtility.fromPercent(position, 0, MathConst.PI2);
 
-		return CircumferencePoint(ellipse, angle, out);
+		return circumferencePoint(ellipse, angle, out);
 	}
 
 	/**
@@ -284,10 +267,11 @@ class EllipseUtil
 	 *
 	 * @return A Point, or point-like object, containing the coordinates of the point around the ellipse.
 	**/
-	public static inline function GetPointAny<T:Vector2Like>(ellipse:Ellipse, position:Float, out:T):T
+	public static inline function getPointAny<T:Vector2Like>(ellipse:Ellipse,
+			position:Float, out:T):T
 	{
-		var angle = MathUtility.FromPercent(position, 0, MathConst.PI2);
-		return CircumferencePointAny(ellipse, angle, out);
+		var angle = MathUtility.fromPercent(position, 0, MathConst.PI2);
+		return circumferencePointAny(ellipse, angle, out);
 	}
 
 	/**
@@ -303,7 +287,8 @@ class EllipseUtil
 	 *
 	 * @return An array of Point objects pertaining to the points around the circumference of the ellipse.
 	**/
-	public static function GetPoints(ellipse:Ellipse, quantity:Int, stepRate:Float = 0, ?out:Array<Point>):Array<Point>
+	public static function getPoints(ellipse:Ellipse, quantity:Int, stepRate:Float = 0,
+			?out:Array<Point>):Array<Point>
 	{
 		if (out == null)
 		{
@@ -314,15 +299,15 @@ class EllipseUtil
 
 		if (quantity == 0)
 		{
-			quantityFloat = Circumference(ellipse) / stepRate;
+			quantityFloat = circumference(ellipse) / stepRate;
 			quantity = Std.int(quantityFloat);
 		}
 
 		for (i in 0...quantity)
 		{
-			var angle = MathUtility.FromPercent(i / quantityFloat, 0, MathConst.PI2);
+			var angle = MathUtility.fromPercent(i / quantityFloat, 0, MathConst.PI2);
 
-			out.push(CircumferencePoint(ellipse, angle));
+			out.push(circumferencePoint(ellipse, angle));
 		}
 
 		return out;
@@ -339,7 +324,7 @@ class EllipseUtil
 	 *
 	 * @return The Ellipse that was offset.
 	**/
-	public static function Offset(ellipse:Ellipse, x:Float, y:Float)
+	public static function offset(ellipse:Ellipse, x:Float, y:Float)
 	{
 		ellipse.x += x;
 		ellipse.y += y;
@@ -357,7 +342,7 @@ class EllipseUtil
 	 *
 	 * @return The Ellipse that was offset.
 	**/
-	public static function OffsetPoint(ellipse:Ellipse, point:Point):Ellipse
+	public static function offsetPoint(ellipse:Ellipse, point:Point):Ellipse
 	{
 		ellipse.x += point.x;
 		ellipse.y += point.y;
@@ -375,7 +360,7 @@ class EllipseUtil
 	 *
 	 * @return A Point object with the random values set in the `x` and `y` properties.
 	**/
-	public static function Random(ellipse:Ellipse, ?out:Point)
+	public static function random(ellipse:Ellipse, ?out:Point):Point
 	{
 		if (out == null)
 		{
@@ -401,7 +386,7 @@ class EllipseUtil
 	 *
 	 * @return A Point object with the random values set in the `x` and `y` properties.
 	**/
-	public static function RandomAny<T:Vector2Like>(ellipse:Ellipse, out:T):T
+	public static function randomAny<T:Vector2Like>(ellipse:Ellipse, out:T):T
 	{
 		var p = Math.random() * Math.PI * 2;
 		var s = Math.sqrt(Math.random());

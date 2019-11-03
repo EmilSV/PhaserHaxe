@@ -16,7 +16,6 @@ import phaserHaxe.display.Color;
 import phaserHaxe.gameobjects.components.IAlpha;
 import phaserHaxe.gameobjects.components.IVisible;
 import phaserHaxe.scene.SceneManager;
-import phaserHaxe.math.MathUtility.clamp as clamp;
 import phaserHaxe.scale.ScaleManager;
 import phaserHaxe.geom.Rectangle;
 import phaserHaxe.gameobjects.components.TransformMatrix;
@@ -183,6 +182,7 @@ class BaseCamera extends EventEmitter implements IAlpha implements IVisible
 	 *
 	 * @since 1.0.0
 	**/
+	@:allow(phaserHaxe)
 	private var _cx:Float = 0;
 
 	/**
@@ -190,6 +190,7 @@ class BaseCamera extends EventEmitter implements IAlpha implements IVisible
 	 *
 	 * @since 1.0.0
 	**/
+	@:allow(phaserHaxe)
 	private var _cy:Float = 0;
 
 	/**
@@ -197,6 +198,7 @@ class BaseCamera extends EventEmitter implements IAlpha implements IVisible
 	 *
 	 * @since 1.0.0
 	**/
+	@:allow(phaserHaxe)
 	private var _cw:Float = 0;
 
 	/**
@@ -204,6 +206,7 @@ class BaseCamera extends EventEmitter implements IAlpha implements IVisible
 	 *
 	 * @since 1.0.0
 	**/
+	@:allow(phaserHaxe)
 	private var _ch:Float = 0;
 
 	/**
@@ -214,7 +217,7 @@ class BaseCamera extends EventEmitter implements IAlpha implements IVisible
 	 *
 	 * @since 1.0.0
 	**/
-	private var _width:Float;
+	private var _width:Int;
 
 	/**
 	 * The height of the Camera viewport, in pixels.
@@ -224,7 +227,7 @@ class BaseCamera extends EventEmitter implements IAlpha implements IVisible
 	 *
 	 * @since 1.0.0
 	**/
-	private var _height:Float;
+	private var _height:Int;
 
 	/**
 	 * The bounds the camera is restrained to during scrolling.
@@ -308,7 +311,7 @@ class BaseCamera extends EventEmitter implements IAlpha implements IVisible
 	 *
 	 * @since 1.0.0
 	**/
-	public var backgroundColor:Color;
+	public var backgroundColor:Color = new Color(0, 0, 0, 0);
 
 	/**
 	 * The Camera alpha value. Setting this property impacts every single object that this Camera
@@ -345,7 +348,7 @@ class BaseCamera extends EventEmitter implements IAlpha implements IVisible
 	 * @readonly
 	 * @since 1.0.0
 	**/
-	public var midPoint:Vector2;
+	public var midPoint(default, null):Vector2;
 
 	/**
 	 * The horizontal origin of rotation for this Camera.
@@ -427,7 +430,7 @@ class BaseCamera extends EventEmitter implements IAlpha implements IVisible
 	 *
 	 * @since 1.0.0
 	**/
-	public var width(get, set):Float;
+	public var width(get, set):Int;
 
 	/**
 	 * The height of the Camera viewport, in pixels.
@@ -437,7 +440,7 @@ class BaseCamera extends EventEmitter implements IAlpha implements IVisible
 	 *
 	 * @since 1.0.0
 	**/
-	public var height(get, set):Float;
+	public var height(get, set):Int;
 
 	/**
 	 * The horizontal scroll position of this Camera.
@@ -535,6 +538,24 @@ class BaseCamera extends EventEmitter implements IAlpha implements IVisible
 	**/
 	public var displayHeight(get, never):Float;
 
+	/**
+	 * @param  x - The x position of the Camera, relative to the top-left of the game canvas.
+	 * @param y - The y position of the Camera, relative to the top-left of the game canvas.
+	 * @param width - The width of the Camera, in pixels.
+	 * @param height - The height of the Camera, in pixels.
+	**/
+	public function new(x:Float, y:Float, width:Int, height:Int)
+	{
+		super();
+
+		_x = x;
+		_y = y;
+		_width = width;
+		_height = height;
+
+		midPoint = new Vector2(width / 2, height / 2);
+	}
+
 	private inline function get_x():Float
 	{
 		return _x;
@@ -561,12 +582,12 @@ class BaseCamera extends EventEmitter implements IAlpha implements IVisible
 		return _y;
 	}
 
-	private inline function get_width():Float
+	private inline function get_width():Int
 	{
 		return _width;
 	}
 
-	private inline function set_width(value:Float):Float
+	private inline function set_width(value:Int):Int
 	{
 		this._width = value;
 		this._cw = value * this.resolution;
@@ -574,12 +595,12 @@ class BaseCamera extends EventEmitter implements IAlpha implements IVisible
 		return _width;
 	}
 
-	private inline function get_height():Float
+	private inline function get_height():Int
 	{
 		return _height;
 	}
 
-	private inline function set_height(value:Float):Float
+	private inline function set_height(value:Int):Int
 	{
 		this._height = value;
 		this._ch = value * this.resolution;
@@ -1166,13 +1187,13 @@ class BaseCamera extends EventEmitter implements IAlpha implements IVisible
 	 *
 	 * @since 1.0.0
 	 *
-	 * @param value - The cameras angle of rotation, given in degrees.
+	 * @param degrees - The cameras angle of rotation, given in degrees.
 	 *
 	 * @return This Camera instance.
 	**/
-	public function setAngle(value:Float = 0):BaseCamera
+	public function setAngle(degrees:Float = 0):BaseCamera
 	{
-		rotation = MathUtility.degToRad(value);
+		rotation = MathUtility.degToRad(degrees);
 		return this;
 	}
 

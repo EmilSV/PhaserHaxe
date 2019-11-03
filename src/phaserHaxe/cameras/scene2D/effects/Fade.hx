@@ -112,6 +112,11 @@ class Fade
 	**/
 	private var _onUpdateScope:Null<Any>;
 
+	public function new(camera:Camera) 
+	{
+		this.camera = camera;
+	}
+
 	/**
 	 * Fades the Camera to or from the given color over the duration specified.
 	 *
@@ -158,7 +163,7 @@ class Fade
 
 		var eventName = (direction) ? Events.FADE_OUT_START : Events.FADE_IN_START;
 
-		camera.emit(eventName, camera, this, duration, red, green, blue);
+		camera.emit(eventName, [camera, this, duration, red, green, blue]);
 
 		return camera;
 	}
@@ -264,7 +269,7 @@ class Fade
 
 		var eventName = direction ? Events.FADE_OUT_COMPLETE : Events.FADE_IN_COMPLETE;
 
-		camera.emit(eventName, camera, this);
+		camera.emit(eventName, [camera, this]);
 	}
 
 	/**

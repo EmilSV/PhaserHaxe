@@ -72,3 +72,4 @@ final class LoaderConfig
 	 * @since 1.0.0
 	**/
 	public var timeout:Int = 0;
+}
