@@ -104,7 +104,7 @@ class Vector2
 	 *
 	 * @return This Vector2.
 	**/
-	public function set(x:Float, ?y:Float):Vector2
+	public inline function set(x:Float, ?y:Float):Vector2
 	{
 		if (y == null)
 		{

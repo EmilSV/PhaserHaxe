@@ -73,6 +73,13 @@ final class MathConst
 	public static inline var INT_MIN:Int = -2147483648;
 
 	/**
+	 * The closest number to zero that can be represented.
+	 *
+	 * @since 1.0.0
+	**/
+	public static inline var CLOSEST_TO_ZERO = 5e-324;
+
+	/**
 	 * the larges safe integer value
 	 *
 	 * @since 1.0.0
@@ -87,7 +94,7 @@ final class MathConst
 	public static inline var FLOAT_MAX:Float = 1.7976931348623157e+308;
 
 	/**
-	 * constant represents the minimum safe integer in JavaScript 
+	 * constant represents the minimum safe integer in JavaScript
 	 *
 	 * @since 1.0.0
 	**/

@@ -15,9 +15,9 @@ final class Back
 	 *
 	 * @return The tweened value.
 	**/
-	public function In(v:Float, overshoot:Float = 1.70158):Float
+	public inline function In(v:Float, overshoot:Float = 1.70158):Float
 	{
-		return inline EasingBack.In(v, overshoot);
+		return EasingBack.In(v, overshoot);
 	}
 
 	/**

@@ -11,7 +11,7 @@ final class EasingLinear
 	 *
 	 * @return The tweened value.
 	**/
-	public static function Linear(v:Float):Float
+	public static function linear(v:Float):Float
 	{
 		return v;
 	}

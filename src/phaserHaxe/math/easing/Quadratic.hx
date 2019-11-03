@@ -14,7 +14,7 @@ final class Quadratic
 	 *
 	 * @return The tweened value.
 	**/
-	public function In(v:Float):Float
+	public function inward(v:Float):Float
 	{
 		return inline EasingQuadratic.In(v);
 	}
@@ -28,7 +28,7 @@ final class Quadratic
 	 *
 	 * @return The tweened value.
 	**/
-	public function InOut(v:Float):Float
+	public function inOut(v:Float):Float
 	{
 		return inline EasingQuadratic.InOut(v);
 	}
@@ -42,7 +42,7 @@ final class Quadratic
 	 *
 	 * @return The tweened value.
 	**/
-	public function Out(v:Float):Float
+	public function out(v:Float):Float
 	{
 		return inline EasingQuadratic.Out(v);
 	}

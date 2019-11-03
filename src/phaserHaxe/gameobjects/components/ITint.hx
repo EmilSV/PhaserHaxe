@@ -291,7 +291,7 @@ final class TintImplantation
 	}
 }
 
-final class TintMixin extends GameObject implements ITint
+final class TintMixin  implements ITint
 {
 	/**
 	 * Private internal value. Holds the top-left tint value.
