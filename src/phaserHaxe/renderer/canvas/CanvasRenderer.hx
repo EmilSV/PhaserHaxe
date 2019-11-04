@@ -12,7 +12,7 @@ import phaserHaxe.display.Color;
 import phaserHaxe.Const;
 import phaserHaxe.renderer.Snapshot.SnapshotState;
 import phaserHaxe.gameobjects.components.TransformMatrix;
-import phaserHaxe.scale.Events as ScaleEvents;
+import phaserHaxe.scale.ScaleEvents;
 import phaserHaxe.renderer.Snapshot;
 import phaserHaxe.math.MathInt;
 #if js

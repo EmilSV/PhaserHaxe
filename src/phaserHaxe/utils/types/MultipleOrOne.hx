@@ -22,4 +22,9 @@ abstract MultipleOrOne<T>(Dynamic) from Array<T> from T from Union<T, Array<T>>
 	{
 		return (cast this : T);
 	}
+
+	public inline function forceArray():Array<T>
+	{
+		return Std.is(this, Array) ? (cast this) : [(cast this : T)];
+	}
 }

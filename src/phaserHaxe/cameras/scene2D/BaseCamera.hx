@@ -1,5 +1,6 @@
 package phaserHaxe.cameras.scene2D;
 
+import phaserHaxe.math.Vector2Like;
 import phaserHaxe.display.InputColorObject;
 import phaserHaxe.math.MathUtility;
 import phaserHaxe.gameobjects.group.Group;
@@ -166,7 +167,7 @@ class BaseCamera extends EventEmitter implements IAlpha implements IVisible
 	 *
 	 * @since 1.0.0
 	**/
-	public var _x:Float;
+	public var x(default, set):Float;
 
 	/**
 	 * The y position of the Camera, relative to the top-left of the game canvas.
@@ -175,7 +176,7 @@ class BaseCamera extends EventEmitter implements IAlpha implements IVisible
 	 *
 	 * @since 1.0.0
 	**/
-	public var _y:Float;
+	public var y(default, set):Float;
 
 	/**
 	 * Internal Camera X value multiplied by the resolution.
@@ -217,7 +218,7 @@ class BaseCamera extends EventEmitter implements IAlpha implements IVisible
 	 *
 	 * @since 1.0.0
 	**/
-	private var _width:Int;
+	public var width(default, set):Int;
 
 	/**
 	 * The height of the Camera viewport, in pixels.
@@ -227,7 +228,7 @@ class BaseCamera extends EventEmitter implements IAlpha implements IVisible
 	 *
 	 * @since 1.0.0
 	**/
-	private var _height:Int;
+	public var height(default, set):Int;
 
 	/**
 	 * The bounds the camera is restrained to during scrolling.
@@ -405,44 +406,6 @@ class BaseCamera extends EventEmitter implements IAlpha implements IVisible
 	private var _maskCamera:BaseCamera = null;
 
 	/**
-	 * The x position of the Camera viewport, relative to the top-left of the game canvas.
-	 * The viewport is the area into which the camera renders.
-	 * To adjust the position the camera is looking at in the game world, see the `scrollX` value.
-	 *
-	 * @since 1.0.0
-	**/
-	public var x(get, set):Float;
-
-	/**
-	 * The y position of the Camera viewport, relative to the top-left of the game canvas.
-	 * The viewport is the area into which the camera renders.
-	 * To adjust the position the camera is looking at in the game world, see the `scrollY` value.
-	 *
-	 * @since 1.0.0
-	**/
-	public var y(get, set):Float;
-
-	/**
-	 * The width of the Camera viewport, in pixels.
-	 *
-	 * The viewport is the area into which the Camera renders. Setting the viewport does
-	 * not restrict where the Camera can scroll to.
-	 *
-	 * @since 1.0.0
-	**/
-	public var width(get, set):Int;
-
-	/**
-	 * The height of the Camera viewport, in pixels.
-	 *
-	 * The viewport is the area into which the Camera renders. Setting the viewport does
-	 * not restrict where the Camera can scroll to.
-	 *
-	 * @since 1.0.0
-	**/
-	public var height(get, set):Int;
-
-	/**
 	 * The horizontal scroll position of this Camera.
 	 *
 	 * Change this value to cause the Camera to scroll around your Scene.
@@ -548,64 +511,44 @@ class BaseCamera extends EventEmitter implements IAlpha implements IVisible
 	{
 		super();
 
-		_x = x;
-		_y = y;
-		_width = width;
-		_height = height;
+		this.x = x;
+		this.y = y;
+		this.width = width;
+		this.height = height;
 
 		midPoint = new Vector2(width / 2, height / 2);
 	}
 
-	private inline function get_x():Float
-	{
-		return _x;
-	}
-
 	private inline function set_x(value:Float):Float
 	{
-		_x = value;
+		x = value;
 		_cx = value * resolution;
 		// this.updateSystem();
-		return _x;
-	}
-
-	private inline function get_y():Float
-	{
-		return _y;
+		return x;
 	}
 
 	private inline function set_y(value:Float):Float
 	{
-		_y = value;
+		y = value;
 		_cy = value * resolution;
 		// this.updateSystem();
-		return _y;
-	}
-
-	private inline function get_width():Int
-	{
-		return _width;
+		return y;
 	}
 
 	private inline function set_width(value:Int):Int
 	{
-		this._width = value;
+		width = value;
 		this._cw = value * this.resolution;
 		// this.updateSystem();
-		return _width;
-	}
-
-	private inline function get_height():Int
-	{
-		return _height;
+		return width;
 	}
 
 	private inline function set_height(value:Int):Int
 	{
-		this._height = value;
+		height = value;
 		this._ch = value * this.resolution;
 		// this.updateSystem();
-		return _height;
+		return height;
 	}
 
 	private inline function get_scrollX():Float
@@ -946,18 +889,15 @@ class BaseCamera extends EventEmitter implements IAlpha implements IVisible
 	 * Converts the given `x` and `y` coordinates into World space, based on this Cameras transform.
 	 * You can optionally provide a Vector2, or similar object, to store the results in.
 	 *
-	 * @method Phaser.Cameras.Scene2D.BaseCamera#getWorldPoint
-	 * @since 3.0.0
+	 * @since 1.0.0
 	 *
-	 * @generic {Phaser.Math.Vector2} O - [output,$return]
+	 * @param x - The x position to convert to world space.
+	 * @param y - The y position to convert to world space.
+	 * @param output - An optional object to store the results in. If not provided a new Vector2 will be created.
 	 *
-	 * @param {number} x - The x position to convert to world space.
-	 * @param {number} y - The y position to convert to world space.
-	 * @param {(object|Phaser.Math.Vector2)} [output] - An optional object to store the results in. If not provided a new Vector2 will be created.
-	 *
-	 * @return {Phaser.Math.Vector2} An object holding the converted values in its `x` and `y` properties.
-	 */
-	function getWorldPoint(x, y, output)
+	 * @return An object holding the converted values in its `x` and `y` properties.
+	**/
+	public function getWorldPoint(x:Float, y:Float, ?output:Vector2):Vector2
 	{
 		if (output == null)
 		{
@@ -1059,6 +999,7 @@ class BaseCamera extends EventEmitter implements IAlpha implements IVisible
 	 *
 	 * @param resolution - The game resolution, as set in the Scale Manager.
 	**/
+	@:allow(phaserHaxe)
 	private function preRender(resolution:Float):Void
 	{
 		var halfWidth = width * 0.5;
@@ -1407,10 +1348,10 @@ class BaseCamera extends EventEmitter implements IAlpha implements IVisible
 
 		this.resolution = res;
 
-		_cx = _x * res;
-		_cy = _y * res;
-		_cw = _width * res;
-		_ch = _height * res;
+		_cx = x * res;
+		_cy = y * res;
+		_cw = width * res;
+		_ch = height * res;
 
 		updateSystem();
 
@@ -1546,7 +1487,7 @@ class BaseCamera extends EventEmitter implements IAlpha implements IVisible
 	{
 		this.mask = mask;
 
-		_maskCamera = (fixedPosition) ? this.cameraManager.defaultMask : this;
+		_maskCamera = (fixedPosition) ? this.cameraManager.defaultCamera : this;
 
 		return this;
 	}
@@ -1620,7 +1561,7 @@ class BaseCamera extends EventEmitter implements IAlpha implements IVisible
 	 * @param delta - The delta time, in ms, elapsed since the last frame.
 	**/
 	@:allow(phaserHaxe)
-	private function update()
+	private function update(time:Int, delta:Float)
 	{
 		//  NOOP
 	}
@@ -1637,7 +1578,7 @@ class BaseCamera extends EventEmitter implements IAlpha implements IVisible
 			return;
 		}
 
-		var custom = (_x != 0 || _y != 0 || scaleManager.width != _width || scaleManager.height != _height);
+		var custom = (x != 0 || y != 0 || scaleManager.width != width || scaleManager.height != height);
 
 		var sceneManager = sceneManager;
 

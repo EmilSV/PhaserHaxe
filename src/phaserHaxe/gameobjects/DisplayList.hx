@@ -3,7 +3,7 @@ package phaserHaxe.gameobjects;
 import phaserHaxe.gameobjects.components.IDepth;
 import phaserHaxe.scene.Systems;
 import phaserHaxe.structs.List;
-import phaserHaxe.scene.Events as SceneEvents;
+import phaserHaxe.scene.SceneEvents;
 import phaserHaxe.utils.ArrayUtils;
 
 /**

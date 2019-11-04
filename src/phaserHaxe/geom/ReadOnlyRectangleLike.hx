@@ -5,21 +5,21 @@ package phaserHaxe.geom;
  *
  * @since 1.0.0
 **/
-typedef RectangleLike =
+typedef ReadOnlyRectangleLike =
 {
 	/**
 	 * The x component of this object.
 	 *
 	 * @since 1.0.0
 	**/
-	var x(default, default):Float;
+	var x(default, never):Float;
 
 	/**
 	 * The y component of this object.
 	 *
 	 * @since 1.0.0
 	**/
-	var y(default, default):Float;
+	var y(default, never):Float;
 
 	/**
 	 * The height of the Rectangle, i.e. the distance
@@ -27,7 +27,7 @@ typedef RectangleLike =
 	 *
 	 * @since 1.0.0
 	**/
-	var width(default, default):Float;
+	var width(default, never):Float;
 
 	/**
 	 * The height of the Rectangle, i.e. the distance
@@ -35,5 +35,5 @@ typedef RectangleLike =
 	 *
 	 * @since 1.0.0
 	**/
-	var height(default, default):Float;
+	var height(default, never):Float;
 }

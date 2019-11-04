@@ -1,5 +1,6 @@
 package phaserHaxe.geom;
 
+import phaserHaxe.math.ReadOnlyVector2Like;
 import phaserHaxe.math.Vector2Like;
 import phaserHaxe.math.MathConst;
 import phaserHaxe.math.MathUtility;
@@ -116,20 +117,6 @@ final class RectangleUtil
 	}
 
 	/**
-		* Creates a new Rectangle which is identical to the given one.
-		*
-		* @since 1.0.0
-		*
-		* @param source - The Rectangle to clone.
-		*s
-		* @return The newly created Rectangle, which is separate from the given one.
-	**/
-	public static inline function inlineClone(source:Rectangle):Rectangle
-	{
-		return inline new Rectangle(source.x, source.y, source.width, source.height);
-	}
-
-	/**
 	 * Checks if a given point is inside a Rectangle's bounds.
 	 *
 	 * @since 1.0.0
@@ -140,13 +127,16 @@ final class RectangleUtil
 	 *
 	 * @return `true` if the point is within the Rectangle's bounds, otherwise `false`.
 	**/
-	public static function contains(rect:Rectangle, x:Float, y:Float):Bool
+	@:generic
+	public static function contains<T:ReadOnlyRectangleLike>(rect:T, x:Float,
+			y:Float):Bool
 	{
 		if (rect.width <= 0 || rect.height <= 0)
 		{
 			return false;
 		}
-		return (rect.x <= x && rect.x + rect.width >= x && rect.y <= y && rect.y + rect.height >= y);
+		return
+			(rect.x <= x && rect.x + rect.width >= x && rect.y <= y && rect.y + rect.height >= y);
 	}
 
 	/**
@@ -159,7 +149,9 @@ final class RectangleUtil
 	 *
 	 * @return A value of true if the Rectangle object contains the specified point, otherwise false.
 	**/
-	public static inline function containsPoint<T:Vector2Like>(rect:Rectangle, point:T):Bool
+	@:generic
+	public static inline function containsPoint<T1:ReadOnlyRectangleLike,
+		T2:Vector2Like>(rect:T1, point:T2):Bool
 	{
 		return contains(rect, point.x, point.y);
 	}
@@ -241,8 +233,8 @@ final class RectangleUtil
 	**/
 	public static function equals(rect, toCompare)
 	{
-		return (rect.x == toCompare.x && rect.y == toCompare.y && rect.width == toCompare.width
-			&& rect.height == toCompare.height);
+		return
+			(rect.x == toCompare.x && rect.y == toCompare.y && rect.width == toCompare.width && rect.height == toCompare.height);
 	}
 
 	/**
@@ -274,7 +266,8 @@ final class RectangleUtil
 			target.setSize(source.width, source.width / ratio);
 		}
 
-		return target.setPosition(source.centerX - (target.width / 2), source.centerY - (target.height / 2));
+		return
+			target.setPosition(source.centerX - (target.width / 2), source.centerY - (target.height / 2));
 	}
 
 	/**
@@ -284,8 +277,7 @@ final class RectangleUtil
 	 *
 	 * Unlike the `FitInside` function, the target rectangle may extend further out than the source.
 	 *
-	 * @function Phaser.Geom.Rectangle.FitOutside
-	 * @since 3.0.0
+	 * @since 1.0.0
 	 *
 	 * @generic {Phaser.Geom.Rectangle} O - [target,$return]
 	 *
@@ -309,22 +301,20 @@ final class RectangleUtil
 			target.setSize(source.width, source.width / ratio);
 		}
 
-		return target.setPosition(source.centerX - target.width / 2, source.centerY - target.height / 2);
+		return
+			target.setPosition(source.centerX - target.width / 2, source.centerY - target.height / 2);
 	}
 
 	/**
 	 * Rounds down (floors) the top left X and Y co-ordinates of the given Rectangle to the largest integer less than or equal to them
 	 *
-	 * @function Phaser.Geom.Rectangle.Floor
-	 * @since 3.0.0
+	 * @since 1.0.0
 	 *
-	 * @generic {Phaser.Geom.Rectangle} O - [rect,$return]
+	 * @param rect - The rectangle to floor the top left X and Y co-ordinates of
 	 *
-	 * @param {Phaser.Geom.Rectangle} rect - The rectangle to floor the top left X and Y co-ordinates of
-	 *
-	 * @return {Phaser.Geom.Rectangle} The rectangle that was passed to this function with its co-ordinates floored.
-	 */
-	public static function floor(rect)
+	 * @return The rectangle that was passed to this function with its co-ordinates floored.
+	**/
+	public static inline function floor<T:RectangleLike>(rect:T):T
 	{
 		rect.x = Math.floor(rect.x);
 		rect.y = Math.floor(rect.y);
@@ -334,16 +324,13 @@ final class RectangleUtil
 	/**
 	 * Rounds a Rectangle's position and size down to the largest integer less than or equal to each current coordinate or dimension.
 	 *
-	 * @function Phaser.Geom.Rectangle.FloorAll
-	 * @since 3.0.0
+	 * @since 1.0.0
 	 *
-	 * @generic {Phaser.Geom.Rectangle} O - [rect,$return]
+	 * @param rect - The Rectangle to adjust.
 	 *
-	 * @param {Phaser.Geom.Rectangle} rect - The Rectangle to adjust.
-	 *
-	 * @return {Phaser.Geom.Rectangle} The adjusted Rectangle.
-	 */
-	public static function floorAll(rect)
+	 * @return The adjusted Rectangle.
+	**/
+	public static inline function floorAll<T:RectangleLike>(rect:T):T
 	{
 		rect.x = Math.floor(rect.x);
 		rect.y = Math.floor(rect.y);
@@ -355,17 +342,17 @@ final class RectangleUtil
 	/**
 	 * Constructs new Rectangle or repositions and resizes an existing Rectangle so that all of the given points are on or within its bounds.
 	 *
-	 * @function Phaser.Geom.Rectangle.FromPoints
-	 * @since 3.0.0
+	 * @since 1.0.0
 	 *
-	 * @generic {Phaser.Geom.Rectangle} O - [out,$return]
 	 *
-	 * @param {array} points - An array of points (either arrays with two elements corresponding to the X and Y coordinate or an object with public `x` and `y` properties) which should be surrounded by the Rectangle.
-	 * @param {Phaser.Geom.Rectangle} [out] - Optional Rectangle to adjust.
+	 * @param points - An array of points (either arrays with two elements corresponding to the X and Y coordinate or an object with public `x` and `y` properties) which should be surrounded by the Rectangle.
+	 * @param out - Optional Rectangle to adjust.
 	 *
 	 * @return {Phaser.Geom.Rectangle} The adjusted `out` Rectangle, or a new Rectangle if none was provided.
 	**/
-	public static function fromPoints(points:Array<Point>, out)
+	@:generic
+	public static function fromPoints<T:ReadOnlyVector2Like>(points:Array<T>,
+			?out:Rectangle):Rectangle
 	{
 		if (out == null)
 		{
@@ -405,16 +392,64 @@ final class RectangleUtil
 	}
 
 	/**
+	 * Constructs new Rectangle or repositions and resizes an existing Rectangle so that all of the given points are on or within its bounds.
+	 *
+	 * @since 1.0.0
+	 *
+	 *
+	 * @param points - An array of points (either arrays with two elements corresponding to the X and Y coordinate or an object with public `x` and `y` properties) which should be surrounded by the Rectangle.
+	 * @param out - Optional Rectangle to adjust.
+	 *
+	 * @return {Phaser.Geom.Rectangle} The adjusted `out` Rectangle, or a new Rectangle if none was provided.
+	**/
+	@:generic
+	public static function fromPointsAny<T1:ReadOnlyVector2Like,
+		T2:RectangleLike>(points:Array<T1>, out:T2):T2
+	{
+		if (points.length == 0)
+		{
+			return out;
+		}
+
+		var minX = MathConst.FLOAT_MAX;
+		var minY = MathConst.FLOAT_MAX;
+		var maxX = MathConst.FLOAT_MIN_SAFE_INTEGER;
+		var maxY = MathConst.FLOAT_MIN_SAFE_INTEGER;
+
+		var p;
+		var px;
+		var py;
+
+		for (i in 0...points.length)
+		{
+			p = points[i];
+
+			px = p.x;
+			py = p.y;
+
+			minX = Math.min(minX, px);
+			minY = Math.min(minY, py);
+			maxX = Math.max(maxX, px);
+			maxY = Math.max(maxY, py);
+		}
+		out.x = minX;
+		out.y = minY;
+		out.width = maxX - minX;
+		out.height = maxY - minY;
+		return out;
+	}
+
+	/**
 	 * Calculates the width/height ratio of a rectangle.
 	 *
-	 * @function Phaser.Geom.Rectangle.GetAspectRatio
-	 * @since 3.0.0
+	 * @since 1.0.0
 	 *
-	 * @param {Phaser.Geom.Rectangle} rect - The rectangle.
+	 * @param rect - The rectangle.
 	 *
-	 * @return {number} The width/height ratio of the rectangle.
+	 * @return The width/height ratio of the rectangle.
 	**/
-	public static function getAspectRatio(rect:Rectangle):Float
+	@:pure
+	public static inline function getAspectRatio<T:ReadOnlyRectangleLike>(rect:T):Float
 	{
 		return (rect.height == 0) ? Math.NaN : rect.width / rect.height;
 	}
@@ -422,22 +457,36 @@ final class RectangleUtil
 	/**
 	 * Returns the center of a Rectangle as a Point.
 	 *
-	 * @function Phaser.Geom.Rectangle.GetCenter
-	 * @since 3.0.0
+	 * @since 1.0.0
 	 *
-	 * @generic {Phaser.Geom.Point} O - [out,$return]
+	 * @param rect - The Rectangle to get the center of.
+	 * @param out - Optional point-like object to update with the center coordinates.
 	 *
-	 * @param {Phaser.Geom.Rectangle} rect - The Rectangle to get the center of.
-	 * @param {(Phaser.Geom.Point|object)} [out] - Optional point-like object to update with the center coordinates.
-	 *
-	 * @return {(Phaser.Geom.Point|object)} The modified `out` object, or a new Point if none was provided.
+	 * @return The modified `out` object, or a new Point if none was provided.
 	**/
-	public static function getCenter(rect, out)
+	public static function getCenter(rect:Rectangle, ?out:Point):Point
 	{
 		if (out == null)
 		{
 			out = new Point();
 		}
+		out.x = rect.centerX;
+		out.y = rect.centerY;
+		return out;
+	}
+
+	/**
+	 * Returns the center of a Rectangle as a Point.
+	 *
+	 * @since 1.0.0
+	 *
+	 * @param rect - The Rectangle to get the center of.
+	 * @param out - Optional point-like object to update with the center coordinates.
+	 *
+	 * @return The modified `out` object, or a new Point if none was provided.
+	**/
+	public static function getCenterAny<T:Vector2Like>(rect:Rectangle, ?out:T):T
+	{
 		out.x = rect.centerX;
 		out.y = rect.centerY;
 		return out;
@@ -454,7 +503,8 @@ final class RectangleUtil
 	 *
 	 * @return [description]
 	**/
-	public static function getPoint(rectangle:Rectangle, position:Float, ?out:Point)
+	public static function getPoint(rectangle:Rectangle, position:Float,
+			?out:Point):Point
 	{
 		if (out == null)
 		{
@@ -510,7 +560,8 @@ final class RectangleUtil
 	 *
 	 * @return An array of Points from the perimeter of the rectangle.
 	**/
-	public static function getPoints(rectangle:Rectangle, quantity:Int, stepRate:Float, ?out:Array<Point>)
+	public static function getPoints(rectangle:Rectangle, quantity:Int, stepRate:Float,
+			?out:Array<Point>):Array<Point>
 	{
 		if (out == null)
 		{
@@ -596,7 +647,8 @@ final class RectangleUtil
 	 *
 	 * @return The intersection result. If the width and height are zero, no intersection occurred.
 	**/
-	public static function intersection(rectA:Rectangle, rectB:Rectangle, ?out:Rectangle)
+	public static function intersection(rectA:Rectangle, rectB:Rectangle,
+			?out:Rectangle):Rectangle
 	{
 		if (out == null)
 		{
@@ -631,7 +683,8 @@ final class RectangleUtil
 	 *
 	 * @return [description]
 	**/
-	public static function MarchingAnts(rect:Rectangle, step:Float, quantity:Int = 0, ?out:Array<Point>):Array<Point>
+	public static function MarchingAnts(rect:Rectangle, step:Float, quantity:Int = 0,
+			?out:Array<Point>):Array<Point>
 	{
 		if (out == null)
 		{
@@ -716,7 +769,7 @@ final class RectangleUtil
 	 *
 	 * @return The modified Rectangle.
 	**/
-	public static function MergePoints(target:Rectangle, points:Array<Point>)
+	public static function MergePoints(target:Rectangle, points:Array<Point>):Rectangle
 	{
 		var minX = target.x;
 		var maxX = target.right;
@@ -865,7 +918,8 @@ final class RectangleUtil
 	 *
 	 * @return [description]
 	**/
-	public static function PerimeterPoint(rectangle:Rectangle, angle:Int, ?out:Point):Point
+	public static function PerimeterPoint(rectangle:Rectangle, angle:Int,
+			?out:Point):Point
 	{
 		if (out == null)
 		{
@@ -939,7 +993,8 @@ final class RectangleUtil
 	 *
 	 * @return A Point object containing the random values in its `x` and `y` properties.
 	**/
-	public static function RandomOutside(outer:Rectangle, inner:Rectangle, ?out:Point):Point
+	public static function RandomOutside(outer:Rectangle, inner:Rectangle,
+			?out:Point):Point
 	{
 		if (out == null)
 		{
@@ -959,7 +1014,8 @@ final class RectangleUtil
 					out.y = outer.y + (Math.random() * (inner.top - outer.y));
 				case 1: // Bottom
 					out.x = inner.x + (Math.random() * (outer.right - inner.x));
-					out.y = inner.bottom + (Math.random() * (outer.bottom - inner.bottom));
+					out.y = inner.bottom +
+						(Math.random() * (outer.bottom - inner.bottom));
 				case 2: // Left
 					out.x = outer.x + (Math.random() * (inner.x - outer.x));
 					out.y = inner.y + (Math.random() * (outer.bottom - inner.y));

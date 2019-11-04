@@ -153,6 +153,7 @@ phaserHaxe.geom.LineUtil
 phaserHaxe.geom.Point
 phaserHaxe.geom.Polygon
 phaserHaxe.geom.PolygonUtil
+phaserHaxe.geom.ReadOnlyRectangleLike
 phaserHaxe.geom.Rectangle
 phaserHaxe.geom.RectangleLike
 phaserHaxe.geom.RectangleUtil
@@ -201,6 +202,7 @@ phaserHaxe.math.Matrix4
 phaserHaxe.math.Pow2
 phaserHaxe.math.Quaternion
 phaserHaxe.math.RandomDataGenerator
+phaserHaxe.math.ReadOnlyVector2Like
 phaserHaxe.math.Snap
 phaserHaxe.math.Vector2
 phaserHaxe.math.Vector2Like
@@ -223,11 +225,11 @@ phaserHaxe.renderer.Snapshot
 phaserHaxe.renderer.webgl.WebGLPipeline
 phaserHaxe.renderer.webgl.WebGLRenderer
 phaserHaxe.scale.CenterType
-phaserHaxe.scale.Events
+phaserHaxe.scale.ScaleEvents
 phaserHaxe.scale.ScaleManager
 phaserHaxe.scale.ScaleModeType
 phaserHaxe.scale.ZoomType
-phaserHaxe.scene.Events
+phaserHaxe.scene.SceneEvents
 phaserHaxe.scene.SceneManager
 phaserHaxe.scene.Systems
 phaserHaxe.Scene

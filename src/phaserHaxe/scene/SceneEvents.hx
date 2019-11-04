@@ -1,6 +1,6 @@
 package phaserHaxe.scene;
 
-enum abstract Events(String)
+enum abstract SceneEvents(String)
 {
 	/**
 	 * The Scene Systems Boot Event.

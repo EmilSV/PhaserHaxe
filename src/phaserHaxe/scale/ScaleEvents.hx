@@ -1,6 +1,6 @@
 package phaserHaxe.scale;
 
-enum abstract Events(String) to String
+enum abstract ScaleEvents(String) to String
 {
 	/**
 	 * The Scale Manager has successfully entered fullscreen mode.
