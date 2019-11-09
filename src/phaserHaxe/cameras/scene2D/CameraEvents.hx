@@ -1,6 +1,6 @@
 package phaserHaxe.cameras.scene2D;
 
-enum abstract Events(String) to String
+enum abstract CameraEvents(String) to String
 {
 	/**
 	 * The Destroy Camera Event.

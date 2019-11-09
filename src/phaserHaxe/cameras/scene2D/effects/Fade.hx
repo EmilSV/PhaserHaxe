@@ -161,7 +161,7 @@ class Fade
 		_onUpdate = callback;
 		_onUpdateScope = context;
 
-		var eventName = (direction) ? Events.FADE_OUT_START : Events.FADE_IN_START;
+		var eventName = (direction) ? CameraEvents.FADE_OUT_START : CameraEvents.FADE_IN_START;
 
 		camera.emit(eventName, [camera, this, duration, red, green, blue]);
 
@@ -267,7 +267,7 @@ class Fade
 		isRunning = false;
 		isComplete = true;
 
-		var eventName = direction ? Events.FADE_OUT_COMPLETE : Events.FADE_IN_COMPLETE;
+		var eventName = direction ? CameraEvents.FADE_OUT_COMPLETE : CameraEvents.FADE_IN_COMPLETE;
 
 		camera.emit(eventName, [camera, this]);
 	}

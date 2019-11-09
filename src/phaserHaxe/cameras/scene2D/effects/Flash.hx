@@ -147,7 +147,7 @@ class Flash
 		_onUpdate = callback;
 		_onUpdateScope = context;
 
-		camera.emit(Events.FLASH_START, [camera, this, duration, red, green, blue]);
+		camera.emit(CameraEvents.FLASH_START, [camera, this, duration, red, green, blue]);
 
 		return camera;
 	}
@@ -250,7 +250,7 @@ class Flash
 
 		isRunning = false;
 
-		camera.emit(Events.FLASH_COMPLETE, [camera, this]);
+		camera.emit(CameraEvents.FLASH_COMPLETE, [camera, this]);
 	}
 
 	/**

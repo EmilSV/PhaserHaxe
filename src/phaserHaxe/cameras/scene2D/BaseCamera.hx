@@ -1610,7 +1610,7 @@ class BaseCamera extends EventEmitter implements IAlpha implements IVisible
 	**/
 	public function destroy()
 	{
-		emit(Events.DESTROY, [this]);
+		emit(CameraEvents.DESTROY, [this]);
 
 		removeAllListeners();
 

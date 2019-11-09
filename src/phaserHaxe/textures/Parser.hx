@@ -136,7 +136,7 @@ final class Parser
 			}
 
 			//  Copy over any extra data
-			newFrame.customData = CustomData.cloneFromDynamic(src);
+			newFrame.customData = CustomData.createFromDynamic(src);
 		}
 
 		//  Copy over any additional data that was in the JSON to Texture.customData

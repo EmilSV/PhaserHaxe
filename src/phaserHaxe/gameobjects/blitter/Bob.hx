@@ -40,7 +40,7 @@ class Bob
 	 *
 	 * @since 1.0.0
 	**/
-	public var data:CustomData = new CustomData();
+	public var data:CustomData<Dynamic> = new CustomData<Dynamic>();
 
 	/**
 	 * The tint value of this Bob.bb

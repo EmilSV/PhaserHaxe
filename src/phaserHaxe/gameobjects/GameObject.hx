@@ -272,7 +272,8 @@ class GameObject extends EventEmitter implements IHaveRenderFlags
 	 *
 	 * @return This GameObject.
 	**/
-	public function setData(key:Union<String, {}>, ?value:Dynamic):GameObject
+	public function setData(key:Union<String, Map<String, Any>>,
+			?value:Dynamic):GameObject
 	{
 		if (data == null)
 		{

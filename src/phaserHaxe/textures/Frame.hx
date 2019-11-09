@@ -341,8 +341,8 @@ class Frame
 	 *
 	 * @since 1.0.0
 	**/
-	public var customData:CustomData = new CustomData();
-	
+	public var customData:CustomData<Dynamic> = new CustomData<Dynamic>();
+
 	/**
 	 * WebGL UV u0 value.
 	 *

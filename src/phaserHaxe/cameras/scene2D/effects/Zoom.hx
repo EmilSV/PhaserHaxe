@@ -169,7 +169,7 @@ class Zoom
 		_onUpdate = callback;
 		_onUpdateScope = context;
 
-		camera.emit(Events.ZOOM_START, [(camera : Dynamic), (this : Dynamic), (duration : Dynamic), (zoom : Dynamic)]);
+		camera.emit(CameraEvents.ZOOM_START, [(camera : Dynamic), (this : Dynamic), (duration : Dynamic), (zoom : Dynamic)]);
 
 		return camera;
 	}
@@ -228,7 +228,7 @@ class Zoom
 
 		isRunning = false;
 
-		camera.emit(Events.ZOOM_COMPLETE, [camera, this]);
+		camera.emit(CameraEvents.ZOOM_COMPLETE, [camera, this]);
 	}
 
 	/**

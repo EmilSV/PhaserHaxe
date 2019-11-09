@@ -69,7 +69,7 @@ class Texture
 	 *
 	 * @since 1.0.0
 	**/
-	public var customData:CustomData;
+	public var customData:CustomData<Dynamic>;
 
 	/**
 	 * The name of the first frame of the Texture.
