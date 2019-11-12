@@ -130,10 +130,24 @@ final class ComputedSizeImplementation
 	{
 		return self.scaleY = value / self.height;
 	}
-
-	public static inline function setSizeToFrame<T:ISize & ICrop>(self:T, ?frame:Frame):T
+	
+	public static function setSizeToFrame<T:ISize>(self:T, ?frame:Frame):T
 	{
-		final frame:Frame = frame != null ? frame : self.frame;
+		final frame:Frame = if (frame != null)
+		{
+			frame;
+		}
+		else
+		{
+			if (Std.is(self, IBaseTexture))
+			{
+				(cast self : IBaseTexture).frame;
+			}
+			else
+			{
+				null;
+			}
+		}
 
 		self.width = frame.realWidth;
 		self.height = frame.realHeight;
@@ -157,8 +171,7 @@ final class ComputedSizeImplementation
 	}
 }
 
-final class ComputedSizeMixin extends GameObject implements IComputedSize
-		implements ITransform implements ICrop
+final class ComputedSizeMixin extends GameObject implements IComputedSize implements ITransform
 {
 	/**
 	 * The native (un-scaled) width of this Game Object.

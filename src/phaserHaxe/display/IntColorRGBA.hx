@@ -1,6 +1,6 @@
 package phaserHaxe.display;
 
-abstract IntColorRGBA(Int)
+abstract IntColorRGBA(Int) from Int to Int
 {
 	/**
 	 * The red color value.

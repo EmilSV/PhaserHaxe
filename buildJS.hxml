@@ -1,20 +1,23 @@
 -cp src
 
 phaserHaxe.animations.Animation
-phaserHaxe.animations.AnimationConfig     
-phaserHaxe.animations.AnimationData       
-phaserHaxe.animations.AnimationEvents     
-phaserHaxe.animations.AnimationFrame      
+phaserHaxe.animations.AnimationConfig
+phaserHaxe.animations.AnimationData
+phaserHaxe.animations.AnimationEvents
+phaserHaxe.animations.AnimationFrame
 phaserHaxe.animations.AnimationFrameConfig
-phaserHaxe.animations.AnimationFrameData  
-phaserHaxe.animations.AnimationManager    
-phaserHaxe.animations.AnimationsConfig    
-phaserHaxe.animations.GenerateFrameNames  
+phaserHaxe.animations.AnimationFrameData
+phaserHaxe.animations.AnimationManager
+phaserHaxe.animations.AnimationsConfig
+phaserHaxe.animations.GenerateFrameNames
 phaserHaxe.animations.GenerateFrameNumbers
-phaserHaxe.animations.JSONAnimation       
-phaserHaxe.animations.JSONAnimationFrame  
-phaserHaxe.animations.JSONAnimations      
-phaserHaxe.cameras.scene2D.BaseCamera     
+phaserHaxe.animations.JSONAnimation
+phaserHaxe.animations.JSONAnimationFrame
+phaserHaxe.animations.JSONAnimations
+phaserHaxe.cache.BaseCache
+phaserHaxe.cache.CacheEvents
+phaserHaxe.cache.CacheManager
+phaserHaxe.cameras.scene2D.BaseCamera
 phaserHaxe.cameras.scene2D.Camera
 phaserHaxe.cameras.scene2D.CameraEvents
 phaserHaxe.cameras.scene2D.CameraManager
@@ -58,7 +61,9 @@ phaserHaxe.create.GenerateTextureConfig
 phaserHaxe.create.Palette
 phaserHaxe.create.Palettes
 phaserHaxe.Create
+phaserHaxe.data.DataEvents
 phaserHaxe.data.DataManager
+phaserHaxe.data.DataMap
 phaserHaxe.device.CanvasFeatures
 phaserHaxe.device.Input
 phaserHaxe.display.Align
@@ -138,6 +143,7 @@ phaserHaxe.gameobjects.IGetBoundsTransformMatrix
 phaserHaxe.gameobjects.IHaveRenderFlags
 phaserHaxe.gameobjects.RenderFlags
 phaserHaxe.gameobjects.RenderTexture
+phaserHaxe.gameobjects.shape.Shape
 phaserHaxe.gameobjects.sprite.ISpriteRenderer
 phaserHaxe.gameobjects.sprite.Sprite
 phaserHaxe.gameobjects.typedefs.GameObjectConfig
@@ -160,8 +166,10 @@ phaserHaxe.geom.RectangleLike
 phaserHaxe.geom.RectangleUtil
 phaserHaxe.geom.Triangle
 phaserHaxe.geom.TriangleUtil
-phaserHaxe.input.types.HitAreaCallback
-phaserHaxe.input.types.InputConfiguration
+phaserHaxe.input.typedefs.EventData
+phaserHaxe.input.typedefs.HitAreaCallback
+phaserHaxe.input.typedefs.InputConfiguration
+phaserHaxe.input.typedefs.InteractiveObject
 phaserHaxe.iterator.StepIterator
 phaserHaxe.macro.ComponentBuilder
 phaserHaxe.macro.Mixin
