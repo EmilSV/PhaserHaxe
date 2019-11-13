@@ -18,7 +18,7 @@ final class Intersects
 	**/
 	public static function CircleToCircle(circleA:Circle, circleB:Circle):Bool
 	{
-		return (DistanceBetween(circleA.x, circleA.y, circleB.x, circleB
+		return (distanceBetween(circleA.x, circleA.y, circleB.x, circleB
 			.y) <= (circleA.radius + circleB.radius));
 	}
 

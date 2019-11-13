@@ -15,7 +15,7 @@ final class Distance
 	 *
 	 * @return The distance between each point.
 	**/
-	public static function DistanceBetween(x1:Float, y1:Float, x2:Float, y2:Float):Float
+	public static function distanceBetween(x1:Float, y1:Float, x2:Float, y2:Float):Float
 	{
 		var dx = x1 - x2;
 		var dy = y1 - y2;
@@ -36,7 +36,7 @@ final class Distance
 	 *
 	 * @return The distance between each point.
 	**/
-	public static function DistancePower(x1:Float, y1:Float, x2:Float, y2:Float, pow:Float = 2):Float
+	public static function distancePower(x1:Float, y1:Float, x2:Float, y2:Float, pow:Float = 2):Float
 	{
 		return Math.sqrt(Math.pow(x2 - x1, pow) + Math.pow(y2 - y1, pow));
 	}
@@ -53,7 +53,7 @@ final class Distance
 	 *
 	 * @return The distance between each point, squared.
 	**/
-	public static function DistanceSquared(x1:Float, y1:Float, x2:Float, y2:Float)
+	public static function distanceSquared(x1:Float, y1:Float, x2:Float, y2:Float)
 	{
 		var dx = x1 - x2;
 		var dy = y1 - y2;

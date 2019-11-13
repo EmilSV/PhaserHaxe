@@ -12,7 +12,7 @@ final class Fuzzy
 	 *
 	 * @return The fuzzy ceiling of the value.
 	**/
-	public static function Ceil(value:Float, epsilon:Float = 0.0001):Float
+	public static function ceil(value:Float, epsilon:Float = 0.0001):Float
 	{
 		return Math.ceil(value - epsilon);
 	}
@@ -30,7 +30,7 @@ final class Fuzzy
 	 *
 	 * @return`true` if the values are fuzzily equal, otherwise `false`.
 	**/
-	public static function Equal(a:Float, b:Float, epsilon:Float = 0.0001):Bool
+	public static function equal(a:Float, b:Float, epsilon:Float = 0.0001):Bool
 	{
 		return Math.abs(a - b) < epsilon;
 	}
@@ -45,7 +45,7 @@ final class Fuzzy
 	 *
 	 * @return The floor of the value.
 	**/
-	public static function Floor(value:Float, epsilon:Float = 0.0001):Float
+	public static function floor(value:Float, epsilon:Float = 0.0001):Float
 	{
 		return Math.floor(value + epsilon);
 	}
@@ -63,7 +63,7 @@ final class Fuzzy
 	 *
 	 * @return `true` if `a` is fuzzily greater than than `b`, otherwise `false`.
 	**/
-	public static function GreaterThan(a:Float, b:Float, epsilon:Float = 0.0001):Bool
+	public static function greaterThan(a:Float, b:Float, epsilon:Float = 0.0001):Bool
 	{
 		return a > b - epsilon;
 	}
@@ -81,7 +81,7 @@ final class Fuzzy
 	 *
 	 * @return `true` if `a` is fuzzily less than `b`, otherwise `false`.
 	**/
-	public function LessThan(a:Float, b:Float, epsilon:Float = 0.0001):Bool
+	public function lessThan(a:Float, b:Float, epsilon:Float = 0.0001):Bool
 	{
 		return a < b + epsilon;
 	}
