@@ -71,6 +71,7 @@ phaserHaxe.device.FeaturesInfo
 phaserHaxe.device.Fullscreen
 phaserHaxe.device.InputInfo
 phaserHaxe.device.OSInfo
+phaserHaxe.device.VideoInfo
 phaserHaxe.display.Align
 phaserHaxe.display.Bounds
 phaserHaxe.display.canvas.CanvasPool

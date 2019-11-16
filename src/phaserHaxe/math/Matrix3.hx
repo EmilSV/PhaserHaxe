@@ -36,9 +36,9 @@ class Matrix3
 	 *
 	 * @since 1.0.0
 	 *
-	 * @return {Phaser.Math.Matrix3} A clone of this Matrix3.
+	 * @return A clone of this Matrix3.
 	**/
-	public function clone()
+	public function clone():Matrix3
 	{
 		return new Matrix3(this);
 	}
@@ -52,7 +52,7 @@ class Matrix3
 	 *
 	 * @return This Matrix3.
 	 */
-	public inline function set(src:Matrix3)
+	public inline function set(src:Matrix3):Matrix3
 	{
 		return copy(src);
 	}
@@ -66,7 +66,7 @@ class Matrix3
 	 *
 	 * @return This Matrix3.
 	**/
-	public function copy(src:Matrix3)
+	public function copy(src:Matrix3):Matrix3
 	{
 		var out = this.val;
 		var a = src.val;
@@ -91,7 +91,7 @@ class Matrix3
 	 *
 	 * @return This Matrix3.
 	 */
-	public function fromMat4(m)
+	public function fromMat4(m):Matrix3
 	{
 		var a = m.val;
 		var out = this.val;
@@ -116,7 +116,7 @@ class Matrix3
 	 *
 	 * @return This Matrix3.
 	 */
-	public function fromArray(a:Array<Float>)
+	public function fromArray(a:Array<Float>):Matrix3
 	{
 		var out = this.val;
 		out[0] = a[0];
@@ -322,7 +322,7 @@ class Matrix3
 	 *
 	 * @return This Matrix3.
 	 */
-	public function translate(v:Vector2Like)
+	public function translate(v:Vector2Like):Matrix3
 	{
 		var a = this.val;
 		var x = v.x;
@@ -338,11 +338,11 @@ class Matrix3
 	 *
 	 * @since 1.0.0
 	 *
-	 * @param {number} rad - The angle in radians to rotate by.
+	 * @param rad - The angle in radians to rotate by.
 	 *
-	 * @return {Phaser.Math.Matrix3} This Matrix3.
+	 * @return This Matrix3.
 	**/
-	public function rotate(rad)
+	public function rotate(rad:Float):Matrix3
 	{
 		var a = this.val;
 		var a00 = a[0];
@@ -373,11 +373,26 @@ class Matrix3
 	 *
 	 * @return This Matrix3.
 	**/
-	public function scale(v:Vector2Like)
+	@:generic
+	public inline function scale<T:Vector2Like>(v:T):Matrix3
+	{
+		return scaleImpl(v.x, v.y);
+	}
+
+	/**
+	 * Apply a scale transformation to this Matrix.
+	 *
+	 * Uses the `x` and `y` components of the given Vector to scale the Matrix.
+	 *
+	 * @since 1.0.0
+	 *
+	 * @param v - The Vector to scale this Matrix with.
+	 *
+	 * @return This Matrix3.
+	**/
+	private function scaleImpl(x:Float, y:Float):Matrix3
 	{
 		var a = this.val;
-		var x = v.x;
-		var y = v.y;
 		a[0] = x * a[0];
 		a[1] = x * a[1];
 		a[2] = x * a[2];
@@ -392,11 +407,11 @@ class Matrix3
 	 *
 	 * @since 1.0.0
 	 *
-	 * @param {Phaser.Math.Quaternion} q - The Quaternion to set the values of this Matrix from.
+	 * @param q - The Quaternion to set the values of this Matrix from.
 	 *
-	 * @return {Phaser.Math.Matrix3} This Matrix3.
+	 * @return This Matrix3.
 	**/
-	public function fromQuat(q)
+	public function fromQuat(q:Quaternion):Matrix3
 	{
 		var x = q.x;
 		var y = q.y;
@@ -469,8 +484,8 @@ class Matrix3
 		var b10 = a21 * a33 - a23 * a31;
 		var b11 = a22 * a33 - a23 * a32;
 		// Calculate the determinant
-		var det:Float = b00 * b11 - b01 * b10 + b02 * b09 +
-			b03 * b08 - b04 * b07 + b05 * b06;
+		var det:Float = b00 * b11 - b01 * b10 + b02 * b09 + b03 * b08 - b04 * b07 +
+			b05 * b06;
 		if (det == 0)
 		{
 			return null;
