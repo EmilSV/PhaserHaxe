@@ -186,7 +186,22 @@ final class BrowserInfo
 		}
 		#end
 
-		inline function parseInt(value:String):Int
+		BrowserInfo.chrome = false;
+		BrowserInfo.chromeVersion = 0;
+		BrowserInfo.edge = false;
+		BrowserInfo.firefox = false;
+		BrowserInfo.firefoxVersion = 0;
+		BrowserInfo.ie = false;
+		BrowserInfo.ieVersion = 0;
+		BrowserInfo.mobileSafari = false;
+		BrowserInfo.opera = false;
+		BrowserInfo.safari = false;
+		BrowserInfo.safariVersion = 0;
+		BrowserInfo.silk = false;
+		BrowserInfo.trident = false;
+		BrowserInfo.tridentVersion = 0;
+
+		function parseInt(value:String):Int
 		{
 			var output = Std.parseInt(value);
 			return output != null ? output : -1;
@@ -240,5 +255,7 @@ final class BrowserInfo
 		{
 			BrowserInfo.silk = true;
 		}
+
+		_isInitialized = true;
 	}
 }

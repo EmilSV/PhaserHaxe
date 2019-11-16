@@ -1,18 +1,18 @@
 -cp src
 
 phaserHaxe.animations.Animation
-phaserHaxe.animations.AnimationConfig     
-phaserHaxe.animations.AnimationData       
-phaserHaxe.animations.AnimationEvents     
-phaserHaxe.animations.AnimationFrame      
+phaserHaxe.animations.AnimationConfig
+phaserHaxe.animations.AnimationData
+phaserHaxe.animations.AnimationEvents
+phaserHaxe.animations.AnimationFrame
 phaserHaxe.animations.AnimationFrameConfig
-phaserHaxe.animations.AnimationFrameData  
-phaserHaxe.animations.AnimationManager    
-phaserHaxe.animations.AnimationsConfig    
-phaserHaxe.animations.GenerateFrameNames  
+phaserHaxe.animations.AnimationFrameData
+phaserHaxe.animations.AnimationManager
+phaserHaxe.animations.AnimationsConfig
+phaserHaxe.animations.GenerateFrameNames
 phaserHaxe.animations.GenerateFrameNumbers
-phaserHaxe.animations.JSONAnimation       
-phaserHaxe.animations.JSONAnimationFrame  
+phaserHaxe.animations.JSONAnimation
+phaserHaxe.animations.JSONAnimationFrame
 phaserHaxe.animations.JSONAnimations
 phaserHaxe.cache.BaseCache
 phaserHaxe.cache.CacheEvents
@@ -64,9 +64,13 @@ phaserHaxe.Create
 phaserHaxe.data.DataEvents
 phaserHaxe.data.DataManager
 phaserHaxe.data.DataMap
-phaserHaxe.device.CanvasFeatures
-phaserHaxe.device.Features
-phaserHaxe.device.Input
+phaserHaxe.device.AudioInfo
+phaserHaxe.device.BrowserInfo
+phaserHaxe.device.CanvasFeaturesInfo
+phaserHaxe.device.FeaturesInfo
+phaserHaxe.device.Fullscreen
+phaserHaxe.device.InputInfo
+phaserHaxe.device.OSInfo
 phaserHaxe.display.Align
 phaserHaxe.display.Bounds
 phaserHaxe.display.canvas.CanvasPool
@@ -171,6 +175,13 @@ phaserHaxe.geom.Triangle
 phaserHaxe.geom.TriangleUtil
 phaserHaxe.input.InputEvents
 phaserHaxe.input.InputManager
+phaserHaxe.input.keyboard.KeyboardEvents
+phaserHaxe.input.keyboard.KeyboardManager
+phaserHaxe.input.keyboard.KeyboardPlugin
+phaserHaxe.input.keyboard.keys.Key
+phaserHaxe.input.keyboard.typedefs.CursorKeys
+phaserHaxe.input.keyboard.typedefs.KeyboardKeydownCallback
+phaserHaxe.input.keyboard.typedefs.KeyComboConfig
 phaserHaxe.input.mouse.MouseManager
 phaserHaxe.input.Pointer
 phaserHaxe.input.typedefs.DragState
@@ -284,6 +295,8 @@ phaserHaxe.utils.types.Vector1Or2
 phaserHaxe.utils.Utils
 phaserHaxe.WidthHeight
 
--dce no
+-dce std
+
+-D js-es=6
 
 -js dist/output.js

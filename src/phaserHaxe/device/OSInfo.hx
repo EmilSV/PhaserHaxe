@@ -10,7 +10,11 @@ package phaserHaxe.device;
 **/
 final class OSInfo
 {
-	private static var isInitialized:Bool = false;
+	#if js
+	private static var _isInitialized:Null<Bool>;
+	#else
+	private static var _isInitialized:Bool;
+	#end
 
 	/**
 	 * Is running on android?
@@ -152,9 +156,18 @@ final class OSInfo
 	**/
 	public static var windowsPhone(get, null):Bool;
 
-	private static inline function get_android()
+	private static inline function isNotInitialized()
 	{
-		if (!isInitialized)
+		#if js
+		return js.Syntax.strictNeq(_isInitialized, true);
+		#else
+		return _isInitialized != true;
+		#end
+	}
+
+	private static function get_android()
+	{
+		if (isNotInitialized())
 		{
 			initialize();
 		}
@@ -162,9 +175,9 @@ final class OSInfo
 		return android;
 	}
 
-	private static inline function get_chromeOS()
+	private static function get_chromeOS()
 	{
-		if (!isInitialized)
+		if (isNotInitialized())
 		{
 			initialize();
 		}
@@ -172,9 +185,9 @@ final class OSInfo
 		return chromeOS;
 	}
 
-	private static inline function get_cordova()
+	private static function get_cordova()
 	{
-		if (!isInitialized)
+		if (isNotInitialized())
 		{
 			initialize();
 		}
@@ -182,9 +195,9 @@ final class OSInfo
 		return cordova;
 	}
 
-	private static inline function get_crosswalk()
+	private static function get_crosswalk()
 	{
-		if (!isInitialized)
+		if (isNotInitialized())
 		{
 			initialize();
 		}
@@ -192,9 +205,9 @@ final class OSInfo
 		return crosswalk;
 	}
 
-	private static inline function get_desktop()
+	private static function get_desktop()
 	{
-		if (!isInitialized)
+		if (isNotInitialized())
 		{
 			initialize();
 		}
@@ -202,9 +215,9 @@ final class OSInfo
 		return desktop;
 	}
 
-	private static inline function get_ejecta()
+	private static function get_ejecta()
 	{
-		if (!isInitialized)
+		if (isNotInitialized())
 		{
 			initialize();
 		}
@@ -212,9 +225,9 @@ final class OSInfo
 		return ejecta;
 	}
 
-	private static inline function get_electron()
+	private static function get_electron()
 	{
-		if (!isInitialized)
+		if (isNotInitialized())
 		{
 			initialize();
 		}
@@ -222,9 +235,9 @@ final class OSInfo
 		return electron;
 	}
 
-	private static inline function get_iOS()
+	private static function get_iOS()
 	{
-		if (!isInitialized)
+		if (isNotInitialized())
 		{
 			initialize();
 		}
@@ -232,9 +245,9 @@ final class OSInfo
 		return iOS;
 	}
 
-	private static inline function get_iOSVersion()
+	private static function get_iOSVersion()
 	{
-		if (!isInitialized)
+		if (isNotInitialized())
 		{
 			initialize();
 		}
@@ -242,9 +255,9 @@ final class OSInfo
 		return iOSVersion;
 	}
 
-	private static inline function get_iPad()
+	private static function get_iPad()
 	{
-		if (!isInitialized)
+		if (isNotInitialized())
 		{
 			initialize();
 		}
@@ -252,9 +265,9 @@ final class OSInfo
 		return iPad;
 	}
 
-	private static inline function get_iPhone()
+	private static function get_iPhone()
 	{
-		if (!isInitialized)
+		if (isNotInitialized())
 		{
 			initialize();
 		}
@@ -262,9 +275,9 @@ final class OSInfo
 		return iPhone;
 	}
 
-	private static inline function get_kindle()
+	private static function get_kindle()
 	{
-		if (!isInitialized)
+		if (isNotInitialized())
 		{
 			initialize();
 		}
@@ -272,9 +285,9 @@ final class OSInfo
 		return kindle;
 	}
 
-	private static inline function get_linux()
+	private static function get_linux()
 	{
-		if (!isInitialized)
+		if (isNotInitialized())
 		{
 			initialize();
 		}
@@ -282,9 +295,9 @@ final class OSInfo
 		return linux;
 	}
 
-	private static inline function get_macOS()
+	private static function get_macOS()
 	{
-		if (!isInitialized)
+		if (isNotInitialized())
 		{
 			initialize();
 		}
@@ -292,9 +305,9 @@ final class OSInfo
 		return macOS;
 	}
 
-	private static inline function get_node()
+	private static function get_node()
 	{
-		if (!isInitialized)
+		if (isNotInitialized())
 		{
 			initialize();
 		}
@@ -302,9 +315,9 @@ final class OSInfo
 		return node;
 	}
 
-	private static inline function get_nodeWebkit()
+	private static function get_nodeWebkit()
 	{
-		if (!isInitialized)
+		if (isNotInitialized())
 		{
 			initialize();
 		}
@@ -312,9 +325,9 @@ final class OSInfo
 		return nodeWebkit;
 	}
 
-	private static inline function get_pixelRatio()
+	private static function get_pixelRatio()
 	{
-		if (!isInitialized)
+		if (isNotInitialized())
 		{
 			initialize();
 		}
@@ -322,9 +335,9 @@ final class OSInfo
 		return pixelRatio;
 	}
 
-	private static inline function get_webApp()
+	private static function get_webApp()
 	{
-		if (!isInitialized)
+		if (isNotInitialized())
 		{
 			initialize();
 		}
@@ -332,9 +345,9 @@ final class OSInfo
 		return webApp;
 	}
 
-	private static inline function get_windows()
+	private static function get_windows()
 	{
-		if (!isInitialized)
+		if (isNotInitialized())
 		{
 			initialize();
 		}
@@ -342,9 +355,9 @@ final class OSInfo
 		return windows;
 	}
 
-	private static inline function get_windowsPhone()
+	private static function get_windowsPhone()
 	{
-		if (!isInitialized)
+		if (isNotInitialized())
 		{
 			initialize();
 		}
@@ -352,9 +365,44 @@ final class OSInfo
 		return windowsPhone;
 	}
 
-	private static inline function initialize()
+	@:allow(phaserHaxe)
+	private static function initialize()
 	{
-		inline function parseInt(value:String):Int
+		#if js
+		if (js.Syntax.strictEq(_isInitialized, true))
+		{
+			return;
+		}
+		#else
+		if (_isInitialized)
+		{
+			return;
+		}
+		#end
+
+		// Default values
+		OSInfo.android = false;
+		OSInfo.chromeOS = false;
+		OSInfo.cordova = false;
+		OSInfo.crosswalk = false;
+		OSInfo.desktop = false;
+		OSInfo.ejecta = false;
+		OSInfo.electron = false;
+		OSInfo.iOS = false;
+		OSInfo.iOSVersion = 0;
+		OSInfo.iPad = false;
+		OSInfo.iPhone = false;
+		OSInfo.kindle = false;
+		OSInfo.linux = false;
+		OSInfo.macOS = false;
+		OSInfo.node = false;
+		OSInfo.nodeWebkit = false;
+		OSInfo.pixelRatio = 1;
+		OSInfo.webApp = false;
+		OSInfo.windows = false;
+		OSInfo.windowsPhone = false;
+
+		function parseInt(value:String):Int
 		{
 			var output = Std.parseInt(value);
 			return output != null ? output : -1;
@@ -460,5 +508,7 @@ final class OSInfo
 		}
 
 		OSInfo.pixelRatio = js.Syntax.code("window['devicePixelRatio'] || 1");
+
+		_isInitialized = true;
 	}
 }

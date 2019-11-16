@@ -1,6 +1,6 @@
 package phaserHaxe.renderer;
 
-import phaserHaxe.device.CanvasFeatures;
+import phaserHaxe.device.CanvasFeaturesInfo;
 import phaserHaxe.renderer.BlendModes;
 
 final class Canvas
@@ -8,7 +8,7 @@ final class Canvas
 	public static function getBlendModes():BlendModeMap
 	{
 		var output = new BlendModeMap();
-		var useNew = CanvasFeatures.supportNewBlendModes;
+		var useNew = CanvasFeaturesInfo.supportNewBlendModes;
 		var so = 'source-over';
 
 		output[NORMAL] = so;

@@ -18,7 +18,7 @@ import phaserHaxe.core.AudioConfig;
 import phaserHaxe.scale.CenterType;
 import phaserHaxe.scale.ScaleModeType;
 import phaserHaxe.scale.ZoomType;
-import phaserHaxe.device.Input as DeviceInput;
+import phaserHaxe.device.InputInfo as DeviceInput;
 import phaserHaxe.plugins.DefaultPlugins;
 
 class Config

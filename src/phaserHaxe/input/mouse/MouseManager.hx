@@ -1,6 +1,6 @@
 package phaserHaxe.input.mouse;
 
-import phaserHaxe.device.CanvasFeatures;
+import phaserHaxe.device.CanvasFeaturesInfo;
 
 import js.Browser;
 import haxe.Constraints.Function;
