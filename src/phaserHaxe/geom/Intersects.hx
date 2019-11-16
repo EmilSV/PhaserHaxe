@@ -16,7 +16,7 @@ final class Intersects
 	 *
 	 * @return `true` if the two Circles intersect, otherwise `false`.
 	**/
-	public static function CircleToCircle(circleA:Circle, circleB:Circle):Bool
+	public static function circleToCircle(circleA:Circle, circleB:Circle):Bool
 	{
 		return (distanceBetween(circleA.x, circleA.y, circleB.x, circleB
 			.y) <= (circleA.radius + circleB.radius));
@@ -32,7 +32,7 @@ final class Intersects
 	 *
 	 * @return `true` if the two objects intersect, otherwise `false`.
 	**/
-	public static function CircleToRectangle(circle:Circle, rect:Rectangle):Bool
+	public static function circleToRectangle(circle:Circle, rect:Rectangle):Bool
 	{
 		var halfWidth = rect.width / 2;
 		var halfHeight = rect.height / 2;
@@ -77,14 +77,14 @@ final class Intersects
 	 *
 	 * @return A rectangle object with intersection data.
 	**/
-	public static function GetRectangleIntersection(rectA:Rectangle, rectB:Rectangle, ?output:Rectangle):Rectangle
+	public static function getRectangleIntersection(rectA:Rectangle, rectB:Rectangle, ?output:Rectangle):Rectangle
 	{
 		if (output == null)
 		{
 			output = new Rectangle();
 		}
 
-		if (RectangleToRectangle(rectA, rectB))
+		if (rectangleToRectangle(rectA, rectB))
 		{
 			output.x = Math.max(rectA.x, rectB.x);
 			output.y = Math.max(rectA.y, rectB.y);
@@ -108,7 +108,7 @@ final class Intersects
 	 *
 	 * @return `true` if the two objects intersect, otherwise `false`.
 	**/
-	public static function LineToCircle(line:Line, circle:Circle, ?nearest:Point):Bool
+	public static function lineToCircle(line:Line, circle:Circle, ?nearest:Point):Bool
 	{
 		if (nearest == null)
 		{
@@ -171,7 +171,7 @@ final class Intersects
 	 *
 	 * @return `true` if the two Lines intersect, and the `out` object will be populated, if given. Otherwise, `false`.
 	**/
-	public static function LineToLine(line1:Line, line2:Line, ?out:Point):Bool
+	public static function lineToLine(line1:Line, line2:Line, ?out:Point):Bool
 	{
 		var x1 = line1.x1;
 		var y1 = line1.y1;
@@ -236,7 +236,7 @@ final class Intersects
 	 *
 	 * @return `true` if the Line and the Rectangle intersect, `false` otherwise.
 	**/
-	public static function LineToRectangle(line:Line, rect:Rectangle):Bool
+	public static function lineToRectangle(line:Line, rect:Rectangle):Bool
 	{
 		var x1 = line.x1;
 		var y1 = line.y1;
@@ -319,7 +319,7 @@ final class Intersects
 	 *
 	 * @return `true` if the Point falls on the Line, otherwise `false`.
 	**/
-	public static function PointToLine(point:Point, line:Line, lineThickness:Float = 1):Bool
+	public static function pointToLine(point:Point, line:Line, lineThickness:Float = 1):Bool
 	{
 		var x1 = line.x1;
 		var y1 = line.y1;
@@ -373,7 +373,7 @@ final class Intersects
 	 *
 	 * @return `true` if the two Rectangles intersect, otherwise `false`.
 	**/
-	public static function RectangleToRectangle(rectA:Rectangle, rectB:Rectangle):Bool
+	public static function rectangleToRectangle(rectA:Rectangle, rectB:Rectangle):Bool
 	{
 		if (rectA.width <= 0 || rectA.height <= 0 || rectB.width <= 0 || rectB.height <= 0)
 		{
@@ -394,9 +394,9 @@ final class Intersects
 	 *
 	 * @return `true` if the Point is on the given line segment, otherwise `false`.
 	**/
-	public static function PointToLineSegment(point:Point, line:Line):Bool
+	public static function pointToLineSegment(point:Point, line:Line):Bool
 	{
-		if (!PointToLine(point, line))
+		if (!pointToLine(point, line))
 		{
 			return false;
 		}
@@ -419,7 +419,7 @@ final class Intersects
 	 *
 	 * @return A value of `true` if objects intersect; otherwise `false`.
 	**/
-	public static function RectangleToTriangle(rect:Rectangle, triangle:Triangle):Bool
+	public static function rectangleToTriangle(rect:Rectangle, triangle:Triangle):Bool
 	{
 		//  First the cheapest ones:
 
@@ -459,19 +459,19 @@ final class Intersects
 		var rectC = rect.getLineC();
 		var rectD = rect.getLineD();
 
-		if (LineToLine(triA, rectA) || LineToLine(triA, rectB) || LineToLine(triA, rectC) || LineToLine(triA, rectD)
+		if (lineToLine(triA, rectA) || lineToLine(triA, rectB) || lineToLine(triA, rectC) || lineToLine(triA, rectD)
 		)
 		{
 			return true;
 		}
 
-		if (LineToLine(triB, rectA) || LineToLine(triB, rectB) || LineToLine(triB, rectC) || LineToLine(triB, rectD)
+		if (lineToLine(triB, rectA) || lineToLine(triB, rectB) || lineToLine(triB, rectC) || lineToLine(triB, rectD)
 		)
 		{
 			return true;
 		}
 
-		if (LineToLine(triC, rectA) || LineToLine(triC, rectB) || LineToLine(triC, rectC) || LineToLine(triC, rectD)
+		if (lineToLine(triC, rectA) || lineToLine(triC, rectB) || lineToLine(triC, rectC) || lineToLine(triC, rectD)
 		)
 		{
 			return true;
@@ -499,7 +499,7 @@ final class Intersects
 	 *
 	 * @return Returns true if there is an intersection.
 	**/
-	public static function RectangleToValues(rect:Rectangle, left:Float, right:Float, top:Float, bottom:Float, tolerance:Float = 0):Bool
+	public static function rectangleToValues(rect:Rectangle, left:Float, right:Float, top:Float, bottom:Float, tolerance:Float = 0):Bool
 	{
 		return !(left > rect.right + tolerance
 			|| right < rect.left - tolerance
@@ -518,7 +518,7 @@ final class Intersects
 	 *
 	 * @return `true` if the Triangle and the `Circle` intersect, otherwise `false`.
 	**/
-	public static function TriangleToCircle(triangle:Triangle, circle:Circle):Bool
+	public static function triangleToCircle(triangle:Triangle, circle:Circle):Bool
 	{
 		//  First the cheapest ones:
 
@@ -535,17 +535,17 @@ final class Intersects
 			return true;
 		}
 
-		if (LineToCircle(triangle.getLineA(), circle))
+		if (lineToCircle(triangle.getLineA(), circle))
 		{
 			return true;
 		}
 
-		if (LineToCircle(triangle.getLineB(), circle))
+		if (lineToCircle(triangle.getLineB(), circle))
 		{
 			return true;
 		}
 
-		if (LineToCircle(triangle.getLineC(), circle))
+		if (lineToCircle(triangle.getLineC(), circle))
 		{
 			return true;
 		}
@@ -565,7 +565,7 @@ final class Intersects
 	 *
 	 * @return `true` if the Triangle and the Line intersect, otherwise `false`.
 	**/
-	public static function TriangleToLine(triangle:Triangle, line:Line)
+	public static function triangleToLine(triangle:Triangle, line:Line)
 	{
 		var pointA = inline line.getPointA(inline new Point());
 		var pointB = inline line.getPointB(inline new Point());
@@ -577,17 +577,17 @@ final class Intersects
 		}
 
 		//  Now check the line against each line of the Triangle
-		if (LineToLine(triangle.getLineA(), line))
+		if (lineToLine(triangle.getLineA(), line))
 		{
 			return true;
 		}
 
-		if (LineToLine(triangle.getLineB(), line))
+		if (lineToLine(triangle.getLineB(), line))
 		{
 			return true;
 		}
 
-		if (LineToLine(triangle.getLineC(), line))
+		if (lineToLine(triangle.getLineC(), line))
 		{
 			return true;
 		}
@@ -607,7 +607,7 @@ final class Intersects
 	 *
 	 * @return `true` if the Triangles intersect, otherwise `false`.
 	**/
-	public static function TriangleToTriangle(triangleA:Triangle, triangleB:Triangle)
+	public static function triangleToTriangle(triangleA:Triangle, triangleB:Triangle)
 	{
 		//  First the cheapest ones:
 
@@ -628,19 +628,19 @@ final class Intersects
 		var lineBC = triangleB.getLineC();
 
 		//  Now check the lines against each line of TriangleB
-		if (LineToLine(lineAA, lineBA) || LineToLine(lineAA, lineBB) || LineToLine(lineAA, lineBC)
+		if (lineToLine(lineAA, lineBA) || lineToLine(lineAA, lineBB) || lineToLine(lineAA, lineBC)
 		)
 		{
 			return true;
 		}
 
-		if (LineToLine(lineAB, lineBA) || LineToLine(lineAB, lineBB) || LineToLine(lineAB, lineBC)
+		if (lineToLine(lineAB, lineBA) || lineToLine(lineAB, lineBB) || lineToLine(lineAB, lineBC)
 		)
 		{
 			return true;
 		}
 
-		if (LineToLine(lineAC, lineBA) || LineToLine(lineAC, lineBB) || LineToLine(lineAC, lineBC)
+		if (lineToLine(lineAC, lineBA) || lineToLine(lineAC, lineBB) || lineToLine(lineAC, lineBC)
 		)
 		{
 			return true;

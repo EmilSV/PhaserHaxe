@@ -655,7 +655,7 @@ final class RectangleUtil
 			out = new Rectangle();
 		}
 
-		if (Intersects.RectangleToRectangle(rectA, rectB))
+		if (Intersects.rectangleToRectangle(rectA, rectB))
 		{
 			out.x = Math.max(rectA.x, rectB.x);
 			out.y = Math.max(rectA.y, rectB.y);
