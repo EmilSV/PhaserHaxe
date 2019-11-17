@@ -1,33 +1,39 @@
 package phaserHaxe.input.keyboard;
 
+import phaserHaxe.utils.types.Union3;
 import phaserHaxe.input.keyboard.keys.KeyCodes;
-import js.html.KeyboardEvent;
+import js.html.KeyboardEvent as WebKeyboardEvent;
 import haxe.Constraints.Function;
-using StringTools
+import phaserHaxe.core.GameEvents;
+import phaserHaxe.utils.ArrayUtils.remove as arrayRemove;
 
-@:forward
-abstract KeyboardManager(Dynamic) {}
+using StringTools;
 
-class KeyboardManager2
+/**
+ * The Keyboard Manager is a helper class that belongs to the global Input Manager.
+ *
+ * Its role is to listen for native DOM Keyboard Events and then store them for further processing by the Keyboard Plugin.
+ *
+ * You do not need to create this class directly, the Input Manager will create an instance of it automatically if keyboard
+ * input has been enabled in the Game Config.
+ *
+ * @since 1.0.0
+**/
+class KeyboardManager
 {
 	/**
 	 * A reference to the Input Manager.
 	 *
-	 * @name Phaser.Input.Keyboard.KeyboardManager#manager
-	 * @type {Phaser.Input.InputManager}
-	 * @since 3.16.0
+	 * @since 1.0.0
 	**/
-	public var manager:InputManager = inputManager;
+	public var manager:InputManager;
 
 	/**
 	 * An internal event queue.
 	 *
-	 * @name Phaser.Input.Keyboard.KeyboardManager#queue
-	 * @type {KeyboardEvent[]}
-	 * @private
-	 * @since 3.16.0
+	 * @since 1.0.0
 	**/
-	public var queue:Array<KeyboardEvent> = [];
+	private var queue:Array<WebKeyboardEvent> = [];
 
 	/**
 	 * A flag that controls if the non-modified keys, matching those stored in the `captures` array,
@@ -41,9 +47,7 @@ class KeyboardManager2
 	 * If you wish to stop capturing the keys, for example switching out to a DOM based element, then
 	 * you can toggle this property at run-time.
 	 *
-	 * @name Phaser.Input.Keyboard.KeyboardManager#preventDefault
-	 * @type {boolean}
-	 * @since 3.16.0
+	 * @since 1.0.0
 	**/
 	public var preventDefault:Bool = true;
 
@@ -86,7 +90,7 @@ class KeyboardManager2
 	 *
 	 * @since 1.0.0
 	**/
-	public var target:Any;
+	public var target:js.html.EventTarget;
 
 	/**
 	 * The Key Down Event handler.
@@ -106,9 +110,14 @@ class KeyboardManager2
 	**/
 	public var onKeyUp:Null<Function> = null;
 
-	public function new()
+	/**
+	 * @param {Phaser.Input.InputManager} inputManager - A reference to the Input Manager.
+	**/
+	public function new(inputManager:InputManager)
 	{
-		inputManager.events.once(InputEvents.MANAGER_BOOT, boot, this);
+		this.manager = inputManager;
+
+		inputManager.events.once(InputEvents.MANAGER_BOOT, this.boot, this);
 	}
 
 	/**
@@ -123,23 +132,116 @@ class KeyboardManager2
 		this.enabled = config.inputKeyboard;
 		this.target = config.inputKeyboardEventTarget;
 
-		this.addCapture(config.inputKeyboardCapture);
+		addCapture(config.inputKeyboardCapture);
 
-		if (!this.target && window)
+		if (target == null && js.Browser.window != null)
 		{
-			this.target = window;
+			this.target = js.Browser.window;
 		}
 
-		if (this.enabled && this.target)
+		if (enabled && target != null)
 		{
-			this.startListeners();
+			startListeners();
 		}
 
-		this.manager.game.events.on(GameEvents.POST_STEP, this.postUpdate, this);
+		manager.game.events.on(GameEvents.POST_STEP, postUpdate, this);
 	}
 
 	/**
-	 		 * By default when a key is pressed Phaser will not stop the event from propagating up to the browser.
+	 * Starts the Keyboard Event listeners running.
+	 * This is called automatically and does not need to be manually invoked.
+	 *
+	 * @since 1.0.0
+	**/
+	public function startListeners()
+	{
+		this.onKeyDown = function(event:WebKeyboardEvent)
+		{
+			if (event.defaultPrevented || !enabled || manager == null)
+			{
+				// Do nothing if event already handled
+				return;
+			}
+
+			this.queue.push(event);
+
+			if (!manager.useQueue)
+			{
+				manager.events.emit(InputEvents.MANAGER_PROCESS);
+			}
+
+			var modified = (event.altKey || event.ctrlKey || event.shiftKey || event.metaKey);
+
+			if (preventDefault && !modified && captures.indexOf(event.keyCode) > -1)
+			{
+				event.preventDefault();
+			}
+		};
+
+		this.onKeyUp = function(event:WebKeyboardEvent)
+		{
+			if (event.defaultPrevented || !enabled || manager == null)
+			{
+				// Do nothing if event already handled
+				return;
+			}
+
+			queue.push(event);
+
+			if (manager.useQueue == null)
+			{
+				manager.events.emit(InputEvents.MANAGER_PROCESS);
+			}
+
+			var modified = (event.altKey || event.ctrlKey || event.shiftKey || event.metaKey);
+
+			if (preventDefault && !modified && captures.indexOf(event.keyCode) > -1)
+			{
+				event.preventDefault();
+			}
+		};
+
+		if (target != null)
+		{
+			target.addEventListener('keydown', onKeyDown, false);
+			target.addEventListener('keyup', onKeyUp, false);
+
+			enabled = true;
+		}
+	}
+
+	/**
+	 * Stops the Key Event listeners.
+	 * This is called automatically and does not need to be manually invoked.
+	 *
+	 * @since 1.0.0
+	**/
+	public function stopListeners():Void
+	{
+		if (onKeyDown != null)
+		{
+			target.removeEventListener('keydown', onKeyDown, false);
+		}
+		if (onKeyUp != null)
+		{
+			target.removeEventListener('keyup', onKeyUp, false);
+		}
+		this.enabled = false;
+	}
+
+	/**
+	 * Clears the event queue.
+	 * Called automatically by the Input Manager.
+	 *
+	 * @since 1.0.0
+	**/
+	private function postUpdate():Void
+	{
+		this.queue = [];
+	}
+
+	/**
+	 * By default when a key is pressed Phaser will not stop the event from propagating up to the browser.
 	 * There are some keys this can be annoying for, like the arrow keys or space bar, which make the browser window scroll.
 	 *
 	 * This `addCapture` method enables consuming keyboard event for specific keys so it doesn't bubble up to the the browser
@@ -150,20 +252,20 @@ class KeyboardManager2
 	 *
 	 * You can pass in a single key code value, or an array of key codes, or a string:
 	 *
-	 * ```javascript
-	 * this.input.keyboard.addCapture(62);
+	 * ```haxe
+	 * input.keyboard.addCapture(62);
 	 * ```
 	 *
 	 * An array of key codes:
 	 *
-	 * ```javascript
-	 * this.input.keyboard.addCapture([ 62, 63, 64 ]);
+	 * ```haxe
+	 * input.keyboard.addCapture([ 62, 63, 64 ]);
 	 * ```
 	 *
 	 * Or a string:
 	 *
-	 * ```javascript
-	 * this.input.keyboard.addCapture('W,S,A,D');
+	 * ```haxe
+	 * input.keyboard.addCapture('W,S,A,D');
 	 * ```
 	 *
 	 * To use non-alpha numeric keys, use a string, such as 'UP', 'SPACE' or 'LEFT'.
@@ -172,13 +274,14 @@ class KeyboardManager2
 	 *
 	 * If there are active captures after calling this method, the `preventDefault` property is set to `true`.
 	 *
-	 * @method Phaser.Input.Keyboard.KeyboardManager#addCapture
-	 * @since 3.16.0
+	 * @since 1.0.0
 	 *
-	 * @param {(string|integer|integer[]|any[])} keycode - The Key Codes to enable capture for, preventing them reaching the browser.
+	 * @param keycode - The Key Codes to enable capture for, preventing them reaching the browser.
 	**/
-	public function addCapture(keycode:Any)
+	public function addCapture(keycode:Union3<KeyCodes, Array<KeyCodes>, String>)
 	{
+		var keycode:Any = keycode;
+
 		if (Std.is(keycode, String))
 		{
 			var keycodeStr = (cast keycode : String);
@@ -187,10 +290,15 @@ class KeyboardManager2
 
 		if (!Std.is(keycode, Array))
 		{
-			keycode = [keycode];
-		}
+			var code = keycode;
 
-		var captures = this.captures;
+			var code = (cast code : Int);
+
+			if (code != -1 && captures.indexOf(code) == -1)
+			{
+				captures.push(code);
+			}
+		}
 
 		var keycode = (cast keycode : Array<Any>);
 
@@ -198,17 +306,120 @@ class KeyboardManager2
 		{
 			var code = keycode[i];
 
-			if (Std.is(code, String))
+			var code = if (Std.is(code, String))
 			{
-				code = KeyCodes.get((code : String).trim().toUpperCase());
+				KeyCodes.getByName((cast code : String).trim().toUpperCase());
+			}
+			else
+			{
+				(cast code : Int);
 			}
 
-			if (captures.indexOf(code) == -1)
+			if (code != -1 && captures.indexOf(code) == -1)
 			{
 				captures.push(code);
 			}
 		}
 
-		this.preventDefault = captures.length > 0;
+		preventDefault = captures.length > 0;
+	}
+
+	/**
+	 * Removes an existing key capture.
+	 *
+	 * Please note that keyboard captures are global. This means that if you call this method from within a Scene, to remove
+	 * the capture of a key, then it will remove it for any Scene in your game, not just the calling one.
+	 *
+	 * You can pass in a single key code value, or an array of key codes, or a string:
+	 *
+	 * ```haxe
+	 * this.input.keyboard.removeCapture(62);
+	 * ```
+	 *
+	 * An array of key codes:
+	 *
+	 * ```haxe
+	 * this.input.keyboard.removeCapture([ 62, 63, 64 ]);
+	 * ```
+	 *
+	 * Or a string:
+	 *
+	 * ```haxe
+	 * this.input.keyboard.removeCapture('W,S,A,D');
+	 * ```
+	 *
+	 * To use non-alpha numeric keys, use a string, such as 'UP', 'SPACE' or 'LEFT'.
+	 *
+	 * You can also provide an array mixing both strings and key code integers.
+	 *
+	 * If there are no captures left after calling this method, the `preventDefault` property is set to `false`.
+	 *
+	 * @since 1.0.0
+	 *
+	 * @param keycode - The Key Codes to disable capture for, allowing them reaching the browser again.
+	**/
+	public function removeCapture(keycode:Union3<KeyCodes, Array<KeyCodes>, String>):Void
+	{
+		var keycode:Any = keycode;
+
+		if (Std.is(keycode, String))
+		{
+			keycode = (cast keycode : String).split(',');
+		}
+
+		if (!Std.is(keycode, Array))
+		{
+			keycode = [keycode];
+		}
+
+		var keycode:Array<Any> = keycode;
+
+		var captures = this.captures;
+
+		for (i in 0...keycode.length)
+		{
+			var code = keycode[i];
+
+			if (Std.is(code, String))
+			{
+				code = KeyCodes.getByName((cast code : String).toUpperCase());
+			}
+
+			arrayRemove(captures, (cast code : Int));
+		}
+
+		preventDefault = captures.length > 0;
+	}
+
+	/**
+	 * Removes all keyboard captures and sets the `preventDefault` property to `false`.
+	 *
+	 * @since 1.0.0
+	**/
+	public function clearCaptures():Void
+	{
+		this.captures = [];
+
+		this.preventDefault = false;
+	}
+
+	/**
+	 * Destroys this Keyboard Manager instance.
+	 *
+	 * @since 1.0.0
+	**/
+	public function destroy():Void
+	{
+		this.stopListeners();
+
+		this.clearCaptures();
+
+		this.queue = [];
+
+		this.manager.game.events.off(GameEvents.POST_RENDER, this.postUpdate, this);
+
+		this.target = null;
+		this.enabled = false;
+		this.manager = null;
 	}
 }

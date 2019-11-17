@@ -1,4 +1,4 @@
-package macro;
+package phaserHaxe.macro;
 
 #if (eval || macro)
 import haxe.macro.Type.ClassKind;
@@ -45,7 +45,7 @@ final class EnumGetByName
 		fields.push(
 			{
 				name: functionName,
-				doc: 'Gets the value of enum field with the same name or if none is found \'$defaultName\'
+				doc: 'Gets the value of enum field with the same name or if none is found `$defaultName`
 				 @param name - the name of enum field 
 				 @return the value that the field enum',
 				access: [Access.APublic, Access.AStatic],

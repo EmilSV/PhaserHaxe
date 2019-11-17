@@ -5,8 +5,11 @@ package phaserHaxe.input.keyboard.keys;
  *
  * @since 1.0.0
 **/
-enum abstract KeyCodes(Int)
+@:build(phaserHaxe.macro.EnumGetByName.build("getByName", "INVALID"))
+enum abstract KeyCodes(Int) from Int to Int
 {
+	var INVALID = -1;
+
 	/**
 	 * The BACKSPACE key.
 	 *
@@ -680,8 +683,8 @@ enum abstract KeyCodes(Int)
 	**/
 	var BRACKET_LEFT_FIREFOX = 175;
 
-	public static function get(name:String):Int
+	public inline function toInt():Int
 	{
-		return 0;	
+		return this;
 	}
 }
