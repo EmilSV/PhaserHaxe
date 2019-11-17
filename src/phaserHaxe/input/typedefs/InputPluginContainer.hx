@@ -27,4 +27,8 @@ typedef InputPluginContainer =
 	 * @since 1.0.0
 	**/
 	public var ?mapping:String;
+
+	public var settingsKey:String;
+
+	public var configKey:String;
 };

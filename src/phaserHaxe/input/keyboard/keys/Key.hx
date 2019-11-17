@@ -3,6 +3,12 @@ package phaserHaxe.input.keyboard.keys;
 import phaserHaxe.input.InputEvents;
 import js.html.KeyboardEvent;
 
+/**
+ * A generic Key object which can be passed to the Process functions (and so on)
+ * keycode must be an integer
+ *
+ * @since 1.0.0
+**/
 class Key extends EventEmitter
 {
 	/**
@@ -146,6 +152,13 @@ class Key extends EventEmitter
 
 	private var preventDefault:Bool;
 
+	public function new(plugin:KeyboardPlugin, keyCode:Int)
+	{
+		super();
+		this.plugin = plugin;
+		this.keyCode = keyCode;
+	}
+
 	/**
 	 * Controls if this Key will continuously emit a `down` event while being held down (true),
 	 * or emit the event just once, on first press, and then skip future events (false).
@@ -279,7 +292,7 @@ class Key extends EventEmitter
 	{
 		if (isDown)
 		{
-			return (plugin.game.loop.time - timeDown);
+			return plugin.game.loop.time - timeDown;
 		}
 		else
 		{
