@@ -1,8 +1,8 @@
 package phaserHaxe.input.keyboard;
 
 import phaserHaxe.utils.types.Union3;
-import phaserHaxe.input.keyboard.keys.KeyCodes;
-import js.html.KeyboardEvent as WebKeyboardEvent;
+import phaserHaxe.input.keyboard.KeyCodes;
+import phaserHaxe.input.keyboard.web.WebKeyboardEvent;
 import haxe.Constraints.Function;
 import phaserHaxe.core.GameEvents;
 import phaserHaxe.utils.ArrayUtils.remove as arrayRemove;
@@ -33,6 +33,7 @@ class KeyboardManager
 	 *
 	 * @since 1.0.0
 	**/
+	@:allow(phaserHaxe)
 	private var queue:Array<WebKeyboardEvent> = [];
 
 	/**
@@ -111,7 +112,7 @@ class KeyboardManager
 	public var onKeyUp:Null<Function> = null;
 
 	/**
-	 * @param {Phaser.Input.InputManager} inputManager - A reference to the Input Manager.
+	 * @param inputManager - A reference to the Input Manager.
 	**/
 	public function new(inputManager:InputManager)
 	{

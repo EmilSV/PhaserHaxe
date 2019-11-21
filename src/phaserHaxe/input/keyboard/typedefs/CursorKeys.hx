@@ -1,6 +1,6 @@
 package phaserHaxe.input.keyboard.typedefs;
 
-import phaserHaxe.input.keyboard.keys.Key;
+import phaserHaxe.input.keyboard.Key;
 
 /**
  * @since 3.0.0

@@ -1,7 +1,7 @@
-package phaserHaxe.input.keyboard.keys;
+package phaserHaxe.input.keyboard;
 
 import phaserHaxe.input.InputEvents;
-import js.html.KeyboardEvent;
+import phaserHaxe.input.keyboard.web.WebKeyboardEvent;
 
 /**
  * A generic Key object which can be passed to the Process functions (and so on)
@@ -30,7 +30,7 @@ class Key extends EventEmitter
 	 *
 	 * @since 1.0.0
 	**/
-	public var originalEvent:KeyboardEvent = null;
+	public var originalEvent:WebKeyboardEvent = null;
 
 	/**
 	 * Can this Key be processed?
@@ -134,6 +134,7 @@ class Key extends EventEmitter
 	 *
 	 * @since 1.0.0
 	**/
+	@:allow(phaserHaxe)
 	private var _justDown:Bool = false;
 
 	/**
@@ -141,6 +142,7 @@ class Key extends EventEmitter
 	 *
 	 * @since 1.0.0
 	**/
+	@:allow(phaserHaxe)
 	public var _justUp:Bool = false;
 
 	/**
@@ -184,7 +186,7 @@ class Key extends EventEmitter
 	 *
 	 * @param event - The native DOM Keyboard event.
 	**/
-	public function onDown(event:KeyboardEvent):Void
+	public function onDown(event:WebKeyboardEvent):Void
 	{
 		originalEvent = event;
 
@@ -226,7 +228,7 @@ class Key extends EventEmitter
 	 *
 	 * @param event - The native DOM Keyboard event.
 	**/
-	public function onUp(event:KeyboardEvent):Void
+	public function onUp(event:WebKeyboardEvent):Void
 	{
 		originalEvent = event;
 

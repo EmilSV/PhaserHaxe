@@ -17,7 +17,7 @@ typedef KeyComboConfig =
 	 *
 	 * @since 1.0.0
 	**/
-	public var ?maxKeyDelay:Float;
+	public var ?maxKeyDelay:Int;
 
 	/**
 	 * If previously matched and they press the first key of the combo again, will it reset?

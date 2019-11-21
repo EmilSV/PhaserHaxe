@@ -1,9 +1,11 @@
 package phaserHaxe.input.mouse;
 
-import phaserHaxe.device.CanvasFeaturesInfo;
-
+import js.html.MouseEvent as WebMouseEvent;
+import phaserHaxe.device.FeaturesInfo;
 import js.Browser;
 import haxe.Constraints.Function;
+
+typedef MouseEventHandler = (event:WebMouseEvent) -> Void;
 
 /**
  * The Mouse Manager is a helper class that belongs to the Input Manager.
@@ -44,7 +46,7 @@ class MouseManager
 	 *
 	 * @since 1.0.0
 	**/
-	public var target:Any = null;
+	public var target:js.html.EventTarget = null;
 
 	/**
 	 * If the mouse has been pointer locked successfully this will be set to true.
@@ -60,7 +62,7 @@ class MouseManager
 	 *
 	 * @since 1.0.0
 	**/
-	public var onMouseMove:Function = null;
+	public var onMouseMove:MouseEventHandler = null;
 
 	/**
 	 * The Mouse Down Event handler.
@@ -69,7 +71,7 @@ class MouseManager
 	 *
 	 * @since 1.0.0
 	**/
-	public var onMouseDown:Function = null;
+	public var onMouseDown:MouseEventHandler = null;
 
 	/**
 	 * The Mouse Up Event handler.
@@ -78,7 +80,7 @@ class MouseManager
 	 *
 	 * @since 1.0.0
 	**/
-	public var onMouseUp:Function = null;
+	public var onMouseUp:MouseEventHandler = null;
 
 	/**
 	 * The Mouse Down Event handler specifically for events on the Window.
@@ -87,7 +89,7 @@ class MouseManager
 	 *
 	 * @since 1.0.0
 	**/
-	public var onMouseDownWindow:Function = null;
+	public var onMouseDownWindow:MouseEventHandler = null;
 
 	/**
 	 * The Mouse Up Event handler specifically for events on the Window.
@@ -96,7 +98,7 @@ class MouseManager
 	 *
 	 * @since 1.0.0
 	**/
-	public var onMouseUpWindow:Function = null;
+	public var onMouseUpWindow:MouseEventHandler = null;
 
 	/**
 	 * The Mouse Over Event handler.
@@ -105,7 +107,7 @@ class MouseManager
 	 *
 	 * @since 1.0.0
 	**/
-	public var onMouseOver:Function = null;
+	public var onMouseOver:MouseEventHandler = null;
 
 	/**
 	 * The Mouse Out Event handler.
@@ -114,7 +116,7 @@ class MouseManager
 	 *
 	 * @since 1.0.0
 	**/
-	public var onMouseOut:Function = null;
+	public var onMouseOut:MouseEventHandler = null;
 
 	/**
 	 * The Mouse Wheel Event handler.
@@ -123,7 +125,7 @@ class MouseManager
 	 *
 	 * @since 1.0.0
 	**/
-	public var onMouseWheel:Function = null;
+	public var onMouseWheel:MouseEventHandler = null;
 
 	/**
 	 * Internal pointerLockChange handler.
@@ -132,7 +134,7 @@ class MouseManager
 	 *
 	 * @since 1.0.0
 	**/
-	public var pointerLockChange:Function = null;
+	public var pointerLockChange:MouseEventHandler = null;
 
 	/**
 	 * @param {Phaser.Input.InputManager} inputManager - A reference to the Input Manager.
@@ -184,7 +186,7 @@ class MouseManager
 	 *
 	 * @since 1.0.0
 	 *
-	 * @return {Phaser.Input.Mouse.MouseManager} This Mouse Manager instance.
+	 * @return This Mouse Manager instance.
 	**/
 	public function disableContextMenu():MouseManager
 	{
@@ -249,40 +251,40 @@ class MouseManager
 	**/
 	function startListeners()
 	{
-		// var _this = this;
-		// var canvas = this.manager.canvas;
-		// var autoFocus = (window && window.focus && this.manager.game.config.autoFocus);
+		var _this = this;
+		var canvas = this.manager.canvas;
+		var autoFocus = (Browser.supported && Browser.window.focus != null && this.manager.game.config.autoFocus);
 
-		// this.onMouseMove = function (event)
-		// {
-		//     if (!event.defaultPrevented && _this.enabled && _this.manager && _this.manager.enabled)
-		//     {
-		//         _this.manager.onMouseMove(event);
+		this.onMouseMove = function(event:WebMouseEvent)
+		{
+			if (!event.defaultPrevented && enabled && manager != null && manager.enabled)
+			{
+				manager.onMouseMove(event);
 
-		//         if (_this.capture)
-		//         {
-		//             event.preventDefault();
-		//         }
-		//     }
-		// };
+				if (capture)
+				{
+					event.preventDefault();
+				}
+			}
+		};
 
-		// this.onMouseDown = function (event)
-		// {
-		//     if (autoFocus)
-		//     {
-		//         window.focus();
-		//     }
+		this.onMouseDown = function(event)
+		{
+			if (autoFocus)
+			{
+				Browser.window.focus();
+			}
 
-		//     if (!event.defaultPrevented && _this.enabled && _this.manager && _this.manager.enabled)
-		//     {
-		//         _this.manager.onMouseDown(event);
+			if (!event.defaultPrevented && enabled && manager != null && manager.enabled)
+			{
+				manager.onMouseDown(event);
 
-		//         if (_this.capture && event.target === canvas)
-		//         {
-		//             event.preventDefault();
-		//         }
-		//     }
-		// };
+				if (capture && event.target == canvas)
+				{
+					event.preventDefault();
+				}
+			}
+		};
 
 		// this.onMouseDownWindow = function (event)
 		// {
@@ -387,28 +389,26 @@ class MouseManager
 	 *
 	 * @since 1.0.0
 	**/
-	function stopListeners()
+	public function stopListeners()
 	{
-		var target = this.target;
+		target.removeEventListener('mousemove', this.onMouseMove);
+		target.removeEventListener('mousedown', this.onMouseDown);
+		target.removeEventListener('mouseup', this.onMouseUp);
+		target.removeEventListener('mouseover', this.onMouseOver);
+		target.removeEventListener('mouseout', this.onMouseOut);
 
-		// target.removeEventListener('mousemove', this.onMouseMove);
-		// target.removeEventListener('mousedown', this.onMouseDown);
-		// target.removeEventListener('mouseup', this.onMouseUp);
-		// target.removeEventListener('mouseover', this.onMouseOver);
-		// target.removeEventListener('mouseout', this.onMouseOut);
+		if (Browser.supported)
+		{
+			Browser.window.removeEventListener('mousedown', this.onMouseDownWindow);
+			Browser.window.removeEventListener('mouseup', this.onMouseUpWindow);
+		}
 
-		// if (window)
-		// {
-		//     window.removeEventListener('mousedown', this.onMouseDownWindow);
-		//     window.removeEventListener('mouseup', this.onMouseUpWindow);
-		// }
-
-		// if (Features.pointerLock)
-		// {
-		//     document.removeEventListener('pointerlockchange', this.pointerLockChange, true);
-		//     document.removeEventListener('mozpointerlockchange', this.pointerLockChange, true);
-		//     document.removeEventListener('webkitpointerlockchange', this.pointerLockChange, true);
-		// }
+		if (FeaturesInfo.pointerLock)
+		{
+			Browser.document.removeEventListener("pointerlockchange", this.pointerLockChange, true);
+			Browser.document.removeEventListener("mozpointerlockchange", this.pointerLockChange, true);
+			Browser.document.removeEventListener("webkitpointerlockchange", this.pointerLockChange, true);
+		}
 	}
 
 	/**

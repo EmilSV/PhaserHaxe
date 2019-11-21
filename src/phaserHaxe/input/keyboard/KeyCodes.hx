@@ -1,4 +1,4 @@
-package phaserHaxe.input.keyboard.keys;
+package phaserHaxe.input.keyboard;
 
 /**
  * Keyboard Codes.
@@ -6,6 +6,7 @@ package phaserHaxe.input.keyboard.keys;
  * @since 1.0.0
 **/
 @:build(phaserHaxe.macro.EnumGetByName.build("getByName", "INVALID"))
+@:build(phaserHaxe.macro.AbstractEnumGetNamerByValue.build("getNameByValue"))
 enum abstract KeyCodes(Int) from Int to Int
 {
 	var INVALID = -1;
