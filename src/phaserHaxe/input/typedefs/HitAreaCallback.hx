@@ -12,4 +12,4 @@ import phaserHaxe.gameobjects.GameObject;
  *
  * @return `true` if the coordinates fall within the space of the hitArea, otherwise `false`.
 **/
-typedef HitAreaCallback = (hitArea:Any, x:Float, y:Float, gameObject:GameObject) -> Void;
+typedef HitAreaCallback = (hitArea:Any, x:Float, y:Float, gameObject:GameObject) -> Bool;

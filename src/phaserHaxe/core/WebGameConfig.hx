@@ -14,7 +14,6 @@ import js.html.CanvasElement;
 import phaserHaxe.Const;
 import js.html.Element;
 
-@:structInit
 typedef WebGameConfig =
 {
 	/**

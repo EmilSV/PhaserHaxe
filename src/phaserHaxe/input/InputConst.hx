@@ -1,6 +1,6 @@
 package phaserHaxe.input;
 
-enum abstract InputConst(Int)
+enum abstract InputConst(Int) to Int from Int
 {
 	/**
 	 * The mouse pointer is being held down.

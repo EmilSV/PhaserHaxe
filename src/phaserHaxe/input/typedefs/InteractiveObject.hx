@@ -51,7 +51,7 @@ typedef InteractiveObject =
 	 *
 	 * @since 1.0.0
 	**/
-	public var cursor:Union<Bool, String>;
+	public var cursor:Null<String>;
 
 	/**
 	 * An optional drop target for a draggable Interactive Object.
@@ -121,40 +121,40 @@ typedef InteractiveObject =
 	 *
 	 * @since 1.0.0
 	**/
-	public var dragStartX:GameObject;
+	public var dragStartX:Float;
 
 	/**
 	 * The y coordinate of the Game Object that owns this Interactive Object when the drag started.
 	 *
 	 * @since 1.0.0
 	**/
-	public var dragStartY:GameObject;
+	public var dragStartY:Float;
 
 	/**
 	 * The x coordinate that the Pointer started dragging this Interactive Object from.
 	 *
 	 * @since 1.0.0
 	**/
-	public var dragStartXGlobal:GameObject;
+	public var dragStartXGlobal:Float;
 
 	/**
 	 * The y coordinate that the Pointer started dragging this Interactive Object from.
 	 *
 	 * @since 1.0.0
 	**/
-	public var dragStartYGlobal:GameObject;
+	public var dragStartYGlobal:Float;
 
 	/**
 	 * The x coordinate that this Interactive Object is currently being dragged to.
 	 *
 	 * @since 1.0.0
 	**/
-	public var dragX:GameObject;
+	public var dragX:Float;
 
 	/**
 	 * The y coordinate that this Interactive Object is currently being dragged to.
 	 *
 	 * @since 1.0.0
 	**/
-	public var dragY:GameObject;
+	public var dragY:Float;
 };

@@ -1,10 +1,12 @@
 package phaserHaxe.input.mouse;
 
 import js.html.MouseEvent as WebMouseEvent;
+import js.html.WheelEvent as WebWheelEvent;
 import js.Browser as WebBrowser;
 import phaserHaxe.device.FeaturesInfo;
 
 typedef MouseEventHandler = (event:WebMouseEvent) -> Void;
+typedef MouseWheelEventHandler = (event:WebWheelEvent) -> Void;
 
 /**
  * The Mouse Manager is a helper class that belongs to the Input Manager.
@@ -124,7 +126,7 @@ class MouseManager
 	 *
 	 * @since 1.0.0
 	**/
-	public var onMouseWheel:MouseEventHandler = null;
+	public var onMouseWheel:MouseWheelEventHandler = null;
 
 	/**
 	 * Internal pointerLockChange handler.
@@ -255,7 +257,6 @@ class MouseManager
 	**/
 	public function startListeners():Void
 	{
-		var _this = this;
 		var canvas = this.manager.canvas;
 		var autoFocus = (WebBrowser.supported && WebBrowser.window.focus != null && this.manager.game.config.autoFocus);
 
@@ -341,7 +342,7 @@ class MouseManager
 		{
 			if (!event.defaultPrevented && enabled && manager != null && manager.enabled)
 			{
-				_this.manager.onMouseWheel(event);
+				manager.onMouseWheel(event);
 			}
 		};
 
@@ -370,15 +371,15 @@ class MouseManager
 		{
 			this.pointerLockChange = function(event)
 			{
-				var element = _this.target;
+				var element = target;
 
 				var document:Dynamic = WebBrowser.document;
 
-				_this.locked = (document.pointerLockElement == element
+				locked = (document.pointerLockElement == element
 					|| document.mozPointerLockElement == element
 					|| document.webkitPointerLockElement == element) ? true : false;
 
-				_this.manager.onPointerLockChange(event);
+				manager.onPointerLockChange(event);
 			};
 
 			WebBrowser.document.addEventListener('pointerlockchange', this.pointerLockChange, true);

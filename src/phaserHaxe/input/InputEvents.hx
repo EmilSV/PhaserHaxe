@@ -1,6 +1,6 @@
 package phaserHaxe.input;
 
-enum abstract InputEvents(String)
+enum abstract InputEvents(String) to String from String
 {
 	/**
 	 * The Input Plugin Boot Event.

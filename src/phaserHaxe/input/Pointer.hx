@@ -1,8 +1,6 @@
 package phaserHaxe.input;
 
-import phaserHaxe.geom.Point;
 import js.html.WheelEvent;
-import phaserHaxe.utils.types.Union;
 import phaserHaxe.cameras.scene2D.Camera;
 import phaserHaxe.math.Vector2;
 import phaserHaxe.math.Interpolation.smoothStepInterpolation;
@@ -354,6 +352,7 @@ class Pointer
 	 *
 	 * @since 1.0.0
 	**/
+	@:allow(phaserHaxe)
 	public var locked(default, null):Bool = false;
 
 	/**
@@ -484,6 +483,7 @@ class Pointer
 	 *
 	 * @since 1.0.0
 	**/
+	@:allow(phaserHaxe)
 	private function updateMotion():Void
 	{
 		var cx = position.x;
@@ -531,6 +531,7 @@ class Pointer
 	 *
 	 * @param event - The Mouse Event to process.
 	**/
+	@:allow(phaserHaxe)
 	private function up(event:MouseEvent):Void
 	{
 		if (Syntax.code("'buttons' in {0}", event))
@@ -568,6 +569,7 @@ class Pointer
 	 *
 	 * @param event - The Mouse Event to process.
 	**/
+	@:allow(phaserHaxe)
 	private function down(event:MouseEvent):Void
 	{
 		if (Syntax.code("'buttons' in {0}", event))
@@ -605,6 +607,7 @@ class Pointer
 	 *
 	 * @param event - The Mouse Event to process.
 	**/
+	@:allow(phaserHaxe)
 	private function move(event:MouseEvent):Void
 	{
 		if (Syntax.code("'buttons' in {0}", event))
@@ -636,6 +639,7 @@ class Pointer
 	 *
 	 * @param event - The Wheel Event to process.
 	**/
+	@:allow(phaserHaxe)
 	private function wheel(event:WheelEvent):Void
 	{
 		if (Syntax.code("'buttons' in {0}", event))

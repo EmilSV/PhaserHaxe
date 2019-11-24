@@ -6,7 +6,7 @@ import phaserHaxe.utils.types.MultipleOrOne;
 import phaserHaxe.geom.RectangleUtil;
 import phaserHaxe.scene.Systems;
 import phaserHaxe.scene.SceneEvents;
-import phaserHaxe.cameras.scene2D.typedefs.CameraConfig;
+import phaserHaxe.cameras.scene2D.typedefs.JSONCamera;
 
 class CameraManager
 {
@@ -327,7 +327,7 @@ class CameraManager
 	/**
 	 * Populates this Camera Manager based on the given configuration object, or an array of config objects.
 	 *
-	 * See the `Phaser.Types.Cameras.Scene2D.CameraConfig` documentation for details of the object structure.
+	 * See the `Phaser.Cameras.Scene2D.typedefs.JSONCamera` documentation for details of the object structure.
 	 *
 	 * @since 1.0.0
 	 *
@@ -335,7 +335,7 @@ class CameraManager
 	 *
 	 * @return This Camera Manager instance.
 	**/
-	public function fromJSON(config:MultipleOrOne<CameraConfig>):CameraManager
+	public function fromJSON(config:MultipleOrOne<JSONCamera>):CameraManager
 	{
 		var config = config.forceArray();
 
@@ -346,29 +346,29 @@ class CameraManager
 		{
 			var cameraConfig = config[i];
 
-			inline function getFastValue<T>(value:T, defaultValue:T):T
+			inline function getValue<T>(value:T, defaultValue:T):T
 			{
 				return cameraConfig != null && value != null ? value : defaultValue;
 			}
 
-			var x = getFastValue(cameraConfig.x, 0);
-			var y = getFastValue(cameraConfig.y, 0);
-			var width = getFastValue(cameraConfig.width, gameWidth);
-			var height = getFastValue(cameraConfig.height, gameHeight);
+			var x = getValue(cameraConfig.x, 0);
+			var y = getValue(cameraConfig.y, 0);
+			var width = getValue(cameraConfig.width, gameWidth);
+			var height = getValue(cameraConfig.height, gameHeight);
 
 			var camera = add(x, y, width, height);
 
 			//  Direct properties
-			camera.name = getFastValue(cameraConfig.name, '');
-			camera.zoom = getFastValue(cameraConfig.zoom, 1);
-			camera.rotation = getFastValue(cameraConfig.rotation, 0);
-			camera.scrollX = getFastValue(cameraConfig.scrollX, 0);
-			camera.scrollY = getFastValue(cameraConfig.scrollY, 0);
-			camera.roundPixels = getFastValue(cameraConfig.roundPixels, false);
-			camera.visible = getFastValue(cameraConfig.visible, true);
+			camera.name = getValue(cameraConfig.name, '');
+			camera.zoom = getValue(cameraConfig.zoom, 1);
+			camera.rotation = getValue(cameraConfig.rotation, 0);
+			camera.scrollX = getValue(cameraConfig.scrollX, 0);
+			camera.scrollY = getValue(cameraConfig.scrollY, 0);
+			camera.roundPixels = getValue(cameraConfig.roundPixels, false);
+			camera.visible = getValue(cameraConfig.visible, true);
 
 			// Background Color
-			var backgroundColor = getFastValue(cameraConfig.backgroundColor, null);
+			var backgroundColor = getValue(cameraConfig.backgroundColor, null);
 
 			if (backgroundColor != null)
 			{
@@ -376,14 +376,14 @@ class CameraManager
 			}
 
 			//  Bounds
-			var boundsConfig = getFastValue(cameraConfig.bounds, null);
+			var boundsConfig = getValue(cameraConfig.bounds, null);
 
 			if (boundsConfig != null)
 			{
-				var bx = getFastValue(boundsConfig.x, 0);
-				var by = getFastValue(boundsConfig.y, 0);
-				var bwidth = getFastValue(boundsConfig.width, gameWidth);
-				var bheight = getFastValue(boundsConfig.height, gameHeight);
+				var bx = getValue(boundsConfig.x, 0);
+				var by = getValue(boundsConfig.y, 0);
+				var bwidth = getValue(boundsConfig.width, gameWidth);
+				var bheight = getValue(boundsConfig.height, gameHeight);
 
 				camera.setBounds(bx, by, bwidth, bheight);
 			}

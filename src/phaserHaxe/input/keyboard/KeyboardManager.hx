@@ -1,11 +1,11 @@
 package phaserHaxe.input.keyboard;
 
-import phaserHaxe.utils.types.Union3;
-import phaserHaxe.input.keyboard.KeyCodes;
-import phaserHaxe.input.keyboard.web.WebKeyboardEvent;
 import haxe.Constraints.Function;
 import phaserHaxe.core.GameEvents;
+import phaserHaxe.utils.types.Union3;
 import phaserHaxe.utils.ArrayUtils.remove as arrayRemove;
+import phaserHaxe.input.keyboard.KeyCodes;
+import phaserHaxe.input.keyboard.web.WebKeyboardEvent;
 
 using StringTools;
 

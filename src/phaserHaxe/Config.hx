@@ -246,7 +246,7 @@ class Config
 	 *
 	 * @since 1.0.0
 	**/
-	public final inputMouse:Union<Bool, Any>;
+	public final inputMouse:Bool;
 
 	/**
 	 * The DOM Target to listen for mouse events on. Defaults to the game canvas if not specified.
