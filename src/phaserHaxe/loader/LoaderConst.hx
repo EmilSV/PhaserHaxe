@@ -3,7 +3,7 @@ package phaserHaxe.loader;
 /**
  * @since 1.0.0
 **/
-enum abstract FileConst(Int) from Int to Int
+enum abstract LoaderConst(Int) from Int to Int
 {
 	/**
 	 * The Loader is idle.

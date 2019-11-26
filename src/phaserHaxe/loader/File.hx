@@ -138,7 +138,7 @@ class File
 	 * @type {?Phaser.Loader.MultiFile}
 	 * @since 1.0.0
 	**/
-	public var multiFile:Null<Dynamic>;
+	public var multiFile:Null<MultiFile>;
 
 	/**
 	 * Does this file have an associated linked file? Such as an image and a normal map.
@@ -148,6 +148,7 @@ class File
 	 * @since 1.0.0
 	**/
 	public var linkFile:File;
+
 
 	private function new(loader:LoaderPlugin, fileConfig:FileConfig)
 	{

@@ -1,19 +1,19 @@
 -cp src
 
 phaserHaxe.animations.Animation
-phaserHaxe.animations.AnimationConfig
-phaserHaxe.animations.AnimationData
-phaserHaxe.animations.AnimationEvents
-phaserHaxe.animations.AnimationFrame
+phaserHaxe.animations.AnimationConfig     
+phaserHaxe.animations.AnimationData       
+phaserHaxe.animations.AnimationEvents     
+phaserHaxe.animations.AnimationFrame      
 phaserHaxe.animations.AnimationFrameConfig
-phaserHaxe.animations.AnimationFrameData
-phaserHaxe.animations.AnimationManager
-phaserHaxe.animations.AnimationsConfig
-phaserHaxe.animations.GenerateFrameNames
+phaserHaxe.animations.AnimationFrameData  
+phaserHaxe.animations.AnimationManager    
+phaserHaxe.animations.AnimationsConfig    
+phaserHaxe.animations.GenerateFrameNames  
 phaserHaxe.animations.GenerateFrameNumbers
-phaserHaxe.animations.JSONAnimation
-phaserHaxe.animations.JSONAnimationFrame
-phaserHaxe.animations.JSONAnimations
+phaserHaxe.animations.JSONAnimation       
+phaserHaxe.animations.JSONAnimationFrame  
+phaserHaxe.animations.JSONAnimations      
 phaserHaxe.cache.BaseCache
 phaserHaxe.cache.CacheEvents
 phaserHaxe.cache.CacheManager
@@ -203,8 +203,8 @@ phaserHaxe.input.typedefs.InteractiveObject
 phaserHaxe.Input
 phaserHaxe.iterator.StepIterator
 phaserHaxe.loader.File
-phaserHaxe.loader.FileConst
 phaserHaxe.loader.filetypes.typedefs.PackFileConfig
+phaserHaxe.loader.LoaderConst
 phaserHaxe.loader.LoaderPlugin
 phaserHaxe.loader.MultiFile
 phaserHaxe.loader.typedefs.FileConfig
@@ -291,6 +291,7 @@ phaserHaxe.scene.typedefs.SettingsConfig
 phaserHaxe.scene.typedefs.SettingsObject
 phaserHaxe.Scene
 phaserHaxe.structs.List
+phaserHaxe.structs.Set
 phaserHaxe.structs.Size
 phaserHaxe.textures.CanvasTexture
 phaserHaxe.textures.FilterMode
@@ -323,7 +324,7 @@ phaserHaxe.utils.types.Vector1Or2
 phaserHaxe.utils.Utils
 phaserHaxe.WidthHeight
 
--dce std
+-dce no
 
 -D js-es=6
 
