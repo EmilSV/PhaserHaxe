@@ -20,7 +20,7 @@ typedef PackFileConfig =
 	 *
 	 * @since 1.0.0
 	**/
-	public var ?url:Union<String, {}>;
+	public var ?url:Union<String, Any>;
 
 	/**
 	 * The default file extension to use if no url is provided.
