@@ -19,19 +19,19 @@ typedef AudioFileConfig =
 	 *
 	 * @since 1.0.0
 	**/
-	public var urlConfig:String;
+	public var ?urlConfig:String;
 
 	/**
 	 * Extra XHR Settings specifically for this file.
 	 *
 	 * @since 1.0.0
 	**/
-	public var xhrSettings:XHRSettingsObject;
+	public var ?xhrSettings:XHRSettingsObject;
 
 	/**
 	 * The AudioContext this file will use to process itself.
 	 *
 	 * @since 1.0.0
 	**/
-	public var audioContext:WebAudioContext;
+	public var ?audioContext:WebAudioContext;
 };

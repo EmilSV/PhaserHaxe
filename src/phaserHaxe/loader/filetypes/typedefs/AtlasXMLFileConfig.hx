@@ -17,7 +17,7 @@ typedef AtlasXMLFileConfig =
 	 *
 	 * @since 1.0.0
 	**/
-	public var textureURL:String;
+	public var ?textureURL:String;
 
 	/**
 	 * The default file extension to use for the image texture if no url is provided.
@@ -38,14 +38,14 @@ typedef AtlasXMLFileConfig =
 	 *
 	 * @since 1.0.0
 	**/
-	public var normalMap:String;
+	public var ?normalMap:String;
 
 	/**
 	 * The absolute or relative URL to load the atlas xml file from.
 	 *
 	 * @since 1.0.0
 	**/
-	public var atlasURL:String;
+	public var ?atlasURL:String;
 
 	/**
 	 * The default file extension to use for the atlas xml if no url is provided.
@@ -59,5 +59,5 @@ typedef AtlasXMLFileConfig =
 	 *
 	 * @since 1.0.0
 	**/
-	public var atlasXhrSettings:XHRSettingsObject;
+	public var ?atlasXhrSettings:XHRSettingsObject;
 };

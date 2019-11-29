@@ -3,10 +3,10 @@ package phaserHaxe.loader.filetypes.typedefs;
 /**
  * @since 1.0.0
 **/
-typedef BinaryFileConfig<T> =
+typedef HTMLTextureFileConfig =
 {
 	/**
-	 * The key of the file. Must be unique within both the Loader and the Binary Cache.
+	 * The key of the file. Must be unique within both the Loader and the Texture Manager.
 	 *
 	 * @since 1.0.0
 	**/
@@ -34,9 +34,16 @@ typedef BinaryFileConfig<T> =
 	public var ?xhrSettings:XHRSettingsObject;
 
 	/**
-	 * Optional type to cast the binary file to once loaded. For example, `Uint8Array`.
+	 * The width of the texture the HTML will be rendered to.
 	 *
 	 * @since 1.0.0
 	**/
-	public var ?dataType:Class<T>;
-}
+	public var ?width:Int;
+
+	/**
+	 * The height of the texture the HTML will be rendered to.
+	 *
+	 * @since 1.0.0
+	**/
+	public var ?height:Int;
+};

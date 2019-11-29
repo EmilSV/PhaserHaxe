@@ -1,12 +1,10 @@
-package phaserHaxe.loader.filetypes.typedefs;
-
 /**
  * @since 1.0.0
 **/
-typedef BinaryFileConfig<T> =
+typedef SceneFileConfig =
 {
 	/**
-	 * The key of the file. Must be unique within both the Loader and the Binary Cache.
+	 * The key of the file. Must be unique within both the Loader and the Text Cache.
 	 *
 	 * @since 1.0.0
 	**/
@@ -32,11 +30,4 @@ typedef BinaryFileConfig<T> =
 	 * @since 1.0.0
 	**/
 	public var ?xhrSettings:XHRSettingsObject;
-
-	/**
-	 * Optional type to cast the binary file to once loaded. For example, `Uint8Array`.
-	 *
-	 * @since 1.0.0
-	**/
-	public var ?dataType:Class<T>;
-}
+};

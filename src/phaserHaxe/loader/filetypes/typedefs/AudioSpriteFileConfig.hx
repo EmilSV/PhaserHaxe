@@ -26,26 +26,26 @@ typedef AudioSpriteFileConfig =
 	 *
 	 * @since 1.0.0
 	**/
-	public var jsonXhrSettings:XHRSettingsObject;
+	public var ?jsonXhrSettings:XHRSettingsObject;
 
 	/**
 	 * The absolute or relative URL to load the audio file from.
 	 *
 	 * @since 1.0.0
 	**/
-	public var audioURL:MultipleOrOne<String>;
+	public var ?audioURL:MultipleOrOne<String>;
 
 	/**
 	 * The audio configuration options.
 	 *
 	 * @since 1.0.0
 	**/
-	public var audioConfig:Any;
+	public var ?audioConfig:Any;
 
 	/**
 	 *  Extra XHR Settings specifically for the audio file.
 	 *
 	 * @since 1.0.0
 	**/
-	public var audioXhrSettings:XHRSettingsObject;
+	public var ?audioXhrSettings:XHRSettingsObject;
 };

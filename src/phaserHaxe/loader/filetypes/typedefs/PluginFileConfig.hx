@@ -3,10 +3,10 @@ package phaserHaxe.loader.filetypes.typedefs;
 /**
  * @since 1.0.0
 **/
-typedef BinaryFileConfig<T> =
+typedef PluginFileConfig =
 {
 	/**
-	 * The key of the file. Must be unique within both the Loader and the Binary Cache.
+	 * The key of the file. Must be unique within the Loader.
 	 *
 	 * @since 1.0.0
 	**/
@@ -27,16 +27,23 @@ typedef BinaryFileConfig<T> =
 	public var ?extension:String;
 
 	/**
+	 * Automatically start the plugin after loading?
+	 *
+	 * @since 1.0.0
+	**/
+	public var ?start:Bool;
+
+	/**
+	 * If this plugin is to be injected into the Scene, this is the property key used.
+	 *
+	 * @since 1.0.0
+	**/
+	public var ?mapping:String;
+
+	/**
 	 * Extra XHR Settings specifically for this file.
 	 *
 	 * @since 1.0.0
 	**/
 	public var ?xhrSettings:XHRSettingsObject;
-
-	/**
-	 * Optional type to cast the binary file to once loaded. For example, `Uint8Array`.
-	 *
-	 * @since 1.0.0
-	**/
-	public var ?dataType:Class<T>;
-}
+};

@@ -1,3 +1,5 @@
+package phaserHaxe.loader.filetypes.typedefs;
+
 /**
  * @typedef {object} Phaser.Types.Loader.FileTypes.ImageFrameConfig
  *
@@ -8,3 +10,7 @@
  * @property {integer} [margin=0] - The margin in the image. This is the space around the edge of the frames.
  * @property {integer} [spacing=0] - The spacing between each frame in the image.
  */
+
+typedef ImageFrameConfig ={
+
+};
