@@ -330,7 +330,7 @@ import phaserHaxe.utils.types.Union;
 	 * @return The Texture that was created, or `null` if the key is already in use.
 	**/
 	public function addImage(key:String, source:HTMLImageElement,
-			dataSource:TextureSource.HtmlSource):Null<Texture>
+			?dataSource:TextureSource.HtmlSource):Null<Texture>
 	{
 		var texture = null;
 

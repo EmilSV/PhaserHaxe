@@ -1,8 +1,13 @@
 package phaserHaxe.loader;
 
-import phaserHaxe.loader.typedefs.FileConfig;
-import js.html.ProgressEvent as WebProgressEvent;
+using StringTools;
+
+import js.html.Blob as HTMLBlob;
 import js.html.XMLHttpRequest;
+import js.html.ProgressEvent as WebProgressEvent;
+import js.Syntax as JsSyntax;
+import js.html.Image as HTMLImageElement;
+import phaserHaxe.loader.typedefs.FileConfig;
 import phaserHaxe.loader.XHRSettingsObject;
 import phaserHaxe.cache.BaseCache;
 import phaserHaxe.utils.types.Union;
@@ -13,9 +18,6 @@ import phaserHaxe.textures.TextureManager;
  * You shouldn't create an instance of a File directly, but should extend it with your own class, setting a custom type and processing methods.
  *
  * @since 1.0.0
- *
- * @param {Phaser.Loader.LoaderPlugin} loader - The Loader that is going to load this File.
- * @param {Phaser.Types.Loader.FileConfig} fileConfig - The file configuration object, as created by the file type.
 **/
 class File
 {
@@ -121,7 +123,7 @@ class File
 	 *
 	 * @since 1.0.0
 	**/
-	public var data:String;
+	public var data:Any;
 
 	/**
 	 * A config object that can be used by file types to store transitional data.
@@ -149,7 +151,10 @@ class File
 	**/
 	public var linkFile:File;
 
-
+	/**
+	 * @param {Phaser.Loader.LoaderPlugin} loader - The Loader that is going to load this File.
+	 * @param {Phaser.Types.Loader.FileConfig} fileConfig - The file configuration object, as created by the file type.
+	**/
 	private function new(loader:LoaderPlugin, fileConfig:FileConfig)
 	{
 		// this.loader = loader;
@@ -433,7 +438,7 @@ class File
 	 * @fires Phaser.Loader.Events#FILE_KEY_COMPLETE
 	 * @since 1.0.0
 	**/
-	public function pendingDestroy(data)
+	public function pendingDestroy(?data:Any)
 	{
 		// if (data == null) { data = this.data; }
 
@@ -459,5 +464,59 @@ class File
 		this.multiFile = null;
 		this.linkFile = null;
 		this.data = null;
+	}
+
+	/**
+	 * Static method for creating object URL using URL API and setting it as image 'src' attribute.
+	 * If URL API is not supported (usually on old browsers) it falls back to creating Base64 encoded url using FileReader.
+	 *
+	 * @since 1.0.0
+	 *
+	 * @param image - Image object which 'src' attribute should be set to object URL.
+	 * @param blob - A Blob object to create an object URL for.
+	 * @param defaultType - Default mime type used if blob type is not available.
+	**/
+	public static function createObjectURL(image:HTMLImageElement, blob:HTMLBlob,
+			defaultType:String)
+	{
+		if (JsSyntax.strictEq(JsSyntax.typeof(js.html.URL), "function"))
+		{
+			js.html.URL.createObjectURL(blob);
+		}
+		else
+		{
+			var reader = new js.html.FileReader();
+
+			reader.onload = function()
+			{
+				var type = blob.type;
+				if (type != null && type.length == 0)
+				{
+					type = defaultType;
+				}
+				image.removeAttribute("crossOrigin");
+				image.src = "data:" + type + ";base64," + reader.result.split(",")[1];
+			};
+
+			reader.onerror = image.onerror;
+
+			reader.readAsDataURL(blob);
+		}
+	}
+
+	/**
+	 * Static method for releasing an existing object URL which was previously created
+	 * by calling {@link File#createObjectURL} method.
+	 *
+	 * @since 1.0.0
+	 *
+	 * @param image - Image object which 'src' attribute should be revoked.
+	**/
+	public static function revokeObjectURL(image:HTMLImageElement):Void
+	{
+		if (JsSyntax.strictEq(JsSyntax.typeof(js.html.URL), "function"))
+		{
+			js.html.URL.revokeObjectURL(image.src);
+		}
 	}
 }

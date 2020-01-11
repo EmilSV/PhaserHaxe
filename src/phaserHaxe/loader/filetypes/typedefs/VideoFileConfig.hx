@@ -1,3 +1,5 @@
+package phaserHaxe.loader.filetypes.typedefs;
+
 import phaserHaxe.utils.types.Union;
 
 /**

@@ -1,3 +1,5 @@
+package phaserHaxe.loader.filetypes.typedefs;
+
 /**
  * @since 1.0.0
 **/

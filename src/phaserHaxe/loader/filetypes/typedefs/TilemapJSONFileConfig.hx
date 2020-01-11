@@ -1,5 +1,7 @@
- /**
-* @since 1.0.0
+package phaserHaxe.loader.filetypes.typedefs;
+
+/**
+ * @since 1.0.0
 **/
 typedef TilemapJSONFileConfig =
 {

@@ -9,7 +9,7 @@ import phaserHaxe.scene.Systems;
 import phaserHaxe.structs.Set;
 import haxe.Json;
 
-class LoaderPlugin
+class LoaderPlugin extends EventEmitter
 {
 	/**
 	 * The Scene which owns this Loader instance.

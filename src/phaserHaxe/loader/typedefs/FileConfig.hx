@@ -62,4 +62,6 @@ typedef FileConfig =
 	 * @since 1.0.0
 	**/
 	public var ?config:Any;
+
+	public var ?cache:Any;
 };

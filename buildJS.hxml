@@ -1,19 +1,19 @@
 -cp src
 
 phaserHaxe.animations.Animation
-phaserHaxe.animations.AnimationConfig     
-phaserHaxe.animations.AnimationData       
-phaserHaxe.animations.AnimationEvents     
-phaserHaxe.animations.AnimationFrame      
+phaserHaxe.animations.AnimationConfig
+phaserHaxe.animations.AnimationData
+phaserHaxe.animations.AnimationEvents
+phaserHaxe.animations.AnimationFrame
 phaserHaxe.animations.AnimationFrameConfig
-phaserHaxe.animations.AnimationFrameData  
-phaserHaxe.animations.AnimationManager    
-phaserHaxe.animations.AnimationsConfig    
-phaserHaxe.animations.GenerateFrameNames  
+phaserHaxe.animations.AnimationFrameData
+phaserHaxe.animations.AnimationManager
+phaserHaxe.animations.AnimationsConfig
+phaserHaxe.animations.GenerateFrameNames
 phaserHaxe.animations.GenerateFrameNumbers
-phaserHaxe.animations.JSONAnimation       
-phaserHaxe.animations.JSONAnimationFrame  
-phaserHaxe.animations.JSONAnimations      
+phaserHaxe.animations.JSONAnimation
+phaserHaxe.animations.JSONAnimationFrame
+phaserHaxe.animations.JSONAnimations
 phaserHaxe.cache.BaseCache
 phaserHaxe.cache.CacheEvents
 phaserHaxe.cache.CacheManager
@@ -203,7 +203,37 @@ phaserHaxe.input.typedefs.InteractiveObject
 phaserHaxe.Input
 phaserHaxe.iterator.StepIterator
 phaserHaxe.loader.File
+phaserHaxe.loader.filetypes.JSONFile
+phaserHaxe.loader.filetypes.typedefs.AtlasJSONFileConfig
+phaserHaxe.loader.filetypes.typedefs.AtlasXMLFileConfig
+phaserHaxe.loader.filetypes.typedefs.AudioFileConfig
+phaserHaxe.loader.filetypes.typedefs.AudioSpriteFileConfig
+phaserHaxe.loader.filetypes.typedefs.BinaryFileConfig
+phaserHaxe.loader.filetypes.typedefs.BitmapFontFileConfig
+phaserHaxe.loader.filetypes.typedefs.CSSFileConfig
+phaserHaxe.loader.filetypes.typedefs.GLSLFileConfig
+phaserHaxe.loader.filetypes.typedefs.HTMLFileConfig
+phaserHaxe.loader.filetypes.typedefs.HTMLTextureFileConfig
+phaserHaxe.loader.filetypes.typedefs.ImageFileConfig
+phaserHaxe.loader.filetypes.typedefs.ImageFrameConfig
+phaserHaxe.loader.filetypes.typedefs.JSONFileConfig
+phaserHaxe.loader.filetypes.typedefs.MultiAtlasFileConfig
+phaserHaxe.loader.filetypes.typedefs.MultiScriptFileConfig
 phaserHaxe.loader.filetypes.typedefs.PackFileConfig
+phaserHaxe.loader.filetypes.typedefs.PluginFileConfig
+phaserHaxe.loader.filetypes.typedefs.SceneFileConfig
+phaserHaxe.loader.filetypes.typedefs.ScenePluginFileConfig
+phaserHaxe.loader.filetypes.typedefs.ScriptFileConfig
+phaserHaxe.loader.filetypes.typedefs.SpriteSheetFileConfig
+phaserHaxe.loader.filetypes.typedefs.SVGFileConfig
+phaserHaxe.loader.filetypes.typedefs.SVGSizeConfig
+phaserHaxe.loader.filetypes.typedefs.TextFileConfig
+phaserHaxe.loader.filetypes.typedefs.TilemapCSVFileConfig
+phaserHaxe.loader.filetypes.typedefs.TilemapImpactFileConfig
+phaserHaxe.loader.filetypes.typedefs.TilemapJSONFileConfig
+phaserHaxe.loader.filetypes.typedefs.UnityAtlasFileConfig
+phaserHaxe.loader.filetypes.typedefs.VideoFileConfig
+phaserHaxe.loader.filetypes.typedefs.XMLFileConfig
 phaserHaxe.loader.LoaderConst
 phaserHaxe.loader.LoaderPlugin
 phaserHaxe.loader.MultiFile
@@ -325,7 +355,5 @@ phaserHaxe.utils.Utils
 phaserHaxe.WidthHeight
 
 -dce no
-
--D js-es=6
 
 -js dist/output.js
