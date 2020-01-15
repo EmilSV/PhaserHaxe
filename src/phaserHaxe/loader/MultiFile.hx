@@ -151,6 +151,16 @@ class MultiFile
 	}
 
 	/**
+	 * Adds this file to its target cache upon successful loading and processing.
+	 *
+	 * @since 1.0.0
+	**/
+	public function addToCache()
+	{
+		
+	}
+
+	/**
 	 * Called by each File when it finishes loading.
 	 *
 	 * @since 1.0.0

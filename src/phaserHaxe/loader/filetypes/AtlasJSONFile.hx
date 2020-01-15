@@ -30,11 +30,11 @@ import phaserHaxe.utils.types.Union;
 class AtlasJSONFile extends MultiFile
 {
 	public function new(loader:LoaderPlugin, key:Union<String, AtlasJSONFileConfig>,
-			textureURL:MultipleOrOne<String>, atlasURL:String,
-			textureXhrSettings:XHRSettingsObject, atlasXhrSettings:XHRSettingsObject)
+			?textureURL:MultipleOrOne<String>, ?atlasURL:String,
+			?textureXhrSettings:XHRSettingsObject, ?atlasXhrSettings:XHRSettingsObject)
 	{
 		var image;
-        var data;
+		var data;
 
 		if (!Std.is(key, String))
 		{
@@ -80,14 +80,36 @@ class AtlasJSONFile extends MultiFile
 
 		if (image.linkFile == null)
 		{
-            final key = (cast key : String);
+			final key = (cast key : String);
 			//  Image has a normal map
 			super(loader, "atlasjson", key, [image, data, image.linkFile]);
 		}
 		else
 		{
-            final key = (cast key : String);
+			final key = (cast key : String);
 			super(loader, "atlasjson", key, [image, data]);
 		}
 	}
+
+	/**
+	 * Adds this file to its target cache upon successful loading and processing.
+	 *
+	 * @since 1.0.0
+	**/
+	public override function addToCache()
+	{
+		if (this.isReadyToProcess())
+		{
+			var image = files[0];
+			var json = files[1];
+			var normalMap = files[2] != null ? files[2].data : null;
+
+			loader.textureManager.addAtlas(image.key, image.data, json.data, normalMap);
+
+			json.addToCache();
+
+			complete = true;
+		}
+	}
 }
+	

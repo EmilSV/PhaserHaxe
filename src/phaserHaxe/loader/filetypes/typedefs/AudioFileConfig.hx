@@ -33,5 +33,5 @@ typedef AudioFileConfig =
 	 *
 	 * @since 1.0.0
 	**/
-	public var ?audioContext:WebAudioContext;
+	public var ?context:WebAudioContext;
 };

@@ -479,7 +479,7 @@ import phaserHaxe.utils.types.Union;
 	 *
 	 * @return The Texture that was created, or `null` if the key is already in use.
 	**/
-	function addAtlas(key:String, source:HTMLImageElement, data:Dynamic,
+	public function addAtlas(key:String, source:HTMLImageElement, data:Dynamic,
 			?dataSource:MultipleOrOne<Union<HTMLImageElement,
 			HTMLCanvasElement>>):Null<Texture>
 	{

@@ -1,5 +1,7 @@
 package phaserHaxe.loader;
 
+import phaserHaxe.loader.filetypes.typedefs.AtlasXMLFileConfig;
+import phaserHaxe.loader.filetypes.typedefs.AtlasJSONFileConfig;
 import phaserHaxe.loader.filetypes.AnimationJSONFile;
 import phaserHaxe.loader.filetypes.ImageFile;
 import phaserHaxe.loader.filetypes.JSONFile;
@@ -7,6 +9,8 @@ import phaserHaxe.loader.filetypes.typedefs.ImageFileConfig;
 import phaserHaxe.loader.filetypes.typedefs.JSONFileConfig;
 import phaserHaxe.utils.types.MultipleOrOne;
 import phaserHaxe.utils.types.Union;
+import phaserHaxe.loader.filetypes.AtlasXMLFile;
+import phaserHaxe.loader.filetypes.AtlasJSONFile;
 
 final class DefaultFileTypesTool
 {
@@ -230,6 +234,272 @@ final class DefaultFileTypesTool
 		{
 			final key = (cast key : Union<String, JSONFileConfig>);
 			loader.addFile(new AnimationJSONFile(loader, key, url, xhrSettings, dataKey));
+		}
+
+		return loader;
+	}
+
+	/**
+	 * Adds a JSON based Texture Atlas, or array of atlases, to the current load queue.
+	 *
+	 * You can call this method from within your Scene's `preload`, along with any other files you wish to load:
+	 *
+	 * ```haxe
+	 * function preload ()
+	 * {
+	 *     load.atlas("mainmenu", "images/MainMenu.png", "images/MainMenu.json");
+	 * }
+	 * ```
+	 *
+	 * The file is **not** loaded right away. It is added to a queue ready to be loaded either when the loader starts,
+	 * or if it's already running, when the next free load slot becomes available. This happens automatically if you
+	 * are calling this from within the Scene's `preload` method, or a related callback. Because the file is queued
+	 * it means you cannot use the file immediately after calling this method, but must wait for the file to complete.
+	 * The typical flow for a Phaser Scene is that you load assets in the Scene's `preload` method and then when the
+	 * Scene's `create` method is called you are guaranteed that all of those assets are ready for use and have been
+	 * loaded.
+	 *
+	 * If you call this from outside of `preload` then you are responsible for starting the Loader afterwards and monitoring
+	 * its events to know when it's safe to use the asset. Please see the Phaser.Loader.LoaderPlugin class for more details.
+	 *
+	 * Phaser expects the atlas data to be provided in a JSON file, using either the JSON Hash or JSON Array format.
+	 * These files are created by software such as Texture Packer, Shoebox and Adobe Flash / Animate.
+	 * If you are using Texture Packer and have enabled multi-atlas support, then please use the Phaser Multi Atlas loader
+	 * instead of this one.
+	 *
+	 * Phaser can load all common image types: png, jpg, gif and any other format the browser can natively handle.
+	 *
+	 * The key must be a unique String. It is used to add the file to the global Texture Manager upon a successful load.
+	 * The key should be unique both in terms of files being loaded and files already present in the Texture Manager.
+	 * Loading a file using a key that is already taken will result in a warning. If you wish to replace an existing file
+	 * then remove it from the Texture Manager first, before loading a new one.
+	 *
+	 * Instead of passing arguments you can pass a configuration object, such as:
+	 *
+	 * ```haxe
+	 * load.atlas({
+	 *     key: "mainmenu",
+	 *     textureURL: "images/MainMenu.png",
+	 *     atlasURL: "images/MainMenu.json"
+	 * });
+	 * ```
+	 *
+	 * See the documentation for `Phaser.Types.Loader.FileTypes.AtlasJSONFileConfig` for more details.
+	 *
+	 * Instead of passing a URL for the atlas JSON data you can also pass in a well formed JSON object instead.
+	 *
+	 * Once the atlas has finished loading you can use frames from it as textures for a Game Object by referencing its key:
+	 *
+	 * ```haxe
+	 * load.atlas("mainmenu", "images/MainMenu.png", "images/MainMenu.json");
+	 * // and later in your game ...
+	 * add.image(x, y, "mainmenu", "background");
+	 * ```
+	 *
+	 * To get a list of all available frames within an atlas please consult your Texture Atlas software.
+	 *
+	 * If you have specified a prefix in the loader, via `Loader.setPrefix` then this value will be prepended to this files
+	 * key. For example, if the prefix was `MENU.` and the key was `Background` the final key will be `MENU.Background` and
+	 * this is what you would use to retrieve the image from the Texture Manager.
+	 *
+	 * The URL can be relative or absolute. If the URL is relative the `Loader.baseURL` and `Loader.path` values will be prepended to it.
+	 *
+	 * If the URL isn't specified the Loader will take the key and create a filename from that. For example if the key is "alien"
+	 * and no URL is given then the Loader will set the URL to be "alien.png". It will always add `.png` as the extension, although
+	 * this can be overridden if using an object instead of method arguments. If you do not desire this action then provide a URL.
+	 *
+	 * Phaser also supports the automatic loading of associated normal maps. If you have a normal map to go with this image,
+	 * then you can specify it by providing an array as the `url` where the second element is the normal map:
+	 *
+	 * ```javascript
+	 * this.load.atlas('mainmenu', [ 'images/MainMenu.png', 'images/MainMenu-n.png' ], 'images/MainMenu.json');
+	 * ```
+	 *
+	 * Or, if you are using a config object use the `normalMap` property:
+	 *
+	 * ```haxe
+	 * load.atlas({
+	 *     key: "mainmenu",
+	 *     textureURL: "images/MainMenu.png",
+	 *     normalMap: "images/MainMenu-n.png",
+	 *     atlasURL: "images/MainMenu.json"
+	 * });
+	 * ```
+	 *
+	 * The normal map file is subject to the same conditions as the image file with regard to the path, baseURL, CORs and XHR Settings.
+	 * Normal maps are a WebGL only feature.
+	 *
+	 * Note: The ability to load this type of file will only be available if the Atlas JSON File type has been built into Phaser.
+	 * It is available in the default build but can be excluded from custom builds.
+	 *
+	 * @fires Phaser.Loader.LoaderPlugin#addFileEvent
+	 * @since 1.0.0
+	 *
+	 * @param key - The key to use for this file, or a file configuration object, or array of them.
+	 * @param textureURL - The absolute or relative URL to load the texture image file from. If undefined or `null` it will be set to `<key>.png`, i.e. if `key` was "alien" then the URL will be "alien.png".
+	 * @param atlasURL - The absolute or relative URL to load the texture atlas json data file from. If undefined or `null` it will be set to `<key>.json`, i.e. if `key` was "alien" then the URL will be "alien.json".
+	 * @param textureXhrSettings - An XHR Settings configuration object for the atlas image file. Used in replacement of the Loaders default XHR Settings.
+	 * @param atlasXhrSettings - An XHR Settings configuration object for the atlas json file. Used in replacement of the Loaders default XHR Settings.
+	 *
+	 * @return The Loader instance.
+	**/
+	public static function atlas<T:LoaderPlugin>(loader:T,
+			key:Union<String, MultipleOrOne<AtlasJSONFileConfig>>,
+			?textureURL:MultipleOrOne<String>, ?atlasURL:String,
+			?textureXhrSettings:XHRSettingsObject, ?atlasXhrSettings:XHRSettingsObject):T
+	{
+		//  Supports an Object file definition in the key argument
+		//  Or an array of objects in the key argument
+		//  Or a single entry where all arguments have been defined
+
+		if (Std.is(key, Array))
+		{
+			final key = (cast key : Array<AtlasJSONFileConfig>);
+			for (i in 0...key.length)
+			{
+				final multifile = new AtlasJSONFile(loader, key[i]);
+
+				loader.addFile(multifile.files);
+			}
+		}
+		else
+		{
+			final key = (cast key : Union<String, AtlasJSONFileConfig>);
+
+			final multifile = new AtlasJSONFile(loader, key, textureURL, atlasURL, textureXhrSettings, atlasXhrSettings);
+
+			loader.addFile(multifile.files);
+		}
+
+		return loader;
+	}
+
+	/**
+	 * Adds an XML based Texture Atlas, or array of atlases, to the current load queue.
+	 *
+	 * You can call this method from within your Scene's `preload`, along with any other files you wish to load:
+	 *
+	 * ```haxe
+	 * function preload ()
+	 * {
+	 *     load.atlasXML("mainmenu", "images/MainMenu.png", "images/MainMenu.xml");
+	 * }
+	 * ```
+	 *
+	 * The file is **not** loaded right away. It is added to a queue ready to be loaded either when the loader starts,
+	 * or if it's already running, when the next free load slot becomes available. This happens automatically if you
+	 * are calling this from within the Scene's `preload` method, or a related callback. Because the file is queued
+	 * it means you cannot use the file immediately after calling this method, but must wait for the file to complete.
+	 * The typical flow for a Phaser Scene is that you load assets in the Scene's `preload` method and then when the
+	 * Scene's `create` method is called you are guaranteed that all of those assets are ready for use and have been
+	 * loaded.
+	 *
+	 * If you call this from outside of `preload` then you are responsible for starting the Loader afterwards and monitoring
+	 * its events to know when it's safe to use the asset. Please see the Phaser.Loader.LoaderPlugin class for more details.
+	 *
+	 * Phaser expects the atlas data to be provided in an XML file format.
+	 * These files are created by software such as Shoebox and Adobe Flash / Animate.
+	 *
+	 * Phaser can load all common image types: png, jpg, gif and any other format the browser can natively handle.
+	 *
+	 * The key must be a unique String. It is used to add the file to the global Texture Manager upon a successful load.
+	 * The key should be unique both in terms of files being loaded and files already present in the Texture Manager.
+	 * Loading a file using a key that is already taken will result in a warning. If you wish to replace an existing file
+	 * then remove it from the Texture Manager first, before loading a new one.
+	 *
+	 * Instead of passing arguments you can pass a configuration object, such as:
+	 *
+	 * ```haxe
+	 * load.atlasXML({
+	 *     key: "mainmenu",
+	 *     textureURL: "mages/MainMenu.png",
+	 *     atlasURL: "images/MainMenu.xml"
+	 * });
+	 * ```
+	 *
+	 * See the documentation for `Phaser.Types.Loader.FileTypes.AtlasXMLFileConfig` for more details.
+	 *
+	 * Once the atlas has finished loading you can use frames from it as textures for a Game Object by referencing its key:
+	 *
+	 * ```javascript
+	 * this.load.atlasXML('mainmenu', 'images/MainMenu.png', 'images/MainMenu.xml');
+	 * // and later in your game ...
+	 * this.add.image(x, y, 'mainmenu', 'background');
+	 * ```
+	 *
+	 * To get a list of all available frames within an atlas please consult your Texture Atlas software.
+	 *
+	 * If you have specified a prefix in the loader, via `Loader.setPrefix` then this value will be prepended to this files
+	 * key. For example, if the prefix was `MENU.` and the key was `Background` the final key will be `MENU.Background` and
+	 * this is what you would use to retrieve the image from the Texture Manager.
+	 *
+	 * The URL can be relative or absolute. If the URL is relative the `Loader.baseURL` and `Loader.path` values will be prepended to it.
+	 *
+	 * If the URL isn't specified the Loader will take the key and create a filename from that. For example if the key is "alien"
+	 * and no URL is given then the Loader will set the URL to be "alien.png". It will always add `.png` as the extension, although
+	 * this can be overridden if using an object instead of method arguments. If you do not desire this action then provide a URL.
+	 *
+	 * Phaser also supports the automatic loading of associated normal maps. If you have a normal map to go with this image,
+	 * then you can specify it by providing an array as the `url` where the second element is the normal map:
+	 *
+	 * ```haxe
+	 * load.atlasXML("mainmenu", [ "images/MainMenu.png", "images/MainMenu-n.png" ], "images/MainMenu.xml");
+	 * ```
+	 *
+	 * Or, if you are using a config object use the `normalMap` property:
+	 *
+	 * ```haxe
+	 * load.atlasXML({
+	 *     key: "mainmenu",
+	 *     textureURL: "images/MainMenu.png",
+	 *     normalMap: "images/MainMenu-n.png",
+	 *     atlasURL: "images/MainMenu.xml"
+	 * });
+	 * ```
+	 *
+	 * The normal map file is subject to the same conditions as the image file with regard to the path, baseURL, CORs and XHR Settings.
+	 * Normal maps are a WebGL only feature.
+	 *
+	 * Note: The ability to load this type of file will only be available if the Atlas XML File type has been built into Phaser.
+	 * It is available in the default build but can be excluded from custom builds.
+	 *
+	 * @fires Phaser.Loader.LoaderPlugin#addFileEvent
+	 * @since 1.0.0
+	 *
+	 * @param key - The key to use for this file, or a file configuration object, or array of them.
+	 * @param textureURL - The absolute or relative URL to load the texture image file from. If undefined or `null` it will be set to `<key>.png`, i.e. if `key` was "alien" then the URL will be "alien.png".
+	 * @param atlasURL - The absolute or relative URL to load the texture atlas xml data file from. If undefined or `null` it will be set to `<key>.xml`, i.e. if `key` was "alien" then the URL will be "alien.xml".
+	 * @param textureXhrSettings - An XHR Settings configuration object for the atlas image file. Used in replacement of the Loaders default XHR Settings.
+	 * @param atlasXhrSettings - An XHR Settings configuration object for the atlas xml file. Used in replacement of the Loaders default XHR Settings.
+	 *
+	 * @return The Loader instance.
+	**/
+	public static function atlasXML<T:LoaderPlugin>(loader:T,
+			key:Union<String, MultipleOrOne<AtlasXMLFileConfig>>,
+			?textureURL:MultipleOrOne<String>, ?atlasURL:String,
+			?textureXhrSettings:XHRSettingsObject, ?atlasXhrSettings:XHRSettingsObject):T
+	{
+		//  Supports an Object file definition in the key argument
+		//  Or an array of objects in the key argument
+		//  Or a single entry where all arguments have been defined
+
+		if (Std.is(key, Array))
+		{
+			final key = (cast key : Array<AtlasXMLFileConfig>);
+			for (i in 0...key.length)
+			{
+				final multifile = new AtlasXMLFile(loader, key[i]);
+
+				loader.addFile(multifile.files);
+			}
+		}
+		else
+		{
+			final key = (cast key : Union<String, AtlasXMLFileConfig>);
+
+			final multifile = new AtlasXMLFile(loader, key, textureURL, atlasURL, textureXhrSettings, atlasXhrSettings);
+
+			loader.addFile(multifile.files);
 		}
 
 		return loader;
