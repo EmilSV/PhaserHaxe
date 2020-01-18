@@ -330,7 +330,7 @@ class File
 	 *
 	 * @param {ProgressEvent} event - The DOM ProgressEvent.
 	 */
-	public function onProgress(event)
+	public function onProgress(event:WebProgressEvent)
 	{
 		// if (event.lengthComputable)
 		// {

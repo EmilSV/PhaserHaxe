@@ -1,5 +1,6 @@
 package phaserHaxe.loader;
 
+import phaserHaxe.loader.filetypes.typedefs.AudioFileConfig;
 import phaserHaxe.loader.filetypes.typedefs.AtlasXMLFileConfig;
 import phaserHaxe.loader.filetypes.typedefs.AtlasJSONFileConfig;
 import phaserHaxe.loader.filetypes.AnimationJSONFile;
@@ -11,6 +12,7 @@ import phaserHaxe.utils.types.MultipleOrOne;
 import phaserHaxe.utils.types.Union;
 import phaserHaxe.loader.filetypes.AtlasXMLFile;
 import phaserHaxe.loader.filetypes.AtlasJSONFile;
+import phaserHaxe.loader.filetypes.AudioFile;
 
 final class DefaultFileTypesTool
 {
@@ -500,6 +502,52 @@ final class DefaultFileTypesTool
 			final multifile = new AtlasXMLFile(loader, key, textureURL, atlasURL, textureXhrSettings, atlasXhrSettings);
 
 			loader.addFile(multifile.files);
+		}
+
+		return loader;
+	}
+
+	public static function audio<T:LoaderPlugin>(loader:T,
+			key:Union<String, MultipleOrOne<AudioFileConfig>>,
+			?urls:MultipleOrOne<String>, ?config:Any, ?xhrSettings:XHRSettingsObject):T
+	{
+		var game = loader.systems.game;
+		var audioConfig = game.config.audio;
+		var deviceAudio = game.device.audio;
+
+		if ((audioConfig != null && audioConfig.noAudio) || (!deviceAudio.webAudio && !deviceAudio.audioData))
+		{
+			//  Sounds are disabled, so skip loading audio
+			return loader;
+		}
+
+		var audioFile:AudioFile;
+
+		if (Std.is(key, Array))
+		{
+			final key = (cast key : Array<AudioFileConfig>);
+
+			for (i in 0...key.length)
+			{
+				//  If it's an array it has to be an array of Objects, so we get everything out of the 'key' object
+				var audioFile = AudioFile.create(loader, key[i]);
+
+				if (audioFile != null)
+				{
+					loader.addFile(audioFile);
+				}
+			}
+		}
+		else
+		{
+			final key = (cast key : Union<String, AudioFileConfig>);
+
+			var audioFile = AudioFile.create(loader, key, urls, config, xhrSettings);
+
+			if (audioFile != null)
+			{
+				loader.addFile(audioFile);
+			}
 		}
 
 		return loader;

@@ -31,7 +31,7 @@ class ImageFile extends File
 			?frameConfig:ImageFrameConfig)
 	{
 		var extension = "png";
-		var normalMapURL;
+		var normalMapURL = null;
 
 		if (!Std.is(key, String))
 		{

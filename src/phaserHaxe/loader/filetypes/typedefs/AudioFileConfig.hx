@@ -19,7 +19,9 @@ typedef AudioFileConfig =
 	 *
 	 * @since 1.0.0
 	**/
-	public var ?urlConfig:String;
+	public var ?url:String;
+
+	public var config:Any;
 
 	/**
 	 * Extra XHR Settings specifically for this file.
