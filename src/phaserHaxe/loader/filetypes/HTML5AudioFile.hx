@@ -25,6 +25,7 @@ class HTML5AudioFile extends BaseAudioFile
 	public var loaded:Bool;
 	public var filesLoaded:Int;
 	public var filesTotal:Int;
+	public var config:Null<Any> = null;
 
 	/**
 	 * @param loader - A reference to the Loader that is responsible for this file.
@@ -53,9 +54,10 @@ class HTML5AudioFile extends BaseAudioFile
 			cache: loader.cacheManager.audio,
 			extension: urlConfig.type,
 			key: key,
-			url: urlConfig.url,
-			config: audioConfig
+			url: urlConfig.url
 		};
+
+		this.config = audioConfig;
 
 		super(loader, fileConfig);
 

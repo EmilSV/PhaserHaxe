@@ -1,5 +1,7 @@
 package phaserHaxe.loader;
 
+import haxe.ds.Map;
+
 using StringTools;
 
 import js.html.Blob as HTMLBlob;
@@ -7,11 +9,11 @@ import js.html.XMLHttpRequest;
 import js.html.ProgressEvent as WebProgressEvent;
 import js.Syntax as JsSyntax;
 import js.html.Image as HTMLImageElement;
-import phaserHaxe.loader.typedefs.FileConfig;
 import phaserHaxe.loader.XHRSettingsObject;
 import phaserHaxe.cache.BaseCache;
 import phaserHaxe.utils.types.Union;
 import phaserHaxe.textures.TextureManager;
+import phaserHaxe.loader.typedefs.FileConfig;
 
 /**
  * The base File class used by all File Types that the Loader can support.
@@ -126,21 +128,12 @@ class File
 	public var data:Any;
 
 	/**
-	 * A config object that can be used by file types to store transitional data.
-	 *
-	 * @since 1.0.0
-	**/
-	public var config:Any;
-
-	/**
 	 * If this is a multipart file, i.e. an atlas and its json together, then this is a reference
 	 * to the parent MultiFile. Set and used internally by the Loader or specific file types.
 	 *
-	 * @name Phaser.Loader.File#multiFile
-	 * @type {?Phaser.Loader.MultiFile}
 	 * @since 1.0.0
 	**/
-	public var multiFile:Null<MultiFile>;
+	public var multiFile:Null<MultiFile> = null;
 
 	/**
 	 * Does this file have an associated linked file? Such as an image and a normal map.

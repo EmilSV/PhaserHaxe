@@ -16,6 +16,8 @@ import haxe.Json;
 **/
 class JSONFile extends File
 {
+	public var config:String;
+
 	/**
 	 * @param loader - A reference to the Loader that is responsible for this file.
 	 * @param key - The key to use for this file, or a file configuration object.
@@ -54,8 +56,9 @@ class JSONFile extends File
 			key: cast key,
 			url: url,
 			xhrSettings: xhrSettings,
-			config: dataKey
 		};
+
+		this.config = dataKey;
 
 		super(loader, fileConfig);
 

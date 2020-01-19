@@ -2,16 +2,16 @@
 
 phaserHaxe.animations.Animation
 phaserHaxe.animations.AnimationConfig
-phaserHaxe.animations.AnimationData  
+phaserHaxe.animations.AnimationData
 phaserHaxe.animations.AnimationEvents
 phaserHaxe.animations.AnimationFrame
 phaserHaxe.animations.AnimationFrameConfig
-phaserHaxe.animations.AnimationFrameData  
-phaserHaxe.animations.AnimationManager    
-phaserHaxe.animations.AnimationsConfig    
-phaserHaxe.animations.GenerateFrameNames  
+phaserHaxe.animations.AnimationFrameData
+phaserHaxe.animations.AnimationManager
+phaserHaxe.animations.AnimationsConfig
+phaserHaxe.animations.GenerateFrameNames
 phaserHaxe.animations.GenerateFrameNumbers
-phaserHaxe.animations.JSONAnimation     
+phaserHaxe.animations.JSONAnimation
 phaserHaxe.animations.JSONAnimationFrame
 phaserHaxe.animations.JSONAnimations
 phaserHaxe.cache.BaseCache
@@ -204,11 +204,15 @@ phaserHaxe.Input
 phaserHaxe.iterator.StepIterator
 phaserHaxe.loader.DefaultFileTypesTool
 phaserHaxe.loader.File
+phaserHaxe.loader.FileConfigData
 phaserHaxe.loader.FileConst
 phaserHaxe.loader.filetypes.AnimationJSONFile
 phaserHaxe.loader.filetypes.AtlasJSONFile
 phaserHaxe.loader.filetypes.AtlasXMLFile
 phaserHaxe.loader.filetypes.AudioFile
+phaserHaxe.loader.filetypes.AudioSpriteFile
+phaserHaxe.loader.filetypes.BaseAudioFile
+phaserHaxe.loader.filetypes.configs.AudioSpriteConfig
 phaserHaxe.loader.filetypes.HTML5AudioFile
 phaserHaxe.loader.filetypes.ImageFile
 phaserHaxe.loader.filetypes.JSONFile
@@ -249,6 +253,7 @@ phaserHaxe.loader.LoaderPlugin
 phaserHaxe.loader.LoaderUtils
 phaserHaxe.loader.MultiFile
 phaserHaxe.loader.typedefs.FileConfig
+phaserHaxe.loader.typedefs.UrlConfig
 phaserHaxe.loader.XHRSettingsObject
 phaserHaxe.Loader
 phaserHaxe.macro.AbstractEnumGetNamerByValue

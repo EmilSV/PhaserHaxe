@@ -59,13 +59,6 @@ class MultiFile
 	public var failed:Int = 0;
 
 	/**
-	 * A storage container for transient data that the loading files need.
-	 *
-	 * @since 1.0.0
-	**/
-	public var config:Any = {};
-
-	/**
 	 * A reference to the Loaders baseURL at the time this MultiFile was created.
 	 * Used to populate child-files.
 	 *
@@ -89,7 +82,8 @@ class MultiFile
 	**/
 	public var prefix:String;
 
-	public function new(loader:LoaderPlugin, type:String, key:String, files:Array<File>)
+	private function new(loader:LoaderPlugin, type:String, key:String,
+			files:Array<File>)
 	{
 		this.loader = loader;
 
@@ -155,10 +149,7 @@ class MultiFile
 	 *
 	 * @since 1.0.0
 	**/
-	public function addToCache()
-	{
-		
-	}
+	public function addToCache() {}
 
 	/**
 	 * Called by each File when it finishes loading.

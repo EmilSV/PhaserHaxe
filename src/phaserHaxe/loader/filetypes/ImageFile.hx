@@ -19,6 +19,8 @@ import phaserHaxe.utils.types.Union;
 **/
 class ImageFile extends File
 {
+	public var config:Null<ImageFrameConfig> = null;
+
 	/**
 	 * @param loader - A reference to the Loader that is responsible for this file.
 	 * @param key - The key to use for this file, or a file configuration object.
@@ -67,9 +69,10 @@ class ImageFile extends File
 			responseType: BLOB,
 			key: key,
 			url: url,
-			xhrSettings: xhrSettings,
-			config: frameConfig
+			xhrSettings: xhrSettings
 		};
+
+		this.config = frameConfig;
 
 		super(loader, fileConfig);
 

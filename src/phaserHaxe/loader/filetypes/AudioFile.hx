@@ -9,6 +9,7 @@ import js.html.audio.AudioContext as WebAudioContext;
 import phaserHaxe.loader.filetypes.typedefs.AudioFileConfig;
 import phaserHaxe.loader.typedefs.FileConfig;
 import phaserHaxe.utils.types.Union;
+import phaserHaxe.loader.filetypes.configs.AudioFileData;
 
 /**
  * A single Audio File suitable for loading by the Loader.
@@ -21,6 +22,8 @@ import phaserHaxe.utils.types.Union;
 **/
 class AudioFile extends BaseAudioFile
 {
+	public var config:AudioFileData;
+
 	/**
 	 * @param loader - A reference to the Loader that is responsible for this file.
 	 * @param key - The key to use for this file, or a file configuration object.
@@ -50,9 +53,10 @@ class AudioFile extends BaseAudioFile
 			responseType: ARRAYBUFFER,
 			key: (cast key : String),
 			url: urlConfig.url,
-			xhrSettings: xhrSettings,
-			config: {context: audioContext}
+			xhrSettings: xhrSettings
 		};
+
+		this.config = {context: audioContext};
 
 		super(loader, fileConfig);
 	}
@@ -68,16 +72,17 @@ class AudioFile extends BaseAudioFile
 		this.state = FileConst.FILE_PROCESSING;
 		var _this = this;
 
-		var config = (cast config : {context: WebAudioContext});
 		// interesting read https://github.com/WebAudio/web-audio-api/issues/1305
 		config.context.decodeAudioData(this.xhrLoader.response, function(audioBuffer:WebAudioBuffer)
 		{
 			_this.data = audioBuffer;
+
 			_this.onProcessComplete();
 		}, function(e:DOMException)
 		{
 			// eslint-disable-next-line no-console
 			Console.error('Error decoding audio: $key - , ${e != null ? e.message : null}');
+
 			_this.onProcessError();
 		});
 

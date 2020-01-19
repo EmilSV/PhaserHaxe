@@ -56,12 +56,5 @@ typedef FileConfig =
 	**/
 	public var ?xhrSettings:XHRSettingsObject;
 
-	/**
-	 * A config object that can be used by file types to store transitional data.
-	 *
-	 * @since 1.0.0
-	**/
-	public var ?config:Any;
-
 	public var ?cache:Any;
 };
