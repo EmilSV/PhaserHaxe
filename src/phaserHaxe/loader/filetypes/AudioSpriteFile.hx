@@ -31,7 +31,7 @@ class AudioSpriteFile extends MultiFile
 			?jsonURL:String, ?audioURL:MultipleOrOne<String>, ?audioConfig:Any,
 			?audioXhrSettings:XHRSettingsObject, ?jsonXhrSettings:XHRSettingsObject)
 	{
-		if (Std.is(key, String))
+		if (!Std.is(key, String))
 		{
 			var config = (cast key : AudioSpriteFileConfig);
 
@@ -42,8 +42,6 @@ class AudioSpriteFile extends MultiFile
 			audioXhrSettings = config.audioXhrSettings;
 			jsonXhrSettings = config.jsonXhrSettings;
 		}
-
-		var data;
 
 		//  No url? then we're going to do a json load and parse it from that
 		if (audioURL == null)
@@ -60,11 +58,11 @@ class AudioSpriteFile extends MultiFile
 		}
 		else
 		{
-			var audio = AudioFile.create(loader, cast key, audioURL, audioConfig, audioXhrSettings);
+			final audio = AudioFile.create(loader, cast key, audioURL, audioConfig, audioXhrSettings);
 
 			if (audio != null)
 			{
-				data = new JSONFile(loader, cast key, jsonURL, jsonXhrSettings);
+				final data = new JSONFile(loader, cast key, jsonURL, jsonXhrSettings);
 
 				super(loader, "audiosprite", cast key, [audio, data]);
 
@@ -92,10 +90,13 @@ class AudioSpriteFile extends MultiFile
 				//  Inspect the data for the files to now load
 				var audioConfig = this.config.audioConfig;
 				var audioXhrSettings = this.config.audioXhrSettings;
+				
 				var audio = AudioFile.create(this.loader, file.key, urls, audioConfig, audioXhrSettings);
+				
 				if (audio != null)
 				{
 					this.addToMultiFile(audio);
+					
 					this.loader.addFile(audio);
 				}
 			}
