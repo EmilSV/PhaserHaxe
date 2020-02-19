@@ -128,6 +128,13 @@ class File
 	public var data:Any;
 
 	/**
+	 * A config object that can be used by file types to store transitional data.
+	 *
+	 * @since 1.0.0
+	**/
+	public var config:Any;
+
+	/**
 	 * If this is a multipart file, i.e. an atlas and its json together, then this is a reference
 	 * to the parent MultiFile. Set and used internally by the Loader or specific file types.
 	 *
@@ -469,8 +476,7 @@ class File
 	 * @param blob - A Blob object to create an object URL for.
 	 * @param defaultType - Default mime type used if blob type is not available.
 	**/
-	public static function createObjectURL(image:HTMLImageElement, blob:HTMLBlob,
-			defaultType:String)
+	public static function createObjectURL(image:HTMLImageElement, blob:HTMLBlob, defaultType:String)
 	{
 		if (JsSyntax.strictEq(JsSyntax.typeof(js.html.URL), "function"))
 		{

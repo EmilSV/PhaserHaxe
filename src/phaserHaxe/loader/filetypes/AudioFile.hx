@@ -31,9 +31,8 @@ class AudioFile extends BaseAudioFile
 	 * @param xhrSettings - Extra XHR Settings specifically for this file.
 	 * @param audioContext - The AudioContext this file will use to process itself.
 	**/
-	public function new(loader:LoaderPlugin, key:Union<String, AudioFileConfig>,
-			?urlConfig:UrlConfig, ?xhrSettings:XHRSettingsObject,
-			?audioContext:WebAudioContext)
+	public function new(loader:LoaderPlugin, key:Union<String, AudioFileConfig>, ?urlConfig:UrlConfig,
+			?xhrSettings:XHRSettingsObject, ?audioContext:WebAudioContext)
 	{
 		if (!Std.is(key, String))
 		{
@@ -89,9 +88,8 @@ class AudioFile extends BaseAudioFile
 		config.context = null;
 	}
 
-	public static function create(loader:LoaderPlugin,
-			key:Union<String, AudioFileConfig>, ?urls:MultipleOrOne<String>,
-			?config:Any, ?xhrSettings:XHRSettingsObject):BaseAudioFile
+	public static function create(loader:LoaderPlugin, key:Union<String, AudioFileConfig>,
+			?urls:MultipleOrOne<String>, ?config:Any, ?xhrSettings:XHRSettingsObject):BaseAudioFile
 	{
 		var game:Game = loader.systems.game;
 		var audioConfig = game.config.audio;
@@ -134,47 +132,30 @@ class AudioFile extends BaseAudioFile
 		}
 	}
 
-	public static function getAudioURL(game:Game, urls:MultipleOrOne<String>):
-		{
-			url:String,
-			type:String
-		}
+	public static function getAudioURL(game:Game, urls:MultipleOrOne<String>):{url:String, type:Null<String>}
 	{
-		throw new Error("Not implemented");
-		// if (!Std.is(urls, Array))
-		// {
-		// 	urls = [(cast urls : Union<String, {url:String, type:String}>)];
-		// }
-		// for (i in 0...urls.length)
-		// {
-		// 	var url:String = null;
-		// 	if (!Std.is(url, String))
-		// 	{
-		// 		url = (cast urls[i] : {url: String}).url;
-		// 		url = urls[i]
-		// 	}
-		// 	else
-		// 	{
-		// 		url = (cast urls[i] : String);
-		// 	}
-		// 	if (url.indexOf("blob:") == 0 || url.indexOf("data:") == 0)
-		// 	{
-		// 		return url;
-		// 	}
-		// 	var audioTypeRegex = (~/\.([a-zA-Z0-9]+)($|\?)/);
-		// 	var audioTypeMatched = audioTypeRegex.match(url);
-		// 	var audioType = null;
-		// 	audioType urls[i].type;
-		// 	audioType = GetFastValue(urls[i], 'type', (audioTypeMatched) ? audioTypeRegex.matched(1) : '')
-		// 		.toLowerCase();
-		// 	if (game.device.audio[audioType])
-		// 	{
-		// 		return {
-		// 			url: url,
-		// 			type: audioType
-		// 		};
-		// 	}
-		// }
-		// return null;
+		final urls:Array<String> = urls.forceArray();
+
+		for (url in urls)
+		{
+			if (url.indexOf("blob:") == 0 || url.indexOf("data:") == 0)
+			{
+				return {
+					url: url,
+					type: null
+				};
+			}
+			var audioTypeRegex = (~/\.([a-zA-Z0-9]+)($|\?)/);
+			var audioTypeMatched = audioTypeRegex.match(url);
+			var audioType = (audioTypeMatched ? audioTypeRegex.matched(1) : '').toLowerCase();
+			if ((game.device.audio : Map<String, Bool>)[audioType])
+			{
+				return {
+					url: url,
+					type: audioType
+				};
+			}
+		}
+		return null;
 	}
 }

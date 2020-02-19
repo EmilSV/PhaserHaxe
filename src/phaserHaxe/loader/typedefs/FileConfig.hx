@@ -57,4 +57,6 @@ typedef FileConfig =
 	public var ?xhrSettings:XHRSettingsObject;
 
 	public var ?cache:Any;
+
+	public var ?config:Any;
 };

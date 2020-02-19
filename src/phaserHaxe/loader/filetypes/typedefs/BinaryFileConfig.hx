@@ -34,9 +34,9 @@ typedef BinaryFileConfig<T> =
 	public var ?xhrSettings:XHRSettingsObject;
 
 	/**
-	 * Optional type to cast the binary file to once loaded. For example, `Uint8Array`.
+	 * Optional function to transform the binary file to a type once loaded.
 	 *
 	 * @since 1.0.0
 	**/
-	public var ?dataType:Class<T>;
+	public var ?dataTypeConstructor:(js.lib.ArrayBuffer) -> Any;
 }

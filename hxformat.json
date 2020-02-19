@@ -20,6 +20,6 @@
 		"tryCatch": "next"
     },
     "wrapping": {
-        "maxLineLength": 90
+        "maxLineLength": 120
     }
 }
